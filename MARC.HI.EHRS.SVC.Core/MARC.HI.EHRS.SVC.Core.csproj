@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MARC.HI.EHRS.SVC.Core</RootNamespace>
+    <AssemblyName>MARC.HI.EHRS.SVC.Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Workflow.Activities">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auditing\ActionType.cs" />
+    <Compile Include="Auditing\AuditableObejctType.cs" />
+    <Compile Include="Auditing\AuditableObject.cs" />
+    <Compile Include="Auditing\AuditableObjectIdType.cs" />
+    <Compile Include="Auditing\AuditableObjectLifecycle.cs" />
+    <Compile Include="Auditing\AuditableObjectRole.cs" />
+    <Compile Include="Auditing\AuditActorData.cs" />
+    <Compile Include="Auditing\AuditData.cs" />
+    <Compile Include="Auditing\AuditSourceType.cs" />
+    <Compile Include="Auditing\NetworkAccessPointType.cs" />
+    <Compile Include="Auditing\OutcomeIndicator.cs" />
+    <Compile Include="DataTypes\AddressPart.cs" />
+    <Compile Include="DataTypes\AddressSet.cs" />
+    <Compile Include="DataTypes\CodeValue.cs" />
+    <Compile Include="DataTypes\CustodianshipData.cs" />
+    <Compile Include="DataTypes\DomainIdentifier.cs" />
+    <Compile Include="DataTypes\Jurisdiction.cs" />
+    <Compile Include="DataTypes\MessageState.cs" />
+    <Compile Include="DataTypes\NamePart.cs" />
+    <Compile Include="DataTypes\NameSet.cs" />
+    <Compile Include="DataTypes\OidRegistrar.cs" />
+    <Compile Include="DataTypes\TelecommunicationsAddress.cs" />
+    <Compile Include="DataTypes\TimestampPart.cs" />
+    <Compile Include="DataTypes\TimestampSet.cs" />
+    <Compile Include="DataTypes\VersionedDomainIdentifier.cs" />
+    <Compile Include="Exceptions\InvalidStateTransitionException.cs" />
+    <Compile Include="Exceptions\IssueException.cs" />
+    <Compile Include="HostConfigurationSectionHandler.cs" />
+    <Compile Include="HostContext.cs" />
+    <Compile Include="Issues\DetectedIssue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IAuditorService.cs" />
+    <Compile Include="Services\IDataPersistenceService.cs" />
+    <Compile Include="Services\IDataRegistrationService.cs" />
+    <Compile Include="Services\ILocalizationService.cs" />
+    <Compile Include="Services\IMessagePersistenceService.cs" />
+    <Compile Include="Services\IQueryPersistenceService.cs" />
+    <Compile Include="Services\ISystemConfigurationService.cs" />
+    <Compile Include="Services\IMessageHandlerService.cs" />
+    <Compile Include="Services\ITerminologyService.cs" />
+    <Compile Include="Services\IUsesHostContext.cs" />
+    <Compile Include="Terminology\ConceptValidationResult.cs" />
+    <Compile Include="Terminology\ValidationOutcome.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

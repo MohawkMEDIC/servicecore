@@ -1,0 +1,968 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:s0="urn://hl7.org/CTSMAPI" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" name="MessageRuntime" targetNamespace="urn://hl7.org/CTSMAPI" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="urn://hl7.org/CTSMAPI" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="urn://cts.hl7.org/types" />
+      <xs:element name="getCTSVersion">
+        <xs:complexType />
+      </xs:element>
+      <xs:complexType name="CTSVersionId">
+        <xs:sequence>
+          <xs:element xmlns:q1="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="major" type="q1:INT" />
+          <xs:element xmlns:q2="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="minor" type="q2:INT" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="getCTSVersionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="getCTSVersionReturn" type="s0:CTSVersionId" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getServiceName">
+        <xs:complexType />
+      </xs:element>
+      <xs:element name="getServiceNameResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q3="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="getServiceNameReturn" type="q3:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getServiceDescription">
+        <xs:complexType />
+      </xs:element>
+      <xs:element name="getServiceDescriptionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q4="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="getServiceDescriptionReturn" type="q4:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getServiceVersion">
+        <xs:complexType />
+      </xs:element>
+      <xs:element name="getServiceVersionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q5="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="getServiceVersionReturn" type="q5:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element xmlns:q6="urn://cts.hl7.org/types" name="item" type="q6:CD" />
+      <xs:element name="validateCode">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q7="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="vocabularyDomain_name" type="q7:ST" />
+            <xs:element xmlns:q8="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="codeToValidate" type="q8:CD" />
+            <xs:element xmlns:q9="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="applicationContext_code" type="q9:ST" />
+            <xs:element xmlns:q10="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="activeConceptsOnly" type="q10:BL" />
+            <xs:element xmlns:q11="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="errorCheckOnly" type="q11:BL" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ValidateCodeReturn">
+        <xs:sequence>
+          <xs:element xmlns:q12="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="nErrors" type="q12:INT" />
+          <xs:element xmlns:q13="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="nWarnings" type="q13:INT" />
+          <xs:element minOccurs="0" maxOccurs="1" name="detail" type="s0:ArrayOfValidationDetail" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfValidationDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="item" type="s0:ValidationDetail" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ValidationDetail">
+        <xs:sequence>
+          <xs:element xmlns:q14="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="codeInError" type="q14:CV" />
+          <xs:element xmlns:q15="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="isError" type="q15:BL" />
+          <xs:element xmlns:q16="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="error_id" type="q16:ST" />
+          <xs:element xmlns:q17="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="errorText" type="q17:ST" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="validateCodeResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="validateCodeReturn" type="s0:ValidateCodeReturn" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getHL7ReleaseVersion">
+        <xs:complexType />
+      </xs:element>
+      <xs:element name="getHL7ReleaseVersionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q18="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="getHL7ReleaseVersionReturn" type="q18:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="translateCode">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q19="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="vocabularyDomainName" type="q19:ST" />
+            <xs:element xmlns:q20="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="fromCode" type="q20:CD" />
+            <xs:element xmlns:q21="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="toCodeSystemId" type="q21:UID" />
+            <xs:element xmlns:q22="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="applicationContextCode" type="q22:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="translateCodeResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q23="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="translateCodeReturn" type="q23:CD" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="validateTranslation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q24="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="vocabularyDomain_name" type="q24:ST" />
+            <xs:element xmlns:q25="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="codeToValidate" type="q25:CD" />
+            <xs:element xmlns:q26="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="applicationContext_code" type="q26:ST" />
+            <xs:element xmlns:q27="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="activeConceptsOnly" type="q27:BL" />
+            <xs:element xmlns:q28="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="errorCheckOnly" type="q28:BL" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="validateTranslationResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="validateTranslationReturn" type="s0:ValidateCodeReturn" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="fillInDetails">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q29="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="codeToFillIn" type="q29:CD" />
+            <xs:element xmlns:q30="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="displayLanguage_code" type="q30:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="fillInDetailsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q31="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="fillInDetailsReturn" type="q31:CD" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="areEquivalent">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q32="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="code1" type="q32:CD" />
+            <xs:element xmlns:q33="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="code2" type="q33:CD" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="areEquivalentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q34="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="areEquivalentReturn" type="q34:BL" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subsumes">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q35="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="parentCode" type="q35:CD" />
+            <xs:element xmlns:q36="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="childCode" type="q36:CD" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subsumesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q37="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="subsumesReturn" type="q37:BL" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getSupportedMatchAlgorithms">
+        <xs:complexType />
+      </xs:element>
+      <xs:element name="getSupportedMatchAlgorithmsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q38="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="unbounded" name="getSupportedMatchAlgorithmsReturn" type="q38:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getSupportedVocabularyDomains">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q39="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="matchText" type="q39:ST" />
+            <xs:element xmlns:q40="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="1" name="matchAlgorithm_code" type="q40:ST" />
+            <xs:element minOccurs="1" maxOccurs="1" name="timeout" type="xs:long" />
+            <xs:element minOccurs="1" maxOccurs="1" name="sizeLimit" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getSupportedVocabularyDomainsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q41="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="unbounded" name="getSupportedVocabularyDomainsReturn" type="q41:ST" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CTSVersionId" nillable="true" type="s0:CTSVersionId" />
+      <xs:element xmlns:q42="urn://cts.hl7.org/types" name="ST" nillable="true" type="q42:ST" />
+      <xs:element name="ArrayOfST" nillable="true" type="s0:ArrayOfST" />
+      <xs:complexType name="ArrayOfST">
+        <xs:sequence>
+          <xs:element xmlns:q43="urn://cts.hl7.org/types" minOccurs="0" maxOccurs="unbounded" name="ST" nillable="true" type="q43:ST" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="urn://cts.hl7.org/types" elementFormDefault="qualified" targetNamespace="urn://cts.hl7.org/types" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="urn://hl7.org/CTSMAPI" />
+      <xs:complexType name="INT">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="v" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ST">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="v" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CD">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="translation" type="tns:ArrayOfCD" />
+          <xs:element minOccurs="0" maxOccurs="1" name="qualifiers" type="tns:ArrayOfCR" />
+          <xs:element minOccurs="0" maxOccurs="1" name="code" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="originalText" type="tns:ED" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codingRationale" type="tns:CS" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codeSystem" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codeSystemName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codeSystemVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="displayName" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfCD">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="s0:item" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfCR">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="s0:item" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ED">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="_this" nillable="true" type="tns:binary_or_text" />
+          <xs:element minOccurs="1" maxOccurs="1" name="encoding" nillable="true" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="mediaType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="compression" nillable="true" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="integrityCheck" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="1" maxOccurs="1" name="reference" nillable="true" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ingegrityCheckAlgorithm" nillable="true" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="charset" nillable="true" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="language" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="thumbnail" type="tns:ArrayOfED" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="binary_or_text">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="itemType">
+            <xs:complexType mixed="true">
+              <xs:sequence>
+                <xs:any />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" name="binaryValue" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="1" maxOccurs="1" name="textualValue" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfED">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="s0:item" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CS">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="code" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="originalText" type="tns:ED" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codingRationale" type="tns:CS" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BL">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="v" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CV">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="code" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="originalText" type="tns:ED" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codingRationale" type="tns:CS" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codeSystem" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codeSystemName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="codeSystemVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="displayName" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="UID">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="v" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="getCTSVersionSoapIn">
+    <part name="parameters" element="s0:getCTSVersion" />
+  </message>
+  <message name="getCTSVersionSoapOut">
+    <part name="parameters" element="s0:getCTSVersionResponse" />
+  </message>
+  <message name="getServiceNameSoapIn">
+    <part name="parameters" element="s0:getServiceName" />
+  </message>
+  <message name="getServiceNameSoapOut">
+    <part name="parameters" element="s0:getServiceNameResponse" />
+  </message>
+  <message name="getServiceDescriptionSoapIn">
+    <part name="parameters" element="s0:getServiceDescription" />
+  </message>
+  <message name="getServiceDescriptionSoapOut">
+    <part name="parameters" element="s0:getServiceDescriptionResponse" />
+  </message>
+  <message name="getServiceVersionSoapIn">
+    <part name="parameters" element="s0:getServiceVersion" />
+  </message>
+  <message name="getServiceVersionSoapOut">
+    <part name="parameters" element="s0:getServiceVersionResponse" />
+  </message>
+  <message name="validateCodeSoapIn">
+    <part name="parameters" element="s0:validateCode" />
+  </message>
+  <message name="validateCodeSoapOut">
+    <part name="parameters" element="s0:validateCodeResponse" />
+  </message>
+  <message name="getHL7ReleaseVersionSoapIn">
+    <part name="parameters" element="s0:getHL7ReleaseVersion" />
+  </message>
+  <message name="getHL7ReleaseVersionSoapOut">
+    <part name="parameters" element="s0:getHL7ReleaseVersionResponse" />
+  </message>
+  <message name="translateCodeSoapIn">
+    <part name="parameters" element="s0:translateCode" />
+  </message>
+  <message name="translateCodeSoapOut">
+    <part name="parameters" element="s0:translateCodeResponse" />
+  </message>
+  <message name="validateTranslationSoapIn">
+    <part name="parameters" element="s0:validateTranslation" />
+  </message>
+  <message name="validateTranslationSoapOut">
+    <part name="parameters" element="s0:validateTranslationResponse" />
+  </message>
+  <message name="fillInDetailsSoapIn">
+    <part name="parameters" element="s0:fillInDetails" />
+  </message>
+  <message name="fillInDetailsSoapOut">
+    <part name="parameters" element="s0:fillInDetailsResponse" />
+  </message>
+  <message name="areEquivalentSoapIn">
+    <part name="parameters" element="s0:areEquivalent" />
+  </message>
+  <message name="areEquivalentSoapOut">
+    <part name="parameters" element="s0:areEquivalentResponse" />
+  </message>
+  <message name="subsumesSoapIn">
+    <part name="parameters" element="s0:subsumes" />
+  </message>
+  <message name="subsumesSoapOut">
+    <part name="parameters" element="s0:subsumesResponse" />
+  </message>
+  <message name="getSupportedMatchAlgoritmsSoapIn">
+    <part name="parameters" element="s0:getSupportedMatchAlgorithms" />
+  </message>
+  <message name="getSupportedMatchAlgoritmsSoapOut">
+    <part name="parameters" element="s0:getSupportedMatchAlgorithmsResponse" />
+  </message>
+  <message name="getSupportedVocabularyDomainsSoapIn">
+    <part name="parameters" element="s0:getSupportedVocabularyDomains" />
+  </message>
+  <message name="getSupportedVocabularyDomainsSoapOut">
+    <part name="parameters" element="s0:getSupportedVocabularyDomainsResponse" />
+  </message>
+  <message name="getCTSVersionHttpGetIn" />
+  <message name="getCTSVersionHttpGetOut">
+    <part name="Body" element="s0:CTSVersionId" />
+  </message>
+  <message name="getServiceNameHttpGetIn" />
+  <message name="getServiceNameHttpGetOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getServiceDescriptionHttpGetIn" />
+  <message name="getServiceDescriptionHttpGetOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getServiceVersionHttpGetIn" />
+  <message name="getServiceVersionHttpGetOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getHL7ReleaseVersionHttpGetIn" />
+  <message name="getHL7ReleaseVersionHttpGetOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getSupportedMatchAlgoritmsHttpGetIn" />
+  <message name="getSupportedMatchAlgoritmsHttpGetOut">
+    <part name="Body" element="s0:ArrayOfST" />
+  </message>
+  <message name="getCTSVersionHttpPostIn" />
+  <message name="getCTSVersionHttpPostOut">
+    <part name="Body" element="s0:CTSVersionId" />
+  </message>
+  <message name="getServiceNameHttpPostIn" />
+  <message name="getServiceNameHttpPostOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getServiceDescriptionHttpPostIn" />
+  <message name="getServiceDescriptionHttpPostOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getServiceVersionHttpPostIn" />
+  <message name="getServiceVersionHttpPostOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getHL7ReleaseVersionHttpPostIn" />
+  <message name="getHL7ReleaseVersionHttpPostOut">
+    <part name="Body" element="s0:ST" />
+  </message>
+  <message name="getSupportedMatchAlgoritmsHttpPostIn" />
+  <message name="getSupportedMatchAlgoritmsHttpPostOut">
+    <part name="Body" element="s0:ArrayOfST" />
+  </message>
+  <portType name="MessageRuntimeSoap">
+    <operation name="getCTSVersion">
+      <input message="s0:getCTSVersionSoapIn" />
+      <output message="s0:getCTSVersionSoapOut" />
+    </operation>
+    <operation name="getServiceName">
+      <input message="s0:getServiceNameSoapIn" />
+      <output message="s0:getServiceNameSoapOut" />
+    </operation>
+    <operation name="getServiceDescription">
+      <input message="s0:getServiceDescriptionSoapIn" />
+      <output message="s0:getServiceDescriptionSoapOut" />
+    </operation>
+    <operation name="getServiceVersion">
+      <input message="s0:getServiceVersionSoapIn" />
+      <output message="s0:getServiceVersionSoapOut" />
+    </operation>
+    <operation name="validateCode">
+      <input message="s0:validateCodeSoapIn" />
+      <output message="s0:validateCodeSoapOut" />
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <input message="s0:getHL7ReleaseVersionSoapIn" />
+      <output message="s0:getHL7ReleaseVersionSoapOut" />
+    </operation>
+    <operation name="translateCode">
+      <input message="s0:translateCodeSoapIn" />
+      <output message="s0:translateCodeSoapOut" />
+    </operation>
+    <operation name="validateTranslation">
+      <input message="s0:validateTranslationSoapIn" />
+      <output message="s0:validateTranslationSoapOut" />
+    </operation>
+    <operation name="fillInDetails">
+      <input message="s0:fillInDetailsSoapIn" />
+      <output message="s0:fillInDetailsSoapOut" />
+    </operation>
+    <operation name="areEquivalent">
+      <input message="s0:areEquivalentSoapIn" />
+      <output message="s0:areEquivalentSoapOut" />
+    </operation>
+    <operation name="subsumes">
+      <input message="s0:subsumesSoapIn" />
+      <output message="s0:subsumesSoapOut" />
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <input message="s0:getSupportedMatchAlgoritmsSoapIn" />
+      <output message="s0:getSupportedMatchAlgoritmsSoapOut" />
+    </operation>
+    <operation name="getSupportedVocabularyDomains">
+      <input message="s0:getSupportedVocabularyDomainsSoapIn" />
+      <output message="s0:getSupportedVocabularyDomainsSoapOut" />
+    </operation>
+  </portType>
+  <portType name="MessageRuntimeSoap12">
+    <operation name="getCTSVersion">
+      <input message="s0:getCTSVersionSoapIn" />
+      <output message="s0:getCTSVersionSoapOut" />
+    </operation>
+    <operation name="getServiceName">
+      <input message="s0:getServiceNameSoapIn" />
+      <output message="s0:getServiceNameSoapOut" />
+    </operation>
+    <operation name="getServiceDescription">
+      <input message="s0:getServiceDescriptionSoapIn" />
+      <output message="s0:getServiceDescriptionSoapOut" />
+    </operation>
+    <operation name="getServiceVersion">
+      <input message="s0:getServiceVersionSoapIn" />
+      <output message="s0:getServiceVersionSoapOut" />
+    </operation>
+    <operation name="validateCode">
+      <input message="s0:validateCodeSoapIn" />
+      <output message="s0:validateCodeSoapOut" />
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <input message="s0:getHL7ReleaseVersionSoapIn" />
+      <output message="s0:getHL7ReleaseVersionSoapOut" />
+    </operation>
+    <operation name="translateCode">
+      <input message="s0:translateCodeSoapIn" />
+      <output message="s0:translateCodeSoapOut" />
+    </operation>
+    <operation name="validateTranslation">
+      <input message="s0:validateTranslationSoapIn" />
+      <output message="s0:validateTranslationSoapOut" />
+    </operation>
+    <operation name="fillInDetails">
+      <input message="s0:fillInDetailsSoapIn" />
+      <output message="s0:fillInDetailsSoapOut" />
+    </operation>
+    <operation name="areEquivalent">
+      <input message="s0:areEquivalentSoapIn" />
+      <output message="s0:areEquivalentSoapOut" />
+    </operation>
+    <operation name="subsumes">
+      <input message="s0:subsumesSoapIn" />
+      <output message="s0:subsumesSoapOut" />
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <input message="s0:getSupportedMatchAlgoritmsSoapIn" />
+      <output message="s0:getSupportedMatchAlgoritmsSoapOut" />
+    </operation>
+    <operation name="getSupportedVocabularyDomains">
+      <input message="s0:getSupportedVocabularyDomainsSoapIn" />
+      <output message="s0:getSupportedVocabularyDomainsSoapOut" />
+    </operation>
+  </portType>
+  <portType name="MessageRuntimeHttpGet">
+    <operation name="getCTSVersion">
+      <input message="s0:getCTSVersionHttpGetIn" />
+      <output message="s0:getCTSVersionHttpGetOut" />
+    </operation>
+    <operation name="getServiceName">
+      <input message="s0:getServiceNameHttpGetIn" />
+      <output message="s0:getServiceNameHttpGetOut" />
+    </operation>
+    <operation name="getServiceDescription">
+      <input message="s0:getServiceDescriptionHttpGetIn" />
+      <output message="s0:getServiceDescriptionHttpGetOut" />
+    </operation>
+    <operation name="getServiceVersion">
+      <input message="s0:getServiceVersionHttpGetIn" />
+      <output message="s0:getServiceVersionHttpGetOut" />
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <input message="s0:getHL7ReleaseVersionHttpGetIn" />
+      <output message="s0:getHL7ReleaseVersionHttpGetOut" />
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <input message="s0:getSupportedMatchAlgoritmsHttpGetIn" />
+      <output message="s0:getSupportedMatchAlgoritmsHttpGetOut" />
+    </operation>
+  </portType>
+  <portType name="MessageRuntimeHttpPost">
+    <operation name="getCTSVersion">
+      <input message="s0:getCTSVersionHttpPostIn" />
+      <output message="s0:getCTSVersionHttpPostOut" />
+    </operation>
+    <operation name="getServiceName">
+      <input message="s0:getServiceNameHttpPostIn" />
+      <output message="s0:getServiceNameHttpPostOut" />
+    </operation>
+    <operation name="getServiceDescription">
+      <input message="s0:getServiceDescriptionHttpPostIn" />
+      <output message="s0:getServiceDescriptionHttpPostOut" />
+    </operation>
+    <operation name="getServiceVersion">
+      <input message="s0:getServiceVersionHttpPostIn" />
+      <output message="s0:getServiceVersionHttpPostOut" />
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <input message="s0:getHL7ReleaseVersionHttpPostIn" />
+      <output message="s0:getHL7ReleaseVersionHttpPostOut" />
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <input message="s0:getSupportedMatchAlgoritmsHttpPostIn" />
+      <output message="s0:getSupportedMatchAlgoritmsHttpPostOut" />
+    </operation>
+  </portType>
+  <binding name="MessageRuntimeSoap" type="s0:MessageRuntimeSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="getCTSVersion">
+      <soap:operation soapAction="getCTSVersion" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getServiceName">
+      <soap:operation soapAction="getServiceName" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getServiceDescription">
+      <soap:operation soapAction="getServiceDescription" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getServiceVersion">
+      <soap:operation soapAction="getServiceVersion" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="validateCode">
+      <soap:operation soapAction="validateCode" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <soap:operation soapAction="getHL7ReleaseVersion" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="translateCode">
+      <soap:operation soapAction="translateCode" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="validateTranslation">
+      <soap:operation soapAction="validateTranslation" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="fillInDetails">
+      <soap:operation soapAction="fillInDetails" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="areEquivalent">
+      <soap:operation soapAction="areEquivalent" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="subsumes">
+      <soap:operation soapAction="subsumes" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <soap:operation soapAction="getSupportedMatchAlgorithms" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getSupportedVocabularyDomains">
+      <soap:operation soapAction="getSupportedVocabularyDomains" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <binding name="MessageRuntimeSoap12" type="s0:MessageRuntimeSoap12">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="getCTSVersion">
+      <soap12:operation soapAction="getCTSVersion" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getServiceName">
+      <soap12:operation soapAction="getServiceName" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getServiceDescription">
+      <soap12:operation soapAction="getServiceDescription" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getServiceVersion">
+      <soap12:operation soapAction="getServiceVersion" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="validateCode">
+      <soap12:operation soapAction="validateCode" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <soap12:operation soapAction="getHL7ReleaseVersion" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="translateCode">
+      <soap12:operation soapAction="translateCode" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="validateTranslation">
+      <soap12:operation soapAction="validateTranslation" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="fillInDetails">
+      <soap12:operation soapAction="fillInDetails" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="areEquivalent">
+      <soap12:operation soapAction="areEquivalent" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="subsumes">
+      <soap12:operation soapAction="subsumes" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <soap12:operation soapAction="getSupportedMatchAlgorithms" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getSupportedVocabularyDomains">
+      <soap12:operation soapAction="getSupportedVocabularyDomains" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <binding name="MessageRuntimeHttpGet" type="s0:MessageRuntimeHttpGet">
+    <http:binding verb="GET" />
+    <operation name="getCTSVersion">
+      <http:operation location="/getCTSVersion" />
+      <input>
+        <http:urlEncoded />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getServiceName">
+      <http:operation location="/getServiceName" />
+      <input>
+        <http:urlEncoded />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getServiceDescription">
+      <http:operation location="/getServiceDescription" />
+      <input>
+        <http:urlEncoded />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getServiceVersion">
+      <http:operation location="/getServiceVersion" />
+      <input>
+        <http:urlEncoded />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <http:operation location="/getHL7ReleaseVersion" />
+      <input>
+        <http:urlEncoded />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <http:operation location="/getSupportedMatchAlgoritms" />
+      <input>
+        <http:urlEncoded />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+  </binding>
+  <binding name="MessageRuntimeHttpPost" type="s0:MessageRuntimeHttpPost">
+    <http:binding verb="POST" />
+    <operation name="getCTSVersion">
+      <http:operation location="/getCTSVersion" />
+      <input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getServiceName">
+      <http:operation location="/getServiceName" />
+      <input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getServiceDescription">
+      <http:operation location="/getServiceDescription" />
+      <input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getServiceVersion">
+      <http:operation location="/getServiceVersion" />
+      <input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getHL7ReleaseVersion">
+      <http:operation location="/getHL7ReleaseVersion" />
+      <input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+    <operation name="getSupportedMatchAlgoritms">
+      <http:operation location="/getSupportedMatchAlgoritms" />
+      <input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </input>
+      <output>
+        <mime:mimeXml part="Body" />
+      </output>
+    </operation>
+  </binding>
+  <service name="MessageRuntime">
+    <port name="MessageRuntimeSoap" binding="s0:MessageRuntimeSoap">
+      <soap:address location="http://hdd.marc-hi.ca/ctsservice/messageruntime.asmx" />
+    </port>
+    <port name="MessageRuntimeSoap12" binding="s0:MessageRuntimeSoap12">
+      <soap12:address location="http://hdd.marc-hi.ca/ctsservice/messageruntime.asmx" />
+    </port>
+    <port name="MessageRuntimeHttpGet" binding="s0:MessageRuntimeHttpGet">
+      <http:address location="http://hdd.marc-hi.ca/ctsservice/messageruntime.asmx" />
+    </port>
+    <port name="MessageRuntimeHttpPost" binding="s0:MessageRuntimeHttpPost">
+      <http:address location="http://hdd.marc-hi.ca/ctsservice/messageruntime.asmx" />
+    </port>
+  </service>
+</definitions>

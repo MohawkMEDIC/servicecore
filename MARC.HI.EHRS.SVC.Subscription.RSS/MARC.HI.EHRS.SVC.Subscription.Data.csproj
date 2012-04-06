@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8547FCB1-1589-4193-9213-CE704D46EBCA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MARC.HI.EHRS.SVC.Subscription.Data</RootNamespace>
+    <AssemblyName>MARC.HI.EHRS.SVC.Subscription.Data</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MARC.Everest">
+      <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationContext.cs" />
+    <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
+    <Compile Include="ISyndicationContract.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Messaging\RegisterSubscriptionRequest.cs" />
+    <Compile Include="Messaging\RegisterSubscriptionResponse.cs" />
+    <Compile Include="AdoSubscriptionManagementService.cs" />
+    <Compile Include="SubscriptionQueryContainer.cs" />
+    <Compile Include="SyndicationService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core.ComponentModel\MARC.HI.EHRS.SVC.Core.ComponentModel.csproj">
+      <Project>{EF8358CF-797B-473D-A36D-1464C8CA6670}</Project>
+      <Name>MARC.HI.EHRS.SVC.Core.ComponentModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
+      <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
+      <Name>MARC.HI.EHRS.SVC.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Subscription.Core\MARC.HI.EHRS.SVC.Subscription.Core.csproj">
+      <Project>{FF3C06E6-CA24-49FB-B202-4F6A12CF5FE5}</Project>
+      <Name>MARC.HI.EHRS.SVC.Subscription.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.HealthWorkerIdentity\MARC.HI.EHRS.SVC.HealthWorkerIdentity.csproj">
+      <Project>{525848D3-2001-4009-8C92-B43870388C4B}</Project>
+      <Name>MARC.HI.EHRS.SVC.HealthWorkerIdentity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.PolicyEnforcement\MARC.HI.EHRS.SVC.PolicyEnforcement.csproj">
+      <Project>{2DD0E817-8D5F-482E-BCEC-21B1FF98D079}</Project>
+      <Name>MARC.HI.EHRS.SVC.PolicyEnforcement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SUBSCRIPTION-DDL.SQL" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
