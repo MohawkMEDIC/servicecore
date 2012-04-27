@@ -3,16 +3,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B8672301-DE96-4FAA-BBA3-78984890E204}</ProjectGuid>
+    <ProjectGuid>{6DC09CCE-454B-4D82-923D-5750EBD7B4B0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MARC.HI.EHRS.SVC.ClientIdentity</RootNamespace>
-    <AssemblyName>MARC.HI.EHRS.SVC.ClientIdentity</AssemblyName>
+    <RootNamespace>MARC.HI.EHRS.QM.Persistence.Data</RootNamespace>
+    <AssemblyName>MARC.HI.EHRS.QM.Persistence.Data</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -21,6 +20,10 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,31 +37,39 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IClientIdentityService.cs" />
+    <Compile Include="AdoQueryPersistenceService.cs" />
+    <Compile Include="Configuration\ConfigurationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core.ComponentModel\MARC.HI.EHRS.SVC.Core.ComponentModel.csproj">
-      <Project>{EF8358CF-797B-473D-A36D-1464C8CA6670}</Project>
-      <Name>MARC.HI.EHRS.SVC.Core.ComponentModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
       <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.QM.Core\MARC.HI.EHRS.QM.Core.csproj">
+      <Project>{BE5CF321-72FB-4CB9-BBDD-E48F5A9845C5}</Project>
+      <Name>MARC.HI.EHRS.QM.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

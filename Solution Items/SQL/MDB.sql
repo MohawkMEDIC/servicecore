@@ -29,7 +29,7 @@
  */
 
 --ALTER DATABASE shr SET bytea_output='ESCAPE';
-
+CREATE LANGUAGE plpgsql;
 DROP TABLE MSG_TBL CASCADE;
 
  -- @TABLE
