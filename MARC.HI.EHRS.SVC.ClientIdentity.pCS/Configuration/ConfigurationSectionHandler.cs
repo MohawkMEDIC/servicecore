@@ -9,6 +9,7 @@ namespace MARC.HI.EHRS.SVC.ClientIdentity.pCS.Configuration
     /// <summary>
     /// Configuration Handler
     /// </summary>
+    /// <marc.hi.ehrs.svc.clientid.pcs connectionString="WCFConnector Connection String" deviceId="ID of the CR"/>
     public class ConfigurationSectionHandler : IConfigurationSectionHandler
     {
 

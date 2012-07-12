@@ -13,6 +13,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi.Configuration
     /// <summary>
     /// Configuration section handler for the multiple listener message handler
     /// </summary>
+    /// <marc.hi.ehrs.svc.messaging.multi>
+    ///     <handlers>
+    ///         <add type="FQN of type"/>
+    ///     </handlers>
+    /// </marc.hi.ehrs.svc.messaging.multi>
+    /// 
     public class ConfigurationSectionHandler : IConfigurationSectionHandler
     {
 
