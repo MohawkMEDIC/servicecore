@@ -123,7 +123,7 @@ namespace MARC.HI.EHRS.SVC.Core
                 foreach (XmlNode xn in oidSection.SelectNodes("./*[local-name() = 'add']"))
                 {
                     if(xn.Attributes["name"] != null && xn.Attributes["oid"] != null && xn.Attributes["desc"] != null)
-                        OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value);
+                        OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
                 }
             }
             if (systemSection != null) // load system information

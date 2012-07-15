@@ -5,6 +5,7 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Messaging.Multi.Configuration;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Multi
 {
@@ -38,6 +39,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi
             foreach (var svc in s_configuration.MessageHandlers)
             {
                 svc.Context = this.Context;
+                Trace.TraceInformation("MMH: Starting message handler service {0}", svc);
                 success &= svc.Start();
             }
             return success;

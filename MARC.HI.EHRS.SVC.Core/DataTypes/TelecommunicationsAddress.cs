@@ -41,5 +41,10 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// </summary>
         [XmlAttribute("value")]
         public string Value { get; set; }
+        /// <summary>
+        /// Usable period
+        /// </summary>
+        [XmlElement("usable")]
+        public TimestampSet UsablePeriod { get; set; }
     }
 }

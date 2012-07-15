@@ -48,6 +48,11 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             public string Description { get; set; }
 
             /// <summary>
+            /// Reference to the OID
+            /// </summary>
+            public Uri Ref { get; set; }
+
+            /// <summary>
             /// Represent this as a string
             /// </summary>
             /// <returns></returns>
@@ -68,7 +73,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// <param name="name">The friendly name of the OID</param>
         /// <param name="oid">The OID itself</param>
         /// <param name="desc">A description for the OID</param>
-        public void Register(string name, string oid, string desc)
+        public void Register(string name, string oid, string desc, string uri)
         {
             // is there another oid with this name
             if (m_registerOids.Count(o => o.Name.Equals(name)) > 0)
@@ -78,7 +83,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             {
                 Name = name,
                 Description = desc,
-                Oid = oid
+                Oid = oid,
+                Ref = new Uri(uri)
             });
         }
 
@@ -96,6 +102,14 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         public OidData FindData(string oid)
         {
             return m_registerOids.Find(o => o.Oid.Equals(oid));
+        }
+
+        /// <summary>
+        /// Find an OID by its reference
+        /// </summary>
+        public OidData FindData(Uri reference)
+        {
+            return this.m_registerOids.Find(o => o.Ref.Equals(reference));
         }
 
         /// <summary>

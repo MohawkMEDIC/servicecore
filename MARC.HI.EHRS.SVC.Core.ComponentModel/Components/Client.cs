@@ -17,13 +17,13 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// Gets or sets the perminant address of the client at the time of the last encounter
         /// </summary>
         [XmlElement("addr")]
-        public AddressSet PerminantAddress { get; set; }
+        public virtual AddressSet PerminantAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the last legal name of the client
         /// </summary>
         [XmlElement("legalName")]
-        public NameSet LegalName { get; set; }
+        public virtual NameSet LegalName { get; set; }
 
         /// <summary>
         /// Gets the set of alternate domain identifiers that the client is known as
