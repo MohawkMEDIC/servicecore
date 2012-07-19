@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// Identifies something within a particular domain
     /// </summary>
     [Serializable][XmlType("DomainIdentifier")]
-    public class DomainIdentifier
+    public class DomainIdentifier : Datatype
     {
 
         /// <summary>

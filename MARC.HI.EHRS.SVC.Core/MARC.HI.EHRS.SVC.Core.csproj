@@ -97,6 +97,7 @@
     <Compile Include="DataTypes\AddressSet.cs" />
     <Compile Include="DataTypes\CodeValue.cs" />
     <Compile Include="DataTypes\CustodianshipData.cs" />
+    <Compile Include="DataTypes\Datatype.cs" />
     <Compile Include="DataTypes\DomainIdentifier.cs" />
     <Compile Include="DataTypes\Jurisdiction.cs" />
     <Compile Include="DataTypes\MessageState.cs" />

@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// Identifies an address within  a telecommunications context
     /// </summary>
     [Serializable][XmlType("TelecomAddress")]
-    public class TelecommunicationsAddress
+    public class TelecommunicationsAddress : Datatype
     {
         /// <summary>
         /// Identifies the use of the telecom address

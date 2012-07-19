@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// Represents codified data
     /// </summary>
     [Serializable][XmlType("CodeValue")]
-    public class CodeValue
+    public class CodeValue : Datatype
     {
         /// <summary>
         /// The OID of the code system from which the code is pulled

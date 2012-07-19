@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// Groups one or more name components into a set
     /// </summary>
     [Serializable][XmlType("NameSet")]
-    public class NameSet
+    public class NameSet : Datatype
     {
         public enum NameSetUse
         {
