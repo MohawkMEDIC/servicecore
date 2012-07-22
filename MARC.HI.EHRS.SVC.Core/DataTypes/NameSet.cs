@@ -34,41 +34,45 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         public enum NameSetUse
         {
             /// <summary>
+            /// A name to be used for searching only
+            /// </summary>
+            Search = 0x0,
+            /// <summary>
             /// The name represents the legal name of the entity
             /// </summary>
-            Legal = 0x0,
+            Legal = 0x1,
             /// <summary>
             /// The name is an official name for the entity
             /// </summary>
-            OfficialRecord = 0x1,
+            OfficialRecord = 0x2,
             /// <summary>
             /// The name is used for licensing purposes
             /// </summary>
-            License = 0x2,
+            License = 0x3,
             /// <summary>
             /// The name is a tribal name
             /// </summary>
-            Indigenous = 0x3,
+            Indigenous = 0x4,
             /// <summary>
             /// The name is an alternate name (ie: AKA)
             /// </summary>
-            Pseudonym = 0x4,
+            Pseudonym = 0x5,
             /// <summary>
             /// The name is an artistic name (ie: Prince)
             /// </summary>
-            Artist = 0x5,
+            Artist = 0x6,
             /// <summary>
             /// The name is used in a religious context (ie: Baptismal name)
             /// </summary>
-            Religious = 0x6,
+            Religious = 0x7,
             /// <summary>
             /// The name has been assigned by an authority
             /// </summary>
-            Assigned = 0x7,
+            Assigned = 0x8,
             /// <summary>
             /// The name is a phonetic representation of the name
             /// </summary>
-            Phonetic = 0x8
+            Phonetic = 0x9
         }
 
         /// <summary>

@@ -34,48 +34,53 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// <summary>
         /// Uses for an address
         /// </summary>
+        [Flags]
         public enum AddressSetUse
         {
             /// <summary>
+            /// Search address
+            /// </summary>
+            Search = 0x0,
+            /// <summary>
             /// A Home address for the entity
             /// </summary>
-            HomeAddress = 0x0,
+            HomeAddress = 0x1,
             /// <summary>
             /// The address to reach the entity after business hours
             /// </summary>
-            PrimaryHome = 0x1,
-            /// <summary>
-            /// A vacation home or cottage
-            /// </summary>
-            VacationHome = 0x2,
-            /// <summary>
-            /// A place of work
-            /// </summary>
-            WorkPlace = 0x3,
+            PrimaryHome = 0x2,
             /// <summary>
             /// Direct address, usually used for telecommunications 
             /// </summary>
             Direct = 0x4,
             /// <summary>
+            /// A vacation home or cottage
+            /// </summary>
+            VacationHome = 0x8,
+            /// <summary>
+            /// A place of work
+            /// </summary>
+            WorkPlace = 0x10,
+            /// <summary>
             /// A public address for the entity
             /// </summary>
-            Public = 0x5,
+            Public = 0x20,
            /// <summary>
            /// Flags the address as a "bad" address
            /// </summary>
-            BadAddress = 0x6,
+            BadAddress = 0x40,
             /// <summary>
             /// An address that can be used for a physical visit
             /// </summary>
-            PhysicalVisit = 0x7,
+            PhysicalVisit = 0x80,
             /// <summary>
             /// An address used to send mail (ie: post office box)
             /// </summary>
-            PostalAddress = 0x8,
+            PostalAddress = 0x100,
             /// <summary>
             /// A temporary address for sending mail
             /// </summary>
-            TemporaryAddress = 0x9
+            TemporaryAddress = 0x200
         }
 
         /// <summary>
