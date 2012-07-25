@@ -12,7 +12,6 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
  * License for the specific language governing permissions and limitations under 
  * the License.
-
  * 
  * User: Justin Fyfe
  * Date: 08-24-2011
@@ -72,7 +71,11 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             /// <summary>
             /// The name is a phonetic representation of the name
             /// </summary>
-            Phonetic = 0x9
+            Phonetic = 0x9,
+            /// <summary>
+            /// Maiden name
+            /// </summary>
+            MaidenName = 0xa
         }
 
         /// <summary>
