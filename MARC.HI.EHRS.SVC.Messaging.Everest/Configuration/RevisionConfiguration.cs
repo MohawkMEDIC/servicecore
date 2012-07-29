@@ -46,6 +46,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration
         /// If true, will enable everest validation
         /// </summary>
         public bool ValidateInstances { get; set; }
+        /// <summary>
+        /// Identifier format
+        /// </summary>
+        public string MessageIdentifierFormat { get; set; }
 
         /// <summary>
         /// Gets a list of Listeners

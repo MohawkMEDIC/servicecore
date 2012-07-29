@@ -69,7 +69,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration
                     revConfig.Name = revSection.Attributes["name"].Value;
                 if (revSection.Attributes["validate"] != null)
                     revConfig.ValidateInstances = Convert.ToBoolean(revSection.Attributes["validate"].Value);
-
+                if (revSection.Attributes["messageIdFormat"] != null)
+                    revConfig.MessageIdentifierFormat = revSection.Attributes["messageIdFormat"].Value;
+                else
+                    revConfig.MessageIdentifierFormat = "{0}";
+                
                 // Sanity check
                 if (revConfig.Formatter == null)
                 {

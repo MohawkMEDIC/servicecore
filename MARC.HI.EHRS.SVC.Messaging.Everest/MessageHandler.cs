@@ -248,7 +248,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
                     // check with persistence
                     if (persistenceService != null)
-                        messageState = persistenceService.GetMessageState(new Guid(interactionStructure.Id.Root));
+                    {
+                        messageState = persistenceService.GetMessageState(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
+                    }
 
                     switch (messageState)
                     {
@@ -261,7 +263,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                                 try
                                 {
                                     WriteMessageToStream(sender as IFormattedConnector, interactionStructure, ms);
-                                    persistenceService.PersistMessage(new Guid(interactionStructure.Id.Root), ms);
+                                    persistenceService.PersistMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension), ms);
                                 }
                                 finally
                                 {
@@ -278,7 +280,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                                 try
                                 {
                                     WriteMessageToStream(sender as IFormattedConnector, response, ms);
-                                    persistenceService.PersistResultMessage(new Guid(response.Id.Root), new Guid(interactionStructure.Id.Root), ms);
+                                    persistenceService.PersistResultMessage(String.Format(curRevision.MessageIdentifierFormat, response.Id.Root, response.Id.Extension), String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension), ms);
                                 }
                                 finally
                                 {
@@ -288,7 +290,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
                             break;
                         case MessageState.Complete:
-                            var rms = persistenceService.GetMessageResponseMessage(new Guid(interactionStructure.Id.Root));
+                            var rms = persistenceService.GetMessageResponseMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
                             response = (sender as IFormattedConnector).Formatter.ParseObject(rms) as IInteraction;
                             break;
                         case MessageState.Active:

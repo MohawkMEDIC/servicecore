@@ -47,11 +47,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             /// <summary>
             /// Gets or sets the id of the message
             /// </summary>
-            public Guid MessageId { get; set; }
+            public String MessageId { get; set; }
             /// <summary>
             /// Gets or sets the id of the response
             /// </summary>
-            public Guid ResponseToId { get; set; }
+            public String ResponseToId { get; set; }
             /// <summary>
             /// Gets or sets the body stream
             /// </summary>
@@ -76,7 +76,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// Get the state of the message in the persistence store
         /// </summary>
-        public MessageState GetMessageState(Guid messageId)
+        public MessageState GetMessageState(String messageId)
         {
             IDbConnection conn = m_configuration.CreateConnection();
 
@@ -96,7 +96,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter
                     IDataParameter msgIdParm = cmd.CreateParameter();
                     msgIdParm.DbType = DbType.String;
-                    msgIdParm.Value = messageId.ToString("B");
+                    msgIdParm.Value = messageId;
                     msgIdParm.Direction = ParameterDirection.Input;
                     msgIdParm.ParameterName = "msg_id_in";
                     cmd.Parameters.Add(msgIdParm);
@@ -134,15 +134,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// Persist a message to the persistence store
         /// </summary>
-        public void PersistMessage(Guid messageId, Stream message)
+        public void PersistMessage(String messageId, Stream message)
         {
-            PersistResultMessage(messageId, default(Guid), message);
+            PersistResultMessage(messageId, default(String), message);
         }
 
         /// <summary>
         /// Get the message that responds to the specified message identifier
         /// </summary>
-        public System.IO.Stream GetMessageResponseMessage(Guid messageId)
+        public System.IO.Stream GetMessageResponseMessage(String messageId)
         {
 
             IDbConnection conn = m_configuration.CreateConnection();
@@ -163,7 +163,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter
                     IDataParameter msgIdParm = cmd.CreateParameter();
                     msgIdParm.DbType = DbType.String;
-                    msgIdParm.Value = messageId.ToString("B");
+                    msgIdParm.Value = messageId;
                     msgIdParm.Direction = ParameterDirection.Input;
                     msgIdParm.ParameterName = "msg_id_in";
                     cmd.Parameters.Add(msgIdParm);
@@ -192,7 +192,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// Persist a response message to the data store
         /// </summary>
-        public void PersistResultMessage(Guid messageId, Guid respondsToId, Stream response)
+        public void PersistResultMessage(String messageId, String respondsToId, Stream response)
         {
             ThreadPool.QueueUserWorkItem(DoPersistResultMessage, new AdoMessagePersistanceArgs()
             {
@@ -237,7 +237,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter for message id
                     IDataParameter msgIdParm = cmd.CreateParameter();
                     msgIdParm.DbType = DbType.String;
-                    msgIdParm.Value = args.MessageId.ToString("B");
+                    msgIdParm.Value = args.MessageId;
                     msgIdParm.Direction = ParameterDirection.Input;
                     msgIdParm.ParameterName = "msg_id_in";
                     cmd.Parameters.Add(msgIdParm);
@@ -254,7 +254,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter for msg_rsp_in
                     IDataParameter msgRspParm = cmd.CreateParameter();
                     msgRspParm.DbType = DbType.String;
-                    msgRspParm.Value = args.ResponseToId.Equals(default(Guid)) ? DBNull.Value : (object)args.ResponseToId.ToString("B");
+                    msgRspParm.Value = args.ResponseToId.Equals(default(String)) ? DBNull.Value : (object)args.ResponseToId;
                     msgRspParm.Direction = ParameterDirection.Input;
                     msgRspParm.ParameterName = "msg_rsp_in";
                     cmd.Parameters.Add(msgRspParm);
@@ -301,7 +301,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// GEt a message
         /// </summary>
-        public Stream GetMessage(Guid messageId)
+        public Stream GetMessage(String messageId)
         {
             IDbConnection conn = m_configuration.CreateConnection();
 
@@ -321,7 +321,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter
                     IDataParameter msgIdParm = cmd.CreateParameter();
                     msgIdParm.DbType = DbType.String;
-                    msgIdParm.Value = messageId.ToString("B");
+                    msgIdParm.Value = messageId;
                     msgIdParm.Direction = ParameterDirection.Input;
                     msgIdParm.ParameterName = "msg_id_in";
                     cmd.Parameters.Add(msgIdParm);

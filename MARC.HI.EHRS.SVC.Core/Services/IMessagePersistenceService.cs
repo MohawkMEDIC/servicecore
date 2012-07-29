@@ -35,30 +35,30 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Get the state of a message
         /// </summary>
-        MessageState GetMessageState(Guid messageId);
+        MessageState GetMessageState(string messageId);
 
         /// <summary>
         /// Persists the message 
         /// </summary>
-        void PersistMessage(Guid messageId, Stream message);
+        void PersistMessage(string messageId, Stream message);
 
         /// <summary>
         /// Get the identifier of the message that represents the response to the current message
         /// </summary>
-        Stream GetMessageResponseMessage(Guid messageId);
+        Stream GetMessageResponseMessage(string messageId);
 
         /// <summary>
         /// Get a message
         /// </summary>
         /// <param name="messageId"></param>
         /// <returns></returns>
-        Stream GetMessage(Guid messageId);
+        Stream GetMessage(string messageId);
 
         /// <summary>
         /// Persist
         /// </summary>
         /// <param name="guid"></param>
         /// <param name="response"></param>
-        void PersistResultMessage(Guid messageId, Guid respondsToId, Stream response);
+        void PersistResultMessage(string messageId, string respondsToId, Stream response);
     }
 }
