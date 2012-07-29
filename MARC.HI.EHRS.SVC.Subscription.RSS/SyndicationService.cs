@@ -147,7 +147,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                 foreach (var itm in subscriptionResults.Take((int)s_configuration.MaximumRecords))
                 {
                     SyndicationItem feedItem = new SyndicationItem();
-                    feedItem.Title = new TextSyndicationContent(String.Format("{0}@{1}", itm.Id.Domain, itm.Id.Identifier), TextSyndicationContentKind.Plaintext);
+                    feedItem.Title = new TextSyndicationContent(String.Format("{1}^^^&{0}&ISO", itm.Id.Domain, itm.Id.Identifier), TextSyndicationContentKind.Plaintext);
                     feedItem.Content = new TextSyndicationContent(localeService.GetString("SBSI004"), TextSyndicationContentKind.Plaintext);
                     feedItem.Id = itm.FeedItemId.ToString();
                     feedItem.PublishDate = itm.Created;

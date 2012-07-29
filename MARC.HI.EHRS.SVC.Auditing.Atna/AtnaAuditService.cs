@@ -74,7 +74,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
             am.SourceIdentification.Add(new AuditSourceIdentificationType()
             {
-                AuditEnterpriseSiteID = String.Format("{0}@{1}", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
+                AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
             });
 
             // Add additional data like the participant
@@ -116,7 +116,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 {
                     NetworkAccessPointId = Environment.MachineName,
                     NetworkAccessPointType = NetworkAccessPointType.MachineName,
-                    UserIdentifier = String.Format("{0}@{1}", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
+                    UserIdentifier = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
                 });
 
 

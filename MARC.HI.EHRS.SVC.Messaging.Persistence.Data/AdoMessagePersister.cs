@@ -136,7 +136,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// </summary>
         public void PersistMessage(String messageId, Stream message)
         {
-            PersistResultMessage(messageId, default(String), message);
+            PersistResultMessage(messageId, String.Empty, message);
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter for msg_rsp_in
                     IDataParameter msgRspParm = cmd.CreateParameter();
                     msgRspParm.DbType = DbType.String;
-                    msgRspParm.Value = args.ResponseToId.Equals(default(String)) ? DBNull.Value : (object)args.ResponseToId;
+                    msgRspParm.Value = String.IsNullOrEmpty(args.ResponseToId) ? DBNull.Value : (object)args.ResponseToId;
                     msgRspParm.Direction = ParameterDirection.Input;
                     msgRspParm.ParameterName = "msg_rsp_in";
                     cmd.Parameters.Add(msgRspParm);
