@@ -81,6 +81,24 @@ namespace MARC.HI.EHRS.SVC.Core
         /// </summary>
         public OidRegistrar OidRegistrar { get; private set; }
 
+        /// <summary>
+        /// Valid senders
+        /// </summary>
+        private List<DomainIdentifier> m_validSenders = new List<DomainIdentifier>();
+
+        /// <summary>
+        /// Validate senders
+        /// </summary>
+        private bool m_validateSenders = true;
+
+        /// <summary>
+        /// Determine if the sender is a valid sender
+        /// </summary>
+        public bool IsRegisteredDevice(DomainIdentifier device)
+        {
+            return !this.m_validateSenders || this.m_validSenders.Exists(o => o.Domain == device.Domain && o.Identifier == device.Identifier);
+        }
+
         #region IConfigurationSectionHandler Members
 
         /// <summary>
@@ -95,12 +113,33 @@ namespace MARC.HI.EHRS.SVC.Core
             this.OidRegistrar = new OidRegistrar();
             this.ServiceAssemblies = new List<Assembly>();
 
-            XmlNode serviceAssemblySection = section.SelectSingleNode("./*[local-name() = 'serviceAssemblies']"), 
+            XmlNode serviceAssemblySection = section.SelectSingleNode("./*[local-name() = 'serviceAssemblies']"),
                 serviceProviderSection = section.SelectSingleNode("./*[local-name() = 'serviceProviders']"),
                 systemSection = section.SelectSingleNode("./*[local-name() = 'system']"),
                 jurisdictionSection = section.SelectSingleNode("./*[local-name() = 'jurisdiction']"),
                 custodianSection = section.SelectSingleNode("./*[local-name() = 'custodianship']"),
-                oidSection = section.SelectSingleNode("./*[local-name() = 'registeredOids']");
+                oidSection = section.SelectSingleNode("./*[local-name() = 'registeredOids']"),
+                sendersSection = section.SelectSingleNode("./*[local-name() = 'registeredDevices']");
+
+            // Senders section
+            if (sendersSection != null) // senders
+            {
+                // Validate?
+                if(sendersSection.Attributes["validateSolicitors"] != null)
+                    this.m_validateSenders = Convert.ToBoolean(sendersSection.Attributes["validateSolicitors"].Value);
+
+                // Add registered senders
+                foreach(XmlElement nd in sendersSection.SelectNodes("./*[local-name() = 'add']"))
+                {
+                    if(nd.Attributes["domain"] == null)
+                        throw new ConfigurationErrorsException("Registered device must have a domain attribute");
+                    this.m_validSenders.Add(new DomainIdentifier() {
+                        Domain = nd.Attributes["domain"].Value,
+                        Identifier = nd.Attributes["value"] == null ? null : nd.Attributes["value"].Value
+                    });
+                }
+            }
+
             if(serviceAssemblySection != null) // Load assembly data
                 foreach (XmlNode nd in serviceAssemblySection.SelectNodes("./*[local-name() = 'add']/@assembly"))
                 {
