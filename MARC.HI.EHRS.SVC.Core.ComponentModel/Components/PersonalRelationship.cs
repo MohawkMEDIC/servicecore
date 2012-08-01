@@ -19,5 +19,9 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         [XmlAttribute("kind")]
         public string RelationshipKind { get; set; }
 
+        /// <summary>
+        /// Gets or sets the status
+        /// </summary>
+        public StatusType Status { get; set; }
     }
 }
