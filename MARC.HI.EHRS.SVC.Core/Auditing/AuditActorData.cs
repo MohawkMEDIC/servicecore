@@ -52,10 +52,10 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// <summary>
         /// Identifies the role(s) that the actor has played
         /// </summary>
-        public List<String> ActorRoleCode { get; set; }
+        public List<CodeValue> ActorRoleCode { get; set; }
         /// <summary>
         /// Default ctor
         /// </summary>
-        public AuditActorData() { ActorRoleCode = new List<string>(); }
+        public AuditActorData() { ActorRoleCode = new List<CodeValue>(); }
     }
 }

@@ -51,6 +51,12 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         public bool IsLicenseAuthority { get; set; }
 
         /// <summary>
+        /// Assigning authority
+        /// </summary>
+        [XmlAttribute("assigningAuth")]
+        public string AssigningAuthority { get; set; }
+
+        /// <summary>
         /// Compare this object to antoher
         /// </summary>
         public override bool Equals(object obj)

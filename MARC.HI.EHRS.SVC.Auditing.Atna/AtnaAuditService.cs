@@ -27,6 +27,7 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Auditing.Atna.Format;
 using System.Threading;
 using System.ComponentModel;
+using System.Net;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
@@ -74,14 +75,15 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
             am.SourceIdentification.Add(new AuditSourceIdentificationType()
             {
-                AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
+                AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName),
             });
-
+            
             // Add additional data like the participant
             bool thisFound = false;
+            string dnsName = Dns.GetHostName();
             foreach (var adActor in ad.Actors)
             {
-                thisFound |= adActor.NetworkAccessPointId == Environment.MachineName &&
+                thisFound |= (adActor.NetworkAccessPointId == Environment.MachineName || adActor.NetworkAccessPointId == dnsName) &&
                     adActor.NetworkAccessPointType == MARC.HI.EHRS.SVC.Core.DataTypes.NetworkAccessPointType.MachineName;
                 var act = new AuditActorData()
                 {
@@ -93,7 +95,10 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     UserName = adActor.UserName
                 };
                 foreach (var rol in adActor.ActorRoleCode)
-                    act.ActorRoleCode.Add(new CodeValue<string>(rol, "HL7 Type Code"));
+                    act.ActorRoleCode.Add(new CodeValue<string>(rol.Code, rol.CodeSystem)
+                        {
+                            DisplayName = rol.DisplayName
+                        });
                 am.Actors.Add(act);
             }
 
