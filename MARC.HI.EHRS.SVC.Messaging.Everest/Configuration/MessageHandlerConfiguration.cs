@@ -37,14 +37,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration
         /// <summary>
         /// Gets the list of interactions that the specified handler can process
         /// </summary>
-        public List<string> Interactions { get; private set; }
+        public List<InteractionConfiguration> Interactions { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the TriggerHandlerConfiguration
         /// </summary>
         public MessageHandlerConfiguration()
         {
-            this.Interactions = new List<string>();
+            this.Interactions = new List<InteractionConfiguration>();
         }
     }
 }

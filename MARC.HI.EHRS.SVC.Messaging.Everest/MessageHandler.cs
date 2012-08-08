@@ -18,6 +18,8 @@ using MARC.Everest.Interfaces;
 using MARC.HI.EHRS.SVC.Messaging.Everest.Exception;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Runtime.InteropServices;
+using MARC.Everest.Connectors.WCF;
+using System.ServiceModel.Channels;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Everest
 {
@@ -230,11 +232,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 MessageHandlerConfiguration receiverConfig = null;
                 if (interactionStructure != null && interactionStructure.InteractionId != null &&
                     !String.IsNullOrEmpty(interactionStructure.InteractionId.Extension))
-                    receiverConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Contains(interactionStructure.InteractionId.Extension));
+                    receiverConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i=>i.Id == interactionStructure.InteractionId.Extension));
 
                 IEverestMessageReceiver currentHandler = null, defaultHandler = null;
                 
-                var defaultHandlerConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Contains("*"));
+                var defaultHandlerConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i=>i.Id == "*"));
                 receiverConfig = receiverConfig ?? defaultHandlerConfig; // find a handler
 
                 // Receiver configuration
@@ -243,7 +245,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 else
                 {
                     
-                    var messageState = MessageState.New;
+                    var messageState = MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New;
                     IInteraction response = null;
 
                     // check with persistence
@@ -254,7 +256,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
                     switch (messageState)
                     {
-                        case MessageState.New:
+                        case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New:
 
                             // Persist the message 
                             if (persistenceService != null)
@@ -289,11 +291,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                             }
 
                             break;
-                        case MessageState.Complete:
+                        case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.Complete:
                             var rms = persistenceService.GetMessageResponseMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
                             response = (sender as IFormattedConnector).Formatter.ParseObject(rms) as IInteraction;
                             break;
-                        case MessageState.Active:
+                        case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.Active:
                             throw new ApplicationException("Message is already being processed");
                     }
                     // Send back
@@ -329,6 +331,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
                         try
                         {
+                            // Create headers
+                            var wcfResult = rcvResult as WcfReceiveResult;
+                            if (wcfResult != null && wcfResult.Headers != null)
+                            {
+                                wcfResult.ResponseHeaders = CreateResponseHeaders(receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension).ResponseHeaders, wcfResult.Headers.MessageVersion);
+                                if (wcfResult.ResponseHeaders != null)
+                                    wcfResult.ResponseHeaders.RelatesTo = wcfResult.Headers.MessageId;
+                            }
                             ISendResult sndResult = ilwConnector.Send(response, rcvResult);
                             if (sndResult.Code != ResultCode.Accepted &&
                                 sndResult.Code != ResultCode.AcceptedNonConformant)
@@ -363,6 +373,49 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 Trace.TraceError(ex.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Create response headers
+        /// </summary>
+        private System.ServiceModel.Channels.MessageHeaders CreateResponseHeaders(XmlNodeList xmlNodeList, MessageVersion ver)
+        {
+            if (xmlNodeList == null)
+                return null;
+
+            MessageHeaders retVal = new MessageHeaders(ver);
+            foreach (XmlElement hdr in xmlNodeList)
+            {
+                if (hdr.NamespaceURI == "http://schemas.xmlsoap.org/ws/2004/08/addressing" || hdr.NamespaceURI == "http://www.w3.org/2005/08/addressing")
+                {
+                    switch (hdr.LocalName)
+                    {
+                        case "Action":
+                            retVal.Action = hdr.InnerText;
+                            break;
+                        case "To":
+                            retVal.To = new Uri(hdr.InnerText);
+                            break;
+                        case "From":
+                            retVal.From = new System.ServiceModel.EndpointAddress(hdr.InnerText);
+                            break;
+                        case "ReplyTo":
+                            retVal.ReplyTo = new System.ServiceModel.EndpointAddress(hdr.InnerText);
+                            break;
+                        default:
+                            MessageHeader header = MessageHeader.CreateHeader(hdr.LocalName, hdr.NamespaceURI, hdr.InnerText);
+                            retVal.Add(header);
+                            break;                            
+                    }
+                }
+                else
+                {
+                    MessageHeader header = MessageHeader.CreateHeader(hdr.LocalName, hdr.NamespaceURI, hdr.InnerText);
+                    retVal.Add(header);
+                }
+
+            }
+            return retVal;
         }
 
         public bool Stop()

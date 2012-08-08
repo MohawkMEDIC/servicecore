@@ -36,6 +36,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// </summary>
         public enum NamePartType
         {
+            None = 0x0,
             Given = 0x01,
             Prefix = 0x02,
             Delimeter = 0x03,

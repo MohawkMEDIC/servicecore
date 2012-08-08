@@ -165,8 +165,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration
                     }
 
                     // Get trigger events
-                    foreach(XmlNode triggerEvent in handlerSection.SelectNodes("./*[local-name() = 'interactionId']/@name"))
-                        handlerConfig.Interactions.Add(triggerEvent.Value);
+                    foreach (XmlNode triggerEvent in handlerSection.SelectNodes("./*[local-name() = 'interactionId']"))
+                    {
+                        InteractionConfiguration config = new InteractionConfiguration();
+                        if (triggerEvent.Attributes["name"] == null)
+                            throw new ConfigurationErrorsException("Interaction is missing name attribute");
+                        else
+                            config.Id = triggerEvent.Attributes["name"].Value;
+
+                        // Load the headers
+                        var responseHeaderNode = triggerEvent.SelectSingleNode("./*[local-name() = 'responseHeaders']");
+                        if (responseHeaderNode != null)
+                            config.ResponseHeaders = responseHeaderNode.ChildNodes;
+                        handlerConfig.Interactions.Add(config);
+                    }
 
                     // Add the handler config
                     revConfig.MessageHandlers.Add(handlerConfig);

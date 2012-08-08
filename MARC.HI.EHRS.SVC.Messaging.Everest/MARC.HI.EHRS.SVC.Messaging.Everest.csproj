@@ -68,11 +68,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
     </Reference>
+    <Reference Include="MARC.Everest.Connectors.WCF, Version=1.1.0.0, Culture=neutral, PublicKeyToken=99dcf2dae6474efd, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Solution Items\MARC.Everest.Connectors.WCF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -87,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\EverestConfigurationSectionHandler.cs" />
+    <Compile Include="Configuration\InteractionConfiguration.cs" />
     <Compile Include="Configuration\RevisionConfiguration.cs" />
     <Compile Include="Configuration\ListenConfiguration.cs" />
     <Compile Include="Configuration\MessageHandlerConfiguration.cs" />
