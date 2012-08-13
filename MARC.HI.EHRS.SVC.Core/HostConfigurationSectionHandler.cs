@@ -161,8 +161,16 @@ namespace MARC.HI.EHRS.SVC.Core
             {
                 foreach (XmlNode xn in oidSection.SelectNodes("./*[local-name() = 'add']"))
                 {
-                    if(xn.Attributes["name"] != null && xn.Attributes["oid"] != null && xn.Attributes["desc"] != null)
-                        OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
+                    if (xn.Attributes["name"] != null && xn.Attributes["oid"] != null && xn.Attributes["desc"] != null)
+                    {
+                        var data = OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
+                        if(xn.ChildNodes != null)
+                            foreach (XmlElement child in xn.ChildNodes)
+                            {
+                                if (child.Name == "attribute" && child.Attributes["name"] != null)
+                                    data.Attributes.Add(child.Attributes["name"].Value, child.Attributes["value"] != null ? child.Attributes["value"].Value : null);
+                            }
+                    }
                 }
             }
             if (systemSection != null) // load system information

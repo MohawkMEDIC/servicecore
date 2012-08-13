@@ -38,8 +38,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi.Configuration
             this.MessageHandlers = new List<IMessageHandlerService>();
 
             // get the handler
-            XmlNodeList addNodes = section.SelectNodes(".//*[local-name() = 'handlers']/*[local-name() = 'add']");
-            foreach(XmlElement nd in addNodes)
+            XmlElement addNodes = section.SelectSingleNode(".//*[local-name() = 'handlers']") as XmlElement;
+            foreach(XmlElement nd in addNodes.ChildNodes)
                 if (nd.Attributes["type"] != null)
                 {
                     Type t = Type.GetType(nd.Attributes["type"].Value);
@@ -55,7 +55,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi.Configuration
                             Trace.TraceWarning("Can't find parameterless constructor on type {0}", t.FullName);
                     }
                     else
-                        Trace.TraceWarning("Can't find type described by '{0}'", nd.Value);
+                        Trace.TraceWarning("Can't find type described by '{0}'", nd.Attributes["type"].Value);
                 }
 
             return this;

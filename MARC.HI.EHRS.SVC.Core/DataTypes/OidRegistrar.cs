@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace MARC.HI.EHRS.SVC.Core.DataTypes
 {
@@ -30,10 +31,44 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     public class OidRegistrar : IEnumerable<MARC.HI.EHRS.SVC.Core.DataTypes.OidRegistrar.OidData>
     {
         /// <summary>
+        /// Equality provider
+        /// </summary>
+        private class AttributeEqualityProvider : IEqualityComparer
+        {
+            #region IEqualityComparer Members
+
+            /// <summary>
+            /// Equals object
+            /// </summary>
+            public bool Equals(object x, object y)
+            {
+                return false;
+            }
+
+            /// <summary>
+            /// Get a hash code for a particular object
+            /// </summary>
+            public int GetHashCode(object obj)
+            {
+                return obj.GetHashCode();
+            }
+
+            #endregion
+        }
+
+        /// <summary>
         /// OID Data
         /// </summary>
         public class OidData
         {
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            public OidData()
+            {
+                this.Attributes = new Hashtable(new AttributeEqualityProvider());
+                
+            }
             /// <summary>
             /// The name of the OID
             /// </summary>
@@ -46,6 +81,10 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             /// The description for the oid
             /// </summary>
             public string Description { get; set; }
+            /// <summary>
+            /// Extended attributes
+            /// </summary>
+            public Hashtable Attributes { get; set; }
 
             /// <summary>
             /// Reference to the OID
@@ -73,19 +112,21 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// <param name="name">The friendly name of the OID</param>
         /// <param name="oid">The OID itself</param>
         /// <param name="desc">A description for the OID</param>
-        public void Register(string name, string oid, string desc, string uri)
+        public OidData Register(string name, string oid, string desc, string uri)
         {
             // is there another oid with this name
             if (m_registerOids.Count(o => o.Name.Equals(name)) > 0)
                 throw new InvalidOperationException("Cannot register a duplicate named OID");
 
-            m_registerOids.Add(new OidData()
+            var od = new OidData()
             {
                 Name = name,
                 Description = desc,
                 Oid = oid,
                 Ref = new Uri(uri ?? string.Format("oid:{0}", oid))
-            });
+            };
+            m_registerOids.Add(od);
+            return od;
         }
 
         /// <summary>
