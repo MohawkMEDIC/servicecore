@@ -66,7 +66,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             /// </summary>
             public OidData()
             {
-                this.Attributes = new Hashtable(new AttributeEqualityProvider());
+                this.Attributes = new List<KeyValuePair<string, string>>();
                 
             }
             /// <summary>
@@ -84,7 +84,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             /// <summary>
             /// Extended attributes
             /// </summary>
-            public Hashtable Attributes { get; set; }
+            public List<KeyValuePair<String,String>> Attributes { get; set; }
 
             /// <summary>
             /// Reference to the OID
@@ -143,6 +143,14 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         public OidData FindData(string oid)
         {
             return m_registerOids.Find(o => o.Oid.Equals(oid));
+        }
+
+        /// <summary>
+        /// Find data related to an oid
+        /// </summary>
+        public OidData FindData(Predicate<OidData> match)
+        {
+            return this.m_registerOids.Find(match);
         }
 
         /// <summary>

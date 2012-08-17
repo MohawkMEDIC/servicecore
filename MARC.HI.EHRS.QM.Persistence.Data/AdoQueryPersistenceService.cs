@@ -110,7 +110,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Register a query set 
         /// </summary>
-        public bool RegisterQuerySet(Guid queryId, MARC.HI.EHRS.SVC.Core.DataTypes.VersionedDomainIdentifier[] results, object tag)
+        public bool RegisterQuerySet(string queryId, MARC.HI.EHRS.SVC.Core.DataTypes.VersionedDomainIdentifier[] results, object tag)
         {
             IDbConnection dbc = m_configuration.CreateConnection();
             try
@@ -143,7 +143,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Push a result into the data store
         /// </summary>
-        private void PushResult(IDbConnection conn, Guid queryId, VersionedDomainIdentifier resultId)
+        private void PushResult(IDbConnection conn, string queryId, VersionedDomainIdentifier resultId)
         {
             IDbCommand cmd = conn.CreateCommand();
             try
@@ -163,7 +163,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 qryVrsnParam.ParameterName = "rslt_vrsn_id_in";
                 qryRsltParam.Value = Decimal.Parse(resultId.Identifier);
                 qryVrsnParam.Value = resultId.Version == null ? DBNull.Value : (object)Decimal.Parse(resultId.Version);
-                qryIdParam.Value = queryId.ToString("B");
+                qryIdParam.Value = queryId;
 
                 // Add parameters
                 cmd.Parameters.Add(qryIdParam);
@@ -182,7 +182,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Register the query 
         /// </summary>
-        private void RegisterQuery(IDbConnection conn, Guid queryId, int nRecords, object tag)
+        private void RegisterQuery(IDbConnection conn, string queryId, int nRecords, object tag)
         {
             // Create command
             IDbCommand cmd = conn.CreateCommand();
@@ -199,7 +199,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 qryIdParam.DbType = DbType.String;
                 qryCntParam.DbType = DbType.Decimal;
                 qryDmnParam.DbType = DbType.String;
-                qryIdParam.Value = queryId.ToString("B");
+                qryIdParam.Value = queryId;
                 qryCntParam.Value = nRecords.ToString();
                 qryDmnParam.Value = tag.ToString();
 
@@ -228,7 +228,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// </summary>
         /// <param name="queryId"></param>
         /// <returns></returns>
-        public bool IsRegistered(Guid queryId)
+        public bool IsRegistered(string queryId)
         {
             // Create connection
             IDbConnection dbc = m_configuration.CreateConnection();
@@ -249,7 +249,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     IDataParameter qryIdParam = cmd.CreateParameter();
                     qryIdParam.Direction = ParameterDirection.Input;
                     qryIdParam.ParameterName = "qry_id_in";
-                    qryIdParam.Value = queryId.ToString("B");
+                    qryIdParam.Value = queryId;
                     qryIdParam.DbType = DbType.String;
                     cmd.Parameters.Add(qryIdParam);
 
@@ -275,7 +275,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Get Query Results from the database
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.DataTypes.VersionedDomainIdentifier[] GetQueryResults(Guid queryId, int startRecord, int nRecords)
+        public MARC.HI.EHRS.SVC.Core.DataTypes.VersionedDomainIdentifier[] GetQueryResults(string queryId, int startRecord, int nRecords)
         {
             IDbConnection dbc = m_configuration.CreateConnection();
             try
@@ -298,7 +298,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     qryIdParam.ParameterName = "qry_id_in";
                     qryStartParam.ParameterName = "str_in";
                     qryQtyParam.ParameterName = "qty_in";
-                    qryIdParam.Value = queryId.ToString("B");
+                    qryIdParam.Value = queryId;
                     qryQtyParam.Value = nRecords;
                     qryStartParam.Value = startRecord;
 
@@ -346,7 +346,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Get the result remaining quantity
         /// </summary>
-        public long QueryResultTotalQuantity(Guid queryId)
+        public long QueryResultTotalQuantity(string queryId)
         {
             IDbConnection dbc = m_configuration.CreateConnection();
             try
@@ -363,7 +363,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     qryIdParam.DbType = DbType.String;
                     qryIdParam.Direction = ParameterDirection.Input;
                     qryIdParam.ParameterName = "qry_id_in";
-                    qryIdParam.Value = queryId.ToString("B");
+                    qryIdParam.Value = queryId;
                     cmd.Parameters.Add(qryIdParam);
 
                     // Execute and return
@@ -398,7 +398,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Get the Tagged value for a query
         /// </summary>
-        public string GetQueryTag(Guid queryId)
+        public string GetQueryTag(string queryId)
         {
             IDbConnection conn = m_configuration.CreateConnection();
             try
@@ -412,7 +412,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 idParam.Direction = ParameterDirection.Input;
                 idParam.DbType = DbType.String;
                 idParam.ParameterName = "qry_id_in";
-                idParam.Value = queryId.ToString("B");
+                idParam.Value = queryId;
                 cmd.Parameters.Add(idParam);
 
                 return cmd.ExecuteScalar().ToString();

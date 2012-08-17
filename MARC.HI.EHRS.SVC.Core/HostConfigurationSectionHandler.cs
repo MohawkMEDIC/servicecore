@@ -131,10 +131,8 @@ namespace MARC.HI.EHRS.SVC.Core
                 // Add registered senders
                 foreach(XmlElement nd in sendersSection.SelectNodes("./*[local-name() = 'add']"))
                 {
-                    if(nd.Attributes["domain"] == null)
-                        throw new ConfigurationErrorsException("Registered device must have a domain attribute");
                     this.m_validSenders.Add(new DomainIdentifier() {
-                        Domain = nd.Attributes["domain"].Value,
+                        Domain = nd.Attributes["domain"] == null ? null : nd.Attributes["domain"].Value,
                         Identifier = nd.Attributes["value"] == null ? null : nd.Attributes["value"].Value
                     });
                 }
@@ -168,7 +166,7 @@ namespace MARC.HI.EHRS.SVC.Core
                             foreach (XmlElement child in xn.ChildNodes)
                             {
                                 if (child.Name == "attribute" && child.Attributes["name"] != null)
-                                    data.Attributes.Add(child.Attributes["name"].Value, child.Attributes["value"] != null ? child.Attributes["value"].Value : null);
+                                    data.Attributes.Add(new KeyValuePair<string,string>(child.Attributes["name"].Value, child.Attributes["value"] != null ? child.Attributes["value"].Value : null));
                             }
                     }
                 }

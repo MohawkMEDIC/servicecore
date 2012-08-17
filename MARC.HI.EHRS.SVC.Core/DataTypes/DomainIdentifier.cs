@@ -45,6 +45,12 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         public string Identifier { get; set; }
 
         /// <summary>
+        /// private identifier (used for matching only)
+        /// </summary>
+        [XmlAttribute("priv")]
+        public bool IsPrivate { get; set; }
+
+        /// <summary>
         /// If true, the domain identifier is issue by a licensing authority
         /// </summary>
         [XmlAttribute("licenseAuthority")]

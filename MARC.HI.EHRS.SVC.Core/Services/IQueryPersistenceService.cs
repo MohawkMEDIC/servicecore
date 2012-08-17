@@ -39,32 +39,32 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="results">The results to be stored in the query</param>
         /// <param name="tag">A user tag for the query result set. Can be used to determine
         /// the type of data being returned</param>
-        bool RegisterQuerySet(Guid queryId, VersionedDomainIdentifier[] results, object tag);
+        bool RegisterQuerySet(string queryId, VersionedDomainIdentifier[] results, object tag);
 
         /// <summary>
         /// Returns true if the query identifier is already registered
         /// </summary>
         /// <param name="queryId"></param>
         /// <returns></returns>
-        bool IsRegistered(Guid queryId);
+        bool IsRegistered(string queryId);
 
         /// <summary>
         /// Get query results from the query set result store
         /// </summary>
         /// <param name="queryId">The identifier for the query</param>
         /// <param name="nRecords">The number of records to pop</param>
-        VersionedDomainIdentifier[] GetQueryResults(Guid queryId, int startRecord, int nRecords);
+        VersionedDomainIdentifier[] GetQueryResults(string queryId, int startRecord, int nRecords);
 
         /// <summary>
         /// Get the query tag value from the result store
         /// </summary>
-        string GetQueryTag(Guid queryId);
+        string GetQueryTag(string queryId);
 
         /// <summary>
         /// Count the number of remaining query results
         /// </summary>
         /// <param name="queryId">Unique identifier for the query to count remaining results</param>
-        long QueryResultTotalQuantity(Guid queryId);
+        long QueryResultTotalQuantity(string queryId);
 
 
     }
