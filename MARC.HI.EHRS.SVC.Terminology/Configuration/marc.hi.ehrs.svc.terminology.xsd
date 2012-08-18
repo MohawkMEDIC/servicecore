@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="marc.hi.ehrs.svc.terminology">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="cts" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="fillInDetails">
+                <xs:complexType>
+                  <xs:attribute name="codeSystem" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="messageRuntimeUrl" type="xs:string" use="required" />
+            <xs:attribute name="proxyAddress" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="qdcdb" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="connection" type="xs:string" use="required" />
+            <xs:attribute name="enableCtsFallback" type="xs:boolean" use="optional" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="maxMemoryCacheSize" type="xs:unsignedShort" use="optional" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

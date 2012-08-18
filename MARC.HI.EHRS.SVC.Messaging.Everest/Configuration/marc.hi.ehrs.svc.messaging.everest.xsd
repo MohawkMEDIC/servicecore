@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:wsa="http://www.w3.org/2005/08/addressing" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.w3.org/2005/08/addressing" />
+  <xs:simpleType name="ListenMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ListenWaitRespond"/>
+      <xs:enumeration value="ListenWait"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="marc.hi.ehrs.svc.messaging.everest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="revision">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="listen">
+                <xs:complexType>
+                  <xs:attribute name="connectionString" type="xs:string" use="required" />
+                  <xs:attribute name="type" type="xs:string" use="required" />
+                  <xs:attribute name="mode" type="ListenMode" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="cacheTypes">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="add">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="namespace" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element maxOccurs="unbounded" name="handler">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="interactionId">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                          <xs:element name="responseHeaders">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:any maxOccurs="unbounded" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="type" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="messageIdFormat" type="xs:string" use="required" />
+            <xs:attribute name="validate" type="xs:boolean" use="required" />
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="formatter" type="xs:string" use="required" />
+            <xs:attribute name="aide" type="xs:string" use="required" />
+            <xs:attribute name="assembly" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

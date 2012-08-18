@@ -1,0 +1,101 @@
+﻿<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="simpleIdentifier">
+    <xs:attribute name="domain" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="identifier">
+    <xs:complexContent>
+      <xs:extension base="simpleIdentifier">
+        <xs:attribute name="value" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="keyValuePair">
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="value" type="xs:token"/>
+  </xs:complexType>
+  <xs:element name="marc.hi.ehrs.svc.core">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="system">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="device" type="identifier"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="custodianship">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string" />
+              <xs:element name="id" type="identifier"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="jurisdiction">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string" />
+              <xs:element name="id" type="identifier"/>
+              <xs:element name="clientExport" type="simpleIdentifier"/>
+              <xs:element name="providerExport" type="simpleIdentifier"/>
+              <xs:element name="sdlExport" type="simpleIdentifier"/>
+              <xs:element name="defaultLanguageCode">
+                <xs:complexType>
+                  <xs:attribute name="code" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="registeredDevices">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="add" type="identifier"/>
+            </xs:sequence>
+            <xs:attribute name="validateSolicitors" type="xs:boolean" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="registeredOids">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="add">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="attribute" type="keyValuePair"/>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                  <xs:attribute name="ref" type="xs:string" use="optional" />
+                  <xs:attribute name="oid" type="xs:string" use="required" />
+                  <xs:attribute name="desc" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="serviceAssemblies">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="add">
+                <xs:complexType>
+                  <xs:attribute name="assembly" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="serviceProviders">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="add">
+                <xs:complexType>
+                  <xs:attribute name="type" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
