@@ -27,7 +27,11 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// <summary>
         /// Remove the data
         /// </summary>
-        Remove
+        Remove,
+        /// <summary>
+        /// Ignore the data serves as a key only
+        /// </summary>
+        Ignore
     }
 
     /// <summary>

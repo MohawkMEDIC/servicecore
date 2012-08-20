@@ -105,14 +105,19 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
             foreach (var aoPtctpt in ad.AuditableObjects)
                 am.AuditableObjects.Add(new AuditableObject()
                 {
-                    IDTypeCode = aoPtctpt.IDTypeCode.HasValue ? new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) : null,
+                    IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
+                        aoPtctpt.IDTypeCode.Value != Core.DataTypes.AuditableObjectIdType.Custom ?
+                            new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) : 
+                            new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.CustomIdTypeCode.Code)) :
+                        null,
                     LifecycleType = aoPtctpt.LifecycleType.HasValue ? (AuditableObjectLifecycle)Enum.Parse(typeof(AuditableObjectLifecycle), aoPtctpt.LifecycleType.ToString()) : 0,
                     LifecycleTypeSpecified = aoPtctpt.LifecycleType.HasValue,
                     ObjectId = aoPtctpt.ObjectId,
                     Role = (AuditableObjectRole)Enum.Parse(typeof(AuditableObjectRole), aoPtctpt.Role.ToString()),
                     RoleSpecified = aoPtctpt.Role != 0,
                     Type = (AuditableObjectType)Enum.Parse(typeof(AuditableObjectType), aoPtctpt.Type.ToString()),
-                    TypeSpecified = aoPtctpt.Type != 0
+                    TypeSpecified = aoPtctpt.Type != 0,
+                    ObjectQuery = aoPtctpt.QueryData
                 });
 
             // Was a record of this service found?

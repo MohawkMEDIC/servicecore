@@ -52,6 +52,10 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// <remarks>Use with object type code Person or SystemObject</remarks>
         UserIdentifier = 0x0b,
         /// <remarks>Use with object type code SystemObject</remarks>
-        Uri = 0x0c
+        Uri = 0x0c,
+        /// <summary>
+        /// Custom code
+        /// </summary>
+        Custom = 0x0d
     }
 }

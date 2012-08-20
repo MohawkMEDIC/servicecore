@@ -61,5 +61,10 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
         /// </summary>
         [XmlElement("ParticipantObjectIDTypeCode")]
         public CodeValue<AuditableObjectIdType> IDTypeCode { get; set; }
+        /// <summary>
+        /// Participant object query
+        /// </summary>
+        [XmlElement("ParticipantObjectQuery")]
+        public string ObjectQuery { get; set; }
     }
 }

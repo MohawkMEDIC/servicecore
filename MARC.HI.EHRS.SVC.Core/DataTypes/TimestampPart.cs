@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// Represents a component of a timestamp set
     /// </summary>
     [Serializable][XmlType("TimestampPart")]
-    public class TimestampPart : ICloneable
+    public class TimestampPart : Datatype, ICloneable
     {
         /// <summary>
         /// Identifies the timestamp part type

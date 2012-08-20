@@ -27,6 +27,8 @@ using System.Diagnostics;
 using System.Net.Sockets;
 using System.IO;
 using System.Xml.Serialization;
+using System.Reflection;
+using System.Xml;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
@@ -64,8 +66,8 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
             {
                 udpClient.Connect(this.m_remoteEndpoint);
                 StringBuilder syslogmessage = new StringBuilder();
-                syslogmessage.AppendFormat("<{0}> {1:MMM dd HH:mm:ss} {2} ",
-                    SYSLOG_FACILITY, DateTime.Now, Environment.MachineName);
+                syslogmessage.AppendFormat("<{0}>1 {1:yyyy-MM-dd}T{1:HH:mm:ss.fff}Z {2} {3} {4} - - ",
+                    SYSLOG_FACILITY, DateTime.UtcNow, Dns.GetHostName(), Process.GetCurrentProcess().ProcessName, Process.GetCurrentProcess().Id);
                 syslogmessage.Append(CreateMessageBody(am));
 
                 // Send the message
@@ -89,8 +91,10 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         private string CreateMessageBody(AuditMessage am)
         {
             StringWriter sw = new StringWriter();
+            XmlWriter xw = XmlWriter.Create(sw, new XmlWriterSettings() { Indent = false });
             XmlSerializer xsz = new XmlSerializer(typeof(AuditMessage));
-            xsz.Serialize(sw, am);
+            xsz.Serialize(xw, am);
+            xw.Close();
             return sw.ToString();
         }
 

@@ -49,5 +49,13 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// Identifies the type of identifier supplied
         /// </summary>
         public AuditableObjectIdType? IDTypeCode { get; set; }
+        /// <summary>
+        /// Custom id type code
+        /// </summary>
+        public CodeValue CustomIdTypeCode { get; set; }
+        /// <summary>
+        /// Data associated with the object
+        /// </summary>
+        public string QueryData { get; set; }
     }
 }
