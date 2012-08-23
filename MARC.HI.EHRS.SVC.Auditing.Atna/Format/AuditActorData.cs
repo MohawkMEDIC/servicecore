@@ -43,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
         /// <summary>
         /// True if the user is the primary requestor
         /// </summary>
-        [XmlAttribute("UserIdRequestor")]
+        [XmlAttribute("UserIsRequestor")]
         public bool UserIsRequestor { get; set; }
         /// <summary>
         /// Identifies the network access point from which the user accessed the system

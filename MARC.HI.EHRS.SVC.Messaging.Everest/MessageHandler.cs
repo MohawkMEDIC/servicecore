@@ -187,13 +187,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
             audit.Actors.Add(new AuditActorData()
             {
                 NetworkAccessPointId = Environment.MachineName,
-                NetworkAccessPointType = NetworkAccessPointType.MachineName
+                NetworkAccessPointType = NetworkAccessPointType.MachineName,
+                UserIdentifier = String.Format("{0}\\{1}", Environment.UserDomainName, Environment.UserName)
             });
             audit.Actors.Add(new AuditActorData()
             {
                 UserIsRequestor = true,
                 NetworkAccessPointId = e.SolicitorEndpoint.ToString(),
-                NetworkAccessPointType = NetworkAccessPointType.IPAddress
+                NetworkAccessPointType = NetworkAccessPointType.IPAddress,
+                UserIdentifier = e.SolicitorEndpoint.ToString()
             });
             audit.AuditableObjects.Add(new AuditableObject()
             {

@@ -91,7 +91,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         private string CreateMessageBody(AuditMessage am)
         {
             StringWriter sw = new StringWriter();
-            XmlWriter xw = XmlWriter.Create(sw, new XmlWriterSettings() { Indent = false });
+            XmlWriter xw = XmlWriter.Create(sw, new XmlWriterSettings() { OmitXmlDeclaration = true, Indent = false });
             XmlSerializer xsz = new XmlSerializer(typeof(AuditMessage));
             xsz.Serialize(xw, am);
             xw.Close();

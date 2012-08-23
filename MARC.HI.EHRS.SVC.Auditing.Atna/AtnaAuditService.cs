@@ -76,6 +76,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
             am.SourceIdentification.Add(new AuditSourceIdentificationType()
             {
                 AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName),
+                AuditSourceID = Dns.GetHostName()
             });
             
             // Add additional data like the participant
