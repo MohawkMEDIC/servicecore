@@ -18,6 +18,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration
         public string Id { get; set; }
 
         /// <summary>
+        /// True if the interaction results in disclosure
+        /// </summary>
+        /// <remarks>Alters the manner in which the interaction message is persisted</remarks>
+        public bool Disclosure { get; set; }
+        /// <summary>
         /// Response headers
         /// </summary>
         public XmlNodeList ResponseHeaders { get; set; }

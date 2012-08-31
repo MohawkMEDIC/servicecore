@@ -31,6 +31,8 @@ using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Timers;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MARC.HI.EHRS.QM.Persistence.Data
 {
@@ -198,15 +200,33 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
 
                 qryIdParam.DbType = DbType.String;
                 qryCntParam.DbType = DbType.Decimal;
-                qryDmnParam.DbType = DbType.String;
+                qryDmnParam.DbType = DbType.Binary;
                 qryIdParam.Value = queryId;
                 qryCntParam.Value = nRecords.ToString();
-                qryDmnParam.Value = tag.ToString();
+
+                // Serialize the tag
+                if (tag != null)
+                {
+                    MemoryStream ms = new MemoryStream();
+                    try
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        bf.Serialize(ms, tag);
+                        ms.Flush();
+                        qryDmnParam.Value = ms.GetBuffer();
+                    }
+                    finally
+                    {
+                        ms.Dispose();
+                    }
+                }
+                else
+                    qryDmnParam.Value = DBNull.Value;
 
                 qryIdParam.Direction = qryCntParam.Direction = qryDmnParam.Direction = ParameterDirection.Input;
                 qryIdParam.ParameterName = "qry_id_in";
                 qryCntParam.ParameterName = "qry_rslt_cnt_in";
-                qryDmnParam.ParameterName = "qry_dmn_in";
+                qryDmnParam.ParameterName = "qry_tag_in";
 
                 // Add Parameters
                 cmd.Parameters.Add(qryIdParam);
@@ -398,14 +418,14 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Get the Tagged value for a query
         /// </summary>
-        public string GetQueryTag(string queryId)
+        public object GetQueryTag(string queryId)
         {
             IDbConnection conn = m_configuration.CreateConnection();
             try
             {
                 conn.Open();
                 IDbCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "get_qry_dmn";
+                cmd.CommandText = "get_qry_tag";
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 IDataParameter idParam = cmd.CreateParameter();
@@ -415,7 +435,24 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 idParam.Value = queryId;
                 cmd.Parameters.Add(idParam);
 
-                return cmd.ExecuteScalar().ToString();
+                var serData = cmd.ExecuteScalar();
+
+                if (serData != DBNull.Value)
+                {
+                    MemoryStream ms = new MemoryStream((byte[])serData);
+                    try
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        return bf.Deserialize(ms);
+                    }
+                    finally
+                    {
+                        ms.Dispose();
+                    }
+                }
+                else
+                    return null;
+
             }
             catch (Exception e)
             {

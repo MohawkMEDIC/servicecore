@@ -173,6 +173,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration
                         else
                             config.Id = triggerEvent.Attributes["name"].Value;
 
+                        if (triggerEvent.Attributes["disclosure"] != null)
+                            config.Disclosure = Boolean.Parse(triggerEvent.Attributes["disclosure"].Value);
                         // Load the headers
                         var responseHeaderNode = triggerEvent.SelectSingleNode("./*[local-name() = 'responseHeaders']");
                         if (responseHeaderNode != null)

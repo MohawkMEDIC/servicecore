@@ -58,7 +58,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Get the query tag value from the result store
         /// </summary>
-        string GetQueryTag(string queryId);
+        object GetQueryTag(string queryId);
 
         /// <summary>
         /// Count the number of remaining query results

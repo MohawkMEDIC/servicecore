@@ -249,6 +249,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                     
                     var messageState = MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New;
                     IInteraction response = null;
+                    InteractionConfiguration interactionConfig = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
+
+                    // Don't persist disclosure messages
+                    if (interactionConfig.Disclosure)
+                        persistenceService = null;
 
                     // check with persistence
                     if (persistenceService != null)
