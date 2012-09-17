@@ -210,7 +210,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
             try
             {
                 // Find a receiver capable of processing this
-                IReceiveResult rcvResult = (sender as IListenWaitConnector).Receive();
+                var wcfConnector = (sender as IListenWaitConnector);
+                IReceiveResult rcvResult = wcfConnector.Receive();
 
                 // get the persistence service from the context
                 IMessagePersistenceService persistenceService = Context.GetService(typeof(IMessagePersistenceService)) as IMessagePersistenceService;
@@ -221,7 +222,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                     messageTypeAssembly = rcvResult.Structure.GetType().Assembly;
 
                 // Find the configuration section that handles the specified revision
-                var curRevision = m_configuration.Revisions.Find(o => o.Assembly.FullName.Equals(messageTypeAssembly.FullName));
+                var curRevision = m_configuration.Revisions.Find(o => o.Listeners.Exists(l=>l.ConnectionString == wcfConnector.ConnectionString));
                 if (curRevision == null)
                 {
                     Trace.TraceError("This service does not seem to have support for the version of message being used");
@@ -250,9 +251,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                     var messageState = MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New;
                     IInteraction response = null;
                     InteractionConfiguration interactionConfig = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
-
-                    // Don't persist disclosure messages
-                    if (interactionConfig.Disclosure)
+                    if(interactionConfig != null && interactionConfig.Disclosure)
                         persistenceService = null;
 
                     // check with persistence

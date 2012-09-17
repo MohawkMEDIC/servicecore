@@ -223,6 +223,10 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
         [Category("IHE XDS Meta Data")]
         [XmlEnum("urn:uuid:10aa1a4b-715a-4120-bfd0-9760414112c8")]
         XDSDocumentEntryStub,
+        [Description("Patient Demographic Query")]
+        [Category("IHE Transactions")]
+        [XmlEnum("ITI-47")]
+        ITI47,
         [Description("PIX Query")]
         [Category("IHE Transactions")]
         [XmlEnum("ITI-45")]
