@@ -341,7 +341,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                             var wcfResult = rcvResult as WcfReceiveResult;
                             if (wcfResult != null && wcfResult.Headers != null)
                             {
-                                wcfResult.ResponseHeaders = CreateResponseHeaders(receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension).ResponseHeaders, wcfResult.Headers.MessageVersion);
+                                var rcvrInfo = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
+                                if (rcvrInfo != null)
+                                {
+                                    wcfResult.ResponseHeaders = CreateResponseHeaders(rcvrInfo.ResponseHeaders, wcfResult.Headers.MessageVersion);
+                                }
                                 if (wcfResult.ResponseHeaders != null)
                                     wcfResult.ResponseHeaders.RelatesTo = wcfResult.Headers.MessageId;
                             }
