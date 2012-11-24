@@ -69,6 +69,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Workflow.Activities">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -93,6 +94,9 @@
     <Compile Include="Auditing\AuditSourceType.cs" />
     <Compile Include="Auditing\NetworkAccessPointType.cs" />
     <Compile Include="Auditing\OutcomeIndicator.cs" />
+    <Compile Include="Configuration\IConfigurationPanel.cs" />
+    <Compile Include="Configuration\IDatabaseConfigurator.cs" />
+    <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
     <Compile Include="DataTypes\AddressPart.cs" />
     <Compile Include="DataTypes\AddressSet.cs" />
     <Compile Include="DataTypes\CodeValue.cs" />
