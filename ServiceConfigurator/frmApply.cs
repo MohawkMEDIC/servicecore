@@ -74,6 +74,7 @@ namespace ServiceConfigurator
             frmApply apply = new frmApply();
             apply.Text = "UnConfigure Features";
             apply.lblDescription.Text = "Select the features that you would like to remove configuration for";
+            
             if (apply.ShowDialog() == DialogResult.OK)
             {
                 var progress = new frmProgress();
