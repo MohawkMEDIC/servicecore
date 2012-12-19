@@ -99,6 +99,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\MARC.HI.EHRS.SVC.licenseheader">
+      <Link>MARC.HI.EHRS.SVC.licenseheader</Link>
+    </None>
     <None Include="Configuration\marc.hi.ehrs.svc.messaging.persistence.xsd">
       <SubType>Designer</SubType>
     </None>

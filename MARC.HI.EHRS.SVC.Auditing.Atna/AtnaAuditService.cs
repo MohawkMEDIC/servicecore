@@ -1,5 +1,5 @@
-﻿/* 
- * Copyright 2008-2011 Mohawk College of Applied Arts and Technology
+﻿/**
+ * Copyright 2012-2012 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -12,11 +12,11 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
  * License for the specific language governing permissions and limitations under 
  * the License.
-
  * 
- * User: Justin Fyfe
- * Date: 08-24-2011
+ * User: fyfej
+ * Date: 23-8-2012
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +28,7 @@ using MARC.HI.EHRS.SVC.Auditing.Atna.Format;
 using System.Threading;
 using System.ComponentModel;
 using System.Net;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
@@ -60,80 +61,88 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         private void SendAuditAsync(object state)
         {
 
-            var ad = state as MARC.HI.EHRS.SVC.Core.DataTypes.AuditData;
-            ISystemConfigurationService sysConfigSvc = this.Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
-
-            // Create the audit basic
-            AuditMessage am = new AuditMessage(
-                ad.Timestamp, (ActionType)Enum.Parse(typeof(ActionType), ad.ActionCode.Value.ToString()),
-                (OutcomeIndicator)Enum.Parse(typeof(OutcomeIndicator), ad.Outcome.Value.ToString()),
-                (EventIdentifierType)Enum.Parse(typeof(EventIdentifierType), ad.EventIdentifier.ToString()),
-                null
-            );
-            if (ad.EventTypeCode != null)
-                am.EventIdentification.EventType.Add(new CodeValue<String>(ad.EventTypeCode.Code, ad.EventTypeCode.CodeSystem));
-
-            am.SourceIdentification.Add(new AuditSourceIdentificationType()
+            try
             {
-                AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName),
-                AuditSourceID = Dns.GetHostName()
-            });
-            
-            // Add additional data like the participant
-            bool thisFound = false;
-            string dnsName = Dns.GetHostName();
-            foreach (var adActor in ad.Actors)
-            {
-                thisFound |= (adActor.NetworkAccessPointId == Environment.MachineName || adActor.NetworkAccessPointId == dnsName) &&
-                    adActor.NetworkAccessPointType == MARC.HI.EHRS.SVC.Core.DataTypes.NetworkAccessPointType.MachineName;
-                var act = new AuditActorData()
+                var ad = state as MARC.HI.EHRS.SVC.Core.DataTypes.AuditData;
+                ISystemConfigurationService sysConfigSvc = this.Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
+
+                // Create the audit basic
+                AuditMessage am = new AuditMessage(
+                    ad.Timestamp, (ActionType)Enum.Parse(typeof(ActionType), ad.ActionCode.Value.ToString()),
+                    (OutcomeIndicator)Enum.Parse(typeof(OutcomeIndicator), ad.Outcome.Value.ToString()),
+                    (EventIdentifierType)Enum.Parse(typeof(EventIdentifierType), ad.EventIdentifier.ToString()),
+                    null
+                );
+                if (ad.EventTypeCode != null)
+                    am.EventIdentification.EventType.Add(new CodeValue<String>(ad.EventTypeCode.Code, ad.EventTypeCode.CodeSystem));
+
+                am.SourceIdentification.Add(new AuditSourceIdentificationType()
                 {
-                    NetworkAccessPointId = adActor.NetworkAccessPointId,
-                    NetworkAccessPointType = (NetworkAccessPointType)Enum.Parse(typeof(NetworkAccessPointType), adActor.NetworkAccessPointType.ToString()),
-                    NetworkAccessPointTypeSpecified = adActor.NetworkAccessPointType != 0,
-                    UserIdentifier = adActor.UserIdentifier,
-                    UserIsRequestor = adActor.UserIsRequestor,
-                    UserName = adActor.UserName
-                };
-                foreach (var rol in adActor.ActorRoleCode)
-                    act.ActorRoleCode.Add(new CodeValue<string>(rol.Code, rol.CodeSystem)
-                        {
-                            DisplayName = rol.DisplayName
-                        });
-                am.Actors.Add(act);
+                    AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName),
+                    AuditSourceID = Dns.GetHostName()
+                });
+                
+                // Add additional data like the participant
+                bool thisFound = false;
+                string dnsName = Dns.GetHostName();
+                foreach (var adActor in ad.Actors)
+                {
+                    thisFound |= (adActor.NetworkAccessPointId == Environment.MachineName || adActor.NetworkAccessPointId == dnsName) &&
+                        adActor.NetworkAccessPointType == MARC.HI.EHRS.SVC.Core.DataTypes.NetworkAccessPointType.MachineName;
+                    var act = new AuditActorData()
+                    {
+                        NetworkAccessPointId = adActor.NetworkAccessPointId,
+                        NetworkAccessPointType = (NetworkAccessPointType)Enum.Parse(typeof(NetworkAccessPointType), adActor.NetworkAccessPointType.ToString()),
+                        NetworkAccessPointTypeSpecified = adActor.NetworkAccessPointType != 0,
+                        UserIdentifier = adActor.UserIdentifier,
+                        UserIsRequestor = adActor.UserIsRequestor,
+                        UserName = adActor.UserName
+                    };
+                    foreach (var rol in adActor.ActorRoleCode)
+                        act.ActorRoleCode.Add(new CodeValue<string>(rol.Code, rol.CodeSystem)
+                            {
+                                DisplayName = rol.DisplayName
+                            });
+                    am.Actors.Add(act);
+                }
+
+                foreach (var aoPtctpt in ad.AuditableObjects)
+                {
+                    am.AuditableObjects.Add(new AuditableObject()
+                    {
+                        IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
+                            aoPtctpt.IDTypeCode.Value != Core.DataTypes.AuditableObjectIdType.Custom ?
+                                new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) :
+                                new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.CustomIdTypeCode.Code)) :
+                            null,
+                        LifecycleType = aoPtctpt.LifecycleType.HasValue ? (AuditableObjectLifecycle)Enum.Parse(typeof(AuditableObjectLifecycle), aoPtctpt.LifecycleType.ToString()) : 0,
+                        LifecycleTypeSpecified = aoPtctpt.LifecycleType.HasValue,
+                        ObjectId = aoPtctpt.ObjectId,
+                        Role = (AuditableObjectRole)Enum.Parse(typeof(AuditableObjectRole), aoPtctpt.Role.ToString()),
+                        RoleSpecified = aoPtctpt.Role != 0,
+                        Type = (AuditableObjectType)Enum.Parse(typeof(AuditableObjectType), aoPtctpt.Type.ToString()),
+                        TypeSpecified = aoPtctpt.Type != 0,
+                        ObjectQuery = aoPtctpt.QueryData
+                    });
+                }
+
+                // Was a record of this service found?
+                if (!thisFound)
+                    am.Actors.Add(new AuditActorData()
+                    {
+                        NetworkAccessPointId = Environment.MachineName,
+                        NetworkAccessPointType = NetworkAccessPointType.MachineName,
+                        UserIdentifier = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
+                    });
+
+
+                // Send the message
+                this.m_configuration.MessagePublisher.SendMessage(am);
             }
-
-            foreach (var aoPtctpt in ad.AuditableObjects)
-                am.AuditableObjects.Add(new AuditableObject()
-                {
-                    IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
-                        aoPtctpt.IDTypeCode.Value != Core.DataTypes.AuditableObjectIdType.Custom ?
-                            new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) : 
-                            new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.CustomIdTypeCode.Code)) :
-                        null,
-                    LifecycleType = aoPtctpt.LifecycleType.HasValue ? (AuditableObjectLifecycle)Enum.Parse(typeof(AuditableObjectLifecycle), aoPtctpt.LifecycleType.ToString()) : 0,
-                    LifecycleTypeSpecified = aoPtctpt.LifecycleType.HasValue,
-                    ObjectId = aoPtctpt.ObjectId,
-                    Role = (AuditableObjectRole)Enum.Parse(typeof(AuditableObjectRole), aoPtctpt.Role.ToString()),
-                    RoleSpecified = aoPtctpt.Role != 0,
-                    Type = (AuditableObjectType)Enum.Parse(typeof(AuditableObjectType), aoPtctpt.Type.ToString()),
-                    TypeSpecified = aoPtctpt.Type != 0,
-                    ObjectQuery = aoPtctpt.QueryData
-                });
-
-            // Was a record of this service found?
-            if (!thisFound)
-                am.Actors.Add(new AuditActorData()
-                {
-                    NetworkAccessPointId = Environment.MachineName,
-                    NetworkAccessPointType = NetworkAccessPointType.MachineName,
-                    UserIdentifier = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
-                });
-
-
-            // Send the message
-            this.m_configuration.MessagePublisher.SendMessage(am);
-
+            catch (Exception e)
+            {
+                Trace.TraceError(e.ToString());
+            }
         }
 
         /// <summary>

@@ -136,6 +136,9 @@
     <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\MARC.HI.EHRS.SVC.licenseheader">
+      <Link>MARC.HI.EHRS.SVC.licenseheader</Link>
+    </None>
     <None Include="marc.hi.ehrs.svc.core.xsd">
       <SubType>Designer</SubType>
     </None>

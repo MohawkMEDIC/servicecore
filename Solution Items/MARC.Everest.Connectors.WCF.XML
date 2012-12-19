@@ -4,152 +4,6 @@
         <name>MARC.Everest.Connectors.WCF</name>
     </assembly>
     <members>
-        <member name="T:MARC.Everest.Connectors.WCF.WcfReceiveResult">
-            <summary>
-            The WCF Receive result is an implementation of the <see cref="T:MARC.Everest.Connectors.IReceiveResult"/> 
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Code">
-            <summary>
-            Gets or sets the result code from the receive operation. Any result other than Accepted or AcceptedNonConformant indicates the entire message may not be available.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Details">
-            <summary>
-            Gets or sets the details of the result. If the <see cref="T:MARC.Everest.Connectors.ResultCode">ResultCode</see> is not Accepted, this list will contain at least one detail item that is an error.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Structure">
-            <summary>
-            Gets or sets the actual result.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.MessageIdentifier">
-            <summary>
-            Gets or sets the id of the message to respond to.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.MessageVersion">
-            <summary>
-            Gets or sets the version of the original message. This is for correlation purposes.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Headers">
-            <summary>
-            Gets or sets the message headers
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Connectors.WCF.Core.IMessageReceiver">
-            <summary>
-            This interface must be implemented by those wishing to use the WCF connector within IIS.
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.IMessageReceiver.MessageReceived(MARC.Everest.Interfaces.IGraphable,MARC.Everest.Connectors.ResultCode,MARC.Everest.Connectors.IResultDetail[])">
-            <summary>
-            Message has been received and should be processed.
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection">
-            <summary>
-            Configuration section handler for web.config and app.config. 
-            This class is intended to be used only by the configuration 
-            system, and not directly by user code.
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.SectionName">
-            <summary>
-            The name of the section the config was loaded from.
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Create(System.Object,System.Object,System.Xml.XmlNode)">
-            <summary>
-            Create the configuration object
-            <example>
-            <code lang="xml">
-            &lt;WcfConnector formatter="MARC.Everest.Formatters.ITS1.Formatter"&gt;
-               &lt;Classification match="/" handler="MyService.MyType"/&gt;
-               &lt;Action type="MARC.Everest.Core.Interactions.REPC_IN000076CA" action="urn:hl7-org:v3:REPC_IN000076CA"/&gt;
-            &lt;/WcfConnector&gt;
-            </code>
-            </example>
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Formatter">
-            <summary>
-            Gets or sets the formatter that will be used to format messages.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Receiver">
-            <summary>
-            Gets or sets a dictionary of receivers for the given message types.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Actions">
-            <summary>
-            Gets or sets a dictionary of actions that map data types to soap actions on the server.
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient">
-            <summary>
-            The connector service client is used by the WCF Client to perform WCF operations.
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Connectors.WCF.Core.IConnectorContract">
-            <summary>
-            Represents a generic service contract that will handle any message from any endpoint
-            and will process it using the connector interface. 
-            </summary>
-            <remarks>
-            This service contract is to be used when the developer wishes to use the WCF connector
-            in an IIS hosted environment.
-            </remarks>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.IConnectorContract.ProcessInboundMessage(System.ServiceModel.Channels.Message)">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor">
-            <summary>
-            Creates a new instance of ConnectorServiceClient.
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.String)">
-            <summary>
-            Creates a new instance of the ConnectorServiceClient using the specified <paramref name="endpointConfigurationName"/>.
-            </summary>
-            <param name="endpointConfigurationName">The name of the endpoint configuration.</param>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.String,System.String)">
-            <summary>
-            Creates a new instance of the ConnectorServiceClient using the specified <paramref name="endpointConfigurationName"/> and 
-            <paramref name="remoteAddress"/>.
-            </summary>
-            <param name="endpointConfigurationName">The name of the endpoint configuration.</param>
-            <param name="remoteAddress">The fully qualified uri resource name that this service will bind to. Example: http://localhost:1234/service/ .</param>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.String,System.ServiceModel.EndpointAddress)">
-            <summary>
-            Creates a new instance of the ConnectorServiceClient using the specified <paramref name="endpointConfigurationName"/> and
-            <paramref name="endpointAddress"/>.
-            </summary>
-            <param name="endpointConfigurationName">The name of the endpoint configuration.</param>
-            <param name="endpointAddress">An EndpointAddress object that specifies the address this service should bind to.</param>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.ServiceModel.Channels.Binding,System.ServiceModel.EndpointAddress)">
-            <summary>
-            Creates a new instance of the ConncetorServiceClient using the specified <paramref name="binding"/> and <paramref name="endpointAddress"/>.
-            </summary>
-            <param name="binding">The binding object this service should use to bind to the endpointAddress.</param>
-            <param name="endpointAddress">An EndpointAddress object that specifies the address this service should bind to using the specified binding.</param>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.ProcessInboundMessage(System.ServiceModel.Channels.Message)">
-            <summary>
-            Process the message.
-            </summary>
-            <param name="m">The message to send.</param>
-            <returns>The resulting message.</returns>
-        </member>
         <member name="T:MARC.Everest.Connectors.WCF.WcfServerConnector">
             <summary>
             The WcfServerConnector provides a gateway to the Windows Communications Foundataion (WCF) channels.
@@ -352,6 +206,11 @@
             </summary>
             <param name="disposing"></param>
         </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfServerConnector.EnableCap">
+            <summary>
+            True when CAP should be enabled
+            </summary>
+        </member>
         <member name="E:MARC.Everest.Connectors.WCF.WcfServerConnector.MessageAvailable">
             <summary>
             Fired when a new message is available on the listen connector interface.
@@ -429,17 +288,32 @@
             Gets or sets the Message that is processed.
             </summary>
         </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfServerConnector.Worker.ResponseHeaders">
+            <summary>
+            Headers to include in the result
+            </summary>
+        </member>
         <member name="T:MARC.Everest.Connectors.WCF.Core.WcfServiceHost">
             <summary>
             Service host class that is used for creating instances.
             </summary>
         </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.WcfServiceHost.#ctor(System.Type,System.Uri[])">
+        <member name="M:MARC.Everest.Connectors.WCF.Core.WcfServiceHost.#ctor">
+            <summary>
+            WCF Service host
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.WcfServiceHost.#ctor(System.String,System.Type,System.Uri[])">
             <summary>
             Creates a new instance of the WcfServiceHost.
             </summary>
             <param name="serviceType">The type of service that this WcfServiceHost should host.</param>
             <param name="baseAddresses">A list of addresses that this service should bind to.</param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.WcfServiceHost.ApplyConfiguration">
+            <summary>
+            Apply configuration
+            </summary>
         </member>
         <member name="P:MARC.Everest.Connectors.WCF.Core.WcfServiceHost.ServiceName">
             <summary>
@@ -451,27 +325,85 @@
             Gets or sets the connector that is expecting the WCF service to contact when a message is received.
             </summary>
         </member>
-        <member name="T:MARC.Everest.Connectors.WCF.Core.ConnectorService">
+        <member name="T:MARC.Everest.Connectors.WCF.Core.IPolicyContract">
             <summary>
-            The listen connector service behavior for WCF service host.
+            Policy contract that serves out the policy files for silverlight applications
             </summary>
         </member>
-        <member name="F:MARC.Everest.Connectors.WCF.Core.ConnectorService.settings">
+        <member name="M:MARC.Everest.Connectors.WCF.Core.IPolicyContract.GetSilverlightPolicyFile">
             <summary>
-            The configuration settings for this particular contract.
+            GEts the silverlight policy file
             </summary>
         </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorService.ProcessInboundMessage(System.ServiceModel.Channels.Message)">
+        <member name="T:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient">
             <summary>
-            Process any message from the channel
+            The connector service client is used by the WCF Client to perform WCF operations.
             </summary>
-            <param name="m">The message to be processed</param>
-            <returns>Any message</returns>
         </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Core.ConnectorService.ListenConnector">
+        <member name="T:MARC.Everest.Connectors.WCF.Core.IConnectorContract">
             <summary>
-            Gets or sets the instance of the WCF listen connector when running in process mode.
-            This value will be null when running in hosted mode (for example, when running in IIS).
+            Represents a generic service contract that will handle any message from any endpoint
+            and will process it using the connector interface. 
+            </summary>
+            <remarks>
+            This service contract is to be used when the developer wishes to use the WCF connector
+            in an IIS hosted environment.
+            </remarks>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.IConnectorContract.ProcessInboundMessage(System.ServiceModel.Channels.Message)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor">
+            <summary>
+            Creates a new instance of ConnectorServiceClient.
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the ConnectorServiceClient using the specified <paramref name="endpointConfigurationName"/>.
+            </summary>
+            <param name="endpointConfigurationName">The name of the endpoint configuration.</param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the ConnectorServiceClient using the specified <paramref name="endpointConfigurationName"/> and 
+            <paramref name="remoteAddress"/>.
+            </summary>
+            <param name="endpointConfigurationName">The name of the endpoint configuration.</param>
+            <param name="remoteAddress">The fully qualified uri resource name that this service will bind to. Example: http://localhost:1234/service/ .</param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.String,System.ServiceModel.EndpointAddress)">
+            <summary>
+            Creates a new instance of the ConnectorServiceClient using the specified <paramref name="endpointConfigurationName"/> and
+            <paramref name="endpointAddress"/>.
+            </summary>
+            <param name="endpointConfigurationName">The name of the endpoint configuration.</param>
+            <param name="endpointAddress">An EndpointAddress object that specifies the address this service should bind to.</param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.#ctor(System.ServiceModel.Channels.Binding,System.ServiceModel.EndpointAddress)">
+            <summary>
+            Creates a new instance of the ConncetorServiceClient using the specified <paramref name="binding"/> and <paramref name="endpointAddress"/>.
+            </summary>
+            <param name="binding">The binding object this service should use to bind to the endpointAddress.</param>
+            <param name="endpointAddress">An EndpointAddress object that specifies the address this service should bind to using the specified binding.</param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorServiceClient.ProcessInboundMessage(System.ServiceModel.Channels.Message)">
+            <summary>
+            Process the message.
+            </summary>
+            <param name="m">The message to send.</param>
+            <returns>The resulting message.</returns>
+        </member>
+        <member name="T:MARC.Everest.Connectors.WCF.Core.IMessageReceiver">
+            <summary>
+            This interface must be implemented by those wishing to use the WCF connector within IIS.
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.IMessageReceiver.MessageReceived(MARC.Everest.Interfaces.IGraphable,MARC.Everest.Connectors.ResultCode,System.Collections.Generic.IEnumerable{MARC.Everest.Connectors.IResultDetail})">
+            <summary>
+            Message has been received and should be processed.
             </summary>
         </member>
         <member name="T:MARC.Everest.Connectors.WCF.WcfConnectionStringBuilder">
@@ -532,85 +464,52 @@
             the name of the endpoint in the configuration file with which to communicate
             </summary>
         </member>
-        <member name="T:MARC.Everest.Connectors.WCF.WcfSendResult">
+        <member name="T:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerOperationBehavior">
             <summary>
-            Result of the WCF Send operation
+            Everest serializer operation behavior
+            </summary> 
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerOperationBehavior.#ctor(System.ServiceModel.Description.OperationDescription,MARC.Everest.Connectors.IXmlStructureFormatter)">
+            <summary>
+            Constructs a new instance of the Everest Serializer operation behavior
             </summary>
         </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Code">
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerOperationBehavior.CreateSerializer(System.Type,System.String,System.String,System.Collections.Generic.IList{System.Type})">
             <summary>
-            Gets or sets the result code of the send operation. Any value other than Accepted and AcceptedNonConformant indicates the message may not have been sent.
+            Create a serializer
             </summary>
         </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Details">
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerOperationBehavior.CreateSerializer(System.Type,System.Xml.XmlDictionaryString,System.Xml.XmlDictionaryString,System.Collections.Generic.IList{System.Type})">
             <summary>
-            Gets or sets the details of the operation. If the <see cref="T:MARC.Everest.Connectors.ResultCode"/> is not Accepted, this list will contain at least one error item.
+            Create the serializer
             </summary>
         </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Message">
+        <member name="T:MARC.Everest.Connectors.WCF.Core.ConnectorService">
             <summary>
-            Gets or sets the message to be sent via the WCF connector.
+            The listen connector service behavior for WCF service host.
             </summary>
         </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.MessageId">
+        <member name="F:MARC.Everest.Connectors.WCF.Core.ConnectorService.settings">
             <summary>
-            Gets or sets the id of the message.
+            The configuration settings for this particular contract.
             </summary>
         </member>
-        <member name="T:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate">
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorService.ProcessInboundMessage(System.ServiceModel.Channels.Message)">
             <summary>
-            Surrogate that exposes an XML object Serializer to the .NET WCF Framework.
+            Process any message from the channel
+            </summary>
+            <param name="m">The message to be processed</param>
+            <returns>Any message</returns>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Core.ConnectorService.GetSilverlightPolicyFile">
+            <summary>
+            Get silverlight policy
             </summary>
         </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.#ctor(MARC.Everest.Connectors.IXmlStructureFormatter)">
+        <member name="P:MARC.Everest.Connectors.WCF.Core.ConnectorService.ListenConnector">
             <summary>
-            Create a new instance of the XmlSerializationSurrogate.
-            </summary>
-            <param name="formatter"></param>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.IsStartObject(System.Xml.XmlDictionaryReader)">
-            <summary>
-            Returns true if the current node of <paramref name="reader"/> is suitable to start deserialization.
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.ReadObject(System.Xml.XmlDictionaryReader,System.Boolean)">
-            <summary>
-            Deserializes an object from <paramref name="reader"/>.
-            </summary>
-            <param name="reader">The XmlReader to deserialize the object from.</param>
-            <param name="verifyObjectName">True if the object's name should be verified prior to deserializing.</param>
-            <returns>The deserialized object or null if deserialization failed.</returns>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.WriteEndObject(System.Xml.XmlDictionaryWriter)">
-            <summary>
-            Not Implemented: The formatter does not make a distinction between the start and end of an object.
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.WriteObjectContent(System.Xml.XmlDictionaryWriter,System.Object)">
-            <summary>
-            Write the content of <paramref name="graph"/> onto <paramref name="writer"/>.
-            </summary>
-            <param name="writer">The writer to serialize <paramref name="graph"/>.</param>
-            <param name="graph">The object to graph to <paramref name="writer"/>.</param>
-        </member>
-        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.WriteStartObject(System.Xml.XmlDictionaryWriter,System.Object)">
-            <summary>
-            Not Implemented: The formatter does not make a distinction between the start and end of an object.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.Formatter">
-            <summary>
-            Gets or sets the structured formatter to use.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.ResultCode">
-            <summary>
-            Gets or sets the Result code.
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.Details">
-            <summary>
-            Gets or sets the details of the format operation
+            Gets or sets the instance of the WCF listen connector when running in process mode.
+            This value will be null when running in hosted mode (for example, when running in IIS).
             </summary>
         </member>
         <member name="T:MARC.Everest.Connectors.WCF.WcfClientConnector">
@@ -821,6 +720,45 @@
              section MARC.Everest.Connectors.wcf to the web.config file (see example). 
              </para>
              <para>
+             <b>Note:</b> Everest for Windows Phone cannot use the Send method as the Silverlight framework
+             does not permit synchronous calls to the WCF client base. 
+             </para>
+             <code lang="cs" title="Sending on Windows Phone Platform">
+             <![CDATA[
+             
+             private WcfClientConnector m_connector;
+             delegate void MessageReceived(IReceiveResult message);
+             
+             public void fooMethod() {
+                 // Create
+                 this.m_connector = new WcfClientConnector("endpointname=pds");
+                 this.m_connector.Formatter = new XmlIts1Formatter();
+                 this.m_connector.Formatter.GraphAides.Add(new DatatypeFormatter());
+                 this.m_connector.Open();
+                 this.m_connector.BeginSend(instance, this.SendCompleted, null);
+                 // .. Continue UI ..
+             }
+             
+             private void SendCompleted(IAsyncResult sendAsyncResult)
+             {
+                  var sendResult = this.m_clientConnector.EndSend(sendAsyncResult);
+                  if(sendResult.Code != ResultCode.Accepted &&
+                     sendResult.Code != ResultCode.AcceptedNonConformant)
+                         return; // bail out
+                  
+                 // receive the response message
+                 var receiveResult = this.m_connector.Receive(sendResult);
+                 
+                 Dispatcher.BeginInvoke(new MessageReceived(this.OnMessageReceived), receiveResult);
+             }
+             
+             private void OnMessageReceived(IReceiveResult result)
+             {
+                 // Do UI stuff here...
+             }
+             ]]>
+             </code>
+             <para>
              The WcfClient must use a connector that is an IInputChannel and IOutputChannel.
              </para>
              </remarks>
@@ -886,6 +824,14 @@
             </summary>
             <param name="data">The IGraphable data to send.</param>
         </member>
+        <member name="M:MARC.Everest.Connectors.WCF.WcfClientConnector.Send(MARC.Everest.Interfaces.IGraphable,System.ServiceModel.Channels.MessageHeaders)">
+            <summary>
+            Send a request to the remote endpoint with the specified message headers
+            </summary>
+            <param name="data">The data to be sent to the remote endpoint</param>
+            <param name="headers">The SOAP headers to append to the request</param>
+            <returns>A <see cref="T:MARC.Everest.Connectors.WCF.WcfSendResult"/> instance containing the result of the send operation</returns>
+        </member>
         <member name="M:MARC.Everest.Connectors.WCF.WcfClientConnector.BeginSend(MARC.Everest.Interfaces.IGraphable,System.AsyncCallback,System.Object)">
             <summary>
             Start an asynchronous send operation.
@@ -925,15 +871,6 @@
             
             </summary>
             <param name="disposing">True to release all resources, false to only release unmanaged resources.</param>
-        </member>
-        <member name="P:MARC.Everest.Connectors.WCF.WcfClientConnector.Headers">
-            <summary>
-            Allows custom SOAP headers to be added to the oubound message prior to sending the message
-            </summary>
-            <remarks>This array should not be used to append WS-RM or WS-SEC data to your message as these are handled
-            by the WCF layer automatically and should be done at the Configuration level. 
-            <para>This array exists to facilitate the addition of custom SOAP headers required by some jurisidictions. This can include 
-            custom authentication tokens, test ticket identifiers, etc...</para></remarks>
         </member>
         <member name="P:MARC.Everest.Connectors.WCF.WcfClientConnector.ConnectionString">
             <summary>
@@ -1017,6 +954,241 @@
         <member name="P:MARC.Everest.Connectors.WCF.WcfClientConnector.Worker.CustomHeaders">
             <summary>
             Gets or sets the custom headers
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Connectors.WCF.WcfReceiveResult">
+            <summary>
+            The WCF Receive result is an implementation of the <see cref="T:MARC.Everest.Connectors.IReceiveResult"/> 
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Code">
+            <summary>
+            Gets or sets the result code from the receive operation. Any result other than Accepted or AcceptedNonConformant indicates the entire message may not be available.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Details">
+            <summary>
+            Gets or sets the details of the result. If the <see cref="T:MARC.Everest.Connectors.ResultCode">ResultCode</see> is not Accepted, this list will contain at least one detail item that is an error.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Structure">
+            <summary>
+            Gets or sets the actual result.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.MessageIdentifier">
+            <summary>
+            Gets or sets the id of the message to respond to.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.MessageVersion">
+            <summary>
+            Gets or sets the version of the original message. This is for correlation purposes.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.Headers">
+            <summary>
+            Gets the headers that were sent from the soliciting applciation
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfReceiveResult.ResponseHeaders">
+            <summary>
+            Gets or sets a series of message headers that should be included in responses to 
+            clients
+            </summary>
+            <remarks>This property is intended to be used by users of the <see cref="T:MARC.HI.Everest.Connectors.WCF.WcfServerConnector"/> connector. For
+            sending headers via the client connector, see the <see cref="F:MARC.HI.Everest.Connectors.WCF.WcfReceiveConnector.Send(MARC.Everest.Interfaces.IGraphable, System.ServiceModel.MessageHeaders)"/> method</remarks>
+        </member>
+        <member name="T:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate">
+            <summary>
+            Surrogate that exposes an XML object Serializer to the .NET WCF Framework.
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.#ctor(MARC.Everest.Connectors.IXmlStructureFormatter)">
+            <summary>
+            Create a new instance of the XmlSerializationSurrogate.
+            </summary>
+            <param name="formatter"></param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.IsStartObject(System.Xml.XmlDictionaryReader)">
+            <summary>
+            Returns true if the current node of <paramref name="reader"/> is suitable to start deserialization.
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.ReadObject(System.Xml.XmlDictionaryReader,System.Boolean)">
+            <summary>
+            Deserializes an object from <paramref name="reader"/>.
+            </summary>
+            <param name="reader">The XmlReader to deserialize the object from.</param>
+            <param name="verifyObjectName">True if the object's name should be verified prior to deserializing.</param>
+            <returns>The deserialized object or null if deserialization failed.</returns>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.WriteEndObject(System.Xml.XmlDictionaryWriter)">
+            <summary>
+            Not Implemented: The formatter does not make a distinction between the start and end of an object.
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.WriteObjectContent(System.Xml.XmlDictionaryWriter,System.Object)">
+            <summary>
+            Write the content of <paramref name="graph"/> onto <paramref name="writer"/>.
+            </summary>
+            <param name="writer">The writer to serialize <paramref name="graph"/>.</param>
+            <param name="graph">The object to graph to <paramref name="writer"/>.</param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.WriteStartObject(System.Xml.XmlDictionaryWriter,System.Object)">
+            <summary>
+            Not Implemented: The formatter does not make a distinction between the start and end of an object.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.Formatter">
+            <summary>
+            Gets or sets the structured formatter to use.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.ResultCode">
+            <summary>
+            Gets or sets the Result code.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Serialization.XmlSerializerSurrogate.Details">
+            <summary>
+            Gets or sets the details of the format operation
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute">
+            <summary>
+            Contract behavior
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.CreateFormatter">
+            <summary>
+            Create a formatter
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.AddBindingParameters(System.ServiceModel.Description.ContractDescription,System.ServiceModel.Description.ServiceEndpoint,System.ServiceModel.Channels.BindingParameterCollection)">
+            <summary>
+            Add binding parameters
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.ApplyClientBehavior(System.ServiceModel.Description.ContractDescription,System.ServiceModel.Description.ServiceEndpoint,System.ServiceModel.Dispatcher.ClientRuntime)">
+            <summary>
+            Apply a client behavior
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.ApplyDispatchBehavior(System.ServiceModel.Description.ContractDescription,System.ServiceModel.Description.ServiceEndpoint,System.ServiceModel.Dispatcher.DispatchRuntime)">
+            <summary>
+            Apply dispatcher behavior
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.Validate(System.ServiceModel.Description.ContractDescription,System.ServiceModel.Description.ServiceEndpoint)">
+            <summary>
+            Validate
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.ReplaceSerializerOperationBehavior(System.ServiceModel.Description.ContractDescription)">
+            <summary>
+            Replace serializer
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.ValidateMessagePartDescription(System.ServiceModel.Description.MessagePartDescription)">
+            <summary>
+            Validate message part description
+            </summary>
+            <param name="pd"></param>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.ValidateIsIGraphable(System.Type)">
+            <summary>
+            Validate is IGraphable and has parameterless constructor
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.Formatter">
+            <summary>
+            Formatter for the WCF service
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.GraphAide">
+            <summary>
+            Graph aide for the WCF service
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Serialization.EverestSerializerFormatAttribute.ValidateConformance">
+            <summary>
+            True if conformance should be validated
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection">
+            <summary>
+            Configuration section handler for web.config and app.config. 
+            This class is intended to be used only by the configuration 
+            system, and not directly by user code.
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.SectionName">
+            <summary>
+            The name of the section the config was loaded from.
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Create(System.Object,System.Object,System.Xml.XmlNode)">
+            <summary>
+            Create the configuration object
+            <example>
+            <code lang="xml">
+            &lt;WcfConnector formatter="MARC.Everest.Formatters.ITS1.Formatter"&gt;
+               &lt;Classification match="/" handler="MyService.MyType"/&gt;
+               &lt;Action type="MARC.Everest.Core.Interactions.REPC_IN000076CA" action="urn:hl7-org:v3:REPC_IN000076CA"/&gt;
+            &lt;/WcfConnector&gt;
+            </code>
+            </example>
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Formatter">
+            <summary>
+            Gets or sets the formatter that will be used to format messages.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Receiver">
+            <summary>
+            Gets or sets a dictionary of receivers for the given message types.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.Configuration.ConfigurationSection.Actions">
+            <summary>
+            Gets or sets a dictionary of actions that map data types to soap actions on the server.
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Connectors.WCF.WcfSendResult">
+            <summary>
+            Result of the WCF Send operation
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Connectors.WCF.WcfSendResult.#ctor">
+            <summary>
+            New WcfSendResult
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Code">
+            <summary>
+            Gets or sets the result code of the send operation. Any value other than Accepted and AcceptedNonConformant indicates the message may not have been sent.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Details">
+            <summary>
+            Gets or sets the details of the operation. If the <see cref="T:MARC.Everest.Connectors.ResultCode"/> is not Accepted, this list will contain at least one error item.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Message">
+            <summary>
+            Gets or sets the message to be sent via the WCF connector.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.MessageId">
+            <summary>
+            Gets or sets the id of the message.
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Connectors.WCF.WcfSendResult.Headers">
+            <summary>
+            Gets or sets message headers to send back to the client
             </summary>
         </member>
     </members>

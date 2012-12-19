@@ -109,6 +109,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\MARC.HI.EHRS.SVC.licenseheader">
+      <Link>MARC.HI.EHRS.SVC.licenseheader</Link>
+    </None>
     <None Include="app.config" />
     <None Include="Configuration\marc.hi.ehrs.svc.terminology.xsd">
       <SubType>Designer</SubType>

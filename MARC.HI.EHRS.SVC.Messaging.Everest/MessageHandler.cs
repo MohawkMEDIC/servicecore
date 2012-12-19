@@ -1,3 +1,21 @@
+/**
+ * Copyright 2012-2012 Mohawk College of Applied Arts and Technology
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you 
+ * may not use this file except in compliance with the License. You may 
+ * obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations under 
+ * the License.
+ * 
+ * User: fyfej
+ * Date: 17-10-2012
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +38,9 @@ using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Runtime.InteropServices;
 using MARC.Everest.Connectors.WCF;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Web;
+using System.ServiceModel;
+//using MARC.HI.EHRS.SVC.Messaging.Everest.ClientAccess;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Everest
 {
@@ -86,7 +107,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 }
                 if (formatter is IValidatingStructureFormatter)
                     (formatter as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
-
                 // Message handlers
                 foreach(var mh in itsConfig.MessageHandlers)
                     mh.Handler.Context = this.Context;
@@ -162,7 +182,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
         void WriteMessageToStream(IFormattedConnector conn, IGraphable msg, MemoryStream ms)
         {
             //var fmtr = conn.Formatter.Clone() as IStructureFormatter;
-            conn.Formatter.GraphObject(ms, msg);
+            conn.Formatter.Graph(ms, msg);
             ms.Flush();
             ms.Seek(0, SeekOrigin.Begin);
         }
@@ -299,7 +319,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                             break;
                         case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.Complete:
                             var rms = persistenceService.GetMessageResponseMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
-                            response = (sender as IFormattedConnector).Formatter.ParseObject(rms) as IInteraction;
+                            var parseResult = (sender as IFormattedConnector).Formatter.Parse(rms);
+                            response = parseResult.Structure as IInteraction;
                             break;
                         case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.Active:
                             throw new ApplicationException("Message is already being processed");
@@ -331,7 +352,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                                 foreach (IResultDetail dtl in mea.Details)
                                     Trace.TraceWarning("{0} : {1} : {2}", dtl.Type, dtl.Message, dtl.Location);
                                 Trace.Unindent();
-
+                                mea.Alternate = response;
                             });
                         ilwConnector.InvalidResponse += invalidMessageDelegate;
 

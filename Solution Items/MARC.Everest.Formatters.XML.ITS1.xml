@@ -4,9 +4,63 @@
         <name>MARC.Everest.Formatters.XML.ITS1</name>
     </assembly>
     <members>
-        <member name="T:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter">
+        <member name="T:MARC.Everest.Formatters.XML.ITS1.SettingsType">
             <summary>
-            Handles reflection method of formatting
+            Types of settings on the type formatter
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.AllowFlavorImposing">
+            <summary>
+            Permits RMIM based classes to impose a Flavor on rendered datatypes
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.AllowSupplierDomainImposing">
+            <summary>
+            Permits RMIM based classes to impose a default SupplierDomain on rendered datatypes
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.AllowUpdateModeImposing">
+            <summary>
+            Permits RMIM based classes to impose a default UpdateMode on rendered datatypes
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.UseReflectionFormat">
+            <summary>
+            Signals that the formatter should use the reflection method of formatting
+            rather than code-dom
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.UseGeneratorFormat">
+            <summary>
+            Signals that the formatter should use the generator (creating of code in memory)
+            method of formatting
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.EnableDeepLearning">
+            <summary>
+            Optimizes the formatter for long running applications where first serialization of 
+            messages is not an issue
+            </summary>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.DefaultUniprocessor">
+            <summary>
+            The default settings for a uniprocessor machine
+            </summary>
+            <remarks>
+            Sets AllowFlavorImposing, AllowUpdateModeImposing, AllowSupplierDomainImposing, and UseReflectionFormat
+            </remarks>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.DefaultMultiprocessor">
+            <summary>
+            The default settings for a multi processor machine
+            </summary>
+            <remarks>
+            Sets all options from DefaultUniprocessor plus UseGeneratorFormat
+            </remarks>
+        </member>
+        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.DefaultLegacy">
+            <summary>
+            Default settings for older versions of everest
             </summary>
         </member>
         <member name="T:MARC.Everest.Formatters.XML.ITS1.ITypeFormatter">
@@ -44,46 +98,6 @@
         <member name="P:MARC.Everest.Formatters.XML.ITS1.ITypeFormatter.HandlesType">
             <summary>
             The type this formatter handles
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Graph(System.Xml.XmlWriter,System.Object,MARC.Everest.Interfaces.IGraphable,MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult)">
-            <summary>
-            Graphs an object to the specified stream
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.GetBuildProperties(System.Type)">
-            <summary>
-            Get build properties
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.IsTraversable(System.Reflection.PropertyInfo)">
-            <summary>
-            Returns true if the property is traversable
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.IsNonStructural(System.Reflection.PropertyInfo)">
-            <summary>
-            Returns true if the property is traversable
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Parse(System.Xml.XmlReader,System.Type,System.Type,MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult)">
-            <summary>
-            Parses an instance of the specified type from the specified stream
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Validate(MARC.Everest.Interfaces.IGraphable,System.String,MARC.Everest.Connectors.IResultDetail[]@)">
-            <summary>
-            Validates the specified object
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Host">
-            <summary>
-            Gets or sets the host of the formatter
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.HandlesType">
-            <summary>
-            Gets the type that this formatter handles
             </summary>
         </member>
         <member name="T:MARC.Everest.Formatters.XML.ITS1.Formatter">
@@ -128,9 +142,9 @@
                  </item>
              </list>
              <para>
-             Furthermore, this formatter can be optimized during initialization using the <see cref="M:BuildCache"/> and 
-             <see cref="M:AddFormatterAssembly"/> methods. These methods force the formatter to "learn" structure prior
-             actually serializing them. In the case of <see cref="M:AddFormatterAssembly"/>, it is possible to load an 
+             Furthermore, this formatter can be optimized during initialization using the <see cref="F:BuildCache"/> and 
+             <see cref="F:AddFormatterAssembly"/> methods. These methods force the formatter to "learn" structure prior
+             actually serializing them. In the case of <see cref="F:AddFormatterAssembly"/>, it is possible to load an 
              assembly that was previously generated by the formatter into memory and add the data to its cache.
              </para>
              </remarks>
@@ -273,14 +287,6 @@
             Destroys the instance of the formatter class
             </summary>
         </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.GraphObject(System.Xml.XmlWriter,MARC.Everest.Interfaces.IGraphable)">
-            <summary>
-            Graphs <paramref name="o"/> onto the <see cref="T:System.Xml.XmlWriter"/> <paramref name="s"/>
-            </summary>
-            <param name="s">The <see cref="T:System.Xml.XmlWriter"/> that should be used to graph the object</param>
-            <param name="o">The <see cref="T:MARC.Everest.Interfaces.IGraphable"/> that should be graphed</param>
-            <returns>A result code indicating the outcome of the graph</returns>
-        </member>
         <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.Graph(System.Xml.XmlWriter,MARC.Everest.Interfaces.IGraphable)">
             <summary>
             Graphs <paramref name="o"/> onto the <see cref="T:System.Xml.XmlWriter"/> <paramref name="s"/>
@@ -325,22 +331,6 @@
             will allow the formatter to give additional location information when reporting issues.
             </para>
             </remarks>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.ParseObject(System.Xml.XmlReader)">
-            <summary>
-            Parses an object from <see cref="T:System.Xml.XmlReader"/> <paramref name="r"/>
-            </summary>
-            <param name="r">The <see cref="T:System.Xml.XmlReader"/> from which an object should be read</param>
-            <returns>A <see cref="T:MARC.Everest.Interfaces.IGraphable"/> representing the parsed instance</returns>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.ParseObject(System.Xml.XmlReader,System.Type)">
-            <summary>
-            Parse an object from <see cref="T:System.Xml.XmlReader"/> <paramref name="r"/> using 
-            <paramref name="t"/> as a type hint
-            </summary>
-            <param name="r">The <see cref="T:System.Xml.XmlReader"/> to parse the object from</param>
-            <param name="t">The type hint (ie: type that should be parsed)</param>
-            <returns>A <see cref="T:MARC.Everest.Interfaces.IGraphable"/> representing the parsed instance</returns>
         </member>
         <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.Parse(System.Xml.XmlReader)">
             <summary>
@@ -416,18 +406,6 @@
             </para>
             </remarks>
         </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.GraphObject(System.IO.Stream,MARC.Everest.Interfaces.IGraphable)">
-            <summary>
-            Graphs object <paramref name="o"/> onto stream <paramref name="s"/>
-            </summary>
-            <param name="s">The stream to which the object <paramref name="o"/> is being graphed</param>
-            <param name="o">The object to be graphed</param>
-            <returns>A result code indicating the result of the graph operation</returns>
-            <remarks>
-            This particular implementation of GraphObject is intended to keep backwards compatibility
-            with pre-Everest 1.0 formatting code.
-            </remarks>
-        </member>
         <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.Graph(System.IO.Stream,MARC.Everest.Interfaces.IGraphable)">
             <summary>
             Graphs object <paramref name="o"/> onto stream <paramref name="s"/>
@@ -436,16 +414,7 @@
             <param name="o">The object to be graphed</param>
             <returns>A <see cref="T:MARC.Everest.Formatters.XML.ITS1.Its1FormatterGraphResult"/> structure contianing the 
             results of formatting</returns>
-            <seealso cref="M:Graph(System.Xml.XmlWriter,MARC.Everest.Interfaces.IGraphable)"/>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.ParseObject(System.IO.Stream)">
-            <summary>
-            Parses an object from <paramref name="s"/>
-            </summary>
-            <param name="s">The stream from which to parse an object</param>
-            <returns>The parsed object</returns>
-            <remarks>This particular implementation of ParseObject is intended to 
-            keep backwards compatibility with pre-Everest 1.0 formatters</remarks>
+            <seealso cref="F:Graph(System.Xml.XmlWriter,MARC.Everest.Interfaces.IGraphable)"/>
         </member>
         <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.Parse(System.IO.Stream)">
             <summary>
@@ -462,7 +431,7 @@
             </para>
             <para>
             While this method will work fine when dealing with one RMIM assembly, it is recommended that you use the 
-            <seealso cref="M:Graph(System.IO.Stream,System.Reflection.Assembly)"/> method when more than one RMIM assembly
+            <seealso cref="F:Graph(System.IO.Stream,System.Reflection.Assembly)"/> method when more than one RMIM assembly
             is loaded in memory.
             </para>
             </remarks>
@@ -471,29 +440,6 @@
             <summary>
             Clones this formatter 
             </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.ParseObject(System.IO.Stream,System.Reflection.Assembly)">
-            <summary>
-            Parses an object <paramref name="s"/> using <paramref name="a"/> to
-            locate a suitable object to parse into.
-            </summary>
-            <param name="s">The stream from which to parse</param>
-            <param name="a">The assembly from which to find a class to parse into</param>
-            <returns>An <see cref="T:MARC.Everest.Interfaces.IGraphable"/> object that represents the 
-            <paramref name="s"/> in object form</returns>
-            <remarks>This method signature is inteded to keep backwards compatibility with previous
-            versions of the Everest framework</remarks>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.ParseObject(System.Xml.XmlReader,System.Reflection.Assembly)">
-            <summary>
-            Parses an object from <paramref name="s"/> using <paramref name="a"/> to find
-            a suitable class definition to parse.
-            </summary>
-            <param name="s">The <see cref="T:System.Xml.XmlReader"/> from which to parse</param>
-            <param name="a">The assembly that should be used to scan</param>
-            <returns><paramref name="s"/> in object form</returns>
-            <remarks>This method signature is intended to keep backwards compatibilty with previous
-            versions of the Everest Framework</remarks>
         </member>
         <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.Parse(System.IO.Stream,System.Reflection.Assembly)">
             <summary>
@@ -504,7 +450,7 @@
             <param name="a"><paramref name="s"/> in object form</param>
             <returns>A <see cref="!:MARC.Everest.Formatters.XML.ITS1.Its1FormatterParseResult"/> containing the results of the parse</returns>
             <remarks>
-            <para>This method differs from the <seealso cref="M:Parse(System.IO.Stream)"/> method in that it
+            <para>This method differs from the <seealso cref="F:Parse(System.IO.Stream)"/> method in that it
             will only look within the specified assembly for a suitable class to populate.</para>
             <para>
             This method will not check the current learned type repository for a class to serialize (ie: it will always 
@@ -521,7 +467,7 @@
             <param name="a"><paramref name="s"/> in object form</param>
             <returns>A <see cref="!:MARC.Everest.Formatters.XML.ITS1.Its1FormatterParseResult"/> containing the results of the parse</returns>
             <remarks>
-            <para>This method differs from the <seealso cref="M:Parse(System.Xml.XmlReader)"/> method in that it
+            <para>This method differs from the <seealso cref="F:Parse(System.Xml.XmlReader)"/> method in that it
             will only look within the specified assembly for a suitable class to populate.</para>
             <para>
             This method will not check the current learned type repository for a class to serialize (ie: it will always 
@@ -702,12 +648,6 @@
              </code>
              </example>
         </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.Details">
-            <summary>
-            Gets a list of result details that identify the detected issues
-            found during formatting
-            </summary>
-        </member>
         <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1Formatter.GraphAides">
             <summary>
             Gets or sets a list of aide formatters that can be instantiated 
@@ -741,6 +681,151 @@
             </summary>
             <remarks>When set to true, the formatter will not produce output when
             an invalid message is encountered</remarks>
+        </member>
+        <member name="T:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter">
+            <summary>
+            This class handles the code generation method of formatting 
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.GetFormatter(System.Type)">
+            <summary>
+            Get the formatter for the specified type
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.GetUniqueTypes(System.Type,System.Collections.Generic.List{System.Type},System.Boolean)">
+            <summary>
+            Get unique types that <paramref name="rmimTypes"/> references
+            </summary>
+            <param name="rmimType">The rmim type to scan</param>
+            <param name="current">The list of currently processed types</param>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.CreateFormatterAssembly(System.Type[],System.Collections.Generic.List{MARC.Everest.Connectors.IStructureFormatter},System.Boolean)">
+            <summary>
+            Creates the formatter assembly for the specified types
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.AddFormatterAssembly(System.Reflection.Assembly)">
+            <summary>
+            Add a formatter assembly to the dict formatters
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter">
+            <summary>
+            Handles reflection method of formatting
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Graph(System.Xml.XmlWriter,System.Object,MARC.Everest.Interfaces.IGraphable,MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult)">
+            <summary>
+            Graphs an object to the specified stream
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.GetBuildProperties(System.Type)">
+            <summary>
+            Get build properties
+            </summary>
+            <remarks>
+            This ensures that the properties in the <paramref name="instanceType"/> 
+            </remarks>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.IsTraversable(System.Reflection.PropertyInfo)">
+            <summary>
+            Returns true if the property is traversable
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.IsNonStructural(System.Reflection.PropertyInfo)">
+            <summary>
+            Returns true if the property is traversable
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Parse(System.Xml.XmlReader,System.Type,System.Type,MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult)">
+            <summary>
+            Parses an instance of the specified type from the specified stream
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Validate(MARC.Everest.Interfaces.IGraphable,System.String,MARC.Everest.Connectors.IResultDetail[]@)">
+            <summary>
+            Validates the specified object
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.Host">
+            <summary>
+            Gets or sets the host of the formatter
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Formatters.XML.ITS1.Reflector.ReflectFormatter.HandlesType">
+            <summary>
+            Gets the type that this formatter handles
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult">
+            <summary>
+            Represents a formatting result from an ITS 1 formatter
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.AddResultDetail(MARC.Everest.Connectors.IResultDetail)">
+            <summary>
+            Add a result detail item
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.AddResultDetail(System.Collections.Generic.IEnumerable{MARC.Everest.Connectors.IResultDetail})">
+            <summary>
+            Add result details from an array
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.#ctor">
+            <summary>
+            Datatype formatter graph result
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.#ctor(MARC.Everest.Connectors.ResultCode,MARC.Everest.Connectors.IResultDetail[])">
+            <summary>
+            Datatype formatter graph result
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.Details">
+            <summary>
+            Gets the details of the parse
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.Code">
+            <summary>
+            Gets the result code of the formatting result
+            </summary>
+        </member>
+        <member name="T:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult">
+            <summary>
+            Formatter parse result for ITS1 structures
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.AddResultDetail(MARC.Everest.Connectors.IResultDetail)">
+            <summary>
+            Add a result detail item
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.AddResultDetail(System.Collections.Generic.IEnumerable{MARC.Everest.Connectors.IResultDetail})">
+            <summary>
+            Add result details from an array
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.#ctor">
+            <summary>
+            Datatype formatter parse result
+            </summary>
+        </member>
+        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.#ctor(MARC.Everest.Connectors.ResultCode,MARC.Everest.Connectors.IResultDetail[])">
+            <summary>
+            Datatype formatter parse result
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.Details">
+            <summary>
+            Gets the details of the parse
+            </summary>
+        </member>
+        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.Code">
+            <summary>
+            Gets the result code of the formatting result
+            </summary>
         </member>
         <member name="T:MARC.Everest.Formatters.XML.ITS1.CodeGen.CreateTypeFormatterCompletedDelegate">
             <summary>
@@ -815,162 +900,6 @@
         <member name="E:MARC.Everest.Formatters.XML.ITS1.CodeGen.TypeFormatterCreator.CodeTypeDeclarationCompleted">
             <summary>
             Code type declaration has been completed
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Formatters.XML.ITS1.SettingsType">
-            <summary>
-            Types of settings on the type formatter
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.AllowFlavorImposing">
-            <summary>
-            Permits RMIM based classes to impose a Flavor on rendered datatypes
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.AllowSupplierDomainImposing">
-            <summary>
-            Permits RMIM based classes to impose a default SupplierDomain on rendered datatypes
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.AllowUpdateModeImposing">
-            <summary>
-            Permits RMIM based classes to impose a default UpdateMode on rendered datatypes
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.UseReflectionFormat">
-            <summary>
-            Signals that the formatter should use the reflection method of formatting
-            rather than code-dom
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.UseGeneratorFormat">
-            <summary>
-            Signals that the formatter should use the generator (creating of code in memory)
-            method of formatting
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.EnableDeepLearning">
-            <summary>
-            Optimizes the formatter for long running applications where first serialization of 
-            messages is not an issue
-            </summary>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.DefaultUniprocessor">
-            <summary>
-            The default settings for a uniprocessor machine
-            </summary>
-            <remarks>
-            Sets AllowFlavorImposing, AllowUpdateModeImposing, AllowSupplierDomainImposing, and UseReflectionFormat
-            </remarks>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.DefaultMultiprocessor">
-            <summary>
-            The default settings for a multi processor machine
-            </summary>
-            <remarks>
-            Sets all options from DefaultUniprocessor plus UseGeneratorFormat
-            </remarks>
-        </member>
-        <member name="F:MARC.Everest.Formatters.XML.ITS1.SettingsType.DefaultLegacy">
-            <summary>
-            Default settings for older versions of everest
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter">
-            <summary>
-            This class handles the code generation method of formatting 
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.GetFormatter(System.Type)">
-            <summary>
-            Get the formatter for the specified type
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.GetUniqueTypes(System.Type,System.Collections.Generic.List{System.Type},System.Boolean)">
-            <summary>
-            Get unique types that <paramref name="rmimTypes"/> references
-            </summary>
-            <param name="rmimType">The rmim type to scan</param>
-            <param name="current">The list of currently processed types</param>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.CreateFormatterAssembly(System.Type[],System.Collections.Generic.List{MARC.Everest.Connectors.IStructureFormatter},System.Boolean)">
-            <summary>
-            Creates the formatter assembly for the specified types
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.CodeGen.CodeGenFormatter.AddFormatterAssembly(System.Reflection.Assembly)">
-            <summary>
-            Add a formatter assembly to the dict formatters
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult">
-            <summary>
-            Represents a formatting result from an ITS 1 formatter
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.AddResultDetail(MARC.Everest.Connectors.IResultDetail)">
-            <summary>
-            Add a result detail item
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.AddResultDetail(System.Collections.Generic.IEnumerable{MARC.Everest.Connectors.IResultDetail})">
-            <summary>
-            Add result details from an array
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.#ctor">
-            <summary>
-            Datatype formatter graph result
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.#ctor(MARC.Everest.Connectors.ResultCode,MARC.Everest.Connectors.IResultDetail[])">
-            <summary>
-            Datatype formatter graph result
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.Details">
-            <summary>
-            Gets the details of the parse
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterGraphResult.Code">
-            <summary>
-            Gets the result code of the formatting result
-            </summary>
-        </member>
-        <member name="T:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult">
-            <summary>
-            Formatter parse result for ITS1 structures
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.AddResultDetail(MARC.Everest.Connectors.IResultDetail)">
-            <summary>
-            Add a result detail item
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.AddResultDetail(System.Collections.Generic.IEnumerable{MARC.Everest.Connectors.IResultDetail})">
-            <summary>
-            Add result details from an array
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.#ctor">
-            <summary>
-            Datatype formatter parse result
-            </summary>
-        </member>
-        <member name="M:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.#ctor(MARC.Everest.Connectors.ResultCode,MARC.Everest.Connectors.IResultDetail[])">
-            <summary>
-            Datatype formatter parse result
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.Details">
-            <summary>
-            Gets the details of the parse
-            </summary>
-        </member>
-        <member name="P:MARC.Everest.Formatters.XML.ITS1.XmlIts1FormatterParseResult.Code">
-            <summary>
-            Gets the result code of the formatting result
             </summary>
         </member>
     </members>
