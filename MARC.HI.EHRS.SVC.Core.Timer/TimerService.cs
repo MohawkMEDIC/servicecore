@@ -52,6 +52,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         public TimerService()
         {
             this.m_configuration = ConfigurationManager.GetSection("marc.hi.svc.core.timer") as TimerConfiguration;
+            
         }
 
         #region ITimerService Members
@@ -68,6 +69,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
 
             // Setup timers based on the jobs
             this.m_timers = new System.Timers.Timer[this.m_configuration.Jobs.Count];
+            int i = 0;
             foreach (var job in this.m_configuration.Jobs)
             {
                 // Timer setup
@@ -78,6 +80,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                 };
                 timer.Elapsed += new System.Timers.ElapsedEventHandler(job.Job.Elapsed);
                 timer.Start();
+                this.m_timers[i++] = timer;
             }
 
             Trace.TraceInformation("Timer service started successfully");
@@ -90,11 +93,13 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         {
             // Stop all timers
             Trace.TraceInformation("Stopping timer service...");
-            foreach (var timer in this.m_timers)
-            {
-                timer.Stop();
-                timer.Dispose();
-            }
+
+            if(this.m_timers != null)
+                foreach (var timer in this.m_timers)
+                {
+                    timer.Stop();
+                    timer.Dispose();
+                }
             this.m_timers = null;
             Trace.TraceInformation("Timer service stopped successfully");
         }

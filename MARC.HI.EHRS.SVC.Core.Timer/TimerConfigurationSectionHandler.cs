@@ -43,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer.Configuration
             // Create the return value and populate each job based on the contents of the config section
             TimerConfiguration retVal = new TimerConfiguration();
 
-            var jobs = section.SelectNodes("//*[local-name() = 'job']");
+            var jobs = section.SelectNodes(".//*[local-name() = 'job']");
             if (jobs != null)
                 foreach (XmlElement job in jobs)
                 {
@@ -67,6 +67,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer.Configuration
                         throw new ConfigurationErrorsException(String.Format("Type '{0}' does not implement ITimerJob", jobType));
                     jobConfig.Job = jobInstance;
                     jobConfig.Timeout = tParsedTimespan;
+                    retVal.Jobs.Add(jobConfig);
                 }
 
             return retVal;
