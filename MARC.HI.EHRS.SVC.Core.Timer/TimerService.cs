@@ -25,6 +25,7 @@ using MARC.HI.EHRS.SVC.Core.Timer.Configuration;
 using System.Configuration;
 using System.Threading;
 using System.Diagnostics;
+using System.Timers;
 
 namespace MARC.HI.EHRS.SVC.Core.Timer
 {
@@ -81,6 +82,9 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                 timer.Elapsed += new System.Timers.ElapsedEventHandler(job.Job.Elapsed);
                 timer.Start();
                 this.m_timers[i++] = timer;
+
+                // Fire the job at startup
+                job.Job.Elapsed(timer, null);
             }
 
             Trace.TraceInformation("Timer service started successfully");
