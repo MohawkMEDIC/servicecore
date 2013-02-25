@@ -39,6 +39,19 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         [XmlElement("id")]
         public Decimal Id { get; set; }
 
+        // Supported components
+        private readonly Type[] m_supportedTypes = new Type[] {
+            typeof(Annotation),
+            typeof(Client),
+            typeof(ChangeSummary),
+            typeof(HealthcareParticipant),
+            typeof(HealthServiceRecordComponentRef),
+            typeof(MaskingIndicator),
+            typeof(PersonalRelationship),
+            typeof(QueryRestriction),
+            typeof(ServiceDeliveryLocation)
+        };
+
         /// <summary>
         /// Components
         /// </summary>
@@ -58,13 +71,15 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
             {
                 var retVal = new List<HealthServiceRecordComponent>(m_components.Count);
                 foreach (var mc in m_components)
-                    if (mc is HealthServiceRecordComponent)
+                    if (mc is HealthServiceRecordComponent && 
+                        Array.Exists(m_supportedTypes, o=>o.Equals(mc.GetType())))
                         retVal.Add(mc as HealthServiceRecordComponent);
                 return retVal;
             }
             set
             {
-                m_components = new List<IComponent>(value.Count);
+                if(m_components == null)
+                    m_components = new List<IComponent>(value.Count);
                 foreach (var mv in value)
                 {
                     (mv.Site as HealthServiceRecordSite).Container = this;
@@ -78,7 +93,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         /// <summary>
         /// Gets a list of components that are members of this container
         /// </summary>
-        List<IComponent> m_components = new List<IComponent>();
+        protected List<IComponent> m_components = new List<IComponent>();
 
         /// <summary>
         /// Add a component to this container

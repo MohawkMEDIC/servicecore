@@ -58,5 +58,11 @@ namespace MARC.HI.EHRS.SVC.Subscription.Core.Services
         /// Get the subscription
         /// </summary>
         Subscription GetSubscription(Guid subscriptionId);
+
+
+        /// <summary>
+        /// Get the subscription
+        /// </summary>
+        SubscriptionResult GetSubscriptionItem(Guid subscriptionId, decimal feedItemId);
     }
 }

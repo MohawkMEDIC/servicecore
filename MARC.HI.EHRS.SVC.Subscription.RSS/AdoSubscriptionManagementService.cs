@@ -699,5 +699,83 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         }
 
         #endregion
+
+        #region ISubscriptionManagementService Members
+
+        /// <summary>
+        /// Get subscription item
+        /// </summary>
+        public SubscriptionResult GetSubscriptionItem(Guid subscriptionId, decimal feedItemId)
+        {
+            SubscriptionResult result = null;
+
+            var configService = Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
+
+            // Now register
+            using (IDbConnection conn = this.m_configuration.CreateConnection())
+                try
+                {
+
+                    // Open the connection
+                    conn.Open();
+
+                    // Create a command
+                    using (IDbCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "get_sub_itm";
+                        cmd.Connection = conn;
+
+                        // parameters
+                        IDataParameter pRecId = cmd.CreateParameter(),
+                            pSubId = cmd.CreateParameter();
+                        pSubId.Direction = pRecId.Direction = ParameterDirection.Input;
+                        pSubId.DbType = DbType.String;
+                        pRecId.DbType = DbType.Decimal;
+                        pSubId.ParameterName = "sub_id_in";
+                        pRecId.ParameterName = "rec_id_in";
+                        pSubId.Value = subscriptionId;
+                        pRecId.Value = feedItemId;
+                        cmd.Parameters.Add(pSubId);
+                        cmd.Parameters.Add(pRecId);
+
+
+                        // Now execute
+                        using (IDataReader rdr = cmd.ExecuteReader())
+                            if(rdr.Read())
+                            {
+                                result = new SubscriptionResult()
+                                {
+                                    Id = new VersionedDomainIdentifier()
+                                    {
+                                        Domain = configService.OidRegistrar.GetOid("SUBSC_RID").Oid,
+                                        Identifier = rdr["ent_id"].ToString()
+                                    },
+                                    Created = Convert.ToDateTime(rdr["crt_utc"]),
+                                    Published = Convert.ToDateTime(rdr["pub_utc"]),
+                                    FeedItemId = Convert.ToDecimal(rdr["rec_id"])
+                                };
+
+                            }
+                    }
+                    return result;
+                }
+                catch (Exception e)
+                {
+#if DEBUG
+                    Trace.TraceError(e.ToString());
+#else
+                    Trace.TraceError(e.Message);
+#endif
+
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+        }
+
+        #endregion
     }
 }

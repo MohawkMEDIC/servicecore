@@ -37,6 +37,8 @@ using System.ServiceModel.Syndication;
 using System.Reflection;
 using MARC.HI.EHRS.SVC.Subscription.Core;
 using System.Xml.Linq;
+using System.ServiceModel.Channels;
+using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Subscription.Data
 {
@@ -96,14 +98,19 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                 throw new InvalidOperationException(localeService.GetString("SBSE002"));
             
             var subscriptionData = mgrSvc.GetSubscription(dbId);
-            var subscriptionResults = mgrSvc.CheckSubscription(dbId, false);
+            subscriptionData.SubscriptionId = id;
+            MessageProperties properties = OperationContext.Current.IncomingMessageProperties; 
+            HttpRequestMessageProperty requestProperty = (HttpRequestMessageProperty)properties[HttpRequestMessageProperty.Name]; 
+            string queryString = requestProperty.QueryString;
+
+            bool newOnly = queryString.Contains("new");
+            var subscriptionResults = mgrSvc.CheckSubscription(dbId, newOnly);
 
             // Construct the feed
-           
-
             return new Atom10FeedFormatter(GenerateFeed(subscriptionData, subscriptionResults));
         }
 
+        
         /// <summary>
         /// Generate a feed
         /// </summary>
@@ -244,15 +251,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
             }
         }
 
-        public System.ServiceModel.Syndication.Atom10FeedFormatter GetSubscriptionNewOnly(string id, string pin)
-        {
-            throw new NotImplementedException();
-        }
-
-        public System.ServiceModel.Syndication.Atom10FeedFormatter GetSubscriptionAll(string id, string pin)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         /// <summary>
         /// Registers a subscription for the specified user
@@ -376,6 +375,63 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         public RegisterSubscriptionResponse GetAllSubscriptions(string oid, string id, string pin)
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region ISyndicationContract Members
+
+        /// <summary>
+        /// Get a subscription item
+        /// </summary>
+        public Stream GetSubscriptionItem(string subid, string pin, string id)
+        {
+            
+            // Get the subscription item
+            // Localization service
+            ILocalizationService localeService = ApplicationContext.CurrentContext.GetService(typeof(ILocalizationService)) as ILocalizationService;
+
+            if (String.IsNullOrEmpty(subid))
+                throw new ArgumentNullException("subid");
+            else if (String.IsNullOrEmpty(pin))
+                throw new ArgumentNullException("pin");
+
+            if (s_configuration == null)
+                lock (s_configuration)
+                    s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.subscription") as ConfigurationSectionHandler;
+
+            // Get the db id
+            Guid dbId = GetDatabaseKey(new Guid(subid), pin);
+
+            // Register a subscription
+            ISubscriptionManagementService mgrSvc = ApplicationContext.CurrentContext.GetService(typeof(ISubscriptionManagementService)) as ISubscriptionManagementService;
+            if (mgrSvc == null)
+                throw new InvalidOperationException(localeService.GetString("SBSE002"));
+
+            var subscriptionResults = mgrSvc.GetSubscriptionItem(dbId, Decimal.Parse(id));
+
+            if (subscriptionResults == null)
+            {
+                return null;
+            }
+            else
+            {
+                // Get the identifier
+                IDataPersistenceService persistence = ApplicationContext.CurrentContext.GetService(typeof(IDataPersistenceService)) as IDataPersistenceService;
+                // De-persist
+                var resultData = persistence.GetContainer(subscriptionResults.Id, true);
+                if (resultData != null)
+                {
+                    XmlSerializer xsz = new XmlSerializer(resultData.GetType());
+                    MemoryStream retVal = new MemoryStream();
+                    xsz.Serialize(retVal, resultData);
+                    retVal.Seek(0, SeekOrigin.Begin);
+                    return retVal;
+                }
+                else
+                    return null;
+            }
+           
         }
 
         #endregion

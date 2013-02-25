@@ -25,6 +25,8 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using MARC.HI.EHRS.SVC.Subscription.Data.Messaging;
 using System.Xml.Serialization;
+using System.ComponentModel;
+using System.IO;
 
 namespace MARC.HI.EHRS.SVC.Subscription.Data
 {
@@ -44,18 +46,11 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         Atom10FeedFormatter GetSubscription(string id, string pin);
 
         /// <summary>
-        /// Get subscription data since the specified date
+        /// Get the subscription item
         /// </summary>
         [OperationContract]
-        [WebGet(UriTemplate = "/subscription/{id}?new&pin={pin}", ResponseFormat = WebMessageFormat.Xml)]
-        Atom10FeedFormatter GetSubscriptionNewOnly(string id, string pin);
-
-        /// <summary>
-        /// Get subscription data since the specified date
-        /// </summary>
-        [OperationContract]
-        [WebGet(UriTemplate = "/subscription/{id}?all&pin={pin}", ResponseFormat = WebMessageFormat.Xml)]
-        Atom10FeedFormatter GetSubscriptionAll(string id, string pin);
+        [WebGet(UriTemplate = "/subscription/{subid}/{id}?pin={pin}", ResponseFormat = WebMessageFormat.Xml)]
+        Stream GetSubscriptionItem(string subid, string pin, string id);
 
         /// <summary>
         /// Register a subscription
