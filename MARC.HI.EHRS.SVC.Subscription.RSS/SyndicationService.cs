@@ -39,6 +39,7 @@ using MARC.HI.EHRS.SVC.Subscription.Core;
 using System.Xml.Linq;
 using System.ServiceModel.Channels;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Subscription.Data
 {
@@ -322,6 +323,8 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
             }
             catch (ConstraintException e)
             {
+
+                Trace.TraceError(e.ToString());
                 // Return the error
                 return new RegisterSubscriptionResponse()
                 {
@@ -334,9 +337,12 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                         }
                     }
                 };
+
             }
             catch (Exception e)
             {
+
+                Trace.TraceError(e.ToString());
                 // Return the error
                 return new RegisterSubscriptionResponse()
                 {

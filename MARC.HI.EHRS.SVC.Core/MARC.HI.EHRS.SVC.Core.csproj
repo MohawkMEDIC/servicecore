@@ -128,7 +128,9 @@
     <Compile Include="Services\ISystemConfigurationService.cs" />
     <Compile Include="Services\IMessageHandlerService.cs" />
     <Compile Include="Services\ITerminologyService.cs" />
+    <Compile Include="Services\ITimerService.cs" />
     <Compile Include="Services\IUsesHostContext.cs" />
+    <Compile Include="ServiceUtil.cs" />
     <Compile Include="Terminology\ConceptValidationResult.cs" />
     <Compile Include="Terminology\ValidationOutcome.cs" />
   </ItemGroup>
