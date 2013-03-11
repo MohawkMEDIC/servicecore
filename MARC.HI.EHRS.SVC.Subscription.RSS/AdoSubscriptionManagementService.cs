@@ -560,7 +560,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                         cmd.ExecuteNonQuery();
                         
                         // Cache
-                        lock(s_cachedSubscriptions)
+                        lock (s_cachedSubscriptions)
                             s_cachedSubscriptions.Add(sub);
 
                         return true;

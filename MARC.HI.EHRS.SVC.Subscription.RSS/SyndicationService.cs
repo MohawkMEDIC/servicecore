@@ -65,7 +65,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
             MD5Cng md5 = new MD5Cng();
             byte[] b = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(hash));
 
-            // Now parse the has back into a guid
+            // Now parse the hash back into a guid
             return new Guid(b);
 
         }
@@ -99,7 +99,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                 throw new InvalidOperationException(localeService.GetString("SBSE002"));
             
             var subscriptionData = mgrSvc.GetSubscription(dbId);
-            subscriptionData.SubscriptionId = id;
+            //subscriptionData.SubscriptionId = id;
             MessageProperties properties = OperationContext.Current.IncomingMessageProperties; 
             HttpRequestMessageProperty requestProperty = (HttpRequestMessageProperty)properties[HttpRequestMessageProperty.Name]; 
             string queryString = requestProperty.QueryString;
@@ -108,14 +108,14 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
             var subscriptionResults = mgrSvc.CheckSubscription(dbId, newOnly);
 
             // Construct the feed
-            return new Atom10FeedFormatter(GenerateFeed(subscriptionData, subscriptionResults));
+            return new Atom10FeedFormatter(GenerateFeed(subscriptionData, id, pin, subscriptionResults));
         }
 
         
         /// <summary>
         /// Generate a feed
         /// </summary>
-        private SyndicationFeed GenerateFeed(Core.Subscription subscriptionData, SubscriptionResult[] subscriptionResults)
+        private SyndicationFeed GenerateFeed(Core.Subscription subscriptionData, String id, String pin, SubscriptionResult[] subscriptionResults)
         {
             // Localization service
             ILocalizationService localeService = ApplicationContext.CurrentContext.GetService(typeof(ILocalizationService)) as ILocalizationService;
@@ -137,24 +137,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
             else
             {
                 feed.LastUpdatedTime = subscriptionData.LastUpdate;
-                feed.Links.Add(
-                    new SyndicationLink(
-                        new Uri(String.Format("{0}/subscription/{1}?new&pin={2}", OperationContext.Current.Channel.LocalAddress, subscriptionData.SubscriptionId, "pin")),
-                        "related",
-                        localeService.GetString("SBSI002"),
-                        "application/xml",
-                        0
-                    )
-                );
-                feed.Links.Add(
-                    new SyndicationLink(
-                        new Uri(String.Format("{0}/subscription/{1}?all&pin={2}", OperationContext.Current.Channel.LocalAddress, subscriptionData.SubscriptionId, "pin")),
-                        "related",
-                        localeService.GetString("SBSI003"),
-                        "application/xml",
-                        0
-                    )
-                );
+               
                 XNamespace xn = "urn:marc-hi:ehrs:subscription";
                 feed.ElementExtensions.Add(
                     new XElement(xn + "intendedFor",
@@ -180,7 +163,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                     feedItem.LastUpdatedTime = itm.Published;
                     feedItem.Links.Add(
                         new SyndicationLink(
-                            new Uri(String.Format("{0}/subscription/{1}/{2}?pin={3}", OperationContext.Current.Channel.LocalAddress, subscriptionData.SubscriptionId, itm.FeedItemId, "pin")
+                            new Uri(String.Format("{0}/{1}?pin={2}", OperationContext.Current.IncomingMessageHeaders.To.ToString().Replace( OperationContext.Current.IncomingMessageHeaders.To.Query, ""), itm.FeedItemId, pin)
                             )
                         ));
                     // Add match
@@ -392,52 +375,59 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         /// </summary>
         public Stream GetSubscriptionItem(string subid, string pin, string id)
         {
-            
-            // Get the subscription item
-            // Localization service
-            ILocalizationService localeService = ApplicationContext.CurrentContext.GetService(typeof(ILocalizationService)) as ILocalizationService;
 
-            if (String.IsNullOrEmpty(subid))
-                throw new ArgumentNullException("subid");
-            else if (String.IsNullOrEmpty(pin))
-                throw new ArgumentNullException("pin");
-
-            if (s_configuration == null)
-                lock (s_configuration)
-                    s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.subscription") as ConfigurationSectionHandler;
-
-            // Get the db id
-            Guid dbId = GetDatabaseKey(new Guid(subid), pin);
-
-            // Register a subscription
-            ISubscriptionManagementService mgrSvc = ApplicationContext.CurrentContext.GetService(typeof(ISubscriptionManagementService)) as ISubscriptionManagementService;
-            if (mgrSvc == null)
-                throw new InvalidOperationException(localeService.GetString("SBSE002"));
-
-            var subscriptionResults = mgrSvc.GetSubscriptionItem(dbId, Decimal.Parse(id));
-
-            if (subscriptionResults == null)
+            try
             {
-                return null;
-            }
-            else
-            {
-                // Get the identifier
-                IDataPersistenceService persistence = ApplicationContext.CurrentContext.GetService(typeof(IDataPersistenceService)) as IDataPersistenceService;
-                // De-persist
-                var resultData = persistence.GetContainer(subscriptionResults.Id, true);
-                if (resultData != null)
+                // Get the subscription item
+                // Localization service
+                ILocalizationService localeService = ApplicationContext.CurrentContext.GetService(typeof(ILocalizationService)) as ILocalizationService;
+
+                if (String.IsNullOrEmpty(subid))
+                    throw new ArgumentNullException("subid");
+                else if (String.IsNullOrEmpty(pin))
+                    throw new ArgumentNullException("pin");
+
+                if (s_configuration == null)
+                    lock (s_configuration)
+                        s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.subscription") as ConfigurationSectionHandler;
+
+                // Get the db id
+                Guid dbId = GetDatabaseKey(new Guid(subid), pin);
+
+                // Register a subscription
+                ISubscriptionManagementService mgrSvc = ApplicationContext.CurrentContext.GetService(typeof(ISubscriptionManagementService)) as ISubscriptionManagementService;
+                if (mgrSvc == null)
+                    throw new InvalidOperationException(localeService.GetString("SBSE002"));
+
+                var subscriptionResults = mgrSvc.GetSubscriptionItem(dbId, Decimal.Parse(id));
+
+                if (subscriptionResults == null)
                 {
-                    XmlSerializer xsz = new XmlSerializer(resultData.GetType());
-                    MemoryStream retVal = new MemoryStream();
-                    xsz.Serialize(retVal, resultData);
-                    retVal.Seek(0, SeekOrigin.Begin);
-                    return retVal;
+                    return null;
                 }
                 else
-                    return null;
+                {
+                    // Get the identifier
+                    IDataPersistenceService persistence = ApplicationContext.CurrentContext.GetService(typeof(IDataPersistenceService)) as IDataPersistenceService;
+                    // De-persist
+                    var resultData = persistence.GetContainer(subscriptionResults.Id, true);
+                    if (resultData != null)
+                    {
+                        XmlSerializer xsz = new XmlSerializer(resultData.GetType());
+                        MemoryStream retVal = new MemoryStream();
+                        xsz.Serialize(retVal, resultData);
+                        retVal.Seek(0, SeekOrigin.Begin);
+                        return retVal;
+                    }
+                    else
+                        return null;
+                }
             }
-           
+            catch (Exception e)
+            {
+                Trace.TraceError(e.ToString());
+                return null;
+            }
         }
 
         #endregion
