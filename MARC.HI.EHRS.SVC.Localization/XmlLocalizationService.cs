@@ -90,7 +90,7 @@ namespace MARC.HI.EHRS.SVC.Localization
         /// <summary>
         /// Gets or sets the host context
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context { get; set; }
+        public IServiceProvider Context { get; set; }
 
         #endregion
     }

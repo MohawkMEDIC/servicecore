@@ -42,7 +42,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
     {
 
         // Context
-        private HostContext m_context;
+        private IServiceProvider m_context;
 
         /// <summary>
         /// Configuration
@@ -309,7 +309,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
         /// <summary>
         /// Gets or sets the current context of the terminology resolver
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context
+        public IServiceProvider Context
         {
             get
             {

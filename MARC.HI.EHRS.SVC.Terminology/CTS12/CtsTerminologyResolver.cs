@@ -207,7 +207,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
         /// <summary>
         /// Gets or sets the host context in which this service runs
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context { get; set; }
+        public IServiceProvider Context { get; set; }
 
         #endregion
 

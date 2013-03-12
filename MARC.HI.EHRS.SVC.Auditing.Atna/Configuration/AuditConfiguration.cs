@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2012-2012 Mohawk College of Applied Arts and Technology
+ * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,25 +14,31 @@
  * the License.
  * 
  * User: fyfej
- * Date: 7-5-2012
+ * Date: 23-10-2012
  */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
 {
     /// <summary>
-    /// Any service that runs within the shared health record host process implements the
-    /// shared health record service interface
+    /// Audit configuration
     /// </summary>
-    public interface IUsesHostContext
+    public class AuditConfiguration
     {
+
+
         /// <summary>
-        /// Gets the context of the shared health record service
+        /// Identifies the host that audits should be sent to
         /// </summary>
-        IServiceProvider Context { get; set; }
+        public IPEndPoint AuditTarget { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message publisher to use for this audit
+        /// </summary>
+        public IMessagePublisher MessagePublisher { get; set; }
     }
 }

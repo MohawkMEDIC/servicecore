@@ -64,7 +64,7 @@ namespace MARC.HI.EHRS.SVC.Auditing
         /// <summary>
         /// Gets or sets the context under which this auditor service runs
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context
+        public IServiceProvider Context
         {
             get;
             set; 

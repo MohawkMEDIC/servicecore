@@ -117,13 +117,13 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         #region IUsesHostContext Members
 
         [NonSerialized]
-        private HostContext m_context;
+        private IServiceProvider m_context;
 
         /// <summary>
         /// Get or set the context of this component
         /// </summary>
         [XmlIgnore]
-        public HostContext Context
+        public IServiceProvider Context
         {
             get { return this.m_context; }
             set { this.m_context = value; }

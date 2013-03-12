@@ -83,7 +83,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi
         /// <summary>
         /// Gets or sets the context
         /// </summary>
-        public Core.HostContext Context
+        public IServiceProvider Context
         {
             get;
             set;

@@ -32,7 +32,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer.Configuration
     {
 
         // Host context
-        private HostContext m_hostContext = null;
+        private IServiceProvider m_hostContext = null;
 
         /// <summary>
         /// Creates a new instance of the timer configuration
@@ -52,7 +52,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer.Configuration
         /// <summary>
         /// Gets or sets the host context that owns this configuration
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context
+        public IServiceProvider Context
         {
             get
             {

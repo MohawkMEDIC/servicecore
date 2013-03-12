@@ -985,12 +985,12 @@ namespace MARC.HI.EHRS.SHR.Messaging
         #region IUsesHostContext Members
 
         // Host context
-        private HostContext m_context;
+        private IServiceProvider m_context;
 
         /// <summary>
         /// Gets or sets the host context
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context
+        public IServiceProvider Context
         {
             get { return this.m_context; }
             set

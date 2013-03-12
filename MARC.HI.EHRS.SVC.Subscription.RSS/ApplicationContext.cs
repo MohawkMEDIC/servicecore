@@ -35,7 +35,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         /// <summary>
         /// Host context backing field for singleton
         /// </summary>
-        private static HostContext s_hostContext;
+        private static IServiceProvider s_hostContext;
         /// <summary>
         /// Sync-lock
         /// </summary>
@@ -56,7 +56,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         /// <summary>
         /// Gets or sets the current host context
         /// </summary>
-        public static HostContext CurrentContext
+        public static IServiceProvider CurrentContext
         {
             get
             {

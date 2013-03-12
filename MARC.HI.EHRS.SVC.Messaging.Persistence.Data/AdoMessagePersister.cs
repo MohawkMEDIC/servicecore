@@ -288,7 +288,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// Gets or sets the host context that this message persister operates within
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context
+        public IServiceProvider Context
         {
             get;
             set; 

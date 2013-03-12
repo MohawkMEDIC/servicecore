@@ -35,7 +35,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
     public class TimerService : ITimerService
     {
         // Host context
-        private HostContext m_hostContext;
+        private IServiceProvider m_hostContext;
 
         /// <summary>
         /// Timer configuration
@@ -115,7 +115,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         /// <summary>
         /// Gets or sets the host context
         /// </summary>
-        public HostContext Context
+        public IServiceProvider Context
         {
             get { return this.m_hostContext; }
             set

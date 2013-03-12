@@ -37,19 +37,18 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
     /// RFC3881 (ATNA style) audits
     /// </summary>
     [Description("RFC3881 Audit Service")]
-    
     public class AtnaAuditService : IAuditorService
     {
     
         // Configuration
-        private ConfigurationSectionHandler m_configuration;
+        protected AuditConfiguration m_configuration;
 
         /// <summary>
         /// Creates a new instance of the ATNA audit service
         /// </summary>
         public AtnaAuditService()
         {
-            this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.auditing.atna") as ConfigurationSectionHandler;
+            this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.auditing.atna") as AuditConfiguration;
         }
 
         #region IAuditorService Members
@@ -162,7 +161,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         /// <summary>
         /// Gets or sets the context of the ATNA message
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.HostContext Context { get; set; }
+        public IServiceProvider Context { get; set; }
 
         #endregion
     }

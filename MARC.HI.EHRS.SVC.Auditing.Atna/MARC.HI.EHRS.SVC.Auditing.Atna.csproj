@@ -61,6 +61,7 @@
     <Compile Include="AtnaAuditService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\AuditConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>

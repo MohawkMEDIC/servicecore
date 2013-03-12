@@ -298,7 +298,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         private static readonly string s_workItemBackupFolder = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), Assembly.GetEntryAssembly().GetName().Name), typeof(AdoSubscriptionManagementService).Assembly.GetName().Name);
 
         // The host context
-        private HostContext m_context;
+        private IServiceProvider m_context;
 
         // Configuration
         private ConfigurationSectionHandler m_configuration;
@@ -452,7 +452,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         /// <summary>
         /// Gets or sets the host context
         /// </summary>
-        public HostContext Context
+        public IServiceProvider Context
         {
             get { return this.m_context; }
             set

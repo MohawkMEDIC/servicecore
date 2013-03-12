@@ -464,7 +464,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
         #region IUsesHostContext Members
 
-        public HostContext Context
+        public IServiceProvider Context
         {
             get;
             set; 

@@ -36,20 +36,11 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
         #region IConfigurationSectionHandler Members
 
         /// <summary>
-        /// Identifies the host that audits should be sent to
-        /// </summary>
-        public IPEndPoint AuditTarget { get; set; }
-
-        /// <summary>
-        /// Gets or sets the message publisher to use for this audit
-        /// </summary>
-        public IMessagePublisher MessagePublisher { get; private set; }
-
-        /// <summary>
         /// Configuration Section Handler
         /// </summary>
         public object Create(object parent, object configContext, System.Xml.XmlNode section)
         {
+            var retVal = new AuditConfiguration();
             XmlElement auditTargetNode = section.SelectSingleNode("./*[local-name() = 'destination']") as XmlElement;
 
             if (auditTargetNode == null)
@@ -80,12 +71,12 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
             }
 
             // Create the audit target
-            this.AuditTarget = new IPEndPoint(IPAddress.Parse(ipAddress), port);
+            retVal.AuditTarget = new IPEndPoint(IPAddress.Parse(ipAddress), port);
 
             // Create the publisher
-            this.MessagePublisher = ci.Invoke(new object[] { this.AuditTarget }) as IMessagePublisher;
+            retVal.MessagePublisher = ci.Invoke(new object[] { retVal.AuditTarget }) as IMessagePublisher;
             
-            return this;
+            return retVal;
         }
 
         #endregion

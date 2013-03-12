@@ -295,7 +295,7 @@ namespace MARC.HI.EHRS.SVC.ClientIdentity.pCS
         /// <summary>
         /// Gets or sets the context of the provider
         /// </summary>
-        public Core.HostContext Context { get; set; }
+        public IServiceProvider Context { get; set; }
         #endregion
     }
 }

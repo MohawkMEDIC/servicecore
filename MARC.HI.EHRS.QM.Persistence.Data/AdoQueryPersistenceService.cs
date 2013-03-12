@@ -409,7 +409,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
 
         #region IUsesHostContext Members
 
-        public MARC.HI.EHRS.SVC.Core.HostContext Context
+        public IServiceProvider Context
         {
             get;
             set;

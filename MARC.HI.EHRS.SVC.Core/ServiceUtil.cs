@@ -6,6 +6,7 @@ using System.Diagnostics;
 using MARC.HI.EHRS.SVC.Core.Services;
 using System.Reflection;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Core
 {
@@ -62,7 +63,7 @@ namespace MARC.HI.EHRS.SVC.Core
                             s_timerService.Start();
                         // audit startup
                         if (s_auditorService != null)
-                            s_auditorService.SendAudit(CreateApplicationStart());
+                            s_auditorService.SendAudit(CreateApplicationStartAudit());
                         Trace.TraceInformation("Service Started Successfully");
                         return 0;
                     }
@@ -96,10 +97,10 @@ namespace MARC.HI.EHRS.SVC.Core
                     s_timerService.Stop();
                 // audit stop
                 if (s_auditorService != null)
-                    s_auditorService.SendAudit(CreateApplicationStop());
+                    s_auditorService.SendAudit(CreateApplicationStopAudit());
                 Trace.TraceInformation("Stopping message handler service {0}", s_messageHandlerService);
                 s_messageHandlerService.Stop();
-                s_messageHandlerService.Context.Dispose();
+                (s_messageHandlerService.Context as IDisposable).Dispose();
             }
         }
 
@@ -128,7 +129,8 @@ namespace MARC.HI.EHRS.SVC.Core
         /// <summary>
         /// Create an application start audit
         /// </summary>
-        private static Core.DataTypes.AuditData CreateApplicationStart()
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Core.DataTypes.AuditData CreateApplicationStartAudit()
         {
             return new SVC.Core.DataTypes.AuditData(
                                 DateTime.Now,
@@ -153,7 +155,8 @@ namespace MARC.HI.EHRS.SVC.Core
         /// <summary>
         /// Create an application stop audit
         /// </summary>
-        private static Core.DataTypes.AuditData CreateApplicationStop()
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Core.DataTypes.AuditData CreateApplicationStopAudit()
         {
             return new SVC.Core.DataTypes.AuditData(
                                 DateTime.Now,

@@ -86,7 +86,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         /// <summary>
         /// Creates a new instance of Health Service Record site
         /// </summary>
-        public HealthServiceRecordSite(IComponent component, IContainer container, HostContext context)
+        public HealthServiceRecordSite(IComponent component, IContainer container, IServiceProvider context)
             : this(component, container)
         {
             this.Context = context;
@@ -151,13 +151,13 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         #region ISharedHealthRecordService Members
 
         [NonSerialized]
-        private HostContext m_context = null;
+        private IServiceProvider m_context = null;
 
         /// <summary>
         /// Gets or sets the context of the site
         /// </summary>
         [XmlIgnore]
-        public HostContext Context
+        public IServiceProvider Context
         {
             get { return this.m_context; }
             set { this.m_context = value; }
