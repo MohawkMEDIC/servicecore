@@ -37,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         /// <summary>
         /// Identifier of the component
         /// </summary>
-        [XmlElement("id")]
+        [XmlAttribute("id")]
         public Decimal Id { get; set; }
 
         // Supported components
