@@ -38,5 +38,17 @@ namespace ServiceConfigurator
         // Configuration File
         public static string s_configFile = null;
 
+        // Fired when the configuration has been applied
+        public static event EventHandler ConfigurationApplied;
+
+        /// <summary>
+        /// Configuration has been applied
+        /// </summary>
+        internal static void OnConfigurationApplied()
+        {
+            if (ConfigurationApplied != null)
+                ConfigurationApplied(null, EventArgs.Empty);
+        }
+
     }
 }

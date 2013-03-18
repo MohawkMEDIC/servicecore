@@ -37,14 +37,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Solution Items\CTS.Types.dll = Solution Items\CTS.Types.dll
 		Solution Items\SQL\ICD10.sql = Solution Items\SQL\ICD10.sql
 		Solution Items\SQL\ICD10CM.sql = Solution Items\SQL\ICD10CM.sql
-		Solution Items\SQL\ISO639-1.sql = Solution Items\SQL\ISO639-1.sql
-		Solution Items\SQL\ISO639-3.sql = Solution Items\SQL\ISO639-3.sql
-		Solution Items\SQL\LOINC.sql = Solution Items\SQL\LOINC.sql
 		Solution Items\MARC.Everest.dll = Solution Items\MARC.Everest.dll
 		Solution Items\MARC.Everest.xml = Solution Items\MARC.Everest.xml
 		Solution Items\SQL\MDB.sql = Solution Items\SQL\MDB.sql
 		Solution Items\SQL\POSTGREQM-DDL.sql = Solution Items\SQL\POSTGREQM-DDL.sql
-		Solution Items\SQL\QDCDB.sql = Solution Items\SQL\QDCDB.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auditing", "Auditing", "{95E8EFB6-C6B9-441D-9F5E-A8598DE9EE72}"
@@ -74,6 +70,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.ConfigurationApplciation", "ServiceConfigurator\MARC.HI.EHRS.SVC.ConfigurationApplciation.csproj", "{E3F86DDE-9604-4F3E-9A31-BDF5C2051A23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Core.Timer", "MARC.HI.EHRS.SVC.Core.Timer\MARC.HI.EHRS.SVC.Core.Timer.csproj", "{D3881DA7-0F20-4E3B-8103-5424C970E376}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Configurator.PostgreSql9", "MARC.HI.EHRS.SVC.Configurator.PostgreSql9\MARC.HI.EHRS.SVC.Configurator.PostgreSql9.csproj", "{42B590C4-3CBD-40D3-857C-180F54B7916F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -306,6 +304,16 @@ Global
 		{D3881DA7-0F20-4E3B-8103-5424C970E376}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D3881DA7-0F20-4E3B-8103-5424C970E376}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D3881DA7-0F20-4E3B-8103-5424C970E376}.Release|x86.ActiveCfg = Release|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{42B590C4-3CBD-40D3-857C-180F54B7916F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -330,6 +338,7 @@ Global
 		{B8672301-DE96-4FAA-BBA3-78984890E204} = {2313042F-125B-4AE1-96A8-B447EB95CFED}
 		{2E0A3F96-DB2E-4775-9A8F-4012177C2B9E} = {2313042F-125B-4AE1-96A8-B447EB95CFED}
 		{E3F86DDE-9604-4F3E-9A31-BDF5C2051A23} = {863E156E-577E-4B2A-84DB-73B4749C0F8B}
+		{42B590C4-3CBD-40D3-857C-180F54B7916F} = {863E156E-577E-4B2A-84DB-73B4749C0F8B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

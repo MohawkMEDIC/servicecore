@@ -97,6 +97,7 @@
     <Compile Include="Configuration\IConfigurationPanel.cs" />
     <Compile Include="Configuration\IDatabaseConfigurator.cs" />
     <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
+    <Compile Include="Configuration\UI\OidRegistrarConfigurationPanel.cs" />
     <Compile Include="DataTypes\AddressPart.cs" />
     <Compile Include="DataTypes\AddressSet.cs" />
     <Compile Include="DataTypes\CodeValue.cs" />

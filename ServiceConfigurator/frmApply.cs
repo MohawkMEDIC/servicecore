@@ -77,6 +77,7 @@ namespace ServiceConfigurator
                         itm.Configure(configDocument);
                     }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
+                    ConfigurationApplicationContext.OnConfigurationApplied();
                 }
                 finally
                 {
@@ -110,6 +111,8 @@ namespace ServiceConfigurator
                         itm.UnConfigure(configDocument);
                     }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
+                    ConfigurationApplicationContext.OnConfigurationApplied();
+
                 }
                 finally
                 {
