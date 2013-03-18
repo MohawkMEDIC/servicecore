@@ -32,20 +32,26 @@ namespace ServiceConfigurator
 {
     public partial class frmApply : Form
     {
-        public frmApply()
+        public frmApply(bool config)
         {
             InitializeComponent();
-            ShowConfigurationPanels();
+            ShowConfigurationPanels(config);
         }
 
         /// <summary>
         /// Show configuration panels
         /// </summary>
-        private void ShowConfigurationPanels()
+        private void ShowConfigurationPanels(bool config)
         {
+            XmlDocument configDocument = new XmlDocument();
+                    configDocument.Load(ConfigurationApplicationContext.s_configFile);
             foreach (var itm in ConfigurationApplicationContext.s_configurationPanels)
-                if(itm.EnableConfiguration)
-                    chkActions.Items.Add(itm);
+                if (itm.EnableConfiguration)
+                {
+                    if(itm.IsConfigured(configDocument) ^ config &&
+                        !(itm is IAlwaysDeployedConfigurationPanel))
+                        chkActions.Items.Add(itm);
+                }
         }
 
         /// <summary>
@@ -53,7 +59,7 @@ namespace ServiceConfigurator
         /// </summary>
         public static void ConfigureFeatures()
         {
-            frmApply apply = new frmApply();
+            frmApply apply = new frmApply(true);
             apply.Text = "Configure Features";
             apply.lblDescription.Text = "Select the features that you would like to apply configuration for";
             if (apply.ShowDialog() == DialogResult.OK)
@@ -76,6 +82,11 @@ namespace ServiceConfigurator
                         progress.StatusText = String.Format("Configuring {0}...", itm.ToString());
                         itm.Configure(configDocument);
                     }
+
+                    // Always applied stuff changes
+                    foreach (var itm in ConfigurationApplicationContext.s_configurationPanels.FindAll(o => o is IAlwaysDeployedConfigurationPanel))
+                        itm.Configure(configDocument);
+
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
                     ConfigurationApplicationContext.OnConfigurationApplied();
                 }
@@ -91,7 +102,7 @@ namespace ServiceConfigurator
         /// </summary>
         public static void UnConfigureFeatures()
         {
-            frmApply apply = new frmApply();
+            frmApply apply = new frmApply(false);
             apply.Text = "UnConfigure Features";
             apply.lblDescription.Text = "Select the features that you would like to remove configuration for";
             

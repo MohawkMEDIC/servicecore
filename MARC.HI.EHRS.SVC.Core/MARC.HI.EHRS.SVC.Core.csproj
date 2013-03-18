@@ -69,6 +69,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Workflow.Activities">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -94,10 +95,37 @@
     <Compile Include="Auditing\AuditSourceType.cs" />
     <Compile Include="Auditing\NetworkAccessPointType.cs" />
     <Compile Include="Auditing\OutcomeIndicator.cs" />
+    <Compile Include="Configuration\IAlwaysDeployedConfigurationPanel.cs" />
     <Compile Include="Configuration\IConfigurationPanel.cs" />
     <Compile Include="Configuration\IDatabaseConfigurator.cs" />
     <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
+    <Compile Include="Configuration\UI\EndpointValidationConfigurationPanel.cs" />
+    <Compile Include="Configuration\UI\frmAddDomainIdentifier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\frmAddDomainIdentifier.Designer.cs">
+      <DependentUpon>frmAddDomainIdentifier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\UI\frmAddOid.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\frmAddOid.Designer.cs">
+      <DependentUpon>frmAddOid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\UI\HL7IdentifierType.cs" />
     <Compile Include="Configuration\UI\OidRegistrarConfigurationPanel.cs" />
+    <Compile Include="Configuration\UI\ucOidRegistrarConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\ucOidRegistrarConfiguration.Designer.cs">
+      <DependentUpon>ucOidRegistrarConfiguration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\UI\ucValidateSolicitors.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\ucValidateSolicitors.Designer.cs">
+      <DependentUpon>ucValidateSolicitors.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataTypes\AddressPart.cs" />
     <Compile Include="DataTypes\AddressSet.cs" />
     <Compile Include="DataTypes\CodeValue.cs" />
@@ -145,6 +173,20 @@
     <None Include="marc.hi.ehrs.svc.core.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\UI\frmAddDomainIdentifier.resx">
+      <DependentUpon>frmAddDomainIdentifier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration\UI\frmAddOid.resx">
+      <DependentUpon>frmAddOid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration\UI\ucOidRegistrarConfiguration.resx">
+      <DependentUpon>ucOidRegistrarConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration\UI\ucValidateSolicitors.resx">
+      <DependentUpon>ucValidateSolicitors.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

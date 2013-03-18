@@ -36,6 +36,51 @@ namespace ServiceConfigurator
     public partial class frmMain : Form
     {
 
+        /// <summary>
+        /// Dummy configuration panel
+        /// </summary>
+        private class DummyConfigPanel : IAlwaysDeployedConfigurationPanel
+        {
+
+            #region IConfigurationPanel Members
+
+            public string Name
+            {
+                get { return "NA"; }
+            }
+
+            public bool EnableConfiguration
+            {
+                get;
+                set;
+            }
+
+            public Control Panel
+            {
+                get { return new Label() { Text = "Configuration Not Supported", TextAlign = ContentAlignment.MiddleCenter }; }
+            }
+
+            public void Configure(XmlDocument configurationDom)
+            {
+            }
+
+            public void UnConfigure(XmlDocument configurationDom)
+            {
+            }
+
+            public bool IsConfigured(XmlDocument configurationDom)
+            {
+                return true;
+            }
+
+            public bool Validate(XmlDocument configurationDom)
+            {
+                return false;
+            }
+
+            #endregion
+        }
+
         // XmlConfiguration
         private XmlDocument m_xmlConfiguration = new XmlDocument();
  
@@ -57,11 +102,46 @@ namespace ServiceConfigurator
                 m_xmlConfiguration.Load(ConfigurationApplicationContext.s_configFile);
                 foreach (var itm in ConfigurationApplicationContext.s_configurationPanels)
                 {
-                    TreeNode tn = new TreeNode(itm.Name);
-                    tn.Tag = itm;
+                    if (itm is DummyConfigPanel)
+                        continue;
 
-                    tn.SelectedImageIndex = tn.ImageIndex = itm.IsConfigured(m_xmlConfiguration) ? 0 : 1;
-                    trvOptions.Nodes.Add(tn);
+                    TreeNodeCollection addToCollection = trvOptions.Nodes;
+
+                    string displayName = itm.Name;
+                    // Does the node have a / ?
+                    if (itm.Name.Contains("/"))
+                    {
+                        string[] comps = itm.Name.Split('/');
+                        displayName = comps[1];
+                        string parentName = comps[0];
+
+                        // Locate the parent
+                        var parentNode = addToCollection.Find(parentName, true);
+                        if (parentNode.Length == 0) // create the parent node
+                        {
+                            parentNode = new TreeNode[] { addToCollection.Add(parentName, parentName) };
+                            parentNode[0].Tag = new DummyConfigPanel();
+                            parentNode[0].SelectedImageIndex = parentNode[0].ImageIndex = 0;
+
+                        }
+                        addToCollection = parentNode[0].Nodes;
+                    }
+
+                    // See if the display name is already set
+                    var alreadyDn = addToCollection.Find(displayName, true);
+                    if (alreadyDn.Length == 0)
+                    {
+
+                        TreeNode tn = addToCollection.Add(displayName, displayName);
+                        tn.Tag = itm;
+
+                        tn.SelectedImageIndex = tn.ImageIndex = itm.IsConfigured(m_xmlConfiguration) || itm is IAlwaysDeployedConfigurationPanel ? 0 : 1;
+                    }
+                    else
+                    {
+                        alreadyDn[0].Tag = itm;
+                        alreadyDn[0].SelectedImageIndex = alreadyDn[0].ImageIndex = itm.IsConfigured(m_xmlConfiguration) || itm is IAlwaysDeployedConfigurationPanel ? 0 : 1;
+                    }
                 }
                 trvOptions.SelectedNode = trvOptions.Nodes[0];
             }
@@ -111,17 +191,27 @@ namespace ServiceConfigurator
         private void trvOptions_AfterSelect(object sender, TreeViewEventArgs e)
         {
 
-            chkEnableFeature.Text = String.Format("Enable Configuration for {0}", e.Node.Text);
-            chkEnableFeature.Enabled = true;
-            chkEnableFeature.Checked = (e.Node.Tag as IConfigurationPanel).EnableConfiguration;
             pnlConfigure.Controls.Clear();
             var pnl = (e.Node.Tag as IConfigurationPanel).Panel;
             pnlConfigure.Controls.Add(pnl);
             pnl.Dock = DockStyle.Fill;
-            if ((e.Node.Tag as IConfigurationPanel).IsConfigured(m_xmlConfiguration))
+            chkEnableFeature.Text = String.Format("Enable Configuration for {0}", e.Node.Text);
+
+            if (e.Node.Tag is IAlwaysDeployedConfigurationPanel)
             {
                 chkEnableFeature.Enabled = false;
-                pnlConfigure.Enabled = false;
+                pnlConfigure.Enabled = true;
+                chkEnableFeature.Checked = true;
+            }
+            else
+            {
+                chkEnableFeature.Enabled = true;
+                chkEnableFeature.Checked = (e.Node.Tag as IConfigurationPanel).EnableConfiguration;
+                if ((e.Node.Tag as IConfigurationPanel).IsConfigured(m_xmlConfiguration))
+                {
+                    chkEnableFeature.Enabled = false;
+                    pnlConfigure.Enabled = false;
+                }
             }
         }
 

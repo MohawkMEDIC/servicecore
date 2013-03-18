@@ -76,5 +76,13 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             else
                 return base.Equals(obj);
         }
+
+        /// <summary>
+        /// Convert to a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("{0}^^^{1}&{2}&ISO", this.Identifier, this.AssigningAuthority, this.Domain);
+        }
     }
 }

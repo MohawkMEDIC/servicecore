@@ -30,6 +30,18 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// </summary>
     public class OidRegistrar : IEnumerable<MARC.HI.EHRS.SVC.Core.DataTypes.OidRegistrar.OidData>
     {
+
+        /// <summary>
+        /// Gets the extended attributes registered for the OidRegistrar
+        /// </summary>
+        public static Dictionary<String, Type> ExtendedAttributes { get; private set; }
+
+        // Oid Registrar
+        static OidRegistrar()
+        {
+            ExtendedAttributes = new Dictionary<string, Type>();
+        }
+
         /// <summary>
         /// Equality provider
         /// </summary>
@@ -99,6 +111,22 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             {
                 return string.Format("{0} ({1})", Oid, Description);
             }
+
+            /// <summary>
+            /// Clone this OID
+            /// </summary>
+            internal OidData Clone()
+            {
+                OidData retVal = new OidData();
+                retVal.Name = this.Name;
+                retVal.Description = this.Description;
+                retVal.Oid = this.Oid;
+                retVal.Ref = new Uri(this.Ref.ToString());
+                retVal.Attributes = new List<KeyValuePair<string, string>>();
+                foreach (var kv in this.Attributes)
+                    retVal.Attributes.Add(new KeyValuePair<string, string>(kv.Key, kv.Value));
+                return retVal;
+            }
         }
 
         /// <summary>
@@ -142,7 +170,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// </summary>
         public OidData FindData(string oid)
         {
-            return m_registerOids.Find(o => o.Oid.Equals(oid));
+            return m_registerOids.Find(o => o.Oid != null && o.Oid.Equals(oid));
         }
 
         /// <summary>
@@ -196,5 +224,26 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         }
 
         #endregion
-}
+
+        /// <summary>
+        /// Register this oid
+        /// </summary>
+        public void Register(OidData oidData)
+        {
+            // is there another oid with this name
+            if (m_registerOids.Count(o => o.Name.Equals(oidData.Name)) > 0)
+                throw new InvalidOperationException("Cannot register a duplicate named OID");
+
+
+            m_registerOids.Add(oidData);
+        }
+
+        /// <summary>
+        /// Remove an oid
+        /// </summary>
+        public void Remove(OidData oidData)
+        {
+            this.m_registerOids.Remove(oidData);
+        }
+    }
 }
