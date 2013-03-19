@@ -85,8 +85,14 @@ namespace ServiceConfigurator
 
                     // Always applied stuff changes
                     foreach (var itm in ConfigurationApplicationContext.s_configurationPanels.FindAll(o => o is IAlwaysDeployedConfigurationPanel))
+                    {
+                        if (!itm.Validate(configDocument))
+                        {
+                            MessageBox.Show(String.Format("Configuration of item '{0}' failed, validation failed", itm), "Validation Failure");
+                            continue;
+                        }
                         itm.Configure(configDocument);
-
+                    }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
                     ConfigurationApplicationContext.OnConfigurationApplied();
                 }

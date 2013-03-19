@@ -75,7 +75,7 @@ namespace ServiceConfigurator
 
             public bool Validate(XmlDocument configurationDom)
             {
-                return false;
+                return true;
             }
 
             #endregion

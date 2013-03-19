@@ -334,18 +334,23 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
             // Set config options
             this.m_configPanel.DatabaseConfigurator = this.DatabaseConfigurator;
             this.m_configPanel.SetConnectionString(configurationDom, this.ConnectionString);
-            this.m_configPanel.EnableLocalValidation = this.EnableLocal;
-            this.m_configPanel.EnableRemoteValidation = this.EnableCts;
-            this.m_configPanel.MaxCacheSize = this.MaxCacheSize;
-            this.m_configPanel.CtsUrl = this.CtsUrl;
-            this.m_configPanel.CtsCS = this.CtsCs;
-            
-            if (configSection != null && persistenceSection != null && 
-                (qdcdbPersistenceSection != null || ctsSection != null) 
+
+
+     
+
+            if (configSection != null && persistenceSection != null &&
+                (qdcdbPersistenceSection != null || ctsSection != null)
                 && addAssemblyNode != null &&
                 (addProviderNodeDb != null || addProviderNodeCts != null)
                 && !EnableConfiguration)
+            {
                 EnableConfiguration = true;
+                this.m_configPanel.EnableLocalValidation = this.EnableLocal;
+                this.m_configPanel.EnableRemoteValidation = this.EnableCts;
+                this.m_configPanel.MaxCacheSize = this.MaxCacheSize;
+                this.m_configPanel.CtsUrl = this.CtsUrl;
+                this.m_configPanel.CtsCS = this.CtsCs;
+            }
 
             // Enable configuration
             return configSection != null && persistenceSection != null &&

@@ -102,10 +102,11 @@ namespace ServiceConfigurator
                 {
                     // Save the configuration
                     var progress = new frmProgress();
+                    int i = 0;
                     try
                     {
                         progress.Show();
-                        int i = 0;
+                        
                         foreach (IConfigurationPanel pnl in ConfigurationApplicationContext.s_configurationPanels)
                         {
                             progress.Status = (int)((++i / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
@@ -116,7 +117,17 @@ namespace ServiceConfigurator
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error Configuring SHR");
+                        MessageBox.Show(ex.Message, "Error Configuring Service");
+
+                        foreach (IConfigurationPanel pnl in ConfigurationApplicationContext.s_configurationPanels)
+                        {
+
+                            progress.Status = (int)((i-- / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
+                            progress.StatusText = String.Format("Removing Configuration for {0}...", pnl.ToString());
+                            pnl.EnableConfiguration = true;
+                            pnl.UnConfigure(configFile);
+                        }
+
                         return;
                     }
                     finally

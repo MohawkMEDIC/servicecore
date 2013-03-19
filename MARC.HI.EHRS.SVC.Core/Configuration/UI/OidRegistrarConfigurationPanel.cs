@@ -70,7 +70,9 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
 
             XmlElement configSectionsNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']") as XmlElement,
                coreNode = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.core']") as XmlElement;
-            
+            if (configSectionsNode == null)
+                configSectionsNode = configurationDom.DocumentElement.AppendChild(configurationDom.CreateElement("configSections")) as XmlElement;
+
             // Configuration section registration
             XmlElement configSectionNode = configSectionsNode.SelectSingleNode("./*[local-name() = 'section'][@name = 'marc.hi.ehrs.svc.core']") as XmlElement;
             if (configSectionNode == null)
@@ -179,7 +181,6 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// </summary>
         public void UnConfigure(System.Xml.XmlDocument configurationDom)
         {
-            throw new InvalidOperationException("Cannot un-configure OID Registrar");
         }
 
         /// <summary>

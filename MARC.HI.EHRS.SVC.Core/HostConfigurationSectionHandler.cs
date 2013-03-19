@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.IO;
 using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Core.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Core
 {
@@ -122,7 +123,7 @@ namespace MARC.HI.EHRS.SVC.Core
                 sendersSection = section.SelectSingleNode("./*[local-name() = 'registeredDevices']");
 
             // Senders section
-            if (sendersSection != null) // senders
+            if (sendersSection != null && !(configContext is IConfigurationPanel)) // senders
             {
                 // Validate?
                 if(sendersSection.Attributes["validateSolicitors"] != null)
@@ -138,7 +139,7 @@ namespace MARC.HI.EHRS.SVC.Core
                 }
             }
 
-            if(serviceAssemblySection != null) // Load assembly data
+            if (serviceAssemblySection != null && !(configContext is IConfigurationPanel)) // Load assembly data
                 foreach (XmlNode nd in serviceAssemblySection.SelectNodes("./*[local-name() = 'add']/@assembly"))
                 {
                     string asmFile = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), nd.Value);
@@ -215,7 +216,7 @@ namespace MARC.HI.EHRS.SVC.Core
                     this.Custodianship.Id = new MARC.HI.EHRS.SVC.Core.DataTypes.DomainIdentifier() { Domain = idElement.Attributes["domain"].Value, Identifier = idElement.Attributes["value"].Value };
                 this.Custodianship.Name = custodianSection.SelectSingleNode("./*[local-name() = 'name']").InnerText;
             }
-            if (serviceProviderSection != null) // Load providers data
+            if (serviceProviderSection != null && !(configContext is IConfigurationPanel)) // Load providers data
                 foreach (XmlNode nd in serviceProviderSection.SelectNodes("./*[local-name() = 'add']/@type"))
                 {
                     Type t = Type.GetType(nd.Value);

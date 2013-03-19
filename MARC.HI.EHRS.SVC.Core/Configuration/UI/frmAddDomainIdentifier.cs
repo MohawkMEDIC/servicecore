@@ -45,12 +45,15 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             }
             set
             {
-                txtId.Text = value.Identifier;
-                var regOid = this.m_oids.FindData(value.Domain);
-                if (regOid != null)
-                    cbxDomain.SelectedIndex = cbxDomain.Items.IndexOf(regOid);
-                else
-                    cbxDomain.Text = value.Domain;
+                if (value != null)
+                {
+                    txtId.Text = value.Identifier;
+                    var regOid = this.m_oids.FindData(value.Domain);
+                    if (regOid != null)
+                        cbxDomain.SelectedIndex = cbxDomain.Items.IndexOf(regOid);
+                    else
+                        cbxDomain.Text = value.Domain;
+                }
             }
         }
 

@@ -35,12 +35,18 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
         string _fileName;
         System.DateTime _currentDate;
         System.IO.StreamWriter _traceWriter;
+        //FileStream _stream;
 
         public RollOverTextWriterTraceListener(string fileName)
         {
             // Pass in the path of the logfile (ie. C:\Logs\MyAppLog.log)
             // The logfile will actually be created with a yyyymmdd format appended to the filename
             _fileName = fileName;
+            if (!Path.IsPathRooted(fileName))
+                _fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+               Path.GetFileName(_fileName));
+            //_stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            
             _traceWriter = new StreamWriter(generateFilename(), true);
             _traceWriter.AutoFlush = true;
         }
@@ -49,21 +55,24 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
         {
             checkRollover();
             _traceWriter.Write("{1}", DateTime.Now, value);
+            _traceWriter.Flush();
+            //_stream.Flush();
         }
 
         public override void WriteLine(string value)
         {
             checkRollover();
             _traceWriter.WriteLine("{0}:{1}", DateTime.Now, value);
-            
+            _traceWriter.Flush();
+            //_stream.Flush();
         }
 
         private string generateFilename()
         {
             _currentDate = System.DateTime.Today;
 
-            return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-               Path.GetFileNameWithoutExtension(_fileName) + "_" +
+            
+            return Path.Combine(Path.GetDirectoryName(_fileName),  Path.GetFileNameWithoutExtension(_fileName) + "_" +
                _currentDate.ToString("yyyyMMdd") + Path.GetExtension(_fileName));
         }
 
@@ -72,7 +81,10 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
             // If the date has changed, close the current stream and create a new file for today's date
             if (_currentDate.CompareTo(System.DateTime.Today) != 0)
             {
+                
                 _traceWriter.Close();
+                //_stream.Close();
+                //_stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
                 _traceWriter = new StreamWriter(generateFilename(), true);
             }
         }
@@ -87,3 +99,4 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
 
     }
 }
+

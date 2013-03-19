@@ -56,6 +56,9 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             XmlElement configSectionsNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']") as XmlElement,
               coreNode = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.core']") as XmlElement;
 
+            if (configSectionsNode == null)
+                configSectionsNode = configurationDom.DocumentElement.AppendChild(configurationDom.CreateElement("configSections")) as XmlElement;
+
             // Configuration section registration
             XmlElement configSectionNode = configSectionsNode.SelectSingleNode("./*[local-name() = 'section'][@name = 'marc.hi.ehrs.svc.core']") as XmlElement;
             if (configSectionNode == null)
@@ -111,7 +114,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 }
 
             }
-            
+            m_needsSync = true;
         }
 
         /// <summary>
@@ -119,8 +122,9 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// </summary>
         public void UnConfigure(System.Xml.XmlDocument configurationDom)
         {
-            throw new InvalidOperationException("Cannot un-configure Endpoint Validation");
         }
+
+        private bool m_needsSync = true;
 
         /// <summary>
         /// True if configured
@@ -128,8 +132,13 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         public bool IsConfigured(System.Xml.XmlDocument configurationDom)
         {
 
-            if (m_panel.Oids == null)
-                m_panel.Oids = OidRegistrarConfigurationPanel.LoadOidRegistrar(configurationDom);
+            
+            if (!m_needsSync)
+                return true;
+
+            m_panel.Oids = OidRegistrarConfigurationPanel.LoadOidRegistrar(configurationDom);
+
+            this.m_needsSync = true;
 
             XmlElement regDevNode = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.core']/*[local-name() = 'registeredDevices']") as XmlElement;
             if (regDevNode == null)

@@ -29,14 +29,15 @@ namespace MARC.HI.EHRS.SVC.Core.Issues
     /// <summary>
     /// Identifies the priority of an issue
     /// </summary>
+    [Flags]
     public enum IssuePriorityType
     {
         [XmlEnum("E")]
-        Error,
+        Error = 0x1,
         [XmlEnum("I")]
-        Informational,
+        Informational = 0x2,
         [XmlEnum("W")]
-        Warning
+        Warning = 0x4
     }
 
     /// <summary>
