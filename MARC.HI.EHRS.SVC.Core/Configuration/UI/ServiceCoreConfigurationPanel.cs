@@ -88,7 +88,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             XmlElement configSectionsNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']") as XmlElement,
                coreNode = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.core']") as XmlElement;
 
-            if (configSectionsName == null)
+            if (configSectionsNode == null)
                 configSectionsNode = configurationDom.DocumentElement.AppendChild(configurationDom.CreateElement("configSections")) as XmlElement;
 
             // Configuration section registration
@@ -261,7 +261,16 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             this.m_custodianData = this.m_panel.Custodianship;
             this.m_deviceId = this.m_panel.DeviceId;
             this.m_jurisdictionData = this.m_panel.Jurisdiction;
-            return true; // todo validate:
+
+            return !String.IsNullOrEmpty(this.m_jurisdictionData.ClientDomain) &&
+                !String.IsNullOrEmpty(this.m_jurisdictionData.ProviderDomain) &&
+                !String.IsNullOrEmpty(this.m_jurisdictionData.PlaceDomain) &&
+                this.m_jurisdictionData.Id != null &&
+                !String.IsNullOrEmpty(this.m_jurisdictionData.Name) &&
+                this.m_custodianData != null &&
+                !String.IsNullOrEmpty(this.m_custodianData.Name) &&
+                this.m_deviceId != null;
+
         }
 
         #endregion

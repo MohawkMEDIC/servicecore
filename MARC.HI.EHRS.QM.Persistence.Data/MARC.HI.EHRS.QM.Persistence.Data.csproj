@@ -48,6 +48,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -60,6 +62,13 @@
   <ItemGroup>
     <Compile Include="AdoQueryPersistenceService.cs" />
     <Compile Include="Configuration\ConfigurationHandler.cs" />
+    <Compile Include="Configuration\UI\Panels\pnlConfigureQueryPersistence.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\Panels\pnlConfigureQueryPersistence.designer.cs">
+      <DependentUpon>pnlConfigureQueryPersistence.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\UI\QueryPersistenceConfigurationPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +88,20 @@
     <None Include="Configuration\marc.hi.ehrs.qm.persistence.data.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SQL\PSQL9\QM-DDL_CLEAN.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQL\PSQL9\QM-DDL.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\UI\Panels\pnlConfigureQueryPersistence.resx">
+      <DependentUpon>pnlConfigureQueryPersistence.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
