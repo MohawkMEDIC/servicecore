@@ -35,7 +35,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
     {
         private pnlConfigureMessagePersistence m_configPanel = new pnlConfigureMessagePersistence();
         private string serviceName = typeof(MARC.HI.EHRS.SVC.Messaging.Persistence.Data.AdoMessagePersister).AssemblyQualifiedName;
-
+        private bool m_needSync = true;
         
         #region IConfigurationPanel Members
 
@@ -166,7 +166,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
                             break;
                     }
                 }
-
+            this.m_needSync = true;
         }
 
         /// <summary>
@@ -212,6 +212,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
                 this.ConnectionString = connString;
             }
 
+            bool isConfigured = configSection != null && persistenceSection != null && addAssemblyNode != null &&
+                addProviderNode != null;
+
+            if (!this.m_needSync)
+                return isConfigured;
+            this.m_needSync = false;
             // Set config options
             this.m_configPanel.DatabaseConfigurator = this.DatabaseConfigurator;
             this.m_configPanel.SetConnectionString(configurationDom, this.ConnectionString);
@@ -221,8 +227,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
                 EnableConfiguration = true;
 
             // Enable configuration
-            return configSection != null && persistenceSection != null && addAssemblyNode != null &&
-                addProviderNode != null;
+            return isConfigured;
         }
 
         /// <summary>

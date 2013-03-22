@@ -80,6 +80,10 @@
       <Project>{BE5CF321-72FB-4CB9-BBDD-E48F5A9845C5}</Project>
       <Name>MARC.HI.EHRS.QM.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceConfigurator\MARC.HI.EHRS.SVC.ConfigurationApplciation.csproj">
+      <Project>{E3F86DDE-9604-4F3E-9A31-BDF5C2051A23}</Project>
+      <Name>MARC.HI.EHRS.SVC.ConfigurationApplciation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\MARC.HI.EHRS.SVC.licenseheader">

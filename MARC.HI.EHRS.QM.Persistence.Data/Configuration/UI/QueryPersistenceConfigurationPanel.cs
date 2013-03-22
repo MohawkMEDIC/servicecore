@@ -17,7 +17,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration.UI
         #region IDataboundConfigurationPanel Members
 
         private pnlConfigureMessagePersistence m_configPanel = new pnlConfigureMessagePersistence();
-        private bool m_needSync = false;
+        private bool m_needSync = true;
 
         public QueryPersistenceConfigurationPanel()
         {
@@ -222,9 +222,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration.UI
             bool isConfigured = configSection != null && persistenceSection != null && addAssemblyNode != null &&
                 addProviderNode != null;
 
-            if (!this.m_needSync)
-                return isConfigured;
-            this.m_needSync = false;
+           
 
             // Get connection string
             if (persistenceSection != null)
@@ -239,6 +237,10 @@ namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration.UI
                 this.DatabaseConfigurator = DatabaseConfiguratorRegistrar.Configurators.Find(o => o.InvariantName == invariantProvider);
                 this.ConnectionString = connString;
             }
+
+            if (!this.m_needSync)
+                return isConfigured;
+            this.m_needSync = false;
 
             // Set config options
             this.m_configPanel.DatabaseConfigurator = this.DatabaseConfigurator;

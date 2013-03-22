@@ -26,6 +26,7 @@ using Npgsql;
 using System.Xml;
 using System.IO;
 using System.Reflection;
+using System.Data;
 
 namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
 {
@@ -42,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         /// </summary>
         public string Name
         {
-            get { return "PostgreSQL 9.0 via Npgsql"; }
+            get { return "PostgreSQL 9.1 via Npgsql"; }
         }
 
         /// <summary>
@@ -323,6 +324,67 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         }
 
         #endregion
+        #endregion
+
+        #region IDatabaseConfigurator Members
+
+        /// <summary>
+        /// Create a database
+        /// </summary>
+        public void CreateDatabase(string serverName, string superUser, string password, string databaseName, string owner)
+        {
+            string connectionString = this.CreateConnectionString(serverName, superUser, password, "postgres");
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string[] createcmds = {
+                                       String.Format("CREATE DATABASE {0} WITH OWNER {1}", databaseName, owner)
+                                   };
+                    
+                    // create the DB
+                    foreach (var cmd in createcmds)
+                        new NpgsqlCommand(cmd, conn).ExecuteNonQuery();
+                }
+                catch {
+                    throw;
+                }
+            }
+
+            connectionString = this.CreateConnectionString(serverName, superUser, password, databaseName);
+            using(NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    // Now switch db
+                    try
+                    {
+                        string[] setupcmds = {
+                                        String.Format("REVOKE ALL ON DATABASE {0} FROM public", databaseName),
+                                        String.Format("GRANT ALL ON DATABASE {0} TO {1}", databaseName, owner),
+                                            "CREATE OR REPLACE LANGUAGE plpgsql",
+                                            "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch",
+                                            "SET bytea_output = ESCAPE"
+                            };
+                        foreach (var cmd in setupcmds)
+                        {
+                            new NpgsqlCommand(cmd, conn).ExecuteNonQuery();
+                        }
+                    }
+                    catch
+                    {
+                        throw;
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
         #endregion
     }
 }

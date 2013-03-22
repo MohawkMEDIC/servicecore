@@ -91,6 +91,8 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
 
         }
 
+        private bool m_needSync = true;
+
         /// <summary>
         /// Configure the option
         /// </summary>
@@ -260,6 +262,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
                             break;
                     }
                 }
+            this.m_needSync = true;
         }
 
         /// <summary>
@@ -293,6 +296,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
         /// </summary>
         public bool IsConfigured(System.Xml.XmlDocument configurationDom)
         {
+
             XmlNode configSection = configurationDom.SelectSingleNode("//*[local-name() = 'section'][@name = 'marc.hi.ehrs.svc.terminology']"),
                 qdcdbPersistenceSection = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.terminology']/*[local-name() = 'qdcdb']"),
                 ctsSection = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.terminology']/*[local-name() = 'cts']"),
@@ -331,6 +335,14 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
                 }
             }
 
+            bool isConfigured = configSection != null && persistenceSection != null &&
+                (qdcdbPersistenceSection != null || ctsSection != null)
+                && addAssemblyNode != null &&
+                (addProviderNodeDb != null || addProviderNodeCts != null);
+
+            if (!this.m_needSync)
+                return isConfigured;
+            m_needSync = false;
             // Set config options
             this.m_configPanel.DatabaseConfigurator = this.DatabaseConfigurator;
             this.m_configPanel.SetConnectionString(configurationDom, this.ConnectionString);
@@ -353,10 +365,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
             }
 
             // Enable configuration
-            return configSection != null && persistenceSection != null &&
-                (qdcdbPersistenceSection != null || ctsSection != null)
-                && addAssemblyNode != null &&
-                (addProviderNodeDb != null || addProviderNodeCts != null);
+            return isConfigured;
         }
 
         /// <summary>

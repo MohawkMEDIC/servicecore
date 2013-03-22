@@ -152,5 +152,29 @@ namespace ServiceConfigurator
             }
         }
 
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+
+            frmNewDatabase newDatabase = new frmNewDatabase(cbxProviderType.SelectedItem as IDatabaseConfigurator, this.txtDatabaseAddress.Text);
+            if (newDatabase.ShowDialog() == DialogResult.OK)
+            {
+
+                if (newDatabase.DatabaseConfigurator != cbxProviderType.SelectedItem)
+                {
+                    cbxProviderType.SelectedItem = newDatabase.DatabaseConfigurator;
+                    txtDatabaseAddress.Text = "";
+                    txtUserName.Text = "";
+                    cbxDatabase.Text = "";
+                }
+
+                if (txtDatabaseAddress.Text == "")
+                    txtDatabaseAddress.Text = newDatabase.Server;
+                if (txtUserName.Text == "")
+                    txtUserName.Text = newDatabase.Server;
+                if (cbxDatabase.Text == "")
+                    cbxDatabase.Text = newDatabase.DatabaseName;
+            }
+        }
+
     }
 }

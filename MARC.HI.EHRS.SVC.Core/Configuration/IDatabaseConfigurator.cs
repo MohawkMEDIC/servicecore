@@ -97,5 +97,11 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
         /// Get all databases
         /// </summary>
         string[] GetDatabases(string serverName, string userName, string password);
+
+        /// <summary>
+        /// Create a database
+        /// </summary>
+        void CreateDatabase(string serverName, string superUser, string password, string databaseName, string owner);
+
     }
 }

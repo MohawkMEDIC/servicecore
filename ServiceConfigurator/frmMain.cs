@@ -207,6 +207,8 @@ namespace ServiceConfigurator
             {
                 chkEnableFeature.Enabled = true;
                 chkEnableFeature.Checked = (e.Node.Tag as IConfigurationPanel).EnableConfiguration;
+                pnlConfigure.Enabled = chkEnableFeature.Checked;
+
                 if ((e.Node.Tag as IConfigurationPanel).IsConfigured(m_xmlConfiguration))
                 {
                     chkEnableFeature.Enabled = false;

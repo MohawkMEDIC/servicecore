@@ -37,6 +37,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MARC.HI.EHRS.SVC.ConfigurationApplciation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationApplicationContext.cs" />
+    <Compile Include="DatabaseSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DatabaseSelector.Designer.cs">
+      <DependentUpon>DatabaseSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmApply.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +67,12 @@
     </Compile>
     <Compile Include="frmMain.designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNewDatabase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewDatabase.Designer.cs">
+      <DependentUpon>frmNewDatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="frmProgress.cs">
       <SubType>Form</SubType>
@@ -79,11 +92,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="DatabaseSelector.resx">
+      <DependentUpon>DatabaseSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmApply.resx">
       <DependentUpon>frmApply.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewDatabase.resx">
+      <DependentUpon>frmNewDatabase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>

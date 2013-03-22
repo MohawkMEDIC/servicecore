@@ -51,6 +51,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnContinue = new System.Windows.Forms.Button();
+            this.btnNew = new System.Windows.Forms.Button();
             this.pnlLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -144,6 +145,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnNew);
             this.groupBox1.Controls.Add(this.txtPassword);
             this.groupBox1.Controls.Add(this.txtUserName);
             this.groupBox1.Controls.Add(this.txtDatabaseAddress);
@@ -203,7 +205,7 @@
             this.cbxDatabase.FormattingEnabled = true;
             this.cbxDatabase.Location = new System.Drawing.Point(125, 226);
             this.cbxDatabase.Name = "cbxDatabase";
-            this.cbxDatabase.Size = new System.Drawing.Size(325, 21);
+            this.cbxDatabase.Size = new System.Drawing.Size(264, 21);
             this.cbxDatabase.TabIndex = 6;
             this.cbxDatabase.DropDown += new System.EventHandler(this.cbxDatabase_DropDown);
             this.cbxDatabase.Validated += new System.EventHandler(this.connectionParameter_Validated);
@@ -283,6 +285,17 @@
             this.btnContinue.UseVisualStyleBackColor = true;
             this.btnContinue.Click += new System.EventHandler(this.btnContinue_Click);
             // 
+            // btnNew
+            // 
+            this.btnNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNew.Location = new System.Drawing.Point(389, 225);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(61, 23);
+            this.btnNew.TabIndex = 8;
+            this.btnNew.Text = "New...";
+            this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
             // frmStartScreen
             // 
             this.AcceptButton = this.btnContinue;
@@ -338,5 +351,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnContinue;
+        private System.Windows.Forms.Button btnNew;
     }
 }

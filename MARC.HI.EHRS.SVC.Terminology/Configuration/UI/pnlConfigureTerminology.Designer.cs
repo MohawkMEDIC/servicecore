@@ -29,16 +29,6 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.txtUserName = new System.Windows.Forms.TextBox();
-            this.txtDatabaseAddress = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.cbxDatabase = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cbxProviderType = new System.Windows.Forms.ComboBox();
             this.chkEnableDb = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.chkEnableCTS = new System.Windows.Forms.CheckBox();
@@ -50,7 +40,12 @@
             this.chkSNOMED = new System.Windows.Forms.CheckBox();
             this.chkLOINC = new System.Windows.Forms.CheckBox();
             this.chkICD = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.dbSelector = new MARC.HI.EHRS.SVC.ConfigurationApplciation.DatabaseSelector();
+            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.numCacheSize)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -63,119 +58,17 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(408, 20);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Local Code Validation";
+            this.label1.Text = "Memory Pool Size";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.Enabled = false;
-            this.txtPassword.Location = new System.Drawing.Point(107, 173);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(287, 20);
-            this.txtPassword.TabIndex = 24;
-            this.txtPassword.Validated += new System.EventHandler(this.connectionParameter_Validated);
-            // 
-            // txtUserName
-            // 
-            this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.Enabled = false;
-            this.txtUserName.Location = new System.Drawing.Point(107, 147);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(287, 20);
-            this.txtUserName.TabIndex = 23;
-            this.txtUserName.Validated += new System.EventHandler(this.connectionParameter_Validated);
-            // 
-            // txtDatabaseAddress
-            // 
-            this.txtDatabaseAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDatabaseAddress.Enabled = false;
-            this.txtDatabaseAddress.Location = new System.Drawing.Point(107, 121);
-            this.txtDatabaseAddress.Name = "txtDatabaseAddress";
-            this.txtDatabaseAddress.Size = new System.Drawing.Size(287, 20);
-            this.txtDatabaseAddress.TabIndex = 21;
-            this.txtDatabaseAddress.Validated += new System.EventHandler(this.connectionParameter_Validated);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 124);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(79, 13);
-            this.label9.TabIndex = 27;
-            this.label9.Text = "Server Address";
-            // 
-            // cbxDatabase
-            // 
-            this.cbxDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxDatabase.Enabled = false;
-            this.cbxDatabase.FormattingEnabled = true;
-            this.cbxDatabase.Location = new System.Drawing.Point(107, 199);
-            this.cbxDatabase.Name = "cbxDatabase";
-            this.cbxDatabase.Size = new System.Drawing.Size(287, 21);
-            this.cbxDatabase.TabIndex = 26;
-            this.cbxDatabase.DropDown += new System.EventHandler(this.cbxDatabase_DropDown);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(48, 176);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(53, 13);
-            this.label8.TabIndex = 25;
-            this.label8.Text = "Password";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(41, 150);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(60, 13);
-            this.label7.TabIndex = 22;
-            this.label7.Text = "User Name";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 202);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 13);
-            this.label6.TabIndex = 20;
-            this.label6.Text = "Database Name";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 97);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Database Software";
-            // 
-            // cbxProviderType
-            // 
-            this.cbxProviderType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxProviderType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxProviderType.Enabled = false;
-            this.cbxProviderType.FormattingEnabled = true;
-            this.cbxProviderType.Location = new System.Drawing.Point(107, 94);
-            this.cbxProviderType.Name = "cbxProviderType";
-            this.cbxProviderType.Size = new System.Drawing.Size(287, 21);
-            this.cbxProviderType.TabIndex = 19;
-            this.cbxProviderType.Validated += new System.EventHandler(this.connectionParameter_Validated);
             // 
             // chkEnableDb
             // 
             this.chkEnableDb.AutoSize = true;
-            this.chkEnableDb.Location = new System.Drawing.Point(10, 71);
+            this.chkEnableDb.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkEnableDb.Location = new System.Drawing.Point(0, 70);
             this.chkEnableDb.Name = "chkEnableDb";
-            this.chkEnableDb.Size = new System.Drawing.Size(159, 17);
+            this.chkEnableDb.Padding = new System.Windows.Forms.Padding(2);
+            this.chkEnableDb.Size = new System.Drawing.Size(408, 21);
             this.chkEnableDb.TabIndex = 28;
             this.chkEnableDb.Text = "Enable local code validation";
             this.chkEnableDb.UseVisualStyleBackColor = true;
@@ -183,9 +76,8 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label2.Location = new System.Drawing.Point(0, 228);
@@ -198,10 +90,10 @@
             // chkEnableCTS
             // 
             this.chkEnableCTS.AutoSize = true;
-            this.chkEnableCTS.Location = new System.Drawing.Point(10, 252);
+            this.chkEnableCTS.Location = new System.Drawing.Point(3, 7);
             this.chkEnableCTS.Name = "chkEnableCTS";
             this.chkEnableCTS.Size = new System.Drawing.Size(259, 17);
-            this.chkEnableCTS.TabIndex = 30;
+            this.chkEnableCTS.TabIndex = 3;
             this.chkEnableCTS.Text = "Enable centralized code validation (HL7 CTS 1.2)";
             this.chkEnableCTS.UseVisualStyleBackColor = true;
             this.chkEnableCTS.CheckedChanged += new System.EventHandler(this.chkEnableCTS_CheckedChanged);
@@ -213,15 +105,15 @@
             this.txtCTSUrl.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtCTSUrl.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
             this.txtCTSUrl.Enabled = false;
-            this.txtCTSUrl.Location = new System.Drawing.Point(107, 275);
+            this.txtCTSUrl.Location = new System.Drawing.Point(100, 30);
             this.txtCTSUrl.Name = "txtCTSUrl";
-            this.txtCTSUrl.Size = new System.Drawing.Size(287, 20);
-            this.txtCTSUrl.TabIndex = 31;
+            this.txtCTSUrl.Size = new System.Drawing.Size(290, 20);
+            this.txtCTSUrl.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(48, 278);
+            this.label3.Location = new System.Drawing.Point(41, 33);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 13);
             this.label3.TabIndex = 32;
@@ -229,12 +121,11 @@
             // 
             // label4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(0, 47);
+            this.label4.Location = new System.Drawing.Point(0, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(408, 21);
             this.label4.TabIndex = 33;
@@ -244,7 +135,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(17, 25);
+            this.label10.Location = new System.Drawing.Point(17, 5);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(138, 13);
             this.label10.TabIndex = 34;
@@ -258,7 +149,7 @@
             0,
             0,
             0});
-            this.numCacheSize.Location = new System.Drawing.Point(278, 23);
+            this.numCacheSize.Location = new System.Drawing.Point(278, 3);
             this.numCacheSize.Maximum = new decimal(new int[] {
             50000,
             0,
@@ -266,7 +157,7 @@
             0});
             this.numCacheSize.Name = "numCacheSize";
             this.numCacheSize.Size = new System.Drawing.Size(116, 20);
-            this.numCacheSize.TabIndex = 35;
+            this.numCacheSize.TabIndex = 1;
             this.numCacheSize.ThousandsSeparator = true;
             this.numCacheSize.Value = new decimal(new int[] {
             10000,
@@ -277,62 +168,86 @@
             // chkSNOMED
             // 
             this.chkSNOMED.AutoSize = true;
-            this.chkSNOMED.Location = new System.Drawing.Point(10, 301);
+            this.chkSNOMED.Location = new System.Drawing.Point(3, 56);
             this.chkSNOMED.Name = "chkSNOMED";
             this.chkSNOMED.Size = new System.Drawing.Size(157, 17);
-            this.chkSNOMED.TabIndex = 37;
+            this.chkSNOMED.TabIndex = 5;
             this.chkSNOMED.Text = "Supports SNOMED(TM) CT";
             this.chkSNOMED.UseVisualStyleBackColor = true;
             // 
             // chkLOINC
             // 
             this.chkLOINC.AutoSize = true;
-            this.chkLOINC.Location = new System.Drawing.Point(10, 324);
+            this.chkLOINC.Location = new System.Drawing.Point(3, 79);
             this.chkLOINC.Name = "chkLOINC";
             this.chkLOINC.Size = new System.Drawing.Size(117, 17);
-            this.chkLOINC.TabIndex = 38;
+            this.chkLOINC.TabIndex = 6;
             this.chkLOINC.Text = "Supports LOINC(R)";
             this.chkLOINC.UseVisualStyleBackColor = true;
             // 
             // chkICD
             // 
             this.chkICD.AutoSize = true;
-            this.chkICD.Location = new System.Drawing.Point(10, 347);
+            this.chkICD.Location = new System.Drawing.Point(3, 102);
             this.chkICD.Name = "chkICD";
             this.chkICD.Size = new System.Drawing.Size(101, 17);
-            this.chkICD.TabIndex = 39;
+            this.chkICD.TabIndex = 7;
             this.chkICD.Text = "Supports ICD10";
             this.chkICD.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.numCacheSize);
+            this.panel1.Controls.Add(this.label10);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 20);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(408, 29);
+            this.panel1.TabIndex = 40;
+            // 
+            // dbSelector
+            // 
+            this.dbSelector.DatabaseConfigurator = null;
+            this.dbSelector.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dbSelector.Enabled = false;
+            this.dbSelector.Location = new System.Drawing.Point(0, 91);
+            this.dbSelector.MinimumSize = new System.Drawing.Size(0, 137);
+            this.dbSelector.Name = "dbSelector";
+            this.dbSelector.Size = new System.Drawing.Size(408, 137);
+            this.dbSelector.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.chkICD);
+            this.panel2.Controls.Add(this.chkEnableCTS);
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.txtCTSUrl);
+            this.panel2.Controls.Add(this.chkLOINC);
+            this.panel2.Controls.Add(this.chkSNOMED);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 249);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(408, 131);
+            this.panel2.TabIndex = 42;
             // 
             // pnlConfigureTerminology
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chkICD);
-            this.Controls.Add(this.chkLOINC);
-            this.Controls.Add(this.chkSNOMED);
-            this.Controls.Add(this.numCacheSize);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtCTSUrl);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.chkEnableCTS);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.dbSelector);
             this.Controls.Add(this.chkEnableDb);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtUserName);
-            this.Controls.Add(this.txtDatabaseAddress);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.cbxDatabase);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.cbxProviderType);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Name = "pnlConfigureTerminology";
-            this.Size = new System.Drawing.Size(408, 375);
+            this.Size = new System.Drawing.Size(408, 527);
             ((System.ComponentModel.ISupportInitialize)(this.numCacheSize)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,16 +256,6 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.TextBox txtUserName;
-        private System.Windows.Forms.TextBox txtDatabaseAddress;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox cbxDatabase;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox cbxProviderType;
         private System.Windows.Forms.CheckBox chkEnableDb;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkEnableCTS;
@@ -362,5 +267,8 @@
         private System.Windows.Forms.CheckBox chkSNOMED;
         private System.Windows.Forms.CheckBox chkLOINC;
         private System.Windows.Forms.CheckBox chkICD;
+        private System.Windows.Forms.Panel panel1;
+        private ConfigurationApplciation.DatabaseSelector dbSelector;
+        private System.Windows.Forms.Panel panel2;
     }
 }
