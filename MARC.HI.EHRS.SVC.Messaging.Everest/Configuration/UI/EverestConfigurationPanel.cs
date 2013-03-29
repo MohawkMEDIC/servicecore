@@ -12,6 +12,9 @@ using System.Configuration;
 using MARC.Everest.Connectors;
 using System.Security.Cryptography.X509Certificates;
 using MARC.Everest.Connectors.WCF.Core;
+using MARC.Everest.Connectors.WCF;
+using System.Net;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
 {
@@ -210,6 +213,26 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
 
                 WcfServiceConfiguration(serviceName[0], revPanel, wcfNode);
 
+                // Configure the URL / SSL
+                try
+                {
+                    if (revPanel.Address.StartsWith("https:"))
+                    {
+                        Uri address = new Uri(revPanel.Address);
+                        // Reserve the SSL certificate on the IP address
+                        if (address.HostNameType == UriHostNameType.Dns)
+                        {
+                            var ipAddresses = Dns.GetHostAddresses(address.Host);
+                            HttpSslTool.BindCertificate(ipAddresses[0], address.Port, revPanel.Certificate.GetCertHash(), revPanel.StoreName, revPanel.StoreLocation);
+                        }
+                        else
+                            HttpSslTool.BindCertificate(IPAddress.Parse(address.Host), address.Port, revPanel.Certificate.GetCertHash(), revPanel.StoreName, revPanel.StoreLocation);
+                    }
+                }
+                catch (Win32Exception e)
+                {
+                    throw new OperationCanceledException(String.Format("Error binding SSL certificate to address. Error was: {0:x} {1}", e.ErrorCode, e.Message), e);
+                }
             }
 
 
@@ -412,7 +435,99 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
         /// </summary>
         public void UnConfigure(System.Xml.XmlDocument configurationDom)
         {
-            //throw new NotImplementedException();
+
+            // This is a complex configuration so here we go.
+            XmlElement configSectionNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']/*[local-name() = 'section'][@name = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
+                configRoot = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
+                wcfRoot = configurationDom.SelectSingleNode("//*[local-name() = 'system.serviceModel']") as XmlElement;
+            
+            // Remove the sections
+            if (configSectionNode != null)
+                configSectionNode.ParentNode.RemoveChild(configSectionNode);
+            if (configRoot != null)
+                configRoot.ParentNode.RemoveChild(configRoot);
+            if (wcfRoot != null && this.m_sectionHandler.Revisions != null)
+            {
+                // Remove each WCF configuration
+                foreach (var rev in this.m_sectionHandler.Revisions)
+                    foreach(var listnr in rev.Listeners)
+                    {
+                        X509Certificate2 serviceCert = null;
+                        StoreLocation certificateLocation = StoreLocation.LocalMachine;
+                        StoreName certificateStore = StoreName.My;
+                        if (listnr.ConnectorType != typeof(WcfServerConnector)) continue;
+                        var connectionString = ConnectionStringParser.ParseConnectionString(listnr.ConnectionString);
+                        var serviceName = connectionString["servicename"][0];
+                        // Lookup the service information
+                        XmlElement serviceNode = wcfRoot.SelectSingleNode(String.Format(".//*[local-name() = 'service'][@name = '{0}']", serviceName)) as XmlElement;
+                        if (serviceNode == null) continue;
+                        if (serviceNode.Attributes["behaviorConfiguration"] != null)
+                        {
+                            XmlElement behavior = wcfRoot.SelectSingleNode(String.Format(".//*[local-name() = 'behavior'][@name = '{0}']", serviceNode.Attributes["behaviorConfiguration"].Value)) as XmlElement;
+                            if (behavior != null)
+                            {
+                                XmlElement serviceCertificateNode = behavior.SelectSingleNode(".//*[local-name() = 'serviceCertificate']") as XmlElement;
+                                if (serviceCertificateNode != null)
+                                {
+                                    certificateStore = (StoreName)Enum.Parse(typeof(StoreName), serviceCertificateNode.Attributes["storeName"].Value);
+                                    certificateLocation = (StoreLocation)Enum.Parse(typeof(StoreLocation), serviceCertificateNode.Attributes["storeLocation"].Value);
+                                    X509Store store = new X509Store(
+                                        certificateStore,
+                                        certificateLocation    
+                                    );
+                                    try
+                                    {
+                                        store.Open(OpenFlags.ReadOnly);
+                                        var cert = store.Certificates.Find((X509FindType)Enum.Parse(typeof(X509FindType), serviceCertificateNode.Attributes["x509FindType"].Value), serviceCertificateNode.Attributes["findValue"].Value, false);
+                                        if (cert.Count > 0)
+                                            serviceCert = cert[0];
+                                    }
+                                    catch (System.Exception e)
+                                    {
+                                        MessageBox.Show("Cannot retrieve certification information");
+                                    }
+                                    finally
+                                    {
+                                        store.Close();
+                                    }
+                                }
+
+                                behavior.ParentNode.RemoveChild(behavior);
+                            }
+                        }
+
+                        // Remove the bindings
+                        XmlNodeList endpoints = serviceNode.SelectNodes(".//*[local-name() = 'endpoint']");
+                        foreach (XmlElement ep in endpoints)
+                        {
+                            if (ep.Attributes["bindingConfiguration"] != null)
+                            {
+                                var binding = wcfRoot.SelectSingleNode(String.Format(".//*[local-name() = 'binding'][@name = '{0}']", ep.Attributes["bindingConfiguration"].Value)) as XmlElement;
+
+                                if (binding != null)
+                                    binding.ParentNode.RemoveChild(binding);
+                            }
+                            
+                            // Un-bind the certificate
+                            if(serviceCert != null)
+                            {
+                                Uri address = new Uri(ep.Attributes["address"].Value);
+                                // Reserve the SSL certificate on the IP address
+                                if (address.HostNameType == UriHostNameType.Dns)
+                                {
+                                    var ipAddresses = Dns.GetHostAddresses(address.Host);
+                                    HttpSslTool.RemoveCertificate(ipAddresses[0], address.Port, serviceCert.GetCertHash(), certificateStore, certificateLocation);
+                                }
+                                else
+                                    HttpSslTool.RemoveCertificate(IPAddress.Parse(address.Host), address.Port, serviceCert.GetCertHash(), certificateStore, certificateLocation);
+                            }
+                        }
+                        serviceNode.ParentNode.RemoveChild(serviceNode);
+
+
+                    }
+            }
+
             this.m_needSync = true;
         }
 
@@ -430,6 +545,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
             // Load the current config if applicable
             if (configRoot != null)
                 this.m_sectionHandler = new EverestConfigurationSectionHandler().Create(null, null, configRoot) as EverestConfigurationSectionHandler;
+            else
+                this.m_sectionHandler = new EverestConfigurationSectionHandler();
 
             bool isConfigured = configSectionNode != null && configRoot != null &&
                 wcfRoot != null && this.m_sectionHandler != null && this.m_sectionHandler.Revisions != null && this.m_sectionHandler.Revisions.Count > 0;

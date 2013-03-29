@@ -100,6 +100,7 @@
     <Compile Include="Configuration\RevisionConfiguration.cs" />
     <Compile Include="Configuration\ListenConfiguration.cs" />
     <Compile Include="Configuration\MessageHandlerConfiguration.cs" />
+    <Compile Include="Configuration\UI\HttpSslTool.cs" />
     <Compile Include="Configuration\UI\RevisionTemplate.cs" />
     <Compile Include="Configuration\UI\EverestConfigurationPanel.cs" />
     <Compile Include="Configuration\UI\pnlEverestConfiguration.cs">
