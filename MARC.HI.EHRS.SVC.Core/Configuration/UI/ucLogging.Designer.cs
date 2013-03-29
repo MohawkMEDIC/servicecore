@@ -44,10 +44,7 @@
             this.chkEnableLogging = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.lblFileSize = new System.Windows.Forms.Label();
-            this.btnCull = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.m_fileScan = new System.ComponentModel.BackgroundWorker();
             this.fSizeRefresh = new System.Windows.Forms.Timer(this.components);
             this.pnlFile.SuspendLayout();
@@ -235,50 +232,15 @@
             this.lblFileSize.Text = "0 KB";
             this.lblFileSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnCull
-            // 
-            this.btnCull.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCull.Location = new System.Drawing.Point(172, 26);
-            this.btnCull.Name = "btnCull";
-            this.btnCull.Size = new System.Drawing.Size(75, 23);
-            this.btnCull.TabIndex = 10;
-            this.btnCull.Text = "Clean";
-            this.btnCull.UseVisualStyleBackColor = true;
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.lblFileSize);
-            this.panel1.Controls.Add(this.btnCull);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 209);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(258, 65);
+            this.panel1.Size = new System.Drawing.Size(258, 35);
             this.panel1.TabIndex = 11;
-            // 
-            // label7
-            // 
-            this.label7.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label7.Location = new System.Drawing.Point(0, 274);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(258, 20);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Active Log";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label7.UseMnemonic = false;
-            // 
-            // txtLog
-            // 
-            this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLog.Location = new System.Drawing.Point(0, 294);
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(258, 103);
-            this.txtLog.TabIndex = 13;
             // 
             // m_fileScan
             // 
@@ -295,8 +257,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pnlFile);
@@ -332,10 +292,7 @@
         private System.Windows.Forms.CheckBox chkEnableLogging;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblFileSize;
-        private System.Windows.Forms.Button btnCull;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtLog;
         private System.ComponentModel.BackgroundWorker m_fileScan;
         private System.Windows.Forms.Timer fSizeRefresh;
     }

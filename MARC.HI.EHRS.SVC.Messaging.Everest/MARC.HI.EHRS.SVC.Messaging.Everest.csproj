@@ -77,7 +77,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -98,6 +100,20 @@
     <Compile Include="Configuration\RevisionConfiguration.cs" />
     <Compile Include="Configuration\ListenConfiguration.cs" />
     <Compile Include="Configuration\MessageHandlerConfiguration.cs" />
+    <Compile Include="Configuration\UI\RevisionTemplate.cs" />
+    <Compile Include="Configuration\UI\EverestConfigurationPanel.cs" />
+    <Compile Include="Configuration\UI\pnlEverestConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\pnlEverestConfiguration.Designer.cs">
+      <DependentUpon>pnlEverestConfiguration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\UI\pnlTemplateConfigure.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\pnlTemplateConfigure.Designer.cs">
+      <DependentUpon>pnlTemplateConfigure.cs</DependentUpon>
+    </Compile>
     <Compile Include="ErrorDescriptions.cs" />
     <Compile Include="Exception\UninterpretableMessageException.cs" />
     <Compile Include="IEverestMessageReceiver.cs" />
@@ -118,6 +134,14 @@
     <None Include="Configuration\marc.hi.ehrs.svc.messaging.everest.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\UI\pnlEverestConfiguration.resx">
+      <DependentUpon>pnlEverestConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration\UI\pnlTemplateConfigure.resx">
+      <DependentUpon>pnlTemplateConfigure.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

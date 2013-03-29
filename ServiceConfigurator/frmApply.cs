@@ -65,12 +65,13 @@ namespace ServiceConfigurator
             if (apply.ShowDialog() == DialogResult.OK)
             {
                 var progress = new frmProgress();
+                int i = 0;
+
+                XmlDocument configDocument = new XmlDocument();
                 try
                 {
                     progress.Show();
-                    XmlDocument configDocument = new XmlDocument();
                     configDocument.Load(ConfigurationApplicationContext.s_configFile);
-                    int i = 0;
                     foreach (IConfigurationPanel itm in apply.chkActions.CheckedItems)
                     {
                         if (!itm.Validate(configDocument))
@@ -80,6 +81,7 @@ namespace ServiceConfigurator
                         }
                         progress.Status = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);
                         progress.StatusText = String.Format("Configuring {0}...", itm.ToString());
+                        Application.DoEvents();
                         itm.Configure(configDocument);
                     }
 
@@ -94,7 +96,24 @@ namespace ServiceConfigurator
                         itm.Configure(configDocument);
                     }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
+                    progress.StatusText = "Executing post configuration tasks...";
                     ConfigurationApplicationContext.OnConfigurationApplied();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error Configuring Service");
+
+                    foreach (IConfigurationPanel itm in apply.chkActions.CheckedItems)
+                    {
+
+                        progress.Status = (int)((i-- / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
+                        progress.StatusText = String.Format("Removing Configuration for {0}...", itm.ToString());
+                        Application.DoEvents();
+
+                        itm.UnConfigure(configDocument);
+                    }
+
+                    return;
                 }
                 finally
                 {
@@ -125,9 +144,14 @@ namespace ServiceConfigurator
                     {
                         progress.Status = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);
                         progress.StatusText = String.Format("Removing Configuration for {0}...", itm.ToString());
+                        Application.DoEvents();
+
                         itm.UnConfigure(configDocument);
+
                     }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
+                    progress.StatusText = "Executing post configuration tasks...";
+                    Application.DoEvents();
                     ConfigurationApplicationContext.OnConfigurationApplied();
 
                 }

@@ -122,6 +122,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// </summary>
         public void UnConfigure(System.Xml.XmlDocument configurationDom)
         {
+            this.m_needsSync = true;
         }
 
         private bool m_needsSync = true;

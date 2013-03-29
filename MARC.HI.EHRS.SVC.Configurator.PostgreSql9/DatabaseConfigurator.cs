@@ -95,7 +95,11 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 tr = new StreamReader(resourceStream);
                 // Deploy the feature
                 string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
-                NpgsqlConnection conn = new NpgsqlConnection(connectionString);
+                NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder(connectionString);
+                builder.MaxPoolSize = 1;
+                builder.MinPoolSize = 1;
+                builder.Pooling = false;
+                NpgsqlConnection conn = new NpgsqlConnection(builder.ConnectionString);
                 try
                 {
                     conn.Open();
@@ -151,7 +155,12 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 //tr = new StreamReader(this.GetType().Assembly.GetManifestResourceStream(String.Format("{0}.{1}_CLEAN.SQL", this.GetType().Namespace, featureName)));
                 // Deploy the feature
                 string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
-                NpgsqlConnection conn = new NpgsqlConnection(connectionString);
+                NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder(connectionString);
+                builder.MaxPoolSize = 1;
+                builder.MinPoolSize = 1;
+                builder.Pooling = false;
+
+                NpgsqlConnection conn = new NpgsqlConnection(builder.ConnectionString);
                 try
                 {
                     conn.Open();
@@ -178,7 +187,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
             // Two elements we need
             XmlElement connectionStringElement = configurationDom.SelectSingleNode("//*[local-name() = 'connectionStrings']") as XmlElement,
                 dataProviderElement = configurationDom.SelectSingleNode("//*[local-name() = 'system.data']") as XmlElement;
-            string connectionString = CreateConnectionString(serverName, userName, password, databaseName);
+            string connectionString = CreateConnectionString(serverName, userName, password, databaseName, true);
 
             // Register data provider
             if (dataProviderElement == null)
@@ -256,7 +265,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         /// </summary>
         public string[] GetDatabases(string serverName, string userName, string password)
         {
-            NpgsqlConnection conn = new NpgsqlConnection(CreateConnectionString(serverName, userName, password, null));
+            NpgsqlConnection conn = new NpgsqlConnection(CreateConnectionString(serverName, userName, password, null, false));
             try
             {
                 conn.Open();
@@ -283,14 +292,14 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         /// <summary>
         /// Create connection string
         /// </summary>
-        private string CreateConnectionString(string serverName, string userName, string password, string databaseName)
+        private string CreateConnectionString(string serverName, string userName, string password, string databaseName, bool pooling)
         {
             NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder();
             builder.UserName = userName;
             builder.Database = databaseName; 
             builder.Host = serverName;
-            builder.Pooling = true;
-            builder.MinPoolSize = 10;
+            builder.Pooling = pooling;
+            builder.MinPoolSize = 1;
             builder.MaxPoolSize = 20;
             builder.CommandTimeout = 240;
             builder.Add("password", password);
@@ -333,7 +342,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         /// </summary>
         public void CreateDatabase(string serverName, string superUser, string password, string databaseName, string owner)
         {
-            string connectionString = this.CreateConnectionString(serverName, superUser, password, "postgres");
+            string connectionString = this.CreateConnectionString(serverName, superUser, password, "postgres", false);
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 try
@@ -352,7 +361,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 }
             }
 
-            connectionString = this.CreateConnectionString(serverName, superUser, password, databaseName);
+            connectionString = this.CreateConnectionString(serverName, superUser, password, databaseName, false);
             using(NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 try

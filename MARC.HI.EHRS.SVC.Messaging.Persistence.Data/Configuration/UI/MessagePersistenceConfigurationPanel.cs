@@ -190,6 +190,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
                 addAssemblyNode.ParentNode.RemoveChild(addAssemblyNode);
             if (addProviderNode != null)
                 addProviderNode.ParentNode.RemoveChild(addProviderNode);
+            this.m_needSync = true;
         }
 
         /// <summary>

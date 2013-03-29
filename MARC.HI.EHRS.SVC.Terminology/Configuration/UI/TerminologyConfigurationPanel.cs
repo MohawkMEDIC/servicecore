@@ -289,6 +289,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
                 addProviderNodeCts.ParentNode.RemoveChild(addProviderNodeCts);
             if (addProviderNodeDb != null)
                 addProviderNodeDb.ParentNode.RemoveChild(addProviderNodeDb);
+            this.m_needSync = true;
         }
 
         /// <summary>
