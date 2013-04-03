@@ -105,6 +105,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     am.Actors.Add(act);
                 }
 
+                
                 foreach (var aoPtctpt in ad.AuditableObjects)
                 {
                     am.AuditableObjects.Add(new AuditableObject()

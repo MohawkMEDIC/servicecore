@@ -81,7 +81,10 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 // Enum type?
                 if (typeof(T).IsEnum)
                 {
-                    return this.Code.ToString();
+                    FieldInfo fi = typeof(T).GetField(this.Code.ToString());
+                    object[] category = fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    if (category.Length > 0)
+                        return (category[0] as DescriptionAttribute).Description;
                 }
                 return null;
             }
