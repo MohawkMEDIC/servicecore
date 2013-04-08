@@ -216,7 +216,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 pgsqlProviderFactoryElement.Attributes["name"].Value = "PostgreSQL Data Provider";
                 pgsqlProviderFactoryElement.Attributes["invariant"].Value = this.InvariantName;
                 pgsqlProviderFactoryElement.Attributes["description"].Value = "PostgreSQL .NET Framework Data Provider";
-                pgsqlProviderFactoryElement.Attributes["type"].Value = typeof(NpgsqlCommand).Assembly.FullName;
+                pgsqlProviderFactoryElement.Attributes["type"].Value = typeof(NpgsqlFactory).AssemblyQualifiedName;
                 dbProviderFactoryElement.AppendChild(pgsqlProviderFactoryElement);
             }
 

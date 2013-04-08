@@ -79,6 +79,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
         public void Configure(System.Xml.XmlDocument configurationDom)
         {
 
+            if (!this.m_panel.RevisionConfigPanels.Exists(o => o.IsConfigurationEnabled))
+                return; // No active configurations
+
             XmlElement configSectionsNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']") as XmlElement,
                 everestNode = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
                 multiNode = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.messaging.multi']") as XmlElement,
@@ -88,6 +91,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
             Type mmhType = Type.GetType("MARC.HI.EHRS.SVC.Messaging.Multi.MultiMessageHandler, MARC.HI.EHRS.SVC.Messaging.Multi"),
                 mmhConfigType = Type.GetType("MARC.HI.EHRS.SVC.Messaging.Multi.Configuration.ConfigurationSectionHandler, MARC.HI.EHRS.SVC.Messaging.Multi");
 
+            // Ensure the assembly is loaded and the provider registered
+            if (coreNode == null)
+            {
+                coreNode = configurationDom.CreateElement("marc.hi.ehrs.svc.core");
+                configurationDom.DocumentElement.AppendChild(coreNode);
+            }
             // Config sections node
             if (configSectionsNode == null)
             {

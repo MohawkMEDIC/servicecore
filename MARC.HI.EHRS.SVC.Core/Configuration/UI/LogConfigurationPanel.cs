@@ -127,7 +127,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 for (int i = 1; i <= 4; i *= 2)
                     if (((int)this.LogSeverities.Value & i) == i)
                         initializeData.Value += string.Format("{0}, ", (IssuePriorityType)i);
-                initializeData.Value = initializeData.Value.Substring(0, initializeData.Value.Length - 2);
+                initializeData.Value = initializeData.Value.Substring(0, initializeData.Value.Length - 2).Replace("Informational","Information");
             }
 
             // Trace settings
@@ -184,7 +184,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 {
                     IssuePriorityType type = 0;
                     for (int i = 1; i <= 4; i *= 2)
-                        if (filterNode.Value.Contains(((IssuePriorityType)i).ToString()))
+                        if (filterNode.Value.Contains(((IssuePriorityType)i).ToString().Replace("Informational","Information")))
                             type |= (IssuePriorityType)i;
                     this.LogSeverities = type;
                     this.m_panel.LogLevel = this.LogSeverities.Value;
