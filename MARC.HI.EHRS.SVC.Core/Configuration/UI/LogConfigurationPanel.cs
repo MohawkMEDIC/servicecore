@@ -135,7 +135,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             if (traceNode == null)
                 traceNode = diagnosticNode.AppendChild(configurationDom.CreateElement("trace")) as XmlElement;
             traceNode.RemoveAll();
-            traceNode.Attributes.Append(configurationDom.CreateAttribute("autoflush")).Value = true.ToString();
+            traceNode.Attributes.Append(configurationDom.CreateAttribute("autoflush")).Value = "true";
             XmlElement listenNode = traceNode.AppendChild(configurationDom.CreateElement("listeners")) as XmlElement,
                 addNode = listenNode.AppendChild(configurationDom.CreateElement("add")) as XmlElement;
             addNode.Attributes.Append(configurationDom.CreateAttribute("name")).Value = shrListenName;

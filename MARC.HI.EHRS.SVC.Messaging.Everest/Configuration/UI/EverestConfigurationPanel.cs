@@ -439,13 +439,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
             // This is a complex configuration so here we go.
             XmlElement configSectionNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']/*[local-name() = 'section'][@name = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
                 configRoot = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
-                wcfRoot = configurationDom.SelectSingleNode("//*[local-name() = 'system.serviceModel']") as XmlElement;
+                wcfRoot = configurationDom.SelectSingleNode("//*[local-name() = 'system.serviceModel']") as XmlElement,
+                multiNode = configurationDom.SelectSingleNode(String.Format("//*[local-name() = 'marc.hi.ehrs.svc.messaging.multi']//*[local-name() = 'add'][@type = '{0}']", typeof(MessageHandler).AssemblyQualifiedName)) as XmlElement;
+
             
             // Remove the sections
             if (configSectionNode != null)
                 configSectionNode.ParentNode.RemoveChild(configSectionNode);
             if (configRoot != null)
                 configRoot.ParentNode.RemoveChild(configRoot);
+            if (multiNode != null)
+                multiNode.ParentNode.RemoveChild(multiNode);
             if (wcfRoot != null && this.m_sectionHandler.Revisions != null)
             {
                 // Remove each WCF configuration
@@ -539,7 +543,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
             // This is a complex configuration so here we go.
             XmlElement configSectionNode = configurationDom.SelectSingleNode("//*[local-name() = 'configSections']/*[local-name() = 'section'][@name = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
                 configRoot = configurationDom.SelectSingleNode("//*[local-name() = 'marc.hi.ehrs.svc.messaging.everest']") as XmlElement,
-                wcfRoot = configurationDom.SelectSingleNode("//*[local-name() = 'system.serviceModel']") as XmlElement;
+                wcfRoot = configurationDom.SelectSingleNode("//*[local-name() = 'system.serviceModel']") as XmlElement,
+                multiNode = configurationDom.SelectSingleNode(String.Format("//*[local-name() = 'marc.hi.ehrs.svc.messaging.multi']//*[local-name() = 'add'][@type = '{0}']", typeof(MessageHandler).AssemblyQualifiedName)) as XmlElement;
+
             XmlNodeList revisions = configurationDom.SelectNodes("//*[local-name() = 'marc.hi.ehrs.svc.messaging.everest']/*[local-name() = 'revision']");
 
             // Load the current config if applicable
@@ -549,7 +555,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
                 this.m_sectionHandler = new EverestConfigurationSectionHandler();
 
             bool isConfigured = configSectionNode != null && configRoot != null &&
-                wcfRoot != null && this.m_sectionHandler != null && this.m_sectionHandler.Revisions != null && this.m_sectionHandler.Revisions.Count > 0;
+                wcfRoot != null && this.m_sectionHandler != null && this.m_sectionHandler.Revisions != null && this.m_sectionHandler.Revisions.Count > 0 && multiNode != null;
             if (!this.m_needSync)
                 return isConfigured;
             this.EnableConfiguration = isConfigured;
