@@ -380,6 +380,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
                 wcfServiceCertificateNode.Attributes.Append(configurationDom.CreateAttribute("storeName")).Value = revPanel.StoreName.ToString();
                 wcfServiceCertificateNode.Attributes.Append(configurationDom.CreateAttribute("x509FindType")).Value = X509FindType.FindByThumbprint.ToString();
                 wcfServiceCertificateNode.Attributes.Append(configurationDom.CreateAttribute("findValue")).Value = revPanel.Certificate.Thumbprint;
+
+                // Client certificates?
+                if (revPanel.RequireClientCerts)
+                {
+                    XmlElement clientCertNode = wcfServiceCredentialsNode.AppendChild(configurationDom.CreateElement("clientCertificate")) as XmlElement,
+                        authNode = clientCertNode.AppendChild(configurationDom.CreateElement("authentication")) as XmlElement;
+                    authNode.Attributes.Append(configurationDom.CreateAttribute("certificateValidationMode"));
+                    authNode.Attributes["certificateValidationMode"].Value = "ChainTrust";
+                    authNode.Attributes.Append(configurationDom.CreateAttribute("trustedStoreLocation"));
+                    authNode.Attributes["trustedStoreLocation"].Value ="LocalMachine";
+
+                }
+
             }
             else if (wcfServiceCredentialsNode != null) // Remove the credentials node
                 wcfRevisionBehaviorNode.RemoveChild(wcfServiceCredentialsNode);

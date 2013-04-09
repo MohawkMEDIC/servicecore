@@ -35,6 +35,8 @@
             this.chkDebug = new System.Windows.Forms.CheckBox();
             this.chkMetaData = new System.Windows.Forms.CheckBox();
             this.grpSSL = new System.Windows.Forms.GroupBox();
+            this.btnChooseCert = new System.Windows.Forms.Button();
+            this.txtCertificate = new System.Windows.Forms.TextBox();
             this.cbxStoreLocation = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbxStore = new System.Windows.Forms.ComboBox();
@@ -42,8 +44,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.pnlConfiguration = new System.Windows.Forms.Panel();
-            this.txtCertificate = new System.Windows.Forms.TextBox();
-            this.btnChooseCert = new System.Windows.Forms.Button();
             this.grpSSL.SuspendLayout();
             this.pnlConfiguration.SuspendLayout();
             this.SuspendLayout();
@@ -131,6 +131,27 @@
             this.grpSSL.TabStop = false;
             this.grpSSL.Text = "Security Configuration";
             // 
+            // btnChooseCert
+            // 
+            this.btnChooseCert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnChooseCert.Location = new System.Drawing.Point(284, 80);
+            this.btnChooseCert.Name = "btnChooseCert";
+            this.btnChooseCert.Size = new System.Drawing.Size(33, 20);
+            this.btnChooseCert.TabIndex = 9;
+            this.btnChooseCert.Text = "...";
+            this.btnChooseCert.UseVisualStyleBackColor = true;
+            this.btnChooseCert.Click += new System.EventHandler(this.btnChooseCert_Click);
+            // 
+            // txtCertificate
+            // 
+            this.txtCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCertificate.Location = new System.Drawing.Point(97, 80);
+            this.txtCertificate.Name = "txtCertificate";
+            this.txtCertificate.ReadOnly = true;
+            this.txtCertificate.Size = new System.Drawing.Size(181, 20);
+            this.txtCertificate.TabIndex = 8;
+            // 
             // cbxStoreLocation
             // 
             this.cbxStoreLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -204,27 +225,6 @@
             this.pnlConfiguration.Name = "pnlConfiguration";
             this.pnlConfiguration.Size = new System.Drawing.Size(344, 214);
             this.pnlConfiguration.TabIndex = 9;
-            // 
-            // txtCertificate
-            // 
-            this.txtCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCertificate.Location = new System.Drawing.Point(97, 80);
-            this.txtCertificate.Name = "txtCertificate";
-            this.txtCertificate.ReadOnly = true;
-            this.txtCertificate.Size = new System.Drawing.Size(181, 20);
-            this.txtCertificate.TabIndex = 8;
-            // 
-            // btnChooseCert
-            // 
-            this.btnChooseCert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChooseCert.Location = new System.Drawing.Point(284, 80);
-            this.btnChooseCert.Name = "btnChooseCert";
-            this.btnChooseCert.Size = new System.Drawing.Size(33, 20);
-            this.btnChooseCert.TabIndex = 9;
-            this.btnChooseCert.Text = "...";
-            this.btnChooseCert.UseVisualStyleBackColor = true;
-            this.btnChooseCert.Click += new System.EventHandler(this.btnChooseCert_Click);
             // 
             // pnlTemplateConfigure
             // 

@@ -124,7 +124,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
                             else
                                 MessageBox.Show("Could not locate the specified certificate for endpoint");
                         }
-                        catch
+                        finally
                         {
                             store.Close();
                         }
