@@ -122,10 +122,10 @@ namespace MARC.HI.EHRS.SVC.Core
         /// </summary>
         public void Dispose()
         {
-            this.m_disposed = true;
             foreach (var kv in this.m_configuration.ServiceProviders)
                 if (kv is IDisposable)
                     (kv as IDisposable).Dispose();
+            this.m_disposed = true;
         }
 
         #endregion

@@ -118,6 +118,7 @@ namespace MARC.HI.EHRS.SVC.Core
                     s_auditorService.SendAudit(CreateApplicationStopAudit());
                 Trace.TraceInformation("Stopping message handler service {0}", s_messageHandlerService);
                 s_messageHandlerService.Stop();
+
                 (s_messageHandlerService.Context as IDisposable).Dispose();
             }
         }

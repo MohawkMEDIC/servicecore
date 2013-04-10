@@ -29,6 +29,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Net;
 using System.Diagnostics;
+using MARC.Everest.Threading;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
@@ -37,11 +38,14 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
     /// RFC3881 (ATNA style) audits
     /// </summary>
     [Description("RFC3881 Audit Service")]
-    public class AtnaAuditService : IAuditorService
+    public class AtnaAuditService : IAuditorService, IDisposable
     {
     
         // Configuration
         protected AuditConfiguration m_configuration;
+
+        // Wait 
+        private WaitThreadPool m_waitThreadPool = new WaitThreadPool();
 
         /// <summary>
         /// Creates a new instance of the ATNA audit service
@@ -151,7 +155,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         public bool SendAudit(MARC.HI.EHRS.SVC.Core.DataTypes.AuditData ad)
         {
 
-            ThreadPool.QueueUserWorkItem(SendAuditAsync, ad);
+            this.m_waitThreadPool.QueueUserWorkItem(SendAuditAsync, ad);
             return true;
         }
 
@@ -163,6 +167,18 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         /// Gets or sets the context of the ATNA message
         /// </summary>
         public IServiceProvider Context { get; set; }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            this.m_waitThreadPool.Dispose();
+        }
 
         #endregion
     }
