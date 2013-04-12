@@ -167,7 +167,8 @@ namespace ServiceConfigurator
                 }
 
             }
-            
+
+            trvOptions.ExpandAll();
         }
 
         /// <summary>

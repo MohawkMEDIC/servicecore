@@ -30,7 +30,11 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
         /// Get the publisher
         /// </summary>
         public Type Publisher { 
-            get { return (this.cbxTransport.SelectedItem as TypeDescription).Type; } 
+            get {
+                if (this.cbxTransport.SelectedItem == null)
+                    return null;
+                return (this.cbxTransport.SelectedItem as TypeDescription).Type; } 
+
             set {
                 foreach(TypeDescription td in cbxTransport.Items)
                     if(td.Type == value)

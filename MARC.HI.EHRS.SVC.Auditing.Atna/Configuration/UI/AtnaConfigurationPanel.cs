@@ -26,7 +26,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
         /// </summary>
         public string Name
         {
-            get { return "Auditing/ATNA"; }
+            get { return "Service Core/Auditing"; }
         }
 
         /// <summary>
@@ -211,6 +211,15 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Represent for the GUI
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "ATNA Auditing";
         }
 
         #endregion
