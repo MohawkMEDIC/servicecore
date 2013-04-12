@@ -142,7 +142,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                     oidElement.Attributes["oid"].Value = oid.Oid;
                 }
                
-                if(oid.Ref != null)
+                if(oid.Ref != null && oid.Ref.Scheme != "oid")
                 {
                     if (oidElement.Attributes["ref"] == null)
                         oidElement.Attributes.Append(configurationDom.CreateAttribute("ref"));

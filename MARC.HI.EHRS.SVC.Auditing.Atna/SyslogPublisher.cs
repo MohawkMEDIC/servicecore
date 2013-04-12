@@ -29,12 +29,14 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Reflection;
 using System.Xml;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
     /// <summary>
     /// Represents an ATNA Client
     /// </summary>
+    [Description("BSD Syslog over UDP")]
     public class SyslogPublisher : IMessagePublisher
     {
         // Represents the remote endpoint that is being connected

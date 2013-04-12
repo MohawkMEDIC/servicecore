@@ -52,6 +52,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -68,6 +70,13 @@
     <Compile Include="Configuration\AuditConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\AtnaConfigurationPanel.cs" />
+    <Compile Include="Configuration\UI\pnlConfigureAudit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\pnlConfigureAudit.Designer.cs">
+      <DependentUpon>pnlConfigureAudit.cs</DependentUpon>
     </Compile>
     <Compile Include="Format\ActionType.cs" />
     <Compile Include="Format\AuditableObejctType.cs" />
@@ -105,6 +114,12 @@
     <None Include="Configuration\marc.hi.ehrs.svc.auditing.atna.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\UI\pnlConfigureAudit.resx">
+      <DependentUpon>pnlConfigureAudit.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

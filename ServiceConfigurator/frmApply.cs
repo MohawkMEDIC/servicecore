@@ -27,6 +27,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using MARC.HI.EHRS.SVC.Core.Configuration;
+using System.IO;
 
 namespace ServiceConfigurator
 {
@@ -70,6 +71,17 @@ namespace ServiceConfigurator
                 XmlDocument configDocument = new XmlDocument();
                 try
                 {
+                    // Try to make a backup
+                    try
+                    {
+                        File.Copy(ConfigurationApplicationContext.s_configFile, ConfigurationApplicationContext.s_configFile + ".bak." + DateTime.Now.ToString("yyyy-MMM-dd"));
+                    }
+                    catch (Exception e)
+                    {
+                        if (MessageBox.Show("The configuration file could not be backed up, would you like to proceed making modifications without a backup?", "Backup failed", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                            return;
+                    }
+
                     progress.Show();
                     configDocument.Load(ConfigurationApplicationContext.s_configFile);
                     foreach (IConfigurationPanel itm in apply.chkActions.CheckedItems)
