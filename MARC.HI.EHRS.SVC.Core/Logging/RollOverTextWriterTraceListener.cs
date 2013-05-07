@@ -35,7 +35,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
         string _fileName;
         System.DateTime _currentDate;
         System.IO.StreamWriter _traceWriter;
-        //FileStream _stream;
+        FileStream _stream;
 
         public RollOverTextWriterTraceListener(string fileName)
         {
@@ -45,9 +45,9 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
             if (!Path.IsPathRooted(fileName))
                 _fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
                Path.GetFileName(_fileName));
-            //_stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            _stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
             
-            _traceWriter = new StreamWriter(generateFilename(), true);
+            _traceWriter = new StreamWriter(_stream);
             _traceWriter.AutoFlush = true;
         }
 
@@ -56,7 +56,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
             checkRollover();
             _traceWriter.Write("{1}", DateTime.Now, value);
             _traceWriter.Flush();
-            //_stream.Flush();
+            _stream.Flush();
         }
 
         public override void WriteLine(string value)
@@ -64,7 +64,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
             checkRollover();
             _traceWriter.WriteLine("{0}:{1}", DateTime.Now, value);
             _traceWriter.Flush();
-            //_stream.Flush();
+            _stream.Flush();
         }
 
         private string generateFilename()
@@ -83,9 +83,10 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
             {
                 
                 _traceWriter.Close();
-                //_stream.Close();
-                //_stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-                _traceWriter = new StreamWriter(generateFilename(), true);
+                _stream.Close();
+                _stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                _traceWriter = new StreamWriter(_stream);
+                _traceWriter.AutoFlush = true;
             }
         }
 

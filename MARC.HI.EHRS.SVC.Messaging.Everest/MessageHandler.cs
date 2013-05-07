@@ -96,7 +96,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                         continue;
                     }
 
-                    formatter.GraphAides.Add(ciFormatter.Invoke(null) as IStructureFormatter);
+                    var aide = ciFormatter.Invoke(null) as IStructureFormatter;
+                    if(aide is IValidatingStructureFormatter)
+                        (aide as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
+                    formatter.GraphAides.Add(aide);
                 }
 
                 // Build the type cache
@@ -271,6 +274,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                     
                     var messageState = MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New;
                     IInteraction response = null;
+                    
                     InteractionConfiguration interactionConfig = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
                     if(interactionConfig != null && interactionConfig.Disclosure)
                         persistenceService = null;
