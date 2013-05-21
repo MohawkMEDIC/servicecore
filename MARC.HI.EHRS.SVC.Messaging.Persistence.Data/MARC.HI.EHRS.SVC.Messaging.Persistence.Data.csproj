@@ -65,7 +65,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MARC.HI.EHRS.SVC.ConfigurationApplciation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -98,6 +97,10 @@
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
       <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceConfigurator\MARC.HI.EHRS.SVC.ConfigurationApplciation.csproj">
+      <Project>{E3F86DDE-9604-4F3E-9A31-BDF5C2051A23}</Project>
+      <Name>MARC.HI.EHRS.SVC.ConfigurationApplciation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
