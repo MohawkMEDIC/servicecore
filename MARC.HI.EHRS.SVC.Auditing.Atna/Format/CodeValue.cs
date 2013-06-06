@@ -50,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 // Enum type?
                 if (typeof(T).IsEnum)
                 {
-                    FieldInfo fi = typeof(T).GetField(this.Code.ToString());
+                    FieldInfo fi = typeof(T).GetField(this.StrongCode.ToString());
                     object[] category = fi.GetCustomAttributes(typeof(CategoryAttribute), false);
                     if (category.Length > 0)
                         return (category[0] as CategoryAttribute).Category;
@@ -62,11 +62,59 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 m_codeSystem = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the codified data
+        /// </summary>
+        [XmlAttribute("code")]
+        public string Code
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// The codified data
         /// </summary>
-        [XmlAttribute("code")]
-        public T Code { get; set; }
+        [XmlIgnore]
+        public T StrongCode
+        {
+            get
+            {
+                if (typeof(T) == typeof(String))
+                    return (T)(Object)this.Code;
+                else if (typeof(T).IsEnum)
+                {
+                    var fi = Array.Find(typeof(T).GetFields(), o =>
+                    {
+                        object[] ci = o.GetCustomAttributes(typeof(XmlEnumAttribute), false);
+                        if (ci.Length == 0)
+                            return o.Name == this.Code;
+                        else
+                            return (ci[0] as XmlEnumAttribute).Name == this.Code;
+                    });
+                    if (fi == null)
+                        return default(T);
+                    else
+                        return (T)fi.GetValue(null);
+                }
+                return default(T);
+            }
+            set
+            {
+                if (typeof(T).IsEnum)
+                {
+                    object[] ci = typeof(T).GetField(value.ToString()).GetCustomAttributes(typeof(XmlEnumAttribute), false);
+                    if (ci.Length == 0)
+                        this.Code = value.ToString();
+                    else
+                        this.Code = (ci[0] as XmlEnumAttribute).Name;
+                }
+                else
+                    this.Code = value.ToString();
+            }
+        }
+
         /// <summary>
         /// The english display name for the code
         /// </summary>
@@ -81,7 +129,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 // Enum type?
                 if (typeof(T).IsEnum)
                 {
-                    FieldInfo fi = typeof(T).GetField(this.Code.ToString());
+                    FieldInfo fi = typeof(T).GetField(this.StrongCode.ToString());
                     object[] category = fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
                     if (category.Length > 0)
                         return (category[0] as DescriptionAttribute).Description;
@@ -110,7 +158,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         /// <param name="code">The code</param>
         public CodeValue(T code)
             : this()
-        { this.Code = code; }
+        { this.StrongCode = code; }
 
         /// <summary>
         /// Create a new instance of the audit code with the specified parameters

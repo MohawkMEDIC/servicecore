@@ -55,6 +55,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
         /// </summary>
         [XmlAttribute("NetworkAccessPointTypeCode")]
         public NetworkAccessPointType NetworkAccessPointType { get; set; }
+
         [XmlIgnore]
         public bool NetworkAccessPointTypeSpecified { get; set; }
 

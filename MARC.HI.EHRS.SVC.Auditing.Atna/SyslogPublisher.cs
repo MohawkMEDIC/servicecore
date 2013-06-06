@@ -43,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         private IPEndPoint m_remoteEndpoint;
 
         // Represents the syslog facility to use 
-        public const int SYSLOG_FACILITY = 13;
+        public const int SYSLOG_FACILITY = 10;
 
         /// <summary>
         /// Creates a new instance of the ATNA client
@@ -68,8 +68,22 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
             {
                 udpClient.Connect(this.m_remoteEndpoint);
                 StringBuilder syslogmessage = new StringBuilder();
-                syslogmessage.AppendFormat("<{0}>1 {1:yyyy-MM-dd}T{1:HH:mm:ss.fff}Z {2} {3} {4} - - ",
-                    SYSLOG_FACILITY, DateTime.UtcNow, Dns.GetHostName(), Process.GetCurrentProcess().ProcessName, Process.GetCurrentProcess().Id);
+                int severity = 7;
+                switch (am.EventIdentification.EventOutcome)
+                {
+                    case OutcomeIndicator.Success:
+                        severity = 5;
+                        break;
+                    case OutcomeIndicator.MinorFail:
+                        severity = 4;
+                        break;
+                    default:
+                        severity = 3;
+                        break;
+                }
+
+                syslogmessage.AppendFormat("<{0}>1 {1:yyyy-MM-dd}T{1:HH:mm:ss.fff}Z {2} {3} {4} IHE+RFC-3881 - ",
+                    SYSLOG_FACILITY * 8 + severity, DateTime.UtcNow, Dns.GetHostName(), Process.GetCurrentProcess().ProcessName, Process.GetCurrentProcess().Id);
                 syslogmessage.Append(CreateMessageBody(am));
 
                 // Send the message
