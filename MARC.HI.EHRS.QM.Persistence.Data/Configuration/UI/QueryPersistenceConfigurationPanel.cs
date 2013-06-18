@@ -6,13 +6,15 @@ using MARC.HI.EHRS.SVC.Core.Configuration;
 using MARC.HI.EHRS.SVC.QM.Persistence.Data.Configuration.UI.Panels;
 using System.Windows.Forms;
 using System.Xml;
+using System.Diagnostics;
+using System.Collections.Specialized;
 
 namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration.UI
 {
     /// <summary>
     /// Configuration for query persistence
     /// </summary>
-    public class QueryPersistenceConfigurationPanel : IDataboundConfigurationPanel
+    public class QueryPersistenceConfigurationPanel : IDataboundConfigurationPanel, IAutoDeployConfigurationPanel
     {
         #region IDataboundConfigurationPanel Members
 
@@ -268,5 +270,40 @@ namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration.UI
         {
             return this.Name;
         }
+
+        #region IAutoDeployConfigurationPanel Members
+
+        public void PrepareConfigure(XmlDocument configurationDom, Dictionary<string, System.Collections.Specialized.StringCollection> deploymentOptions)
+        {
+            StringCollection dbServer = null,
+                               dbProvider = null,
+                               dbUser = null,
+                               dbPassword = null,
+                               dbDb = null;
+
+            if (!deploymentOptions.TryGetValue("dbprovider", out dbProvider) ||
+                            !deploymentOptions.TryGetValue("dbserver", out dbServer) ||
+                            !deploymentOptions.TryGetValue("dbuser", out dbUser) ||
+                            !deploymentOptions.TryGetValue("dbpassword", out dbPassword) ||
+                            !deploymentOptions.TryGetValue("dbdb", out dbDb))
+            {
+                MessageBox.Show("Insufficient application configuration options");
+            }
+
+
+            // Now, try to create the dbprovider
+            this.DatabaseConfigurator = Activator.CreateInstance(Type.GetType(dbProvider[0])) as IDatabaseConfigurator;
+            try // to create the "dbname"
+            {
+                this.DatabaseConfigurator.CreateDatabase(dbServer[0], dbUser[0], dbPassword[0], dbDb[0], dbUser[0]);
+            }
+            catch { }
+
+            // Setup the connection string
+            this.ConnectionString = this.DatabaseConfigurator.CreateConnectionStringElement(configurationDom, dbServer[0], dbUser[0], dbPassword[0], dbDb[0]);
+            this.EnableConfiguration = true;
+        }
+
+        #endregion
     }
 }

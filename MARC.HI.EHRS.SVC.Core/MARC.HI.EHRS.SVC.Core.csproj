@@ -160,6 +160,7 @@
     <Compile Include="Exceptions\IssueException.cs" />
     <Compile Include="HostConfigurationSectionHandler.cs" />
     <Compile Include="HostContext.cs" />
+    <Compile Include="Configuration\IAutoDeployConfigurationPanel.cs" />
     <Compile Include="Issues\DetectedIssue.cs" />
     <Compile Include="Logging\RollOverTextWriterTraceListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

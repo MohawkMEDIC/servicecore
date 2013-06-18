@@ -24,13 +24,15 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Core.Configuration;
 using System.Windows.Forms;
 using System.Xml;
+using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Terminology.Configuration
 {
     /// <summary>
     /// Terminology configuration panel
     /// </summary>
-    public class TerminologyConfigurationPanel : IDataboundConfigurationPanel
+    public class TerminologyConfigurationPanel : IDataboundConfigurationPanel, IAutoDeployConfigurationPanel
     {
 
         private pnlConfigureTerminology m_configPanel = new pnlConfigureTerminology();
@@ -411,6 +413,52 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
         {
             return this.Name;
         }
+        #endregion
+
+        #region IAutoDeployConfigurationPanel Members
+
+        /// <summary>
+        /// Prepare configuration
+        /// </summary>
+        public void PrepareConfigure(XmlDocument configurationDom, Dictionary<string, System.Collections.Specialized.StringCollection> deploymentOptions)
+        {
+            StringCollection dbServer = null,
+                   dbProvider = null,
+                   dbUser = null,
+                   dbPassword = null,
+                   dbDb = null,
+                   local = null,
+                   cacheSize = null;
+
+            if (!deploymentOptions.TryGetValue("dbprovider", out dbProvider) ||
+                            !deploymentOptions.TryGetValue("dbserver", out dbServer) ||
+                            !deploymentOptions.TryGetValue("dbuser", out dbUser) ||
+                            !deploymentOptions.TryGetValue("dbpassword", out dbPassword) ||
+                            !deploymentOptions.TryGetValue("dbdb", out dbDb))
+            {
+                MessageBox.Show("Insufficient application configuration options");
+            }
+
+            deploymentOptions.TryGetValue("termlocal", out local);
+            deploymentOptions.TryGetValue("termcache", out cacheSize);
+
+            // Now, try to create the dbprovider
+            this.DatabaseConfigurator = Activator.CreateInstance(Type.GetType(dbProvider[0])) as IDatabaseConfigurator;
+            try // to create the "dbname"
+            {
+                this.DatabaseConfigurator.CreateDatabase(dbServer[0], dbUser[0], dbPassword[0], dbDb[0], dbUser[0]);
+            }
+            catch { }
+
+            // Setup the connection string
+            this.ConnectionString = this.DatabaseConfigurator.CreateConnectionStringElement(configurationDom, dbServer[0], dbUser[0], dbPassword[0], dbDb[0]);
+            this.EnableConfiguration = true;
+            this.EnableLocal = local == null ? this.EnableLocal : Boolean.Parse(local[0]);
+            this.EnableCts = false;
+            this.MaxCacheSize = cacheSize == null ? this.MaxCacheSize : Int32.Parse(cacheSize[0]);
+
+        }
+
         #endregion
     }
 

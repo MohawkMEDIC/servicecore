@@ -25,13 +25,15 @@ using MARC.HI.EHRS.SVC.Core.Configuration;
 using System.Xml;
 using System.Windows.Forms;
 using MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI.Panels;
+using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
 {
     /// <summary>
     /// Message Persistence
     /// </summary>
-    public class MessagePersistenceConfigurationPanel : IDataboundConfigurationPanel
+    public class MessagePersistenceConfigurationPanel : IDataboundConfigurationPanel, IAutoDeployConfigurationPanel
     {
         private pnlConfigureMessagePersistence m_configPanel = new pnlConfigureMessagePersistence();
         private string serviceName = typeof(MARC.HI.EHRS.SVC.Messaging.Persistence.Data.AdoMessagePersister).AssemblyQualifiedName;
@@ -265,5 +267,44 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration.UI
         {
             return this.Name;
         }
+
+        #region IAutoDeployConfigurationPanel Members
+
+        /// <summary>
+        /// Prepare configuration
+        /// </summary>
+        public void PrepareConfigure(XmlDocument configurationDom, Dictionary<string, System.Collections.Specialized.StringCollection> deploymentOptions)
+        {
+            StringCollection dbServer = null,
+                dbProvider = null,
+                dbUser = null,
+                dbPassword = null,
+                dbDb = null;
+
+            if (!deploymentOptions.TryGetValue("dbprovider", out dbProvider) ||
+                !deploymentOptions.TryGetValue("dbserver", out dbServer) ||
+                !deploymentOptions.TryGetValue("dbuser", out dbUser) ||
+                !deploymentOptions.TryGetValue("dbpassword", out dbPassword) ||
+                !deploymentOptions.TryGetValue("dbdb", out dbDb))
+            {
+                MessageBox.Show("Insufficient application configuration options");
+            }
+
+            // Now, try to create the dbprovider
+            this.DatabaseConfigurator = Activator.CreateInstance(Type.GetType(dbProvider[0])) as IDatabaseConfigurator;
+            try // to create the "dbname"
+            {
+                this.DatabaseConfigurator.CreateDatabase(dbServer[0], dbUser[0], dbPassword[0], dbDb[0], dbUser[0]);
+            }
+            catch { }
+
+            // Setup the connection string
+            this.ConnectionString = this.DatabaseConfigurator.CreateConnectionStringElement(configurationDom, dbServer[0], dbUser[0], dbPassword[0], dbDb[0]);
+            this.EnableConfiguration = true;
+            
+
+        }
+
+        #endregion
     }
 }

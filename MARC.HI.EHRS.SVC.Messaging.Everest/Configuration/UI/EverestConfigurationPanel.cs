@@ -15,13 +15,14 @@ using MARC.Everest.Connectors.WCF.Core;
 using MARC.Everest.Connectors.WCF;
 using System.Net;
 using System.ComponentModel;
+using System.Collections.Specialized;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
 {
     /// <summary>
     /// Represents the Everest messaging configuration panel
     /// </summary>
-    public class EverestConfigurationPanel : IConfigurationPanel
+    public class EverestConfigurationPanel : IAutoDeployConfigurationPanel
     {
 
         private pnlEverestConfiguration m_panel = new pnlEverestConfiguration();
@@ -642,6 +643,29 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
         {
             return "MARC-HI Everest Framework Listeners";
         }
+        #endregion
+
+
+        #region IAutoDeployConfigurationPanel Members
+
+        /// <summary>
+        /// Deploy with the specified options
+        /// </summary>
+        public void PrepareConfigure(XmlDocument configurationDom, Dictionary<string, StringCollection> deploymentOptions)
+        {
+            // Look for the templates
+            StringCollection templateNames = new StringCollection();
+            if (!deploymentOptions.TryGetValue("etpl", out templateNames))
+                return;
+
+            this.EnableConfiguration = true;
+
+            foreach(var rev in this.m_panel.RevisionConfigPanels)
+                if (templateNames.Contains(rev.Title))
+                    rev.IsConfigurationEnabled = true;
+
+        }
+
         #endregion
 
     }
