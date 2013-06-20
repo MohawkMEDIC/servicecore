@@ -46,7 +46,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
                 _fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
                Path.GetFileName(_fileName));
             _stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-            
+            _stream.Seek(0, SeekOrigin.End);
             _traceWriter = new StreamWriter(_stream);
             _traceWriter.AutoFlush = true;
         }
