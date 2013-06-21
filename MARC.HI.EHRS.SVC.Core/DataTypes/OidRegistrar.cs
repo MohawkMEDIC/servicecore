@@ -151,7 +151,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
                 Name = name,
                 Description = desc,
                 Oid = oid,
-                Ref = new Uri(uri ?? string.Format("oid:{0}", oid))
+                Ref = new Uri(uri ?? string.Format("urn:oid:{0}", oid))
             };
             m_registerOids.Add(od);
             return od;
