@@ -93,6 +93,8 @@
     <Compile Include="Format\CodeValue.cs" />
     <Compile Include="Format\EventIdentificationType.cs" />
     <Compile Include="Format\NetworkAccessPointType.cs" />
+    <Compile Include="Format\ObjectDataChoiceType.cs" />
+    <Compile Include="Format\ObjectDetailType.cs" />
     <Compile Include="Format\OutcomeIndicator.cs" />
     <Compile Include="IMessagePublisher.cs">
       <SubType>Code</SubType>

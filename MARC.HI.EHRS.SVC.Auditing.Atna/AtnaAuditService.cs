@@ -126,8 +126,10 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                         RoleSpecified = aoPtctpt.Role != 0,
                         Type = (AuditableObjectType)Enum.Parse(typeof(AuditableObjectType), aoPtctpt.Type.ToString()),
                         TypeSpecified = aoPtctpt.Type != 0,
-                        ObjectQuery = aoPtctpt.QueryData
+                        ObjectSpec = aoPtctpt.QueryData ?? aoPtctpt.NameData,
+                        ObjectSpecChoice = aoPtctpt.QueryData == null ? ObjectDataChoiceType.ParticipantObjectName : ObjectDataChoiceType.ParticipantObjectQuery
                     });
+                    // TODO: Object Data
                 }
 
                 // Was a record of this service found?

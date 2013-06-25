@@ -55,6 +55,12 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
         /// </summary>
         [XmlAttribute("NetworkAccessPointTypeCode")]
         public NetworkAccessPointType NetworkAccessPointType { get; set; }
+        
+        /// <summary>
+        /// The alternative user identification
+        /// </summary>
+        [XmlAttribute("AlternativeUserID")]
+        public string AlternativeUserId { get; set; }
 
         [XmlIgnore]
         public bool NetworkAccessPointTypeSpecified { get; set; }

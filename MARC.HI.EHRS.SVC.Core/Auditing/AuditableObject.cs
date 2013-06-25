@@ -57,5 +57,9 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// Data associated with the object
         /// </summary>
         public string QueryData { get; set; }
+        /// <summary>
+        /// Data associated with the object
+        /// </summary>
+        public string NameData { get; set; }
     }
 }
