@@ -259,7 +259,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 MessageHandlerConfiguration receiverConfig = null;
                 if (interactionStructure != null && interactionStructure.InteractionId != null &&
                     !String.IsNullOrEmpty(interactionStructure.InteractionId.Extension))
-                    receiverConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i=>i.Id == interactionStructure.InteractionId.Extension));
+                    receiverConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i => i.Id == interactionStructure.InteractionId.Extension));
+                else
+                {
+                    Trace.TraceWarning("Interaction is missing InteractionId attribute! Assuming default");
+                    // Set interaction id
+                    var intId = interactionStructure.GetType().GetMethod("GetInteractionId", BindingFlags.Static | BindingFlags.Public);
+                    if (intId == null)
+                        throw new InvalidOperationException("Cannot find the GetInteractionId method, cannot determine interaction");
+                    interactionStructure.InteractionId = intId.Invoke(null, null) as II;
+                }
+
+                // Message identifier missing?
+                if (interactionStructure.Id == null)
+                {
+                    interactionStructure.Id = Guid.NewGuid();
+                    Trace.TraceWarning("Interaction is missing id. Generated token {0}...", interactionStructure.Id.Root);
+                }
 
                 IEverestMessageReceiver currentHandler = null, defaultHandler = null;
                 
