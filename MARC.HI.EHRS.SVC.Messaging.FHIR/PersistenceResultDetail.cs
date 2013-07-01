@@ -14,39 +14,27 @@
  * the License.
  * 
  * User: fyfej
- * Date: 7-5-2012
+ * Date: 16-7-2012
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
+using MARC.Everest.Connectors;
 
-namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
+namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
     /// <summary>
-    /// Identifies the source of the audit
+    /// Result detail related to a persistence problem
     /// </summary>
-    public class AuditSourceIdentificationType
+    internal class PersistenceResultDetail : ResultDetail
     {
-
         /// <summary>
-        /// Identifies the entperprise site of the audit
+        /// Create a new instance of the invalid state transition detail
         /// </summary>
-        [XmlAttribute("AuditEnterpriseSiteID")]
-        public string AuditEnterpriseSiteID { get; set; }
-
-        /// <summary>
-        /// Identifies the audit source id
-        /// </summary>
-        [XmlAttribute("AuditSourceID")]
-        public string AuditSourceID { get; set; }
-
-        /// <summary>
-        /// Identifies the source type of the audit source
-        /// </summary>
-        [XmlElement("AuditSourceTypeCode")]
-        public List<CodeValue<AuditSourceType>> AuditSourceTypeCode { get; set; }
+        internal PersistenceResultDetail(ResultDetailType type, string message, Exception innerException)
+            : base(type, message, innerException)
+        { }
     }
 }

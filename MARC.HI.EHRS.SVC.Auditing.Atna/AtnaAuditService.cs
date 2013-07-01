@@ -82,7 +82,11 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 am.SourceIdentification.Add(new AuditSourceIdentificationType()
                 {
                     AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName),
-                    AuditSourceID = Dns.GetHostName()
+                    AuditSourceID = Dns.GetHostName(),
+                    AuditSourceTypeCode = new List<CodeValue<AuditSourceType>>()
+                    {
+                        new CodeValue<AuditSourceType>(AuditSourceType.ApplicationServerProcess)
+                    }
                 });
                 
                 // Add additional data like the participant
