@@ -169,7 +169,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Create an operation outcome resource
         /// </summary>
-        private static OperationOutcome CreateOutcomeResource(FhirQueryResult result)
+        public static OperationOutcome CreateOutcomeResource(FhirOperationResult result)
         {
             var retVal = new OperationOutcome();
 

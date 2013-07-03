@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -27,6 +29,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets a list of issues 
         /// </summary>
         [XmlElement("issue")]
+        [Description("A list of detected issues")]
         public List<Issue> Issue { get; set; }
 
     }

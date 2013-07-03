@@ -19,11 +19,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         public FhirQuery Query { get; set; }
 
         /// <summary>
-        /// Business violations
-        /// </summary>
-        public List<DetectedIssue> Issues { get; set; }
-
-        /// <summary>
         /// Gets the total results
         /// </summary>
         public int TotalResults { get; set; }

@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 16-7-2012
+ * Date: 16-7-2012 
  */
 
 using System;
@@ -28,12 +28,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
     /// <summary>
     /// Result detail related to a persistence problem
     /// </summary>
-    internal class PersistenceResultDetail : ResultDetail
+    public class PersistenceResultDetail : ResultDetail
     {
         /// <summary>
         /// Create a new instance of the invalid state transition detail
         /// </summary>
-        internal PersistenceResultDetail(ResultDetailType type, string message, Exception innerException)
+        public PersistenceResultDetail(ResultDetailType type, string message, Exception innerException)
             : base(type, message, innerException)
         { }
     }

@@ -88,6 +88,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Last updated timestamp
         /// </summary>
+        [XmlIgnore]
         public DateTime Timestamp { get; set; }
     }
 }

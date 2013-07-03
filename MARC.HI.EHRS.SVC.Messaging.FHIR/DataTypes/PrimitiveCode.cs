@@ -9,7 +9,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// <summary>
     /// Primitive code value
     /// </summary>
-    [XmlType("PrimitiveCode", Namespace = "http://hl7.org/fhir")]
+    [XmlType("code", Namespace = "http://hl7.org/fhir")]
     public class PrimitiveCode<T> : Primitive<T>
     {
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using MARC.Everest.Connectors;
+using MARC.HI.EHRS.SVC.Core.Issues;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
@@ -22,6 +23,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// Represents the results of the operation
         /// </summary>
         public List<ResourceBase> Results { get; set; }
+
+        /// <summary>
+        /// Business violations
+        /// </summary>
+        public List<DetectedIssue> Issues { get; set; }
 
         /// <summary>
         /// Gets the list of details

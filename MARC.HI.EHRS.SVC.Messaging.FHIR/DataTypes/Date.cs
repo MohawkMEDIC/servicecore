@@ -44,6 +44,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Gets the precision of the date
         /// </summary>
+        [XmlIgnore]
         public DatePrecision Precision { get; set; }
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Gets or sets the value
         /// </summary>
+        [XmlIgnore]
         public override string Value
         {
             get
@@ -126,6 +128,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Only date is permitted
         /// </summary>
+        [XmlIgnore]
         public override string Value
         {
             get

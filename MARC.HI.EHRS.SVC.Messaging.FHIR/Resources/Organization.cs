@@ -53,12 +53,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirBoolean Active { get; set; }
 
         /// <summary>
-        /// Gets or sets the accrediations for the organization
-        /// </summary>
-        [XmlElement("accreditation")]
-        public List<Accreditation> Accreditation { get; set; }
-
-        /// <summary>
         /// Gets or sets the contact entities
         /// </summary>
         [XmlElement("contactEntity")]

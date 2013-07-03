@@ -6,13 +6,14 @@ using System.Xml.Serialization;
 using System.Reflection;
 using System.Collections;
 using System.Xml;
+using System.Runtime.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
 {
     /// <summary>
     /// Represents a value that can be referenced using IDREF
     /// </summary>
-    [XmlType("Element", Namespace = "http://hl7.org/fhir")]
+    [XmlType("Shareable", Namespace = "http://hl7.org/fhir")]
     public class Shareable 
     {
 
@@ -31,18 +32,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// Represents the ID of the object
         /// </summary>
         [XmlAttribute("id")]
+        [DataMember(Name = "id")]
         public string XmlId { get; set; }
 
         /// <summary>
         /// Identifier reference
         /// </summary>
         [XmlAttribute("idref")]
+        [DataMember(Name = "idref")]
         public string IdRef { get; set; }
 
         /// <summary>
         /// Extension
         /// </summary>
         [XmlElement("extension")]
+        [DataMember(Name = "extension")]
         public List<Extension> Extension { get; set; }
 
         /// <summary>
@@ -121,9 +125,33 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         }
 
         /// <summary>
+        /// Write a table header
+        /// </summary>
+        protected void WriteTableHeader(XmlWriter w, Shareable value)
+        {
+            this.WriteTableCellInternal(w, value, 1, 1, "th");
+        }
+
+        /// <summary>
+        /// Write a table header
+        /// </summary>
+        protected void WriteTableCell(XmlWriter w, Shareable value)
+        {
+            this.WriteTableCellInternal(w, value, 1, 1, "td");
+        }
+
+        /// <summary>
+        /// Write a table header
+        /// </summary>
+        protected void WriteTableHeader(XmlWriter w, Shareable value, int colspan, int rowspan)
+        {
+            this.WriteTableCellInternal(w, value, colspan, rowspan, "th");
+        }
+
+        /// <summary>
         /// Write a table row
         /// </summary>
-        protected void WriteTableRows(XmlWriter w, string key, params Shareable[] values)
+        protected void WriteTableRows(XmlWriter w, FhirString key, params Shareable[] values)
         {
             // Span calc
             if (values == null || values.Length == 0) return;
@@ -151,15 +179,24 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Write a table cell
         /// </summary>
-        protected void WriteTableCell(XmlWriter w, string value, int colspan, int rowspan)
+        protected void WriteTableCell(XmlWriter w, Shareable value, int colspan, int rowspan)
         {
-            w.WriteStartElement("td", NS_XHTML);
+            this.WriteTableCellInternal(w, value, colspan, rowspan, "td");
+        }
+
+        /// <summary>
+        /// Write table cell utility
+        /// </summary>
+        private void WriteTableCellInternal(XmlWriter w, Shareable value, int colspan, int rowspan, string tagName)
+        {
+            w.WriteStartElement(tagName, NS_XHTML);
             if (colspan > 1)
                 w.WriteAttributeString("colspan", colspan.ToString());
             if (rowspan > 1)
                 w.WriteAttributeString("rowspan", rowspan.ToString());
 
-            w.WriteString(value);
+            if(value != null)
+                value.WriteText(w);
             w.WriteEndElement(); // td
         }
     }

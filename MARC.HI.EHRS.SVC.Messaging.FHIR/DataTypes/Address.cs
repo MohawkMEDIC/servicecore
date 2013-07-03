@@ -86,7 +86,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
             w.WriteStartElement("tbody", NS_XHTML);
             w.WriteStartElement("tr", NS_XHTML);
             base.WriteTableCell(w, this.Use, 0, 0);
-            base.WriteTableCell(w, output.First(), 0, 0);
+            base.WriteTableCell(w, (FhirString)output.First(), 0, 0);
             w.WriteEndElement();// tr
 
             for(int i = 1; i < output.Count; i++)
@@ -95,9 +95,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
                     continue;
 
                 w.WriteStartElement("tr", NS_XHTML);
-                base.WriteTableCell(w, String.Empty, 0, 0);
-                base.WriteTableCell(w, output[i], 0, 0);
-                w.WriteEndElement();
+                base.WriteTableCell(w, (FhirString)String.Empty, 0, 0);
+                base.WriteTableCell(w, (FhirString)output[i], 0, 0);
+                w.WriteEndElement(); // tr
             }
             w.WriteEndElement();//tbody
             w.WriteEndElement();//table

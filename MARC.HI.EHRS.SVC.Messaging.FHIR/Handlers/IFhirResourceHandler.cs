@@ -23,17 +23,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         /// <summary>
         /// Read a specific version of a resource
         /// </summary>
-        FhirOperationResult Read(decimal id, decimal versionId);
+        FhirOperationResult Read(string id, string versionId);
 
         /// <summary>
         /// Update a resource
         /// </summary>
-        FhirOperationResult Update(decimal id, ResourceBase target, DataPersistenceMode mode);
+        FhirOperationResult Update(string id, ResourceBase target, DataPersistenceMode mode);
 
         /// <summary>
         /// Delete a resource
         /// </summary>
-        FhirOperationResult Delete(decimal id, DataPersistenceMode mode);
+        FhirOperationResult Delete(string id, DataPersistenceMode mode);
 
         /// <summary>
         /// Create a resource
@@ -43,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         /// <summary>
         /// Validate a resource
         /// </summary>
-        FhirOperationResult Validate(decimal id, ResourceBase target);
+        FhirOperationResult Validate(string id, ResourceBase target);
 
         /// <summary>
         /// Query a FHIR resource
