@@ -14,9 +14,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// <summary>
         /// Creates a new instance of the WcfEndpoint
         /// </summary>
-        public FhirServiceConfiguration(string wcfEndpoint)
+        public FhirServiceConfiguration(string wcfEndpoint, string landingPage)
         {
             this.WcfEndpoint = wcfEndpoint;
+            this.LandingPage = landingPage;
         }
 
         /// <summary>
@@ -24,5 +25,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// </summary>
         public string WcfEndpoint { get; private set; }
 
+        /// <summary>
+        /// The landing page file
+        /// </summary>
+        public string LandingPage { get; private set; }
     }
 }

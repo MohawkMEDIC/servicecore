@@ -55,5 +55,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public Shareable Value { get; set; }
 
 
+        /// <summary>
+        /// Write extension information
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            if(this.Value != null)
+                this.Value.WriteText(w);
+            w.WriteString(" - Profile: ");
+            this.Url.WriteText(w);
+            
+        }
+
     }
 }

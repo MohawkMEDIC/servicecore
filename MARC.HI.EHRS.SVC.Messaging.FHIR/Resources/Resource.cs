@@ -6,6 +6,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
 using System.Net;
 using System.Diagnostics;
+using System.ServiceModel.Web;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -38,7 +39,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the reference
         /// </summary>
         [XmlElement("reference")]
-        public PrimitiveCode<String> Reference { get; set; }
+        public FhirUri Reference { get; set; }
 
         /// <summary>
         /// Gets or sets the display
@@ -63,8 +64,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             // Request uri
             Uri requestUri = null;
 
-            if (!Uri.TryCreate(this.Reference.Value, UriKind.Absolute, out requestUri))
-                requestUri = new Uri(baseUri, this.Reference.Value);
+            if (!this.Reference.Value.IsAbsoluteUri)
+                requestUri = new Uri(baseUri, this.Reference.Value.ToString());
 
             // Make request to URI
             Trace.TraceInformation("Fetching from {0}...", requestUri);
@@ -91,6 +92,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 throw;
             }
 
+        }
+
+        /// <summary>
+        /// Write text
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            this.Reference.WriteText(w);
+            
         }
 
     }

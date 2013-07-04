@@ -129,7 +129,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         protected void WriteTableHeader(XmlWriter w, Shareable value)
         {
-            this.WriteTableCellInternal(w, value, 1, 1, "th");
+            this.WriteTableCellInternal(w, value, 1, 1, "th", null);
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         protected void WriteTableCell(XmlWriter w, Shareable value)
         {
-            this.WriteTableCellInternal(w, value, 1, 1, "td");
+            this.WriteTableCellInternal(w, value, 1, 1, "td", null);
         }
 
         /// <summary>
@@ -145,7 +145,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         protected void WriteTableHeader(XmlWriter w, Shareable value, int colspan, int rowspan)
         {
-            this.WriteTableCellInternal(w, value, colspan, rowspan, "th");
+            this.WriteTableCellInternal(w, value, colspan, rowspan, "th", null);
+        }
+
+        /// <summary>
+        /// Write a table header using the specified style
+        /// </summary>
+        protected void WriteTableHeader(XmlWriter w, Shareable value, int colspan, int rowspan, string style)
+        {
+            this.WriteTableCellInternal(w, value, colspan, rowspan, "th", style);
         }
 
         /// <summary>
@@ -181,15 +189,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         protected void WriteTableCell(XmlWriter w, Shareable value, int colspan, int rowspan)
         {
-            this.WriteTableCellInternal(w, value, colspan, rowspan, "td");
+            this.WriteTableCellInternal(w, value, colspan, rowspan, "td", null);
+        }
+
+        /// <summary>
+        /// Write a table cell using the specified style
+        /// </summary>
+        protected void WriteTableCell(XmlWriter w, Shareable value, int colspan, int rowspan, string style)
+        {
+            this.WriteTableCellInternal(w, value, colspan, rowspan, "td", style);
         }
 
         /// <summary>
         /// Write table cell utility
         /// </summary>
-        private void WriteTableCellInternal(XmlWriter w, Shareable value, int colspan, int rowspan, string tagName)
+        private void WriteTableCellInternal(XmlWriter w, Shareable value, int colspan, int rowspan, string tagName, string style)
         {
             w.WriteStartElement(tagName, NS_XHTML);
+
+            // CSS
+            if(!String.IsNullOrEmpty(style))
+                w.WriteAttributeString("style", style);
             if (colspan > 1)
                 w.WriteAttributeString("colspan", colspan.ToString());
             if (rowspan > 1)

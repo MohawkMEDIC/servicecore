@@ -18,6 +18,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [ResourceProfile(Name = "profile")]
     public class Profile : ResourceBase
     {
+
+        /// <summary>
+        /// Status structure
+        /// </summary>
+        [XmlType("Status", Namespace = "http://hl7.org/fhir")]
+        public class StatusType
+        {
+            /// <summary>
+            /// The status of the object
+            /// </summary>
+            [XmlElement("code")]
+            [Description("draft | testing | review | production | withdrawn | superseded")]
+            public PrimitiveCode<String> Code { get; set; }
+            /// <summary>
+            /// A comment containing supplemental status info
+            /// </summary>
+            [XmlElement("comment")]
+            [Description("Supplemental status info")]
+            public FhirString Comment { get; set; }
+        }
+
         /// <summary>
         /// Creates a new instance of the profile resource
         /// </summary>
@@ -27,6 +48,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.ExtensionDefinition = new List<ExtensionDefinition>();
             this.Binding = new List<BindingDefinition>();
             this.Import = new List<ProfileImport>();
+            this.Telecom = new List<Telecom>();
+            this.Code = new List<Coding>();
+
         }
 
         /// <summary>
@@ -71,6 +95,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Natural language description of the profile")]
         [XmlElement("description")]
         public FhirString Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets codes used for indexing
+        /// </summary>
+        [Description("A code to assist with indexing and finding")]
+        [XmlElement("code")]
+        public List<Coding> Code { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status
+        /// </summary>
+        [Description("The current status")]
+        [XmlElement("status")]
+        [ElementProfile(MinOccurs = 1)]
+        public StatusType Status { get; set; }
 
         /// <summary>
         /// Represents an import of a profile
@@ -131,6 +170,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             // Extensions
             foreach (var ext in this.ExtensionDefinition)
                 ext.WriteText(w);
+
+            // Bindings
+            foreach (var bind in this.Binding)
+                bind.WriteText(w);
         }
     }
 }

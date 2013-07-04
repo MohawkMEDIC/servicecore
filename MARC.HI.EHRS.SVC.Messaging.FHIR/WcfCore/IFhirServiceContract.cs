@@ -8,6 +8,7 @@ using System.ServiceModel.Web;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using System.IO;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 {
@@ -26,6 +27,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     public interface IFhirServiceContract
     {
 
+        /// <summary>
+        /// Get index page
+        /// </summary>
+        [WebGet(UriTemplate = "/")]
+        Stream Index();
+ 
         /// <summary>
         /// Read a resource
         /// </summary>

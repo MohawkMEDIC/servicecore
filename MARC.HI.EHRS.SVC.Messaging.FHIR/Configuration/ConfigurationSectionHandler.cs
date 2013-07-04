@@ -22,20 +22,24 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             
             // Section
             XmlElement serviceElement = section.SelectSingleNode("./*[local-name() = 'service']") as XmlElement;
-            string wcfServiceName = String.Empty;
+            string wcfServiceName = String.Empty,
+                landingPage = String.Empty;
 
             if (serviceElement != null)
             {
-                XmlAttribute serviceName = serviceElement.Attributes["wcfServiceName"];
+                XmlAttribute serviceName = serviceElement.Attributes["wcfServiceName"],
+                    landingPageNode = serviceElement.Attributes["landingPage"];
                 if (serviceName != null)
                     wcfServiceName = serviceName.Value;
                 else
                     throw new ConfigurationErrorsException("Missing wcfServiceName attribute", serviceElement);
+                if (landingPageNode != null)
+                    landingPage = landingPageNode.Value;
             }
             else
                 throw new ConfigurationErrorsException("Missing serviceElement", section);
 
-            return new FhirServiceConfiguration(wcfServiceName);
+            return new FhirServiceConfiguration(wcfServiceName, landingPage);
         }
 
         #endregion

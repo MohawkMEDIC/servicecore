@@ -19,7 +19,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("name")]
         [Description("Defines a linkage between a vocabulary binding name used in the profile (or expected to be used in profile importing this one) and a value set or code list")]
-        public FhirString String { get; set; }
+        public FhirString Name { get; set; }
         /// <summary>
         /// The definition (description) of the binding
         /// </summary>
@@ -47,8 +47,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Identifies the referenced value set
         /// </summary>
-        [XmlElement("referenceValueSet")]
+        [XmlElement("referenceUri", typeof(FhirUri))]
+        [XmlElement("referenceResource", typeof(Resource<ValueSet>))]
         [Description("Points to the value set or external definition that identifies the set of codes to be used")]
-        public Resource<ValueSet> Reference { get; set; }
+        public Shareable Reference { get; set; }
+
+        /// <summary>
+        /// Write text
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            w.WriteStartElement("table");
+            w.WriteAttributeString("border", "1");
+            w.WriteElementString("caption", String.Format("ValueSet Binding - {0}", this.Name));
+            w.WriteStartElement("tbody");
+
+            // Output the 
+            base.WriteTableRows(w, "Type", this.Type);
+            base.WriteTableRows(w, "Extensible", this.IsExtensible);
+            base.WriteTableRows(w, "Conformance", this.Conformance);
+            base.WriteTableRows(w, "Reference", this.Reference);
+            w.WriteEndElement(); // tbody
+            w.WriteEndElement(); // table      
+        }
     }
 }

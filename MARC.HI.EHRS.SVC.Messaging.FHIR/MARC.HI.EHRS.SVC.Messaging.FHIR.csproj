@@ -82,6 +82,7 @@
     <Compile Include="FhirQuery.cs" />
     <Compile Include="FhirQueryResult.cs" />
     <Compile Include="Handlers\IFhirResourceHandler.cs" />
+    <Compile Include="Handlers\ProfileResourceHandler.cs" />
     <Compile Include="PersistenceResultDetail.cs" />
     <Compile Include="Handlers\FhirResourceHandlerUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,12 +95,11 @@
     <Compile Include="Resources\ConceptSet.cs" />
     <Compile Include="Resources\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
-    <Compile Include="Resources\Demographics.cs" />
     <Compile Include="Resources\Element.cs" />
     <Compile Include="Resources\ElementDefinition.cs" />
     <Compile Include="Resources\ExtensionDefinition.cs" />
     <Compile Include="Resources\Issue.cs" />
-    <Compile Include="Resources\Language.cs" />
+    <Compile Include="Resources\Communication.cs" />
     <Compile Include="Resources\Narrative.cs" />
     <Compile Include="Resources\OperationOutcome.cs" />
     <Compile Include="Resources\Organization.cs" />
@@ -120,6 +120,7 @@
     <Compile Include="ResultDetailClasses.cs" />
     <Compile Include="Util\AuditUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
+    <Compile Include="Util\ProfileUtil.cs" />
     <Compile Include="WcfCore\FhirServiceBehavior.cs" />
     <Compile Include="WcfCore\IFhirServiceContract.cs" />
   </ItemGroup>
@@ -132,6 +133,9 @@
       <Project>{9408A628-EEC4-4F21-8408-4E1CB3AB0815}</Project>
       <Name>MARC.HI.EHRS.SVC.DecisionSupport</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="index.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -65,8 +65,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             
             // Output the 
             base.WriteTableRows(w, "Applies To", this.Context.ToArray());
-            base.WriteTableRows(w, "Type", this.Definition.Type[0]);
-            base.WriteTableRows(w, "Binding", this.Definition.Binding);
+
+            base.WriteTableRows(w, "Type", this.Definition.Type.ToArray());
+
+            if(this.Definition.Binding != null)
+            {
+                w.WriteStartElement("tr");
+                
+                base.WriteTableCell(w, (FhirString)"Binding");
+                w.WriteStartElement("td");
+                w.WriteStartElement("a");
+                w.WriteAttributeString("href", String.Format("#{0}", this.Definition.Binding));
+                w.WriteString(this.Definition.Binding);
+                w.WriteEndElement(); // a
+                w.WriteEndElement(); //td
+                w.WriteEndElement(); //tr
+
+            }
             base.WriteTableRows(w, "Comments", this.Definition.Comments ?? this.Definition.FormalDefinition ?? this.Definition.ShortDefinition);
             w.WriteEndElement(); // tbody
             w.WriteEndElement(); // table        }

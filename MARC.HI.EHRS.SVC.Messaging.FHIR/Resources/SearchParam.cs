@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -18,16 +20,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the name of the search parameter
         /// </summary>
         [XmlElement("name")]
+        [Description("The name of the search parameter")]
+        [ElementProfile(MinOccurs = 1)]
         public FhirString Name { get; set; }
+
         /// <summary>
         /// Gets or sets the type of the parameter
         /// </summary>
         [XmlElement("type")]
+        [Description("The type of the search parameter")]
+        [ElementProfile(MinOccurs = 1)]
         public PrimitiveCode<String> Type { get; set; }
         /// <summary>
         /// Gets or sets the documentation related to the parameter
         /// </summary>
         [XmlElement("documentation")]
+        [Description("Contents and meaning of the parameter")]
+        [ElementProfile (MinOccurs = 1)]
         public FhirString Documentation { get; set; }
 
         /// <summary>

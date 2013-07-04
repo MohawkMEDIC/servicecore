@@ -31,21 +31,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.Link = new List<Resource<Patient>>();
             this.Identifier = new List<Identifier>();
             this.Active = new FhirBoolean(true);
+            this.Name = new List<HumanName>();
+            this.Telecom = new List<Telecom>();
+            this.Address = new List<Address>();
+            this.Language = new List<Communication>();
+            this.Photo = new List<Attachment>();
         }
-
-        /// <summary>
-        /// Link between this patient and others
-        /// </summary>
-        [XmlElement("link")]
-        [Description("Other patient resources linked to this patient resource")]
-        public List<Resource<Patient>> Link { get; set; }
-
-        /// <summary>
-        /// True when the patient is active
-        /// </summary>
-        [XmlElement("active")]
-        [Description("Whether this patient's record is in active use")]
-        public FhirBoolean Active { get; set; }
 
         /// <summary>
         /// Gets or sets a list of identifiers
@@ -56,11 +47,71 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public List<Identifier> Identifier { get; set; }
 
         /// <summary>
-        /// Patient demographics 
+        /// The name of the individual
         /// </summary>
-        [XmlElement("details")]
-        [Description("Patient demographics")]
-        public Demographics Details { get; set; }
+        [XmlElement("name")]
+        [Description("A name associated with the individual")]
+        public List<HumanName> Name { get; set; }
+
+        /// <summary>
+        /// The telecommunications addresses for the individual
+        /// </summary>
+        [XmlElement("telecom")]
+        [Description("A contact detail for the individual")]
+        public List<Telecom> Telecom { get; set; }
+
+        /// <summary>
+        /// The gender of the individual
+        /// </summary>
+        [XmlElement("gender")]
+        [Description("Gender for administrative purposes")]
+        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
+        public CodeableConcept Gender { get; set; }
+
+        /// <summary>
+        /// The birth date of the individual
+        /// </summary>
+        [XmlElement("birthDate")]
+        [Description("The date and time of birth for the individual")]
+        public Date BirthDate { get; set; }
+
+        /// <summary>
+        /// True if the individual is deceased
+        /// </summary>
+        [XmlElement("deceasedDateTime", typeof(Date))]
+        [XmlElement("deceasedBoolean", typeof(FhirBoolean))]
+        [Description("Indicates if the individual is deceased or not")]
+        public Object Deceased { get; set; }
+
+        /// <summary>
+        /// Gets or sets the addresses of the user
+        /// </summary>
+        [XmlElement("address")]
+        [Description("Addresses for the individual")]
+        public List<Address> Address { get; set; }
+
+        /// <summary>
+        /// Gets or sets the marital status of the user
+        /// </summary>
+        [XmlElement("maritalStatus")]
+        [Description("Marital (civil) status of a person")]
+        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/marital-status")]
+        public CodeableConcept MaritalStatus { get; set; }
+
+        /// <summary>
+        /// The multiple birth indicator
+        /// </summary>
+        [XmlElement("multipleBirthInteger", typeof(FhirInt))]
+        [XmlElement("multipleBirthBoolean", typeof(FhirBoolean))]
+        [Description("Whether patient is part of a multiple birth")]
+        public Shareable MultipleBirth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the photograph of the user
+        /// </summary>
+        [XmlElement("photo")]
+        [Description("Image of the person")]
+        public List<Attachment> Photo { get; set; }
 
         /// <summary>
         /// Contact details
@@ -78,6 +129,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public Animal Animal { get; set; }
 
         /// <summary>
+        /// Gets or sets the language of the user
+        /// </summary>
+        [Description("Person's proficiancy level of a language")]
+        [XmlElement("communication")]
+        public List<Communication> Language { get; set; }
+
+        /// <summary>
         /// Provider of the patient resource
         /// </summary>
         [XmlElement("provider")]
@@ -85,19 +143,18 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public Resource<Organization> Provider { get; set; }
 
         /// <summary>
-        /// The multiple birth indicator
+        /// Link between this patient and others
         /// </summary>
-        [XmlElement("multipleBirthInteger", typeof(FhirInt))]
-        [XmlElement("multipleBirthBoolean", typeof(FhirBoolean))]
-        [Description("Whether patient is part of a multiple birth")]
-        public Shareable MultipleBirth { get; set; }
+        [XmlElement("link")]
+        [Description("Other patient resources linked to this patient resource")]
+        public List<Resource<Patient>> Link { get; set; }
 
         /// <summary>
-        /// The deceased date of the resource
+        /// True when the patient is active
         /// </summary>
-        [XmlElement("deceasedDate")]
-        [Description("Date of death of the patient")]
-        public Date DeceasedDate { get; set; }
+        [XmlElement("active")]
+        [Description("Whether this patient's record is in active use")]
+        public FhirBoolean Active { get; set; }
 
         /// <summary>
         /// Generate the narrative
@@ -113,9 +170,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             xw.WriteEndElement(); // tbody
             xw.WriteEndElement(); // table
 
-            if (this.Details != null)
-                this.Details.WriteText(xw);
+            // Now output demographics
+            xw.WriteStartElement("table", NS_XHTML);
+            xw.WriteElementString("caption", NS_XHTML, "Demographic Information");
+            xw.WriteStartElement("tbody", NS_XHTML);
+            base.WriteTableRows(xw, "Name", this.Name.ToArray());
+            base.WriteTableRows(xw, "DOB", this.BirthDate);
+            base.WriteTableRows(xw, "Gender", this.Gender);
+            base.WriteTableRows(xw, "Address", this.Address.ToArray());
+            base.WriteTableRows(xw, "Contacts", this.Telecom.ToArray());
+            // Extended Attributes
+            base.WriteTableRows(xw, "Extended Attributes", this.Extension.ToArray());
+            xw.WriteEndElement(); // tbody
+            xw.WriteEndElement(); // table
 
+            
         }
 
     }

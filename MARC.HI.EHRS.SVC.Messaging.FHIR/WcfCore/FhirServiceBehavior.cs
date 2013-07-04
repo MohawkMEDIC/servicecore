@@ -17,6 +17,8 @@ using System.Data;
 using System.IO;
 using System.Xml;
 using System.Net;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
+using System.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 {
@@ -27,6 +29,42 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     {
 
         #region IFhirServiceContract Members
+
+        /// <summary>
+        /// Get the index
+        /// </summary>
+        public Stream Index()
+        {
+            try
+            {
+                WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"index.html\"");
+                WebOperationContext.Current.OutgoingResponse.LastModified = DateTime.UtcNow;
+                FhirServiceConfiguration config = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+                if (!String.IsNullOrEmpty(config.LandingPage))
+                {
+                    using (var fs = File.OpenRead(config.LandingPage))
+                    {
+                        MemoryStream ms = new MemoryStream();
+                        int br = 1024;
+                        byte[] buffer = new byte[1024];
+                        while (br == 1024)
+                        {
+                            br = fs.Read(buffer, 0, 1024);
+                            ms.Write(buffer, 0, br);
+                        }
+                        ms.Seek(0, SeekOrigin.Begin);
+                        return ms;
+                    }
+                }
+                else
+                    return typeof(FhirServiceBehavior).Assembly.GetManifestResourceStream("MARC.HI.EHRS.SVC.Messaging.FHIR.index.htm");
+            }
+            catch (IOException)
+            {
+                throw new WebFaultException(HttpStatusCode.NotFound);
+            }
+        }
 
         /// <summary>
         /// Read a reasource

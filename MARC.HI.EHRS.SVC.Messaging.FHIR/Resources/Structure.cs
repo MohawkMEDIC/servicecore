@@ -5,6 +5,7 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -34,6 +35,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("type")]
         [Description("The Resource or Data type being described")]
+        [ElementProfile(MinOccurs = 1)]
         public PrimitiveCode<String> Type { 
             get
             {
@@ -79,18 +81,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Reference to a resource profile that includes the constraint statement that applies to this resource")]
         [XmlElement("profile")]
         public FhirString Profile { get; set; }
-        /// <summary>
-        /// Gets or sets the search parameters supported on the structure
-        /// </summary>
-        [XmlElement("searchParam")]
-        [Description("Defines additional search parameters for implementations to support and/or make use of")]
-        public List<SearchParam> SearchParams { get; set; }
+        
         /// <summary>
         /// Gets or sets the elements that are supported in the resource
         /// </summary>
         [XmlElement("element")]
         [Description("Captures constraints on each element within the resource")]
         public List<Element> Elements { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the search parameters supported on the structure
+        /// </summary>
+        [XmlElement("searchParam")]
+        [Description("Defines additional search parameters for implementations to support and/or make use of")]
+        public List<SearchParam> SearchParams { get; set; }
 
         /// <summary>
         /// Write text

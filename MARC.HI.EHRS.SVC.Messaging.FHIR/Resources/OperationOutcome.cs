@@ -31,7 +31,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets a list of issues 
         /// </summary>
         [XmlElement("issue")]
-        [Description("A list of detected issues")]
+        [Description("A list of issues related to the operation")]
+        [ElementProfile(MinOccurs = 1)]
         public List<Issue> Issue { get; set; }
 
     }

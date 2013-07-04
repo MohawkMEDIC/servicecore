@@ -64,6 +64,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         public Type Binding { get; set; }
 
         /// <summary>
+        /// Identifies the remote binding
+        /// </summary>
+        public String RemoteBinding { get; set; }
+
+        /// <summary>
+        /// Sets the fixed value type
+        /// </summary>
+        public Type ValueType { get; set; }
+
+        /// <summary>
         /// Min-occurs
         /// </summary>
         public int MinOccurs { get; set; }

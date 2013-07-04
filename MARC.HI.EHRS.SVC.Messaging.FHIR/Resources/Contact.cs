@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
+using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -18,18 +20,42 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the relationships between the container
         /// </summary>
         [XmlElement("relationship")]
+        [Description("The kind of relationship")]
         public List<CodeableConcept> Relationship { get; set; }
 
-        /// <summary>
-        /// Gets or sets the patient details
+        // The name of the individual
         /// </summary>
-        [XmlElement("details")]
-        public Demographics Details { get; set; }
+        [XmlElement("name")]
+        [Description("A name associated with the individual")]
+        public List<HumanName> Name { get; set; }
+
+        /// <summary>
+        /// The telecommunications addresses for the individual
+        /// </summary>
+        [XmlElement("telecom")]
+        [Description("A contact detail for the individual")]
+        public List<Telecom> Telecom { get; set; }
+
+        /// <summary>
+        /// The gender of the individual
+        /// </summary>
+        [XmlElement("gender")]
+        [Description("Gender for administrative purposes")]
+        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
+        public CodeableConcept Gender { get; set; }
+
+        /// <summary>
+        /// Gets or sets the addresses of the user
+        /// </summary>
+        [XmlElement("address")]
+        [Description("Addresses for the individual")]
+        public List<Address> Address { get; set; }
 
         /// <summary>
         /// Gets or sets the organization
         /// </summary>
         [XmlElement("organization")]
+        [Description("Organization that is associated with the contact")]
         public Resource<Organization> Organization { get; set; }
 
     }

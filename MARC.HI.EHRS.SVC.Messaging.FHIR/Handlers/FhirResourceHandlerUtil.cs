@@ -46,7 +46,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         /// </summary>
         public static IFhirResourceHandler GetResourceHandler(String resourceName)
         {
-            return s_messageProcessors.Find(o => o.ResourceName == resourceName);
+            return s_messageProcessors.Find(o => o.ResourceName.ToLower() == resourceName.ToLower());
         }
 
       

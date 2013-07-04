@@ -58,6 +58,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         /// </summary>
         public Type Binding { get; set; }
 
+        /// <summary>
+        /// Identifies a remote binding
+        /// </summary>
+        public String RemoteBinding { get; set; }
+
 
     }
 }

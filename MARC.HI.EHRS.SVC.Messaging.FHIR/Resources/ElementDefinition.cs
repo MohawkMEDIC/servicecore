@@ -101,9 +101,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 travType = travTypes.ToArray();
             }
 
-            var tr = TypeRef.MakeTypeRef(travType);
-            if (tr != null)
-                this.Type.Add(tr);
+            foreach (var t in travType)
+            {
+                var tr = TypeRef.MakeTypeRef(t);
+                if (tr != null)
+                    this.Type.Add(tr);
+            }
         }
 
         /// <summary>
@@ -111,6 +114,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("short")]
         [Description("A concise definition that is shown in the concise XML format that summarized profiles")]
+        [ElementProfile(MinOccurs = 1)]
         public FhirString ShortDefinition { get; set; }
 
         /// <summary>
@@ -118,6 +122,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("formal")]
         [Description("The definition must be consistent with the base definition but convey the meaning of the element")]
+        [ElementProfile(MinOccurs = 1)]
         public FhirString FormalDefinition { get; set; }
 
         /// <summary>
@@ -132,31 +137,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("min")]
         [Description("The minimum number of times this element must appear in the instance")]
+        [ElementProfile(MinOccurs = 1)]
         public FhirInt MinOccurs { get; set; }
         /// <summary>
         /// Maximum occurance
         /// </summary>
         [XmlElement("max")]
         [Description("The maximum number of times this element can appear in the instance")]
+        [ElementProfile(MinOccurs = 1)]
         public FhirString MaxOccurs { get; set; }
-        /// <summary>
-        /// True if the object must be supported
-        /// </summary>
-        [XmlElement("mustSupport")]
-        [Description("If true, conformant resource authors must be capable of providing a value for the element and resource consumers must be capable of extracting and doing something useful with the data element. If false, the element may be ignored and not supported")]
-        public FhirBoolean MustSupport { get; set; }
-        /// <summary>
-        /// True if the object must be understood
-        /// </summary>
-        [Description("If true, the element cannot be ignored by systems unless they recognize the element and a pre-determination has been made that it is not relevant to their particular system")]
-        [XmlElement("mustUnderstand")]
-        public FhirBoolean MustUnderstand { get; set; }
-        /// <summary>
-        /// The external binding if applicable
-        /// </summary>
-        [Description("Identifies the set of codes that applies to this element if a data type supporting codes is used")]
-        [XmlElement("binding")]
-        public FhirString Binding { get; set; }
 
         /// <summary>
         /// The type of the element
@@ -166,29 +155,86 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public List<TypeRef> Type { get; set; }
 
         /// <summary>
+        /// True if the object must be supported
+        /// </summary>
+        [XmlElement("mustSupport")]
+        [Description("If true, conformant resource authors must be capable of providing a value for the element and resource consumers must be capable of extracting and doing something useful with the data element. If false, the element may be ignored and not supported")]
+        public FhirBoolean MustSupport { get; set; }
+
+        /// <summary>
+        /// True if the object must be understood
+        /// </summary>
+        [Description("If true, the element cannot be ignored by systems unless they recognize the element and a pre-determination has been made that it is not relevant to their particular system")]
+        [XmlElement("mustUnderstand")]
+        public FhirBoolean MustUnderstand { get; set; }
+
+        /// <summary>
+        /// The external binding if applicable
+        /// </summary>
+        [Description("Identifies the set of codes that applies to this element if a data type supporting codes is used")]
+        [XmlElement("binding")]
+        public FhirString Binding { get; set; }
+
+        /// <summary>
         /// Write text utility
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
 
-            base.WriteTableCell(w, (FhirString)String.Format("{0}..{1} ", this.MinOccurs, this.MaxOccurs));
-            
-            if(this.Type != null && this.Type.Count > 0)
-                base.WriteTableCell(w, this.Type[0]);
+            // Style for minoccurs
+            string style = String.Empty;
+            if (this.MaxOccurs == "0")
+                style = "text-decoration:line-through";
+
+            base.WriteTableCell(w, (FhirString)String.Format("{0}..{1} ", this.MinOccurs, this.MaxOccurs), 1, 1, style);
+
+            if (this.Type != null && this.Type.Count > 0)
+            {
+                w.WriteStartElement("td");
+                foreach (var t in this.Type)
+                {
+                    t.WriteText(w);
+
+                    if (t != this.Type.Last())
+                        w.WriteString(" | ");
+                }
+                w.WriteEndElement(); // td
+            }
 
             w.WriteStartElement("td");
 
-            (this.Comments ?? this.FormalDefinition ?? this.ShortDefinition ?? new FhirString()).WriteText(w);
+
+            // Default content
+            w.WriteStartElement("span");
+            if (!String.IsNullOrEmpty(style))
+                w.WriteAttributeString("style", style);
+                        (this.FormalDefinition ?? this.ShortDefinition ?? new FhirString()).WriteText(w);
             if (this.Binding != null)
             {
+                w.WriteStartElement("br");
+                w.WriteEndElement();
                 w.WriteStartElement("em");
                 w.WriteString("Note: This value is bound to ");
                 w.WriteStartElement("a");
-                w.WriteAttributeString("href", this.Binding);
+                w.WriteAttributeString("href", String.Format("#{0}", this.Binding));
                 this.Binding.WriteText(w);
                 w.WriteEndElement(); // a
                 w.WriteEndElement(); // wm
             }
+            w.WriteEndElement(); // span
+
+            // Additional comments
+            if (this.Comments != null)
+            {
+                w.WriteStartElement("br");
+                w.WriteEndElement(); w.WriteStartElement("span"); // comments
+                w.WriteAttributeString("style", "color:red; font-style:italic");
+                w.WriteStartElement("strong");
+                w.WriteString("Additional Comments: ");
+                w.WriteEndElement(); // strong
+                w.WriteString(this.Comments);
+                w.WriteEndElement(); // span
+            }            
             w.WriteEndElement(); // td
 
             //base.WriteTableRows(w, "Definition", this.FormalDefinition);
