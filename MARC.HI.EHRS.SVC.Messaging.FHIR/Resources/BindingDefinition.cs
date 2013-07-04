@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents a binding definition
     /// </summary>
     [XmlType("Binding", Namespace = "http://hl7.org/fhir")]
-    public class BindingDefinition
+    public class BindingDefinition : Shareable
     {
         /// <summary>
         /// The name of the binding

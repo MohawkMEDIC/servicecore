@@ -12,8 +12,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents a structure definition
     /// </summary>
     [XmlType("Structure", Namespace = "http://hl7.org/fhir")]
-    public class Structure 
+    public class Structure : Shareable
     {
+        /// <summary>
+        /// Sharable structure
+        /// </summary>
+        public Structure() : base()
+        {
+            this.Elements = new List<Element>();
+            this.SearchParams = new List<SearchParam>();
+        }
 
         /// <summary>
         /// Gets or sets the resouce type
@@ -83,5 +91,104 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("element")]
         [Description("Captures constraints on each element within the resource")]
         public List<Element> Elements { get; set; }
+
+        /// <summary>
+        /// Write text
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            w.WriteStartElement("table");
+            w.WriteAttributeString("border", "1");
+            w.WriteElementString("caption", this.Name);
+            w.WriteStartElement("tbody");
+
+            w.WriteStartElement("tr");
+            w.WriteStartElement("td");
+
+            w.WriteStartElement("table");
+            w.WriteAttributeString("border", "1");
+            w.WriteElementString("caption", String.Format("Definition",  this.Name));
+            w.WriteStartElement("tbody");
+
+            // Write header rows 
+            w.WriteStartElement("tr");
+            base.WriteTableHeader(w, (FhirString)"Path");
+            base.WriteTableHeader(w, (FhirString)"Multiplicity");
+            base.WriteTableHeader(w, (FhirString)"Type");
+            base.WriteTableHeader(w, (FhirString)"Comments");
+            w.WriteEndElement(); // tr
+
+            foreach (var element in this.Elements)
+                element.WriteText(w);
+
+            // end
+            w.WriteEndElement(); // tbody
+            w.WriteEndElement(); // table
+            w.WriteEndElement(); // td
+            w.WriteEndElement(); // tr
+
+            // next row
+            w.WriteStartElement("tr");
+            w.WriteStartElement("td");
+
+
+            w.WriteStartElement("table");
+            w.WriteAttributeString("border", "1");
+            w.WriteElementString("caption", String.Format("Search Parameters", this.Name));
+            w.WriteStartElement("tbody");
+            // Write header rows 
+            w.WriteStartElement("tr");
+            base.WriteTableHeader(w, (FhirString)"Parameter");
+            base.WriteTableHeader(w, (FhirString)"Type");
+            base.WriteTableHeader(w, (FhirString)"Definition");
+            w.WriteEndElement(); // tr
+
+            // Write each of the profile elements
+            foreach (var search in this.SearchParams)
+                search.WriteText(w);
+
+            w.WriteEndElement(); // tbody
+            w.WriteEndElement(); // table
+            w.WriteEndElement(); // td
+            w.WriteEndElement(); // tr
+            w.WriteEndElement(); // tbody
+            w.WriteEndElement(); // table
+
+            //w.WriteStartElement("div");
+            //w.WriteAttributeString("class", "resource");
+
+            //// Output the name of the resource
+            //w.WriteStartElement("a");
+            //w.WriteAttributeString("href", String.Format("#{0}", this.Name));
+            //w.WriteAttributeString("class", "h2");
+            //this.Name.WriteText(w);
+            //w.WriteEndElement(); // span
+
+            //// Elements
+            //w.WriteStartElement("table");
+            //w.WriteElementString("caption", "Elements");
+            //w.WriteStartElement("tbody");
+
+            //// Write each of the profile elements
+            //foreach (var element in this.Elements)
+            //    element.WriteText(w);
+
+            //w.WriteEndElement(); // tbody
+            //w.WriteEndElement(); // table
+
+
+            //w.WriteStartElement("table");
+            //w.WriteElementString("caption", "Search Parameters");
+            //w.WriteStartElement("tbody");
+
+            //// Write each of the profile elements
+            //foreach (var search in this.SearchParams)
+            //    search.WriteText(w);
+
+            //w.WriteEndElement(); // tbody
+            //w.WriteEndElement(); // table
+
+            //w.WriteEndElement(); // div
+        }
     }
 }

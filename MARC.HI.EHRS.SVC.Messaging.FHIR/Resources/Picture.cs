@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
 
     [XmlRoot("Picture", Namespace = "http://hl7.org/fhir")]
     [XmlType("Picture", Namespace = "http://hl7.org/fhir")]
+    [Profile(ProfileId = "svccore")]
+    [ResourceProfile(Name = "ServiceCore Resource - Picture")]
     public class Picture : ResourceBase
     {
         

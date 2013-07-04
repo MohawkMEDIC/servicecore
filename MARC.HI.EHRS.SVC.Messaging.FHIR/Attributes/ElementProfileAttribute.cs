@@ -44,14 +44,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         public string FormalDefinition { get; set; }
 
         /// <summary>
-        /// Min-occurs
+        /// Comment
         /// </summary>
-        public int MinOccurs { get; set; }
-
-        /// <summary>
-        /// Max-occurs
-        /// </summary>
-        public int MaxOccurs { get; set; }
+        public string Comment { get; set; }
 
         /// <summary>
         /// True if the implementer must support
@@ -67,5 +62,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         /// Identifies the binding (value set)
         /// </summary>
         public Type Binding { get; set; }
+
+        /// <summary>
+        /// Min-occurs
+        /// </summary>
+        public int MinOccurs { get; set; }
+
+        /// <summary>
+        /// Max-occurs
+        /// </summary>
+        public int MaxOccurs { get; set; }
+
     }
 }

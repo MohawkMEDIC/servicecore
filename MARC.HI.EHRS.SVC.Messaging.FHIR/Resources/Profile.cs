@@ -26,6 +26,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.Structure = new List<Structure>();
             this.ExtensionDefinition = new List<ExtensionDefinition>();
             this.Binding = new List<BindingDefinition>();
+            this.Import = new List<ProfileImport>();
         }
 
         /// <summary>
@@ -72,6 +73,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirString Description { get; set; }
 
         /// <summary>
+        /// Represents an import of a profile
+        /// </summary>
+        [XmlElement("import")]
+        [Description("Import of another profile")]
+        public List<ProfileImport> Import { get; set; }
+
+        /// <summary>
         /// The resource or data type constraint
         /// </summary>
         [Description("A constraint on a resource or datatype")]
@@ -92,6 +100,37 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Defines a linkage between a vocabulary binding name used in the profile (or expected to be used in profile importing this one) and a value set or code list")]
         public List<BindingDefinition> Binding { get; set; }
 
+        /// <summary>
+        /// Write a text representation of the profile
+        /// </summary>
+        /// <param name="w"></param>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
 
+            w.WriteStartElement("div");
+            w.WriteAttributeString("class", "h1");
+            this.Name.WriteText(w);
+            w.WriteEndElement(); // div
+
+            w.WriteStartElement("em");
+            this.Publisher.WriteText(w);
+            w.WriteEndElement(); // em
+
+            // Emit description
+            if (this.Description != null)
+            {
+                w.WriteStartElement("p");
+                this.Description.WriteText(w);
+                w.WriteEndElement(); //p
+            }
+
+            // Resource content
+            foreach (var res in this.Structure)
+                res.WriteText(w);
+
+            // Extensions
+            foreach (var ext in this.ExtensionDefinition)
+                ext.WriteText(w);
+        }
     }
 }

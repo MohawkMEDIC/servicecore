@@ -19,7 +19,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlRoot("Patient", Namespace = "http://hl7.org/fhir")] 
     [ParticipantObjectMap(IdType = AuditableObjectIdType.PatientNumber, Role = AuditableObjectRole.Patient, Type = AuditableObjectType.Person, OidName = "CR_CID")]
     [Profile(ProfileId = "svccore", Name = "MARC-HI ServiceCore FHIR Profile", Import = "http://hl7.org/implement/standards/fhir/profiles-resources.xml")]
-    [ResourceProfile(Name = "patient")]
+    [ResourceProfile(Name = "ServiceCore Resource - Patient")]
     public class Patient : ResourceBase
     {
 

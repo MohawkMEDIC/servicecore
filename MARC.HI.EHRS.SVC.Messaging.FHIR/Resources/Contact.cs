@@ -10,7 +10,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// <summary>
     /// Contact information
     /// </summary>
-    [XmlType("Contact", Namespace = "http://hl7.org/fhir")]
+    [XmlType("ContactInfo", Namespace = "http://hl7.org/fhir")]
     public class Contact : Shareable
     {
 

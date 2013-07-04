@@ -21,6 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.Telecom = new List<Telecom>();
             this.Address = new List<Address>();
             this.Language = new List<Language>();
+            this.Photo = new List<Attachment>();
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("photo")]
         [Description("Image of the person")]
-        public Resource<Picture> Photo { get; set; }
+        public List<Attachment> Photo { get; set; }
         /// <summary>
         /// Gets or sets the marital status of the user
         /// </summary>

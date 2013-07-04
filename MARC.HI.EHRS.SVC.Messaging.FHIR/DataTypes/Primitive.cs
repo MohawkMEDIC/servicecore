@@ -165,7 +165,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     public class FhirString : Primitive<String> {
         public FhirString() : base() { }
         public FhirString(String value) : base(value) { }
-        public static implicit operator FhirString(string v) { return new FhirString(v); }
+        public static implicit operator FhirString(string v) { return v == null ? null : new FhirString(v); }
 
     }
     /// <summary>

@@ -9,7 +9,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// <summary>
     /// Represents a telecommunications address
     /// </summary>
-    [XmlType("Telecom", Namespace="http://hl7.org/fhir")]
+    [XmlType("Contact", Namespace="http://hl7.org/fhir")]
     public class Telecom : Shareable
     {
         /// <summary>

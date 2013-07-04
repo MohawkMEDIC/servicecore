@@ -83,7 +83,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             w.WriteStartElement("caption");
             this.Name.WriteText(w);
             w.WriteString("(");
-            this.Identifier.WriteText(w);
+
+            if(this.Identifier != null)
+                this.Identifier.WriteText(w);
             w.WriteString(") - ");
 
             if (this.Define != null)
@@ -107,7 +109,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 foreach (var itm in this.Define.Concept)
                 {
                     w.WriteStartElement("tr");
-                    this.WriteTableCell(w, itm.Code);
+                    this.WriteTableCell(w, itm);
                     this.WriteTableCell(w, this.Define.System);
                     this.WriteTableCell(w, itm.Display);
                     w.WriteEndElement(); // tr

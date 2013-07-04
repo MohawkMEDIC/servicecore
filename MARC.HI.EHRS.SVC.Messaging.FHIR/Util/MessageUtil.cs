@@ -37,17 +37,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// </summary>
         public static string TranslateFhirDomain(string fhirDomain)
         {
-            if (fhirDomain.StartsWith("urn:oid:"))
+            Uri fhirDomainUri = null;
+            if (MARC.Everest.DataTypes.II.IsValidOidFlavor(new MARC.Everest.DataTypes.II(fhirDomain)))
+                return fhirDomain;
+            else if (fhirDomain.StartsWith("urn:oid:"))
                 return fhirDomain.Replace("urn:oid:", "");
             else if (fhirDomain.StartsWith("urn:ietf:rfc:3986"))
                 return fhirDomain;
-            else
+            else if (Uri.TryCreate(fhirDomain, UriKind.Absolute, out fhirDomainUri))
             {
-                var oid = ApplicationContext.ConfigurationService.OidRegistrar.FindData(new Uri(fhirDomain));
+                var oid = ApplicationContext.ConfigurationService.OidRegistrar.FindData(fhirDomainUri);
                 if (oid == null)
                     throw new InvalidOperationException(String.Format("Could not locate the specified domain '{0}'", fhirDomain));
                 return oid.Oid;
             }
+            else
+                return fhirDomain;
         }
 
         /// <summary>
@@ -85,18 +90,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Create a feed
         /// </summary>
-        internal static SyndicationFeed CreateFeed(FhirQueryResult result)
+        internal static SyndicationFeed CreateFeed(FhirOperationResult result)
         {
 
             SyndicationFeed retVal = new SyndicationFeed();
+            FhirQueryResult queryResult = result as FhirQueryResult;
 
-            int pageNo = result.Query.Start / result.Query.Quantity,
-                nPages = (result.TotalResults / result.Query.Quantity) + 1;
+            int pageNo = queryResult == null || queryResult.Query.Quantity == 0 ? 0 : queryResult.Query.Start / queryResult.Query.Quantity,
+                nPages = queryResult == null || queryResult.Query.Quantity == 0 ? 1 : (queryResult.TotalResults / queryResult.Query.Quantity) + 1;
 
             if (result.Details.Exists(o => o.Type == ResultDetailType.Error))
-                retVal.Title = new TextSyndicationContent(String.Format("Search Error", pageNo));
+                retVal.Title = new TextSyndicationContent(String.Format("Error", pageNo));
             else
-                retVal.Title = new TextSyndicationContent(String.Format("Search Page {0}", pageNo));
+                retVal.Title = new TextSyndicationContent(String.Format("Results Page {0}", pageNo));
             retVal.Id = String.Format("urn:uuid:{0}", Guid.NewGuid());
 
             // Make the Self uri
@@ -105,11 +111,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 baseUri = baseUri.Substring(0, baseUri.IndexOf("?") + 1);
 
             // Self uri
-            for (int i = 0; i < result.Query.ActualParameters.Count; i++)
-                foreach (var itm in result.Query.ActualParameters.GetValues(i))
-                    baseUri += string.Format("{0}={1}&", result.Query.ActualParameters.GetKey(i), itm);
-
-            baseUri += String.Format("stateid={0}&", result.Query.QueryId);
+            if (queryResult != null)
+            {
+                for (int i = 0; i < queryResult.Query.ActualParameters.Count; i++)
+                    foreach (var itm in queryResult.Query.ActualParameters.GetValues(i))
+                        baseUri += string.Format("{0}={1}&", queryResult.Query.ActualParameters.GetKey(i), itm);
+                baseUri += String.Format("stateid={0}&", queryResult.Query.QueryId);
+            }
 
             // Self URI
             if (nPages > 1)
@@ -135,7 +143,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             //retVal.
             // Results
-            if (result.TotalResults != 0)
+            if (result.Results != null)
             {
                 var feedItems = new List<SyndicationItem>();
                 foreach (ResourceBase itm in result.Results)

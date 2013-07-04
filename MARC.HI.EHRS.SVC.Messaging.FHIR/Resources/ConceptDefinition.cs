@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Identifies a concept definition
     /// </summary>
     [XmlType("Concept", Namespace = "http://hl7.org/fhir")]
-    public class ConceptDefinition
+    public class ConceptDefinition : Shareable
     {
 
         /// <summary>
@@ -39,5 +39,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("definition")]
         public FhirString Definition { get; set; }
+
+        /// <summary>
+        /// Write text
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            w.WriteStartElement("a");
+            w.WriteAttributeString("href", String.Format("#{0}", this.Code));
+            this.Code.WriteText(w);
+            w.WriteEndElement();
+        }
     }
 }

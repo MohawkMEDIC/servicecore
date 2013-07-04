@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Search parameter
     /// </summary>
     [XmlType("SearchParam", Namespace = "http://hl7.org/fhir")]
-    public class SearchParam
+    public class SearchParam : Shareable
     {
 
         /// <summary>
@@ -29,6 +29,18 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("documentation")]
         public FhirString Documentation { get; set; }
+
+        /// <summary>
+        /// Write textual output of the search parameter
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            w.WriteStartElement("tr");
+            base.WriteTableCell(w, this.Name);
+            base.WriteTableCell(w, this.Type);
+            base.WriteTableCell(w, this.Documentation);
+            w.WriteEndElement(); // tr
+        }
 
     }
 }

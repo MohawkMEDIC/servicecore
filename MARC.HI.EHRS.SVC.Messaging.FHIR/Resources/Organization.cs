@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -13,6 +14,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlRoot("Organization",Namespace = "http://hl7.org/fhir")] 
     [XmlType("Organization", Namespace = "http://hl7.org/fhir")]
+    [Profile(ProfileId = "svccore")]
+    [ResourceProfile(Name = "ServiceCore Resource - Organization")]
     public class Organization : ResourceBase
     {
 

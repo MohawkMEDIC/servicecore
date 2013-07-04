@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Identifies a concept set
     /// </summary>
     [XmlType("ConceptSet", Namespace = "http://hl7.org/fhir")]
-    public class ConceptSet
+    public class ConceptSet : Shareable
     {
         /// <summary>
         /// Concept set

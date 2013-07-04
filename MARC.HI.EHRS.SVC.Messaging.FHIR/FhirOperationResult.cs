@@ -15,6 +15,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
     {
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public FhirOperationResult()
+        {
+            this.Details = new List<IResultDetail>();
+            this.Issues = new List<DetectedIssue>();
+        }
+
+        /// <summary>
         /// Gets the overall outcome of the operation
         /// </summary>
         public ResultCode Outcome { get; set; }

@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -13,8 +14,38 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Describes an element
     /// </summary>
     [XmlType("Element", Namespace = "http://hl7.org/fhir")]
-    public class Element
+    public class Element : Shareable
     {
+
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public Element()
+        {
+
+        }
+
+         /// <summary>
+        /// Root type
+        /// </summary>
+        public Element(Type rootType)
+            : this()
+        {
+            var profile = rootType.GetCustomAttribute<ResourceProfileAttribute>();
+            var traversal = rootType.GetCustomAttribute<XmlRootAttribute>();
+
+            // Now populate!
+            // First, populate what we can
+            if (profile != null)
+                this.Name = profile.Name;
+
+            // The traversal
+            if (traversal != null)
+                this.Path = traversal.ElementName;
+
+            this.Definition = new ElementDefinition(rootType);
+        }
+
         /// <summary>
         /// Gets or sets the path upon which the element is bound
         /// </summary>
@@ -41,5 +72,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("definition")]
         [ElementProfile(MinOccurs = 1)]
         public ElementDefinition Definition { get; set; }
+
+        /// <summary>
+        /// Write a textual representation of this 
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            
+            w.WriteStartElement("tr");
+            if (this.Definition.MaxOccurs == "0")
+                w.WriteAttributeString("style", "text-decoration:line-through");
+            base.WriteTableCell(w, this.Path);
+            this.Definition.WriteText(w);
+            w.WriteEndElement(); // tr
+
+        }
     }
 }

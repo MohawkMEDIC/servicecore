@@ -22,13 +22,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the internal identifier for the resource
         /// </summary>
         [XmlIgnore]
-        public decimal Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Version identifier
         /// </summary>
         [XmlIgnore]
-        public decimal VersionId { get; set; }
+        public string VersionId { get; set; }
 
         /// <summary>
         /// Gets or sets the narrative text
@@ -64,6 +64,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             {
                 xw.WriteStartElement("body", NS_XHTML);
                 this.WriteText(xw);
+
                 xw.WriteEndElement();
             }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -12,6 +13,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Practitioner", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Practitioner", Namespace = "http://hl7.org/fhir")]
+    [Profile(ProfileId = "svccore")]
+    [ResourceProfile(Name = "Service Core Resource - Practictioner")]
     public class Practictioner : ResourceBase
     {
         /// <summary>

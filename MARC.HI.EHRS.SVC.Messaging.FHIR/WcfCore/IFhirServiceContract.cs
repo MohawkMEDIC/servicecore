@@ -14,7 +14,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     /// <summary>
     /// FHIR Service Contract
     /// </summary>
-    [XmlSerializerFormat]
     [ServiceContract]
     [ServiceKnownType(typeof(Patient))]
     [ServiceKnownType(typeof(Organization))]
@@ -23,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     [ServiceKnownType(typeof(OperationOutcome))]
     [ServiceKnownType(typeof(ValueSet))]
     [ServiceKnownType(typeof(Profile))]
-
+    [XmlSerializerFormat (SupportFaults = true)]
     public interface IFhirServiceContract
     {
 

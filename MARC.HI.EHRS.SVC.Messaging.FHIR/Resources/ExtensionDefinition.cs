@@ -13,8 +13,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents a definition of an extension 
     /// </summary>
     [XmlType("ExtensionDefn", Namespace = "http://hl7.org/fhir")]
-    public class ExtensionDefinition 
+    public class ExtensionDefinition : Shareable
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ExtensionDefinition()
+        {
+            this.Context = new List<FhirString>();
+        }
 
         /// <summary>
         /// The unique identifier for the extension
@@ -45,5 +52,24 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("definition")]
         [ElementProfile(MinOccurs = 1)]
         public ElementDefinition Definition { get; set; }
+
+        /// <summary>
+        /// Write element extension to the output
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter w)
+        {
+            w.WriteStartElement("table");
+            w.WriteAttributeString("border", "1");
+            w.WriteElementString("caption", String.Format("Extension - {0}", this.Code));
+            w.WriteStartElement("tbody");
+            
+            // Output the 
+            base.WriteTableRows(w, "Applies To", this.Context.ToArray());
+            base.WriteTableRows(w, "Type", this.Definition.Type[0]);
+            base.WriteTableRows(w, "Binding", this.Definition.Binding);
+            base.WriteTableRows(w, "Comments", this.Definition.Comments ?? this.Definition.FormalDefinition ?? this.Definition.ShortDefinition);
+            w.WriteEndElement(); // tbody
+            w.WriteEndElement(); // table        }
+        }
     }
 }

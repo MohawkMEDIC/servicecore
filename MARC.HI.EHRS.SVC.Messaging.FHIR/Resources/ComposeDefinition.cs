@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Composed from other systems
     /// </summary>
     [XmlType("Compose", Namespace = "http://hl7.org/fhir")]
-    public class ComposeDefinition
+    public class ComposeDefinition : Shareable
     {
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Value set definition
     /// </summary>
     [XmlType("Define", Namespace = "http://hl7.org/fhir")]
-    public class ValueSetDefinition
+    public class ValueSetDefinition : Shareable
     {
 
         /// <summary>

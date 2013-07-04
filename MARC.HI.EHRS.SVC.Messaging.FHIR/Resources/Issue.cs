@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents an issue detail
     /// </summary>
     [XmlType("Issue", Namespace = "http://hl7.org/fhir")]
-    public class Issue
+    public class Issue : Shareable
     {
         /// <summary>
         /// Default constructor

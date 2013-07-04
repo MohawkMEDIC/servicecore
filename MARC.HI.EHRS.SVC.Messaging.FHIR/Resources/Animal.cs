@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents data related to animal patients
     /// </summary>
     [XmlType("Animal", Namespace = "http://hl7.org/fhir")]
-    public class Animal
+    public class Animal : Shareable
     {
         /// <summary>
         /// Gets or sets the species code
