@@ -36,6 +36,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.Address = new List<Address>();
             this.Language = new List<Communication>();
             this.Photo = new List<Attachment>();
+            this.Contact = new List<Contact>();
         }
 
         /// <summary>
