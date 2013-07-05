@@ -78,6 +78,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         internal override void WriteText(System.Xml.XmlWriter w)
         {
 
+
             w.WriteStartElement("table");
             w.WriteAttributeString("border", "1");
             w.WriteStartElement("caption");

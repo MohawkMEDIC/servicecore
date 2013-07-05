@@ -57,6 +57,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
+
+            w.WriteStartElement("a");
+            w.WriteAttributeString("name", this.Name);
+            w.WriteEndElement();
             w.WriteStartElement("table");
             w.WriteAttributeString("border", "1");
             w.WriteElementString("caption", String.Format("ValueSet Binding - {0}", this.Name));

@@ -304,10 +304,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new DataException("Read failed");
                 audit = AuditUtil.CreateAuditData(result.Results);
 
-                WebOperationContext.Current.OutgoingResponse.Headers.Add("Last-Modified", result.Results[0].Timestamp.ToString("ddd, dd MMM yyyy HH:mm:ss zzz"));
                 // Create the result
-                if (result.Results != null && result.Results.Count == 1)
+                if (result.Results != null && result.Results.Count > 0 && WebOperationContext.Current.OutgoingResponse.ContentType == "application/fhir+xml")
                 {
+                    WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
                     WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", String.Format("filename=\"{0}-{1}-{2}.xml\"", resourceType, result.Results[0].Id, result.Results[0].VersionId));
                     WebOperationContext.Current.OutgoingResponse.ETag = result.Results[0].VersionId;
                 }
