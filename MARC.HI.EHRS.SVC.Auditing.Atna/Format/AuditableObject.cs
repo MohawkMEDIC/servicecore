@@ -77,6 +77,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Format
         /// <summary>
         /// Gets or sets the audit choice
         /// </summary>
+        [XmlIgnore]
         public ObjectDataChoiceType ObjectSpecChoice { get; set; }
     }
 }
