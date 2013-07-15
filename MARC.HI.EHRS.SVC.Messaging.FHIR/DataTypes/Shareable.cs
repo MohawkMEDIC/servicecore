@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         }
 
         /// <summary>
-        /// Represents the ID of the object
+        /// Represents the ID of the object via XS:ID
         /// </summary>
         [XmlAttribute("id")]
         [DataMember(Name = "id")]

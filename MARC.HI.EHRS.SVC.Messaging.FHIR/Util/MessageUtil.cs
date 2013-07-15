@@ -97,7 +97,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             FhirQueryResult queryResult = result as FhirQueryResult;
 
             int pageNo = queryResult == null || queryResult.Query.Quantity == 0 ? 0 : queryResult.Query.Start / queryResult.Query.Quantity,
-                nPages = queryResult == null || queryResult.Query.Quantity == 0 ? 1 : (queryResult.TotalResults / queryResult.Query.Quantity) + 1;
+                nPages = queryResult == null || queryResult.Query.Quantity == 0 ? 1 : (queryResult.TotalResults / queryResult.Query.Quantity);
 
             if (result.Details.Exists(o => o.Type == ResultDetailType.Error))
                 retVal.Title = new TextSyndicationContent(String.Format("Error", pageNo));
@@ -116,22 +116,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 for (int i = 0; i < queryResult.Query.ActualParameters.Count; i++)
                     foreach (var itm in queryResult.Query.ActualParameters.GetValues(i))
                         baseUri += string.Format("{0}={1}&", queryResult.Query.ActualParameters.GetKey(i), itm);
-                baseUri += String.Format("stateid={0}&", queryResult.Query.QueryId);
+                baseUri += String.Format("_stateid={0}&", queryResult.Query.QueryId);
             }
 
             // Self URI
             if (nPages > 1)
             {
-                retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}&page={1}", baseUri, pageNo)), "self", null, null, 0));
+                retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo)), "self", null, null, 0));
                 if (pageNo > 0)
                 {
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}&page=0", baseUri)), "first", ApplicationContext.LocalizationService.GetString("FHIR001"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}&page={1}", baseUri, pageNo - 1)), "previous", ApplicationContext.LocalizationService.GetString("FHIR002"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page=0", baseUri)), "first", ApplicationContext.LocalizationService.GetString("FHIR001"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo - 1)), "previous", ApplicationContext.LocalizationService.GetString("FHIR002"), null, 0));
                 }
                 if (pageNo < nPages - 1)
                 {
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}&page={1}", baseUri, pageNo + 1)), "next", ApplicationContext.LocalizationService.GetString("FHIR003"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}&page={1}", baseUri, nPages)), "last", ApplicationContext.LocalizationService.GetString("FHIR004"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo + 1)), "next", ApplicationContext.LocalizationService.GetString("FHIR003"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, nPages)), "last", ApplicationContext.LocalizationService.GetString("FHIR004"), null, 0));
                 }
             }
             else

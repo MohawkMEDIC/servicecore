@@ -19,6 +19,8 @@ using System.Xml;
 using System.Net;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
 using System.Configuration;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 {
@@ -29,6 +31,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     {
 
         #region IFhirServiceContract Members
+
+        /// <summary>
+        /// Get schema
+        /// </summary>
+        public XmlSchema GetSchema(int schemaId)
+        {
+            XmlSchemas schemaCollection = new XmlSchemas();
+            
+            XmlReflectionImporter importer = new XmlReflectionImporter("http://hl7.org/fhir");
+            XmlSchemaExporter exporter = new XmlSchemaExporter(schemaCollection);
+            
+            foreach(var cls in typeof(FhirServiceBehavior).Assembly.GetTypes().Where(o=>o.GetCustomAttribute<XmlRootAttribute>() != null && !o.IsGenericTypeDefinition))
+                exporter.ExportTypeMapping(importer.ImportTypeMapping(cls, "http://hl7.org/fhir"));
+
+            return schemaCollection[schemaId];
+        }
 
         /// <summary>
         /// Get the index
@@ -104,9 +122,47 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             }
         }
 
+        /// <summary>
+        /// Update a resource
+        /// </summary>
         public ResourceBase UpdateResource(string resourceType, string id, string mimeType, ResourceBase target)
         {
-            throw new NotImplementedException();
+            FhirOperationResult result = null;
+            try
+            {
+
+                // Setup outgoing content
+                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+
+                // Create or update?
+                var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
+                if (handler == null)
+                    throw new FileNotFoundException(); // endpoint not found!
+
+                result = handler.Update(id, target, DataPersistenceMode.Production);
+                if (result == null || result.Results.Count == 0) // Create
+                {
+                    result = handler.Create(target, DataPersistenceMode.Production);
+                    WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Created;
+                }
+
+                if (result == null || result.Outcome == ResultCode.Rejected)
+                    throw new InvalidDataException("Resource structure is not valid");
+                else if (result.Outcome == ResultCode.AcceptedNonConformant)
+                    throw new ConstraintException("Resource not conformant");
+                else if (result.Outcome == ResultCode.TypeNotAvailable ||
+                    result.Results == null || result.Results.Count == 0)
+                    throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
+                else if (result.Outcome != ResultCode.Accepted)
+                    throw new DataException("Update failed");
+
+                return result.Results[0];
+
+            }
+            catch (Exception e)
+            {
+                return this.ErrorHelper(e, result, false) as ResourceBase;
+            }
         }
 
         public ResourceBase DeleteResource(string resourceType, string id, string mimeType)
@@ -114,14 +170,89 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Create a resource
+        /// </summary>
         public ResourceBase CreateResource(string resourceType, string mimeType, ResourceBase target)
         {
-            throw new NotImplementedException();
+            FhirOperationResult result = null;
+            try
+            {
+               
+                // Setup outgoing content
+                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+
+                // Create or update?
+                var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
+                if (handler == null)
+                    throw new FileNotFoundException(); // endpoint not found!
+
+                result = handler.Create(target, DataPersistenceMode.Production);
+                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Created;
+
+                if (result == null || result.Outcome == ResultCode.Rejected)
+                    throw new InvalidDataException("Resource structure is not valid");
+                else if (result.Outcome == ResultCode.AcceptedNonConformant)
+                    throw new ConstraintException("Resource not conformant");
+                else if (result.Outcome == ResultCode.TypeNotAvailable ||
+                    result.Results == null || result.Results.Count == 0)
+                    throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
+                else if (result.Outcome != ResultCode.Accepted)
+                    throw new DataException("Create failed");
+
+                return result.Results[0];
+
+            }
+            catch (Exception e)
+            {
+                return this.ErrorHelper(e, result, false) as ResourceBase;
+            }
         }
 
+        /// <summary>
+        /// Validate a resource (really an update with debugging / non comit)
+        /// </summary>
         public OperationOutcome ValidateResource(string resourceType, string id, ResourceBase target)
         {
-            throw new NotImplementedException();
+            FhirOperationResult result = null;
+            try
+            {
+
+                // Setup outgoing content
+                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+
+                // Create or update?
+                var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
+                if (handler == null)
+                    throw new FileNotFoundException(); // endpoint not found!
+                
+                result = handler.Update(id, target, DataPersistenceMode.Debugging);
+                if (result == null || result.Results.Count == 0) // Create
+                {
+                    result = handler.Create(target, DataPersistenceMode.Debugging);
+                    WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Created;
+                }
+
+                if (result == null || result.Outcome == ResultCode.Rejected)
+                    throw new InvalidDataException("Resource structure is not valid");
+                else if (result.Outcome == ResultCode.AcceptedNonConformant)
+                    throw new ConstraintException("Resource not conformant");
+                else if (result.Outcome == ResultCode.TypeNotAvailable ||
+                    result.Results == null || result.Results.Count == 0)
+                    throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
+                else if (result.Outcome != ResultCode.Accepted)
+                    throw new DataException("Validate failed");
+
+
+                
+                // Return constraint
+                return MessageUtil.CreateOutcomeResource(result);
+
+            }
+            catch (Exception e)
+            {
+                return this.ErrorHelper(e, result, false) as OperationOutcome;
+            }
         }
 
         /// <summary>
@@ -159,7 +290,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 result = resourceProcessor.Query(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters);
 
                 if (result.Outcome == ResultCode.Rejected)
-                    throw new InvalidOperationException("Message was rejected");
+                    throw new InvalidDataException("Message was rejected");
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Query failed");
 
@@ -182,9 +313,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
         }
 
-       public System.Xml.XmlElement GetOptions()
+        /// <summary>
+        /// Get conformance
+        /// </summary>
+        public Conformance GetOptions()
         {
-            throw new NotImplementedException();
+            WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"conformance.xml\"");
+            return ConformanceUtil.GetConformanceStatement();
         }
 
         public System.ServiceModel.Syndication.Atom10FeedFormatter PostTransaction(System.ServiceModel.Syndication.Atom10FeedFormatter feed)
@@ -228,36 +364,45 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         {
 
             if (result == null && returnBundle)
-            {
                 result = new FhirQueryResult() { Details = new List<IResultDetail>(), Query = new FhirQuery() { Start = 0, Quantity = 0 } };
-            }
+            else if (result == null)
+                result = new FhirOperationResult() { Details = new List<IResultDetail>() { new ResultDetail(ResultDetailType.Error, "No information available", e) } };
+
 
             Trace.TraceError(e.ToString());
             result.Details.Add(new ResultDetail(ResultDetailType.Error, e.Message, e));
 
             HttpStatusCode retCode = HttpStatusCode.OK;
-            
+
             if (e is NotSupportedException)
                 retCode = System.Net.HttpStatusCode.MethodNotAllowed;
             else if (e is NotImplementedException)
                 retCode = System.Net.HttpStatusCode.NotImplemented;
-            else if (e is InvalidOperationException)
+            else if (e is InvalidDataException)
                 retCode = HttpStatusCode.BadRequest;
             else if (e is FileLoadException)
                 retCode = System.Net.HttpStatusCode.Gone;
             else if (e is FileNotFoundException)
                 retCode = System.Net.HttpStatusCode.NotFound;
+            else if (e is ConstraintException)
+                retCode = (HttpStatusCode)422;
             else
                 retCode = System.Net.HttpStatusCode.InternalServerError;
 
             WebOperationContext.Current.OutgoingResponse.StatusCode = retCode;
             WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Xml;
-            
-            if (returnBundle)
-                throw new WebFaultException<Atom10FeedFormatter>(new Atom10FeedFormatter(MessageUtil.CreateFeed(result)), retCode);
-            else
-                throw new WebFaultException<OperationOutcome>(MessageUtil.CreateOutcomeResource(result), retCode);
 
+            if (returnBundle)
+            {
+                WebOperationContext.Current.OutgoingResponse.ContentType = "application/atom+xml";
+                throw new WebFaultException<Atom10FeedFormatter>(new Atom10FeedFormatter(MessageUtil.CreateFeed(result)), retCode);
+            }
+            else
+            {
+                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"error.xml\"");
+                throw new WebFaultException<OperationOutcome>(MessageUtil.CreateOutcomeResource(result), retCode);
+            }
                 //return MessageUtil.CreateOutcomeResource(result);
 
         }
@@ -294,7 +439,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 result = resourceProcessor.Read(id, vid);
 
                 if (result.Outcome == ResultCode.Rejected)
-                    throw new InvalidOperationException("Message was rejected");
+                    throw new InvalidDataException("Message was rejected");
                 else if (result.Outcome == (ResultCode.NotAvailable | ResultCode.Rejected))
                     throw new FileLoadException(String.Format("Resource {0} is no longer available", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
                 else if (result.Outcome == ResultCode.TypeNotAvailable ||
@@ -326,6 +471,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     auditService.SendAudit(audit);
             }
         }
+
+        /// <summary>
+        /// Get meta-data
+        /// </summary>
+        public Conformance GetMetaData()
+        {
+            return this.GetOptions();
+        }
+
         #endregion
     }
 }

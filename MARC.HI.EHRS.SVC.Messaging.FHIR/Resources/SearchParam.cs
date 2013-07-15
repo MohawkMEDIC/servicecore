@@ -25,12 +25,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirString Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the source of the search parameter definition
+        /// </summary>
+        [XmlElement("source")]
+        [Description("The source of the search parameter definition")]
+        public FhirUri Source { get; set; }
+
+        /// <summary>
         /// Gets or sets the type of the parameter
         /// </summary>
         [XmlElement("type")]
         [Description("The type of the search parameter")]
         [ElementProfile(MinOccurs = 1)]
         public PrimitiveCode<String> Type { get; set; }
+
         /// <summary>
         /// Gets or sets the documentation related to the parameter
         /// </summary>

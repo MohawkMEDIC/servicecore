@@ -51,7 +51,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [XmlElement("valueAddress", typeof(Address))]
         [XmlElement("valueContact" ,typeof(Telecom))]
         [XmlElement("valueSchedule", typeof(Schedule))]
-        [XmlElement("valueResource", typeof(Resource<Shareable>))]
+        [XmlElement("valueResource", typeof(Resource))]
         public Shareable Value { get; set; }
 
 

@@ -56,6 +56,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public List<Address> Address { get; set; }
 
         /// <summary>
+        /// Part of
+        /// </summary>
+        [XmlElement("partOf")]
+        [Description("The organization of which this organization forms a part")]
+        public Resource<Organization> PartOf { get; set; }
+
+        /// <summary>
         /// Gets or sets the contact entities
         /// </summary>
         [XmlElement("contactEntity")]
