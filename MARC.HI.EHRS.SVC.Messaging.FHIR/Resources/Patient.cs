@@ -34,7 +34,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.Name = new List<HumanName>();
             this.Telecom = new List<Telecom>();
             this.Address = new List<Address>();
-            this.Language = new List<Communication>();
+            this.Language = new List<CodeableConcept>();
             this.Photo = new List<Attachment>();
             this.Contact = new List<Contact>();
         }
@@ -134,7 +134,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Person's proficiancy level of a language")]
         [XmlElement("communication")]
-        public List<Communication> Language { get; set; }
+        public List<CodeableConcept> Language { get; set; }
 
         /// <summary>
         /// Provider of the patient resource
