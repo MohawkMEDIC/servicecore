@@ -50,6 +50,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public IdRef Primary { get; set; }
 
         /// <summary>
+        /// Get the primary code
+        /// </summary>
+        public Coding GetPrimaryCode()
+        {
+            return this.Primary.ResolveReference(this) as Coding;
+        }
+
+        /// <summary>
         /// Write text
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)

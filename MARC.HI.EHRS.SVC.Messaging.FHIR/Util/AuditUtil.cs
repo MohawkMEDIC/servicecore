@@ -84,6 +84,36 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
                         break;
                     }
+                case "POST":
+                    {
+                        retVal = new AuditData(DateTime.Now, ActionType.Create, OutcomeIndicator.Success, EventIdentifierType.Import, new CodeValue(
+                            "POST", "urn:ietf:rfc:2616"));
+
+                        // Audit actor for Patient Identity Source
+                        retVal.Actors.Add(new AuditActorData()
+                        {
+                            UserIsRequestor = true,
+                            UserIdentifier = userId,
+                            ActorRoleCode = new List<CodeValue>() {
+                            new  CodeValue("110153", "DCM") { DisplayName = "Source" }
+                        },
+                            NetworkAccessPointId = remoteEndpoint,
+                            NetworkAccessPointType = NetworkAccessPointType.IPAddress,
+                            UserName = userId
+                        });
+                        // Audit actor for FHIR service
+                        retVal.Actors.Add(new AuditActorData()
+                        {
+                            UserIdentifier = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
+                            UserIsRequestor = false,
+                            ActorRoleCode = new List<CodeValue>() { new CodeValue("110152", "DCM") { DisplayName = "Destination" } },
+                            NetworkAccessPointType = NetworkAccessPointType.MachineName,
+                            NetworkAccessPointId = Dns.GetHostName(),
+                            UserName = Environment.UserName
+                        });
+
+                        break;
+                    }
                 default:
                     {
                         retVal = new AuditData(DateTime.Now, ActionType.Execute, OutcomeIndicator.Success, EventIdentifierType.ApplicationActivity, new CodeValue(

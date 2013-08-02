@@ -60,5 +60,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="guid"></param>
         /// <param name="response"></param>
         void PersistResultMessage(string messageId, string respondsToId, Stream response);
+
+        /// <summary>
+        /// Get all message ids between the specified time(s)
+        /// </summary>
+        IEnumerable<String> GetMessageIds(DateTime from, DateTime to);
+
     }
 }

@@ -44,19 +44,9 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
     {
 
         /// <summary>
-        /// Clean interval
-        /// </summary>
-        private const double CLEAN_INTERVAL = 3600000d;
-
-        /// <summary>
         /// Configuration handler
         /// </summary>
         private static ConfigurationHandler m_configuration;
-
-        /// <summary>
-        /// Cleaning timer
-        /// </summary>
-        private static Timer m_cleanTimer;
 
         /// <summary>
         /// Ado Query Persistence Service
@@ -64,48 +54,8 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         static AdoQueryPersistenceService()
         {
             m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.qm.persistence.data") as ConfigurationHandler;
-            m_cleanTimer = new Timer(CLEAN_INTERVAL);
-            m_cleanTimer.Elapsed += new ElapsedEventHandler(m_cleanTimer_Elapsed);
-            m_cleanTimer_Elapsed(null, null);
         }
 
-        /// <summary>
-        /// Cleaning timer has been elapsed, check the database for all any old messages that need to be cleaned
-        /// </summary>
-        static void m_cleanTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            #if DEBUG
-            Trace.TraceInformation("Cleaning stale queries from database...");
-            #endif 
-
-            IDbConnection connection = m_configuration.CreateConnection();
-            try
-            {
-                connection.Open();
-
-                // Clean the query database
-                IDbCommand cmd = connection.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "qry_cln";
-                IDataParameter ageParm = cmd.CreateParameter();
-                ageParm.DbType = DbType.String;
-                ageParm.Direction = ParameterDirection.Input;
-                ageParm.ParameterName = "max_age_in";
-                ageParm.Value = String.Format("{0} days", m_configuration.MaxQueryAge);
-                cmd.Parameters.Add(ageParm);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.ToString());
-            }
-            finally
-            {
-                connection.Close();
-                connection.Dispose();
-            }
-
-        }
 
         #region IQueryPersistenceService Members
 

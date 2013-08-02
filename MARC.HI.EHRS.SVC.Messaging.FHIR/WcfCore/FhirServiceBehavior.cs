@@ -176,9 +176,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         public ResourceBase CreateResource(string resourceType, string mimeType, ResourceBase target)
         {
             FhirOperationResult result = null;
+
+            AuditData audit = null;
+            IAuditorService auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+
             try
             {
-               
+
                 // Setup outgoing content
                 WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
 
@@ -200,12 +204,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Create failed");
 
+                audit = AuditUtil.CreateAuditData(result.Results);
+
                 return result.Results[0];
 
             }
             catch (Exception e)
             {
+                audit = AuditUtil.CreateAuditData(result.Results);
                 return this.ErrorHelper(e, result, false) as ResourceBase;
+            }
+            finally
+            {
+                if (auditService != null)
+                    auditService.SendAudit(audit);
             }
         }
 

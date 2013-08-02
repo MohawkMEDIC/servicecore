@@ -348,5 +348,65 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         }
 
         #endregion
+
+        #region IMessagePersistenceService Members
+
+        /// <summary>
+        /// Get all message request identifiers between specified times
+        /// </summary>
+        public IEnumerable<string> GetMessageIds(DateTime from, DateTime to)
+        {
+            List<String> retVal = new List<string>();
+            IDbConnection conn = m_configuration.CreateConnection();
+
+            try
+            {
+                conn.Open();
+
+                // Create the database command
+                IDbCommand cmd = conn.CreateCommand();
+
+                try
+                {
+                    // Setup command
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "qry_msgs";
+
+                    // Setup parameter
+                    IDataParameter fromParm = cmd.CreateParameter(),
+                        toParm = cmd.CreateParameter();
+                    fromParm.DbType = toParm.DbType = DbType.DateTime;
+                    fromParm.Value = from;
+                    toParm.Value = to;
+                    fromParm.Direction = toParm.Direction= ParameterDirection.Input;
+                    fromParm.ParameterName = "msg_utc_from_in";
+                    toParm.ParameterName = "msg_utc_to_in";
+                    cmd.Parameters.Add(fromParm);
+                    cmd.Parameters.Add(toParm);
+
+                    // Execute
+                    using (IDataReader rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            retVal.Add(Convert.ToString(rdr[0]));
+                    return retVal;
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.ToString());
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        #endregion
     }
 }
