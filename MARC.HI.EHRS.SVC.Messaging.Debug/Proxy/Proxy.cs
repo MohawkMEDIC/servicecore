@@ -104,6 +104,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
                 List<byte> receivedBytes = new List<byte>(),
                     sentBytes = new List<byte>();
                 bool nullReceive = false;
+                Uri sourceUri = new Uri(String.Format("tcp://{0}", client.Client.RemoteEndPoint.ToString())),
+                    destUri = null;
+                String receivedMessageTmp = String.Empty;
 
                 while (client.Connected && ((destinationClient != null && destinationClient.Connected) ^ (destinationClient == null)))
                 {
@@ -127,6 +130,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
                                 sentBytes.AddRange(buffer);
                             else
                                 sentBytes.AddRange(buffer.Take(br));
+
+                            // In case we only get one byte?
+                            if(br == 1 && buffer[0] == (byte)'\v')
+                                while (!destinationStream.DataAvailable)
+                                    if (DateTime.Now.Subtract(lastReceivedTime) > timeout)
+                                        break;
+
                             Thread.Sleep(50);
                         }
 
@@ -136,7 +146,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
                             clientStream.Write(sentBytes.ToArray(), 0, sentBytes.Count);
                             clientStream.Flush();
                             Trace.TraceInformation("Received {0} bytes from {1}...", sentBytes.Count, destinationClient.Client.RemoteEndPoint);
-                            StoreMessage(System.Text.Encoding.UTF8.GetString(sentBytes.ToArray()));
+                            try
+                            {
+                                StoreMessage(System.Text.Encoding.UTF8.GetString(sentBytes.ToArray()), destUri, sourceUri);
+                            }
+                            catch { }
                             sentBytes.Clear();
                         }
                         else if (nullReceive && !clientStream.DataAvailable)
@@ -170,6 +184,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
 
                     Trace.TraceInformation("Received {0} bytes from {1}...", receivedBytes.Count, client.Client.RemoteEndPoint);
                     String bufferData = System.Text.Encoding.UTF8.GetString(receivedBytes.ToArray());
+                    receivedMessageTmp += bufferData;
 
                     // Do we have a place to send?
                     if (destination == null)
@@ -180,14 +195,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
                         destinationClient = new TcpClient(AddressFamily.InterNetwork);
                         destinationClient.Connect(destination);
                         destinationStream = destinationClient.GetStream();
+                        destUri = new Uri(String.Format("tcp://{0}", destinationClient.Client.RemoteEndPoint.ToString()));
+
                     }
                     if (destinationStream != null)
                     {
                         destinationStream.Write(receivedBytes.ToArray(), 0, receivedBytes.Count);
                         destinationStream.Flush();
                     }
-                    // TODO: Store this
-                    StoreMessage(bufferData);
+                    // TODO: Store this?
+                    try
+                    {
+                        StoreMessage(receivedMessageTmp, sourceUri, destUri);
+                        receivedMessageTmp = String.Empty;
+                    }
+                    catch { }
+
                     receivedBytes.Clear();
                 }
 
@@ -219,12 +242,30 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
         /// <summary>
         /// Store a message
         /// </summary>
-        private void StoreMessage(String bufferData)
+        private void StoreMessage(String bufferData, Uri src, Uri dst)
         {
             // First attempt to determine if the received bytes are HTTP traffic or MLLP traffic
             IMessagePersistenceService imp = this.Context.GetService(typeof(IMessagePersistenceService)) as IMessagePersistenceService;
             if (imp == null)
                 return;
+
+            imp.PersistMessageInfo(ParseMessageInfo(bufferData, src, dst));
+           
+
+        }
+
+        /// <summary>
+        /// Parse message info
+        /// </summary>
+        private MessageInfo ParseMessageInfo(string bufferData, Uri src, Uri dst)
+        {
+            // Message info
+            MessageInfo info = new MessageInfo()
+            {
+                Body = System.Text.Encoding.UTF8.GetBytes(bufferData),
+                Destination = dst,
+                Source = src
+            };
 
             Regex re = new Regex(@"^\vMSH\|(.*?\|){8}(.*?)\|");
             var match = re.Match(bufferData);
@@ -232,18 +273,18 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
             {
                 string msgId = match.Groups[2].Value;
 
-
+                info.Source = new Uri(src.ToString().Replace("tcp:", "llp:"));
+                info.Destination = new Uri(dst.ToString().Replace("tcp:", "llp:"));
+                info.Id = msgId;
                 // Now MSA?
                 re = new Regex(@".*?MSA\|(.*?\|)(.*?)(\r|\|).*");
                 match = re.Match(bufferData);
                 if (match.Success)
                 {
                     string rspId = match.Groups[2].Value;
-                    imp.PersistResultMessage(msgId, rspId, new MemoryStream(System.Text.Encoding.UTF8.GetBytes(bufferData)));
+                    info.Response = rspId;
                 }
-                else
-                    imp.PersistMessage(msgId, new MemoryStream(System.Text.Encoding.UTF8.GetBytes(bufferData)));
-
+                return info;
             }
             else
             {
@@ -253,15 +294,26 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
                 if (re.IsMatch(payload))
                     payload = payload.Substring(bufferData.IndexOf("\r\n\r\n"));
                 XmlDocument payloadDocument = new XmlDocument();
+
+                info.Source = new Uri(src.ToString().Replace("tcp:", "http:"));
+                info.Destination = new Uri(dst.ToString().Replace("tcp:", "http:"));
+
                 try
                 {
                     payloadDocument.LoadXml(payload);
                     XmlNode messageIdNode = payloadDocument.SelectSingleNode("//*[local-name() = 'MessageID' and namespace-uri() = 'http://www.w3.org/2005/08/addressing']"),
                         relatesToNode = payloadDocument.SelectSingleNode("//*[local-name() = 'RelatesTo'  and namespace-uri() = 'http://www.w3.org/2005/08/addressing']");
-                    if (messageIdNode != null) // request
-                        imp.PersistMessage(messageIdNode.InnerText, new MemoryStream(System.Text.Encoding.UTF8.GetBytes(payload)));
-                    else if(relatesToNode != null)
-                        imp.PersistResultMessage(Guid.NewGuid().ToString(), relatesToNode.InnerText, new MemoryStream(System.Text.Encoding.UTF8.GetBytes(payload)));
+                    if (messageIdNode != null)
+                        info.Id = messageIdNode.InnerText;
+                    else
+                        info.Id = Guid.NewGuid().ToString();
+                    if (relatesToNode != null) // request
+                    {
+                        info.Id = Guid.NewGuid().ToString();
+                        info.Response = relatesToNode.InnerText;
+                    }
+
+                    return info;
                 }
                 catch (Exception e)
                 {
@@ -272,6 +324,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug.Proxy
 
             }
 
+            throw new Exception("Could not parse message");
         }
 
         private IPEndPoint ReadDestination(String bufferData)

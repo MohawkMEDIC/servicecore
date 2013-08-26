@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.IO;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Debug
 {
@@ -39,6 +40,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug
         /// Find messages
         /// </summary>
         [WebGet(UriTemplate = "/message?from={from}&to={to}")]
-        List<String> FindMessages(String from, String to);
+        StoredMessageCollection FindMessages(String from, String to);
     }
 }

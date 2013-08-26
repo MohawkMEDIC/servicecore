@@ -44,18 +44,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// </summary>
         private class AdoMessagePersistanceArgs
         {
+            ///// <summary>
+            ///// Gets or sets the id of the message
+            ///// </summary>
+            //public String MessageId { get; set; }
+            ///// <summary>
+            ///// Gets or sets the id of the response
+            ///// </summary>
+            //public String ResponseToId { get; set; }
+            ///// <summary>
+            ///// Gets or sets the body stream
+            ///// </summary>
+            //public byte[] MessageBody { get; set; }
             /// <summary>
-            /// Gets or sets the id of the message
+            /// The message information to persist
             /// </summary>
-            public String MessageId { get; set; }
-            /// <summary>
-            /// Gets or sets the id of the response
-            /// </summary>
-            public String ResponseToId { get; set; }
-            /// <summary>
-            /// Gets or sets the body stream
-            /// </summary>
-            public byte[] MessageBody { get; set; }
+            public MessageInfo MessageInfo { get; set; }
         }
 
         /// <summary>
@@ -194,12 +198,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// </summary>
         public void PersistResultMessage(String messageId, String respondsToId, Stream response)
         {
-            ThreadPool.QueueUserWorkItem(DoPersistResultMessage, new AdoMessagePersistanceArgs()
-            {
-                ResponseToId = respondsToId,
-                MessageBody = GetMessageBody(response),
-                MessageId = messageId
-            });
+            this.PersistMessageInfo(
+                new MessageInfo()
+                {
+                    Response = respondsToId,
+                    Body = GetMessageBody(response),
+                    Id = messageId
+                }
+            );
         }
 
         /// <summary>
@@ -237,7 +243,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter for message id
                     IDataParameter msgIdParm = cmd.CreateParameter();
                     msgIdParm.DbType = DbType.String;
-                    msgIdParm.Value = args.MessageId;
+                    msgIdParm.Value = args.MessageInfo.Id;
                     msgIdParm.Direction = ParameterDirection.Input;
                     msgIdParm.ParameterName = "msg_id_in";
                     cmd.Parameters.Add(msgIdParm);
@@ -245,7 +251,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter for the message body
                     IDataParameter msgBodyParm = cmd.CreateParameter();
                     msgBodyParm.DbType = DbType.Binary;
-                    msgBodyParm.Value = args.MessageBody;
+                    msgBodyParm.Value = args.MessageInfo.Body;
                     msgBodyParm.Direction = ParameterDirection.Input;
                     msgBodyParm.ParameterName = "msg_body_in";
                     cmd.Parameters.Add(msgBodyParm);
@@ -254,10 +260,26 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Setup parameter for msg_rsp_in
                     IDataParameter msgRspParm = cmd.CreateParameter();
                     msgRspParm.DbType = DbType.String;
-                    msgRspParm.Value = String.IsNullOrEmpty(args.ResponseToId) ? DBNull.Value : (object)args.ResponseToId;
+                    msgRspParm.Value = String.IsNullOrEmpty(args.MessageInfo.Response) ? DBNull.Value : (object)args.MessageInfo.Response;
                     msgRspParm.Direction = ParameterDirection.Input;
                     msgRspParm.ParameterName = "msg_rsp_in";
                     cmd.Parameters.Add(msgRspParm);
+
+                    // Setup parameter for msg_rsp_in
+                    IDataParameter msgSrcParm = cmd.CreateParameter();
+                    msgSrcParm.DbType = DbType.String;
+                    msgSrcParm.Value = args.MessageInfo.Source == null ? DBNull.Value : (object)args.MessageInfo.Source.ToString();
+                    msgSrcParm.Direction = ParameterDirection.Input;
+                    msgSrcParm.ParameterName = "src_in";
+                    cmd.Parameters.Add(msgSrcParm);
+
+                    // Setup parameter for msg_rsp_in
+                    IDataParameter msgDstParm = cmd.CreateParameter();
+                    msgDstParm.DbType = DbType.String;
+                    msgDstParm.Value = args.MessageInfo.Destination == null ? DBNull.Value : (object)args.MessageInfo.Destination.ToString();
+                    msgDstParm.Direction = ParameterDirection.Input;
+                    msgDstParm.ParameterName = "dst_in";
+                    cmd.Parameters.Add(msgDstParm);
 
                     // Execute the query without result
                     
@@ -276,7 +298,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             {
                 conn.Close();
                 conn.Dispose();
-                args.MessageBody = null;
+                args.MessageInfo = null;
                 System.GC.Collect();
             }
         }
@@ -303,48 +325,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// </summary>
         public Stream GetMessage(String messageId)
         {
-            IDbConnection conn = m_configuration.CreateConnection();
-
-            try
-            {
-                conn.Open();
-
-                // Create the database command
-                IDbCommand cmd = conn.CreateCommand();
-
-                try
-                {
-                    // Setup command
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "get_msg";
-
-                    // Setup parameter
-                    IDataParameter msgIdParm = cmd.CreateParameter();
-                    msgIdParm.DbType = DbType.String;
-                    msgIdParm.Value = messageId;
-                    msgIdParm.Direction = ParameterDirection.Input;
-                    msgIdParm.ParameterName = "msg_id_in";
-                    cmd.Parameters.Add(msgIdParm);
-
-                    // Execute
-                    byte[] resp = (byte[])cmd.ExecuteScalar();
-                    return new MemoryStream(resp);
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-            }
-            catch (Exception e)
-            {
-                Trace.TraceError(e.ToString());
-                throw;
-            }
-            finally
-            {
-                conn.Close();
-                conn.Dispose();
-            }
+            var messageInfo = this.GetMessageInfo(messageId);
+            if (messageInfo != null)
+                return new MemoryStream(messageInfo.Body);
+            else
+                return null;
         }
 
         #endregion
@@ -389,6 +374,82 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                         while (rdr.Read())
                             retVal.Add(Convert.ToString(rdr[0]));
                     return retVal;
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.ToString());
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region IMessagePersistenceService Members
+
+        /// <summary>
+        /// Persist detailed message information
+        /// </summary>
+        public void PersistMessageInfo(MessageInfo message)
+        {
+            ThreadPool.QueueUserWorkItem(DoPersistResultMessage, new AdoMessagePersistanceArgs()
+            {
+                MessageInfo = message
+            });
+        }
+
+        /// <summary>
+        /// Get message info
+        /// </summary>
+        public MessageInfo GetMessageInfo(string messageId)
+        {
+            IDbConnection conn = m_configuration.CreateConnection();
+
+            try
+            {
+                conn.Open();
+
+                // Create the database command
+                IDbCommand cmd = conn.CreateCommand();
+
+                try
+                {
+                    // Setup command
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "get_msg_tbl";
+
+                    // Setup parameter
+                    IDataParameter msgIdParm = cmd.CreateParameter();
+                    msgIdParm.DbType = DbType.String;
+                    msgIdParm.Value = messageId;
+                    msgIdParm.Direction = ParameterDirection.Input;
+                    msgIdParm.ParameterName = "msg_id_in";
+                    cmd.Parameters.Add(msgIdParm);
+
+                    // Execute
+                    using (IDataReader rdr = cmd.ExecuteReader())
+                        if (rdr.Read())
+                            return new MessageInfo()
+                            {
+                                Body = (byte[])rdr["msg_body"],
+                                Destination = rdr["msg_dst"] == DBNull.Value ? null : new Uri(Convert.ToString(rdr["msg_dst"])),
+                                Id = Convert.ToString(rdr["msg_id"]),
+                                Response = rdr["msg_rsp_id"] == DBNull.Value ? null : Convert.ToString(rdr["msg_rsp_id"]),
+                                Source = rdr["msg_src"] == DBNull.Value ? null : new Uri(Convert.ToString(rdr["msg_src"])),
+                                Timestamp = (DateTime)rdr["msg_utc"]
+                            };
+                        else
+                            return null;
+
                 }
                 finally
                 {

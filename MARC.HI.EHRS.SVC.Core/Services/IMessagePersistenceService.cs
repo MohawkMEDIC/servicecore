@@ -26,6 +26,39 @@ using System.IO;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
+
+    /// <summary>
+    /// Message information
+    /// </summary>
+    public class MessageInfo
+    {
+        /// <summary>
+        /// Gets the id of the message
+        /// </summary>
+        public String Id { get; set; }
+        /// <summary>
+        /// Gets the message id that this message responds to or the response of this message.
+        /// </summary>
+        public String Response { get; set; }
+        /// <summary>
+        /// Gets the remote endpoint of the message
+        /// </summary>
+        public Uri Source { get; set; }
+        /// <summary>
+        /// Gets the local endpoint of the message
+        /// </summary>
+        public Uri Destination { get; set; }
+        /// <summary>
+        /// Gets the time the message was received
+        /// </summary>
+        public DateTime Timestamp { get; set; }
+        /// <summary>
+        /// Gets the body of the message
+        /// </summary>
+        public byte[] Body { get; set; }
+
+    }
+
     /// <summary>
     /// Identifies a structure for message persistence service implementations
     /// </summary>
@@ -41,6 +74,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// Persists the message 
         /// </summary>
         void PersistMessage(string messageId, Stream message);
+
+        /// <summary>
+        /// Persist message extension
+        /// </summary>
+        void PersistMessageInfo(MessageInfo message);
 
         /// <summary>
         /// Get the identifier of the message that represents the response to the current message
@@ -65,6 +103,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// Get all message ids between the specified time(s)
         /// </summary>
         IEnumerable<String> GetMessageIds(DateTime from, DateTime to);
+
+        /// <summary>
+        /// Get message extended attribute
+        /// </summary>
+        MessageInfo GetMessageInfo(string messageId);
+
 
     }
 }

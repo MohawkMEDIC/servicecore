@@ -82,8 +82,17 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                         break;
                 }
 
+                string domainName = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
+                string hostName = Dns.GetHostName();
+                string fqdn = "";
+                if (!hostName.Contains(domainName))
+                    fqdn = hostName + "." + domainName;
+                else
+                    fqdn = hostName;
+
+
                 syslogmessage.AppendFormat("<{0}>1 {1:yyyy-MM-dd}T{1:HH:mm:ss.fff}Z {2} {3} {4} IHE+RFC-3881 - ",
-                    SYSLOG_FACILITY * 8 + severity, DateTime.UtcNow, Dns.GetHostName(), Process.GetCurrentProcess().ProcessName, Process.GetCurrentProcess().Id);
+                    (SYSLOG_FACILITY * 8) + severity, DateTime.UtcNow, fqdn, Process.GetCurrentProcess().ProcessName, Process.GetCurrentProcess().Id);
                 syslogmessage.Append(CreateMessageBody(am));
 
                 // Send the message

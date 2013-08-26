@@ -57,15 +57,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug
         /// <summary>
         /// Find all messages
         /// </summary>
-        public List<string> FindMessages(string from, string to)
+        public StoredMessageCollection FindMessages(string from, string to)
         {
+            
             var imps = ApplicationContext.CurrentContext.GetService(typeof(IMessagePersistenceService)) as IMessagePersistenceService;
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/xml";
+
+            // Now sanity check
+            DateTime dtFrom = DateTime.Parse(from),
+                dtTo = DateTime.Parse(to);
+            if (dtTo.Subtract(dtFrom).TotalMinutes > 60)
+                throw new InvalidOperationException("Cannot query more than 60 minutes worth of messages");
+
             if (imps != null)
             {
-                List<String> retVal = new List<string>();
-                foreach (var itm in imps.GetMessageIds(DateTime.Parse(from), DateTime.Parse(to)))
-                    retVal.Add(String.Format("{0}/message/{1}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, itm));
+                StoredMessageCollection retVal = new StoredMessageCollection();
+                foreach (var itm in imps.GetMessageIds(dtFrom, dtTo))
+                {
+                    var mi = imps.GetMessageInfo(itm);
+                    var smi = new StoredMessageInfo(mi);
+                    smi.Response = new StoredMessageInfo(imps.GetMessageInfo(mi.Response));
+                    retVal.Messages.Add(smi);
+                }
                 return retVal;
             }
             else
