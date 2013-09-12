@@ -74,9 +74,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug
                 StoredMessageCollection retVal = new StoredMessageCollection();
                 foreach (var itm in imps.GetMessageIds(dtFrom, dtTo))
                 {
+                    
                     var mi = imps.GetMessageInfo(itm);
                     var smi = new StoredMessageInfo(mi);
-                    smi.Response = new StoredMessageInfo(imps.GetMessageInfo(mi.Response));
+                    if(!String.IsNullOrEmpty(mi.Response))
+                        smi.Response = new StoredMessageInfo(imps.GetMessageInfo(mi.Response));
                     retVal.Messages.Add(smi);
                 }
                 return retVal;

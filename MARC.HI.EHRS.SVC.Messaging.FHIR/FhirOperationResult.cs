@@ -21,6 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         {
             this.Details = new List<IResultDetail>();
             this.Issues = new List<DetectedIssue>();
+            this.Results = new List<ResourceBase>();
         }
 
         /// <summary>

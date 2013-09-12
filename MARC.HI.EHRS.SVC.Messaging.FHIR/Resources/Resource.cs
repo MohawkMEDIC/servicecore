@@ -65,15 +65,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Fetch the resource described by this item
         /// </summary>
-        public T FetchResource<T>(Uri baseUri) where T : Shareable
+        public ResourceBase FetchResource(Uri baseUri)
         {
-            return this.FetchResource<T>(baseUri, null);
+            return this.FetchResource(baseUri, null);
         }
 
         /// <summary>
         /// Fetch a resource from the specified uri with the specified credentials
         /// </summary>
-        public T FetchResource<T>(Uri baseUri, ICredentials credentials) where T : Shareable
+        public ResourceBase FetchResource(Uri baseUri, ICredentials credentials)
         {
             // Request uri
             Uri requestUri = null;
@@ -96,8 +96,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                         throw new WebException(String.Format("Server responded with {0}", response.StatusCode));
 
                     // Get the response stream
-                    XmlSerializer xsz = new XmlSerializer(typeof(T));
-                    return xsz.Deserialize(response.GetResponseStream()) as T;
+                    Type resourceType = typeof(Resource).Assembly.GetType(String.Format("{0}.{1}", typeof(Resource).Namespace, this.Type.Value));
+
+                    XmlSerializer xsz = new XmlSerializer(resourceType);
+                    return xsz.Deserialize(response.GetResponseStream()) as ResourceBase;
                 }
             }
             catch (Exception e)
@@ -107,14 +109,45 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             }
 
         }
+
+        /// <summary>
+        /// Create a reasource reference to the specified resource
+        /// </summary>
+        public static Resource<T> CreateResourceReference<T>(T instance, Uri baseUri) where T : ResourceBase
+        {
+            return new Resource<T>()
+            {
+                Type = new PrimitiveCode<string>(instance.GetType().GetCustomAttribute<XmlRootAttribute>() != null ? instance.GetType().GetCustomAttribute<XmlRootAttribute>().ElementName : instance.GetType().Name),
+                Reference = String.IsNullOrEmpty(instance.VersionId) ?
+                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}", instance.GetType().Name, instance.Id)) :
+                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}/history/@{2}", instance.GetType().Name, instance.Id, instance.VersionId))
+            };
+        }
     }
 
     /// <summary>
     /// Identifies a resource link
     /// </summary>
     public class Resource<T> : Resource
-        where T : Shareable
+        where T : ResourceBase
     {
+
+        /// <summary>
+        /// Fetch the resource described by this item
+        /// </summary>
+        public T FetchResource(Uri baseUri)
+        {
+            return this.FetchResource(baseUri, null);
+        }
+
+        /// <summary>
+        /// Fetch a resource from the specified uri with the specified credentials
+        /// </summary>
+        public T FetchResource(Uri baseUri, ICredentials credentials) 
+        {
+            return (T)base.FetchResource(baseUri, credentials);
+        }
+
         /// <summary>
         /// Gets or sets the type
         /// </summary>
@@ -135,19 +168,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         }
 
 
-        /// <summary>
-        /// Create a reasource reference to the specified resource
-        /// </summary>
-        public static Resource<T> CreateResourceReference<T>(T instance, Uri baseUri) where T : ResourceBase
-        {
-            return new Resource<T>()
-            {
-                Type = new PrimitiveCode<string>(instance.GetType().GetCustomAttribute<XmlRootAttribute>() != null ? instance.GetType().GetCustomAttribute<XmlRootAttribute>().ElementName : instance.GetType().Name),
-                Reference = String.IsNullOrEmpty(instance.VersionId) ?
-                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}", instance.GetType().Name, instance.Id)) :
-                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}/history/@{2}", instance.GetType().Name, instance.Id, instance.VersionId))
-            };
-        }
+       
 
     }
 }

@@ -128,10 +128,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         public ResourceBase UpdateResource(string resourceType, string id, string mimeType, ResourceBase target)
         {
             FhirOperationResult result = null;
+            AuditData audit = null;
+            IAuditorService auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+
             try
             {
 
-                // Setup outgoing content
+                // Setup outgoing content/
                 WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
 
                 // Create or update?
@@ -150,18 +153,26 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new InvalidDataException("Resource structure is not valid");
                 else if (result.Outcome == ResultCode.AcceptedNonConformant)
                     throw new ConstraintException("Resource not conformant");
-                else if (result.Outcome == ResultCode.TypeNotAvailable ||
-                    result.Results == null || result.Results.Count == 0)
+                else if (result.Outcome == ResultCode.TypeNotAvailable)
                     throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Update failed");
+
+                audit = AuditUtil.CreateAuditData(result.Results);
 
                 return result.Results[0];
 
             }
             catch (Exception e)
             {
+                audit = AuditUtil.CreateAuditData(result.Results);
+                audit.Outcome = OutcomeIndicator.EpicFail;
                 return this.ErrorHelper(e, result, false) as ResourceBase;
+            }
+            finally
+            {
+                if (auditService != null)
+                    auditService.SendAudit(audit);
             }
         }
 
@@ -198,8 +209,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new InvalidDataException("Resource structure is not valid");
                 else if (result.Outcome == ResultCode.AcceptedNonConformant)
                     throw new ConstraintException("Resource not conformant");
-                else if (result.Outcome == ResultCode.TypeNotAvailable ||
-                    result.Results == null || result.Results.Count == 0)
+                else if (result.Outcome == ResultCode.TypeNotAvailable)
                     throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Create failed");
@@ -212,6 +222,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             catch (Exception e)
             {
                 audit = AuditUtil.CreateAuditData(result.Results);
+                audit.Outcome = OutcomeIndicator.EpicFail;
                 return this.ErrorHelper(e, result, false) as ResourceBase;
             }
             finally
@@ -249,14 +260,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new InvalidDataException("Resource structure is not valid");
                 else if (result.Outcome == ResultCode.AcceptedNonConformant)
                     throw new ConstraintException("Resource not conformant");
-                else if (result.Outcome == ResultCode.TypeNotAvailable ||
-                    result.Results == null || result.Results.Count == 0)
+                else if (result.Outcome == ResultCode.TypeNotAvailable)
                     throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Validate failed");
-
-
-                
+                                
                 // Return constraint
                 return MessageUtil.CreateOutcomeResource(result);
 

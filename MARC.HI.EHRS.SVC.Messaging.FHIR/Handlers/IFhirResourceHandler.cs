@@ -41,11 +41,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         FhirOperationResult Create(ResourceBase target, DataPersistenceMode mode);
 
         /// <summary>
-        /// Validate a resource
-        /// </summary>
-        FhirOperationResult Validate(string id, ResourceBase target);
-
-        /// <summary>
         /// Query a FHIR resource
         /// </summary>
         FhirQueryResult Query(NameValueCollection parameters);

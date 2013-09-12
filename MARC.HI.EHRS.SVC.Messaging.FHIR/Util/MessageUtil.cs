@@ -38,12 +38,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         public static string TranslateFhirDomain(string fhirDomain)
         {
             Uri fhirDomainUri = null;
-            if (MARC.Everest.DataTypes.II.IsValidOidFlavor(new MARC.Everest.DataTypes.II(fhirDomain)))
-                return fhirDomain;
-            else if (fhirDomain.StartsWith("urn:oid:"))
+            if (fhirDomain.StartsWith("urn:oid:"))
                 return fhirDomain.Replace("urn:oid:", "");
             else if (fhirDomain.StartsWith("urn:ietf:rfc:3986"))
                 return fhirDomain;
+            
             else if (Uri.TryCreate(fhirDomain, UriKind.Absolute, out fhirDomainUri))
             {
                 var oid = ApplicationContext.ConfigurationService.OidRegistrar.FindData(fhirDomainUri);
@@ -51,6 +50,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     throw new InvalidOperationException(String.Format("Could not locate the specified domain '{0}'", fhirDomain));
                 return oid.Oid;
             }
+            else if (MARC.Everest.DataTypes.II.IsValidOidFlavor(new MARC.Everest.DataTypes.II(fhirDomain)))
+                return fhirDomain;
             else
                 return fhirDomain;
         }
