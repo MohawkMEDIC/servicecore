@@ -68,14 +68,30 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         internal override void WriteText(System.Xml.XmlWriter w)
         {
             this.Type.WriteText(w);
-
             // Now profiles?
             if (this.Profile.Count > 0)
             {
                 w.WriteStartElement("blockquote");
+                w.WriteElementString("strong", "Profiles:");
+                w.WriteStartElement("br");
+                w.WriteEndElement();
                 foreach (var itm in this.Profile)
                 {
                     itm.WriteText(w);
+                    w.WriteStartElement("br");
+                    w.WriteEndElement();
+                }
+                w.WriteEndElement(); // blockquote
+                w.WriteStartElement("blockquote");
+                w.WriteElementString("strong", "Search Parameters:");
+                w.WriteStartElement("br");
+                w.WriteEndElement();
+                foreach (var itm in this.SearchParams)
+                {
+                    w.WriteStartElement("a");
+                    w.WriteAttributeString("href", itm.Source.Value.ToString());
+                    itm.Name.WriteText(w);
+                    w.WriteEndElement(); // a
                     w.WriteStartElement("br");
                     w.WriteEndElement();
                 }

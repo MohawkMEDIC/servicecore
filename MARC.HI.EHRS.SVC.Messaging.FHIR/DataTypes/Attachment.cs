@@ -10,6 +10,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Identifies an attachment
     /// </summary>
     [XmlType("Attachment", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
     public class Attachment : Shareable
     {
 

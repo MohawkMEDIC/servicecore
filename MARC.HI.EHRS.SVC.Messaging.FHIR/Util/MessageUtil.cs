@@ -116,8 +116,18 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             {
                 for (int i = 0; i < queryResult.Query.ActualParameters.Count; i++)
                     foreach (var itm in queryResult.Query.ActualParameters.GetValues(i))
-                        baseUri += string.Format("{0}={1}&", queryResult.Query.ActualParameters.GetKey(i), itm);
-                baseUri += String.Format("_stateid={0}&", queryResult.Query.QueryId);
+                        switch(queryResult.Query.ActualParameters.GetKey(i))
+                        {
+                            case "_stateid":
+                            case "_page":
+                                break;
+                            default:
+                                baseUri += string.Format("{0}={1}&", queryResult.Query.ActualParameters.GetKey(i), itm);
+                                break;
+                        }
+
+                if(!baseUri.Contains("_stateid="))
+                    baseUri += String.Format("_stateid={0}&", queryResult.Query.QueryId);
             }
 
             // Self URI
@@ -129,10 +139,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page=0", baseUri)), "first", ApplicationContext.LocalizationService.GetString("FHIR001"), null, 0));
                     retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo - 1)), "previous", ApplicationContext.LocalizationService.GetString("FHIR002"), null, 0));
                 }
-                if (pageNo < nPages - 1)
+                if (pageNo <= nPages)
                 {
                     retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo + 1)), "next", ApplicationContext.LocalizationService.GetString("FHIR003"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, nPages)), "last", ApplicationContext.LocalizationService.GetString("FHIR004"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}_page={1}", baseUri, nPages + 1)), "last", ApplicationContext.LocalizationService.GetString("FHIR004"), null, 0));
                 }
             }
             else
@@ -140,7 +150,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             // Updated
             retVal.LastUpdatedTime = DateTime.Now;
-            retVal.Generator = "http://te.marc-hi.ca";
+            retVal.Generator = "MARC-HI Service Core Framework";
 
             //retVal.
             // Results

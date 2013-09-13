@@ -37,6 +37,9 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         Completed = 0x08,
         Obsolete = 0x10,
         Aborted = 0x20,
-        Nullified = 0x40
+        Nullified = 0x40,
+        Suspended = Cancelled | Active,
+        Terminated = Cancelled | Obsolete,
+        Normal = New | Active | Cancelled | Completed | Obsolete | Aborted | Suspended | Terminated
     }
 }

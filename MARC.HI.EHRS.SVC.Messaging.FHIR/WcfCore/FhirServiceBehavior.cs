@@ -165,7 +165,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             }
             catch (Exception e)
             {
-                audit = AuditUtil.CreateAuditData(result.Results);
+                audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
                 return this.ErrorHelper(e, result, false) as ResourceBase;
             }
@@ -176,9 +176,53 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             }
         }
 
+        /// <summary>
+        /// Delete a resource
+        /// </summary>
         public ResourceBase DeleteResource(string resourceType, string id, string mimeType)
         {
-            throw new NotImplementedException();
+            FhirOperationResult result = null;
+            AuditData audit = null;
+            IAuditorService auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+
+            try
+            {
+
+                // Setup outgoing content/
+                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.NoContent;
+
+                // Create or update?
+                var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
+                if (handler == null)
+                    throw new FileNotFoundException(); // endpoint not found!
+
+                result = handler.Delete(id, DataPersistenceMode.Production);
+
+                if (result == null || result.Outcome == ResultCode.Rejected)
+                    throw new NotSupportedException();
+                else if (result.Outcome == ResultCode.TypeNotAvailable)
+                    throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
+                else if (result.Outcome != ResultCode.Accepted)
+                    throw new DataException("Delete failed");
+
+                audit = AuditUtil.CreateAuditData(result.Results);
+
+                return null;
+
+            }
+            catch (Exception e)
+            {
+               
+                audit = AuditUtil.CreateAuditData(null);
+                audit.Outcome = OutcomeIndicator.EpicFail;
+                return this.ErrorHelper(e, result, false) as ResourceBase;
+            }
+            finally
+            {
+                if (auditService != null)
+                    auditService.SendAudit(audit);
+            }
         }
 
         /// <summary>
@@ -221,7 +265,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             }
             catch (Exception e)
             {
-                audit = AuditUtil.CreateAuditData(result.Results);
+                audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
                 return this.ErrorHelper(e, result, false) as ResourceBase;
             }
@@ -338,11 +382,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// </summary>
         public Conformance GetOptions()
         {
+            var retVal = ConformanceUtil.GetConformanceStatement();
             WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+            WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
+            WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"conformance.xml\"");
-            return ConformanceUtil.GetConformanceStatement();
+            return retVal;
         }
 
+        /// <summary>
+        /// Posting transaction is not supported
+        /// </summary>
         public System.ServiceModel.Syndication.Atom10FeedFormatter PostTransaction(System.ServiceModel.Syndication.Atom10FeedFormatter feed)
         {
             throw new NotImplementedException();
@@ -367,14 +417,35 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             }
         }
 
+        /// <summary>
+        /// Not implemented result
+        /// </summary>
         public System.ServiceModel.Syndication.Atom10FeedFormatter GetResourceHistory(string resourceType, string mimeType)
         {
-            throw new NotImplementedException();
+            var result = new FhirOperationResult()
+            {
+                Outcome = ResultCode.Rejected,
+                Details = new List<IResultDetail>() { 
+                    new ResultDetail(ResultDetailType.Error, "For security reasons resource history is not supported", null, null)
+                }
+            };
+            return this.ErrorHelper(new NotImplementedException(), result, true) as Atom10FeedFormatter;
+            
         }
 
+        /// <summary>
+        /// Not implemented
+        /// </summary>
         public System.ServiceModel.Syndication.Atom10FeedFormatter GetHistory(string mimeType)
         {
-            throw new NotImplementedException();
+            var result = new FhirOperationResult()
+            {
+                Outcome = ResultCode.Rejected,
+                Details = new List<IResultDetail>() { 
+                    new ResultDetail(ResultDetailType.Error, "For security reasons system history is not supported", null, null)
+                }
+            };
+            return this.ErrorHelper(new NotImplementedException(), result, true) as Atom10FeedFormatter;
         }
 
         /// <summary>

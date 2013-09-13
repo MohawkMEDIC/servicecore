@@ -14,11 +14,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents a value that can be referenced using IDREF
     /// </summary>
     [XmlType("Shareable", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
     public class Shareable 
     {
 
         // XHTML
         public const string NS_XHTML = "http://www.w3.org/1999/xhtml";
+
+        [NonSerialized]
+        private List<Extension> m_extensions;
 
         /// <summary>
         /// Represents a referencable class
@@ -47,7 +51,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         [XmlElement("extension")]
         [DataMember(Name = "extension")]
-        public List<Extension> Extension { get; set; }
+        public List<Extension> Extension { get { return this.m_extensions; } set { this.m_extensions = value; } }
 
         /// <summary>
         /// Make this a reference type

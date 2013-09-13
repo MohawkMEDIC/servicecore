@@ -12,6 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Primitive values
     /// </summary>
     [XmlType(Namespace = "http://hl7.org/fhir")]
+    [Serializable]
     public abstract class Primitive<T> : Shareable
     {
 
@@ -132,6 +133,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents a Uri
     /// </summary>
     [XmlType("uri", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
+
     public class FhirUri : Primitive<Uri> { 
         public FhirUri() : base() { }
         public FhirUri(Uri value) : base(value) { }
@@ -152,7 +155,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents an int
     /// </summary>
     [XmlType("integer")]
+    [Serializable]
     public class FhirInt : Primitive<Int32?> {
+
         public FhirInt() : base() { }
         public FhirInt(Int32 value) : base(value) { }
         public static implicit operator FhirInt(int v) { return new FhirInt(v); }
@@ -162,6 +167,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents a string
     /// </summary>
     [XmlType("string", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
     public class FhirString : Primitive<String> {
         public FhirString() : base() { }
         public FhirString(String value) : base(value) { }
@@ -172,6 +178,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents a string
     /// </summary>
     [XmlType("base64Binary", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
     public class FhirBinary : Primitive<byte[]>
     {
         public FhirBinary() : base() { }

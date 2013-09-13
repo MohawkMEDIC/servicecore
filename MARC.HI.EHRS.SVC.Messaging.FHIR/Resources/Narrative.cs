@@ -13,6 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Narrative
     /// </summary>
     [XmlType("Narrative", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
     public class Narrative : Shareable
     {
 

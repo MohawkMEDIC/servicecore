@@ -84,7 +84,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             w.WriteEndElement(); // tbody
             w.WriteEndElement(); // table
 
-           
 
         }
 

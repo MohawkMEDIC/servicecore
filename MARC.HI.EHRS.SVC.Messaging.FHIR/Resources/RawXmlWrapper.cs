@@ -10,6 +10,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// <summary>
     /// Raw XML Wrapper
     /// </summary>
+    [Serializable]
+    [XmlRoot("div", Namespace = "http://www.w3.org/1999/xhtml")]
     public class RawXmlWrapper
     {
         /// <summary>
