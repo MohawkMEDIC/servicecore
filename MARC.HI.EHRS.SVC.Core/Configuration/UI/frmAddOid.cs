@@ -325,7 +325,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                     cbxOid.SelectedIndex = cbxOid.Items.IndexOf(regOid);
                 else
                     cbxOid.Text = Oid.Oid ;
-
+                this.txtUrl.Text = Oid.Ref.ToString();
                 this.pgAttributes.SelectedObject = epc;
             }
         }
@@ -359,7 +359,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             this.Oid.Name = txtName.Text;
             this.Oid.Oid = cbxOid.SelectedItem != null ? (cbxOid.SelectedItem as OidRegistrar.OidData).Oid : cbxOid.Text;
             this.Oid.Description = txtNote.Text;
-            
+            this.Oid.Ref = new Uri(txtUrl.Text);
             // Copy values
             ExtensionPropertyClass evd = pgAttributes.SelectedObject as ExtensionPropertyClass;
             this.Oid.Attributes.RemoveAll(o => OidRegistrar.ExtendedAttributes.ContainsKey(o.Key));

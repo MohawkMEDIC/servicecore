@@ -40,6 +40,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.pgAttributes = new System.Windows.Forms.PropertyGrid();
             this.cbxOid = new System.Windows.Forms.ComboBox();
+            this.txtUrl = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errDefault)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,8 +74,9 @@
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 81);
+            this.label4.Location = new System.Drawing.Point(12, 108);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(103, 13);
             this.label4.TabIndex = 4;
@@ -103,7 +106,8 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(166, 238);
+            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnOk.Location = new System.Drawing.Point(166, 265);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 9;
@@ -113,8 +117,9 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(247, 238);
+            this.btnCancel.Location = new System.Drawing.Point(247, 265);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 10;
@@ -124,9 +129,10 @@
             // 
             // pgAttributes
             // 
+            this.pgAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pgAttributes.CommandsVisibleIfAvailable = false;
             this.pgAttributes.HelpVisible = false;
-            this.pgAttributes.Location = new System.Drawing.Point(15, 102);
+            this.pgAttributes.Location = new System.Drawing.Point(15, 129);
             this.pgAttributes.Name = "pgAttributes";
             this.pgAttributes.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
             this.pgAttributes.Size = new System.Drawing.Size(307, 130);
@@ -145,14 +151,34 @@
             this.cbxOid.Size = new System.Drawing.Size(266, 21);
             this.cbxOid.TabIndex = 6;
             // 
+            // txtUrl
+            // 
+            this.txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUrl.Location = new System.Drawing.Point(56, 82);
+            this.txtUrl.Name = "txtUrl";
+            this.txtUrl.Size = new System.Drawing.Size(266, 20);
+            this.txtUrl.TabIndex = 12;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 85);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "URL:";
+            // 
             // frmAddOid
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(344, 267);
+            this.ClientSize = new System.Drawing.Size(344, 295);
             this.ControlBox = false;
+            this.Controls.Add(this.txtUrl);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.cbxOid);
             this.Controls.Add(this.pgAttributes);
             this.Controls.Add(this.btnCancel);
@@ -187,5 +213,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PropertyGrid pgAttributes;
         private System.Windows.Forms.ComboBox cbxOid;
+        private System.Windows.Forms.TextBox txtUrl;
+        private System.Windows.Forms.Label label5;
     }
 }

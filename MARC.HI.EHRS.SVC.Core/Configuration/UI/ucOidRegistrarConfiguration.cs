@@ -36,6 +36,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                     ListViewItem lsiOid = lsvOids.Items.Add(oid.Name, oid.Name, -1); 
                     lsiOid.SubItems.Add(oid.Oid);
                     lsiOid.SubItems.Add(oid.Description);
+                    lsiOid.SubItems.Add(oid.Ref.ToString());
                     lsiOid.Tag = oid;
                     
                 }
@@ -60,6 +61,8 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 lsvOids.SelectedItems[0].Text = addOid.Oid.Name;
                 lsvOids.SelectedItems[0].SubItems[1].Text = addOid.Oid.Oid;
                 lsvOids.SelectedItems[0].SubItems[2].Text = addOid.Oid.Description;
+                lsvOids.SelectedItems[0].SubItems[3].Text = addOid.Oid.Ref.ToString();
+
             }
         }
 

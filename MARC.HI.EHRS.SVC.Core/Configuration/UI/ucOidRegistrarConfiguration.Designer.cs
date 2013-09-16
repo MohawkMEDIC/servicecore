@@ -39,6 +39,7 @@
             this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colOid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colUrl = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlControls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,7 +117,8 @@
             this.lsvOids.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.colOid,
-            this.colDescription});
+            this.colDescription,
+            this.colUrl});
             this.lsvOids.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvOids.FullRowSelect = true;
             this.lsvOids.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -143,6 +145,10 @@
             // 
             this.colDescription.Text = "Description";
             this.colDescription.Width = 180;
+            // 
+            // colUrl
+            // 
+            this.colUrl.Text = "Ref";
             // 
             // ucOidRegistrarConfiguration
             // 
@@ -171,6 +177,7 @@
         private System.Windows.Forms.ColumnHeader colName;
         private System.Windows.Forms.ColumnHeader colOid;
         private System.Windows.Forms.ColumnHeader colDescription;
+        private System.Windows.Forms.ColumnHeader colUrl;
 
     }
 }
