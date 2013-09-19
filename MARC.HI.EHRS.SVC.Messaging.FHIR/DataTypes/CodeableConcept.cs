@@ -62,24 +62,32 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
-            w.WriteStartElement("table", NS_XHTML);
-            w.WriteStartElement("tbody", NS_XHTML);
 
-            foreach (var cd in this.Coding)
+            if (this.Coding.Count > 1)
             {
-                w.WriteStartElement("tr", NS_XHTML);
-                w.WriteStartElement("td", NS_XHTML);
-                if (this.Primary != null && this.Primary.Value != null &&
-                    this.Primary.Value == cd.XmlId)
-                    w.WriteAttributeString("style", "font-weight:bold");
-                cd.WriteText(w);
-                w.WriteEndElement(); // td
-                w.WriteEndElement();
+                w.WriteStartElement("table", NS_XHTML);
+                w.WriteStartElement("tbody", NS_XHTML);
 
+                foreach (var cd in this.Coding)
+                {
+                    w.WriteStartElement("tr", NS_XHTML);
+                    w.WriteStartElement("td", NS_XHTML);
+                    if (this.Primary != null && this.Primary.Value != null &&
+                        this.Primary.Value == cd.XmlId)
+                        w.WriteAttributeString("style", "font-weight:bold");
+                    cd.WriteText(w);
+                    w.WriteEndElement(); // td
+                    w.WriteEndElement();
+
+                }
+
+                w.WriteEndElement(); //tbody
+                w.WriteEndElement(); // table
             }
-
-            w.WriteEndElement(); //tbody
-            w.WriteEndElement(); // table
+            else
+            {
+                this.GetPrimaryCode().WriteText(w);
+            }
         }
     }
 }

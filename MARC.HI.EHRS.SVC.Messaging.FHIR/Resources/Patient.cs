@@ -179,7 +179,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             base.WriteTableRows(xw, "DOB", this.BirthDate);
             base.WriteTableRows(xw, "Gender", this.Gender);
             base.WriteTableRows(xw, "Address", this.Address.ToArray());
-            base.WriteTableRows(xw, "Contacts", this.Telecom.ToArray());
+            base.WriteTableRows(xw, "Telecom", this.Telecom.ToArray());
+            // Contacts
+            if (this.Contact != null)
+                base.WriteTableRows(xw, "Contacts", this.Contact.ToArray());
             // Extended Attributes
             base.WriteTableRows(xw, "Extended Attributes", this.Extension.ToArray());
             xw.WriteEndElement(); // tbody

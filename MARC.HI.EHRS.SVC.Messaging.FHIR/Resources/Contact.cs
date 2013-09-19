@@ -58,5 +58,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Organization that is associated with the contact")]
         public Resource<Organization> Organization { get; set; }
 
+        /// <summary>
+        /// Write the contact information
+        /// </summary>
+        internal override void WriteText(System.Xml.XmlWriter xw)
+        {
+            if (this.Name != null)
+                this.Name.First().WriteText(xw);
+
+            xw.WriteString(" - ");
+            xw.WriteStartElement("em", NS_XHTML);
+            foreach (var rel in this.Relationship)
+            {
+                rel.WriteText(xw);
+                xw.WriteRaw(", ");
+            }
+            xw.WriteEndElement(); // em
+        }
     }
 }
