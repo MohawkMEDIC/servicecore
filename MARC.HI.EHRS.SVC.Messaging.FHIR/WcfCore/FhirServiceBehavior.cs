@@ -21,6 +21,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
 using System.Configuration;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 {
@@ -29,6 +30,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     /// </summary>
     public class FhirServiceBehavior : IFhirServiceContract
     {
+
+        private const string FHIR_TYPE = "application/fhir+xml; charset=utf-8";
+        private const string ATOM_TYPE = "application/atom+xml; charset=utf-8";
 
         #region IFhirServiceContract Members
 
@@ -92,9 +96,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             FhirOperationResult result = null;
             try
             {
+               
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 result = this.PerformRead(resourceType, id, null);
+                String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
+
+                    WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}/history/@{1}", baseUri, result.Results[0].VersionId));
                 return result.Results[0];
             }
             catch (Exception e)
@@ -112,7 +120,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             try
             {
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 result = this.PerformRead(resourceType, id, vid);
                 return result.Results[0];
             }
@@ -135,7 +143,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             {
 
                 // Setup outgoing content/
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
 
                 // Create or update?
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
@@ -144,10 +152,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
                 result = handler.Update(id, target, DataPersistenceMode.Production);
                 if (result == null || result.Results.Count == 0) // Create
-                {
-                    result = handler.Create(target, DataPersistenceMode.Production);
-                    WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Created;
-                }
+                    throw new NotSupportedException("Update is not supported on non-existant resource");
 
                 if (result == null || result.Outcome == ResultCode.Rejected)
                     throw new InvalidDataException("Resource structure is not valid");
@@ -159,6 +164,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new DataException("Update failed");
 
                 audit = AuditUtil.CreateAuditData(result.Results);
+
+                String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.AbsoluteUri;
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}{1}/@{2}/history/@{3}", baseUri, resourceType, result.Results[0].Id, result.Results[0].VersionId));
+                WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
+                WebOperationContext.Current.OutgoingResponse.ETag = result.Results[0].VersionId;
 
                 return result.Results[0];
 
@@ -189,7 +199,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             {
 
                 // Setup outgoing content/
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.NoContent;
 
                 // Create or update?
@@ -239,7 +249,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             {
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
 
                 // Create or update?
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
@@ -259,6 +269,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new DataException("Create failed");
 
                 audit = AuditUtil.CreateAuditData(result.Results);
+
+                String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.AbsoluteUri;
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}{1}/@{2}/history/@{3}", baseUri, resourceType, result.Results[0].Id, result.Results[0].VersionId));
+                WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
+                WebOperationContext.Current.OutgoingResponse.ETag = result.Results[0].VersionId;
+
 
                 return result.Results[0];
 
@@ -286,7 +302,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             {
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
 
                 // Create or update?
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
@@ -322,7 +338,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Searches a resource from the client registry datastore 
         /// </summary>
-        public System.ServiceModel.Syndication.Atom10FeedFormatter SearchResource(string resourceType)
+        public Object SearchResource(string resourceType)
         {
             // Get the services from the service registry
             var auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
@@ -340,7 +356,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 var resourceProcessor = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/atom+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 WebOperationContext.Current.OutgoingRequest.Headers.Add("Last-Modified", DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz"));
                 
                 if (resourceProcessor == null) // Unsupported resource
@@ -367,7 +383,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             {
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail; 
-                return this.ErrorHelper(e, result, true) as Atom10FeedFormatter;
+                return this.ErrorHelper(e, result, false) ;
             }
             finally
             {
@@ -383,7 +399,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         public Conformance GetOptions()
         {
             var retVal = ConformanceUtil.GetConformanceStatement();
-            WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+            WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/@{1}/history/@{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
             WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"conformance.xml\"");
@@ -406,7 +423,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             FhirOperationResult readResult = null;
             try
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/atom+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 readResult = this.PerformRead(resourceType, id, String.Empty);
                 WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
                 return new Atom10FeedFormatter(MessageUtil.CreateFeed(readResult));
@@ -422,6 +439,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// </summary>
         public System.ServiceModel.Syndication.Atom10FeedFormatter GetResourceHistory(string resourceType, string mimeType)
         {
+            
             var result = new FhirOperationResult()
             {
                 Outcome = ResultCode.Rejected,
@@ -473,7 +491,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 retCode = HttpStatusCode.BadRequest;
             else if (e is FileLoadException)
                 retCode = System.Net.HttpStatusCode.Gone;
-            else if (e is FileNotFoundException)
+            else if (e is FileNotFoundException || e is ArgumentException)
                 retCode = System.Net.HttpStatusCode.NotFound;
             else if (e is ConstraintException)
                 retCode = (HttpStatusCode)422;
@@ -485,12 +503,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
             if (returnBundle)
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/atom+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 throw new WebFaultException<Atom10FeedFormatter>(new Atom10FeedFormatter(MessageUtil.CreateFeed(result)), retCode);
             }
             else
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = "application/fhir+xml";
+                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"error.xml\"");
                 throw new WebFaultException<OperationOutcome>(MessageUtil.CreateOutcomeResource(result), retCode);
             }
@@ -520,10 +538,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 var resourceProcessor = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
 
                 if (resourceProcessor == null) // Unsupported resource
-                {
-                    WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
-                    return null;
-                }
+                
+                    throw new FileNotFoundException("Specified resource type is not found");
+                
 
                 // TODO: Appropriately format response
                 // Process incoming request
@@ -541,7 +558,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 audit = AuditUtil.CreateAuditData(result.Results);
 
                 // Create the result
-                if (result.Results != null && result.Results.Count > 0 && WebOperationContext.Current.OutgoingResponse.ContentType == "application/fhir+xml")
+                if (result.Results != null && result.Results.Count > 0 && WebOperationContext.Current.OutgoingResponse.ContentType == FHIR_TYPE)
                 {
                     WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
                     WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", String.Format("filename=\"{0}-{1}-{2}.xml\"", resourceType, result.Results[0].Id, result.Results[0].VersionId));
@@ -572,5 +589,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         }
 
         #endregion
+
+        /// <summary>
+        /// Create or update
+        /// </summary>
+        public ResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, ResourceBase target)
+        {
+            return this.UpdateResource(resourceType, id, mimeType, target);
+        }
+
+        /// <summary>
+        /// Alternate search
+        /// </summary>
+        public Object SearchResourceAlt(string resourceType)
+        {
+            return this.SearchResource(resourceType);
+        }
     }
 }

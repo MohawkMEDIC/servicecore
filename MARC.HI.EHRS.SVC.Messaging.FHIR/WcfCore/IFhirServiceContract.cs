@@ -25,6 +25,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     [ServiceKnownType(typeof(ValueSet))]
     [ServiceKnownType(typeof(Profile))]
     [ServiceKnownType(typeof(Conformance))]
+    [ServiceKnownType(typeof(System.ServiceModel.Syndication.Atom10FeedFormatter))]
     [XmlSerializerFormat (SupportFaults = true)]
     public interface IFhirServiceContract
     {
@@ -77,6 +78,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         ResourceBase CreateResource(string resourceType, string mimeType, ResourceBase target);
 
         /// <summary>
+        /// Create a resource
+        /// </summary>
+        [WebInvoke(UriTemplate = "/{resourceType}/@{id}?_format={mimeType}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [OperationContract]
+        ResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, ResourceBase target);
+
+        /// <summary>
         /// Validate a resource
         /// </summary>
         [WebInvoke(UriTemplate = "/{resourceType}/validate/@{id}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -88,7 +96,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// </summary>
         [WebGet(UriTemplate = "/{resourceType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "search")]
-        Atom10FeedFormatter SearchResource(string resourceType);
+        Object SearchResource(string resourceType);
+
+
+        /// <summary>
+        /// Version read a resource
+        /// </summary>
+        [WebGet(UriTemplate = "/{resourceType}/search", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [OperationContract()]
+        Object SearchResourceAlt(string resourceType);
 
         /// <summary>
         /// Options for this service
@@ -112,7 +128,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// Get history
         /// </summary>
         [WebGet(UriTemplate = "/{resourceType}/@{id}/history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
-        [OperationContract(Name = "history")]
+        [OperationContract(Name = "history-instance")]
         Atom10FeedFormatter GetResourceInstanceHistory(string resourceType, string id, string mimeType);
 
         /// <summary>

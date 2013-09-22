@@ -54,6 +54,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         public Coding GetPrimaryCode()
         {
+            if (this.Primary == null && this.Coding.Count > 0)
+                return Coding[0];
+            else if (this.Primary == null)
+                return null;
             return this.Primary.ResolveReference(this) as Coding;
         }
 
@@ -84,7 +88,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
                 w.WriteEndElement(); //tbody
                 w.WriteEndElement(); // table
             }
-            else
+            else if(this.Coding.Count == 1)
             {
                 this.GetPrimaryCode().WriteText(w);
             }

@@ -19,7 +19,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Type of operation
         /// </summary>
         [Description("Type of operation")]
-        [XmlElement("type")]
+        [XmlElement("code")]
         public PrimitiveCode<String> Type { get; set; }
 
         /// <summary>

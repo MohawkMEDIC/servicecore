@@ -21,12 +21,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         {
             var structAtt = me.GetCustomAttribute<StructureAttribute>();
             if (structAtt != null)
-                return new Uri(String.Format("{0}/ValueSet/@v3-{1}",
+                return new Uri(String.Format("{0}ValueSet/@v3-{1}",
                     WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
                     structAtt.Name
                 ));
             else
-                return new Uri(String.Format("{0}/ValueSet/@{1}",
+                return new Uri(String.Format("{0}ValueSet/@{1}",
                     WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
                     me.FullName
                 ));

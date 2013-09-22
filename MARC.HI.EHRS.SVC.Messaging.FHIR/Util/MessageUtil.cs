@@ -47,7 +47,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             {
                 var oid = ApplicationContext.ConfigurationService.OidRegistrar.FindData(fhirDomainUri);
                 if (oid == null)
-                    throw new InvalidOperationException(String.Format("Could not locate the specified domain '{0}'", fhirDomain));
+                    throw new InvalidOperationException(String.Format("Could not locate identity system '{0}'", fhirDomain));
                 return oid.Oid;
             }
             else if (MARC.Everest.DataTypes.II.IsValidOidFlavor(new MARC.Everest.DataTypes.II(fhirDomain)))
@@ -105,11 +105,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             else
                 retVal.Title = new TextSyndicationContent(String.Format("Results Page {0}", pageNo));
             retVal.Id = String.Format("urn:uuid:{0}", Guid.NewGuid());
-
+            retVal.Authors.Add(new SyndicationPerson(null, Environment.MachineName, null));
             // Make the Self uri
             String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
             if (baseUri.Contains("?"))
                 baseUri = baseUri.Substring(0, baseUri.IndexOf("?") + 1);
+            else
+                baseUri += "?";
 
             // Self uri
             if (queryResult != null)
@@ -152,6 +154,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             retVal.LastUpdatedTime = DateTime.Now;
             retVal.Generator = "MARC-HI Service Core Framework";
 
+            // HACK: Remove me
+            if(queryResult != null)
+                retVal.ElementExtensions.Add("totalResults", "http://a9.com/-/spec/opensearch/1.1/", queryResult.TotalResults);
+
             //retVal.
             // Results
             if (result.Results != null)
@@ -160,12 +166,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 foreach (ResourceBase itm in result.Results)
                 {
                     Uri resourceUrl = new Uri(String.Format("{0}/{1}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/@{1}/history/@{2}", itm.GetType().Name, itm.Id, itm.VersionId)));
-                    SyndicationItem feedResult = new SyndicationItem(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null, resourceUrl);
+                    SyndicationItem feedResult = new SyndicationItem(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null,null);
+                    feedResult.Links.Add(new SyndicationLink(resourceUrl, "self", null, null, 0));
 
-                    feedResult.Summary = new TextSyndicationContent(itm.Text.ToString(), TextSyndicationContentKind.Html);
-                    feedResult.Content = new XmlSyndicationContent("application/fhir+xml", new SyndicationElementExtension(itm, new XmlSerializer(itm.GetType())));
+                    string summary = "<div xmlns=\"http://www.w3.org/1999/xhtml\">" + itm.Text.ToString() + "</div>";
+                    feedResult.Summary = new TextSyndicationContent(summary, TextSyndicationContentKind.XHtml);
+                    feedResult.Content = new XmlSyndicationContent("text/xml", new SyndicationElementExtension(itm, new XmlSerializer(itm.GetType())));
                     feedResult.LastUpdatedTime = itm.Timestamp;
                     feedResult.PublishDate = DateTime.Now;
+                    feedResult.Authors.Add(new SyndicationPerson(null, Environment.MachineName, null));
+
                     // TODO: author
                     feedItems.Add(feedResult);
                 }
@@ -173,12 +183,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             }
 
             // Outcome
-            if (result.Details.Count > 0 || result.Issues != null && result.Issues.Count > 0)
-            {
-                var outcome = CreateOutcomeResource(result);
-                retVal.ElementExtensions.Add(outcome, new XmlSerializer(typeof(OperationOutcome)));
-                retVal.Description = new TextSyndicationContent(outcome.Text.ToString(), TextSyndicationContentKind.Html);
-            }
+            //if (result.Details.Count > 0 || result.Issues != null && result.Issues.Count > 0)
+            //{
+            //    var outcome = CreateOutcomeResource(result);
+            //    retVal.ElementExtensions.Add(outcome, new XmlSerializer(typeof(OperationOutcome)));
+            //    retVal.Description = new TextSyndicationContent(outcome.Text.ToString(), TextSyndicationContentKind.Html);
+            //}
             return retVal;
 
         }

@@ -63,7 +63,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
             
             return new Shareable()
             {
-                IdRef = this.XmlId
+                IdRef = String.Format("#{0}", this.XmlId)
             };
         }
 
@@ -90,9 +90,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         {
             
             // Check "this"
-            if(context == null)
+            if (context == null)
                 return null;
-            else if(context.XmlId == this.IdRef)
+            else if (String.Format("#{0}", context.XmlId) == this.IdRef)
+                return context;
+            else if (context.XmlId == this.IdRef)
                 return context;
 
             // Check each property
@@ -102,7 +104,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
                 if (value is Shareable) // Referencable
                 {
                     var refValue = value as Shareable;
-                    if (refValue.XmlId == this.IdRef)
+                    if (String.Format("#{0}", refValue.XmlId) == this.IdRef)
                         return refValue;
                     else
                     {

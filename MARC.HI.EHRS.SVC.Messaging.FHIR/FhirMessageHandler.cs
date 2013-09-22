@@ -8,6 +8,8 @@ using System.Configuration;
 using System.ServiceModel.Web;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
 using System.Diagnostics;
+using System.ServiceModel;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
@@ -43,9 +45,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
                 // Set the context
                 ApplicationContext.CurrentContext = this.Context;
 
+
                 this.m_webHost = new WebServiceHost(typeof(FhirServiceBehavior));
                 this.m_webHost.Description.ConfigurationName = this.m_configuration.WcfEndpoint;
-                
+                (this.m_webHost.Description.Endpoints[0].Binding as WebHttpBinding).ContentTypeMapper = new FhirContentTypeHandler();
                 // Start the web host
                 this.m_webHost.Open();
                 return true;

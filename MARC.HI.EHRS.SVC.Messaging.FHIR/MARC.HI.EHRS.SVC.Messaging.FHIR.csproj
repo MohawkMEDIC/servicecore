@@ -129,6 +129,7 @@
     <Compile Include="Util\ConformanceUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
     <Compile Include="Util\ProfileUtil.cs" />
+    <Compile Include="WcfCore\FhirContentTypeHandler.cs" />
     <Compile Include="WcfCore\FhirServiceBehavior.cs" />
     <Compile Include="WcfCore\IFhirServiceContract.cs" />
   </ItemGroup>
