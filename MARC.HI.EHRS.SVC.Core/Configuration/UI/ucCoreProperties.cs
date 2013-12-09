@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Xml;
 
 namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
 {
@@ -66,10 +69,11 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 {
                     Id = txtJurisdictionId.Tag as DomainIdentifier,
                     ClientDomain = (txtECID.Tag as DomainIdentifier).Domain,
-                    DefaultLanguageCode = CultureInfo.CurrentCulture.TwoLetterISOLanguageName,
+                    DefaultLanguageCode = this.Locale,
                     PlaceDomain = (txtELID.Tag as DomainIdentifier).Domain,
                     ProviderDomain = (txtEPID.Tag as DomainIdentifier).Domain,
-                    Name = txtJurisdictionName.Text
+                    Name = txtJurisdictionName.Text,
+                    
                 };
             }
             set
@@ -84,9 +88,39 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             }
         }
 
+        public string Locale
+        {
+            get
+            {
+                return cbxLanguage.SelectedValue.ToString();
+            }
+            set
+            {
+                cbxLanguage.Text = value;
+            }
+        }
+
         public ucCoreProperties()
         {
             InitializeComponent();
+
+            // Scan this directory for the configuration file name
+            foreach (var f in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "*.??.xml"))
+            {
+                // Load the file
+                XmlDocument doc = new XmlDocument();
+                doc.Load(f);
+
+                // Get the name of the locale
+                var node = doc.SelectSingleNode("//*[local-name() = 'locale' and namespace-uri() = 'urn:marc-hi:ca/localization']/@name");
+                if (node == null)
+                    continue;
+                else
+                    cbxLanguage.Items.Add(node.Value);
+
+            }
+            cbxLanguage.SelectedIndex = 0;
+
         }
 
         /// <summary>

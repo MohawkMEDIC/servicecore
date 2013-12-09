@@ -113,7 +113,23 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             // System ID, Jurisdiction and Custodian
             XmlElement jurisdictionNode = coreNode.SelectSingleNode("./*[local-name() = 'jurisdiction']") as XmlElement,
                 custodianNode = coreNode.SelectSingleNode("./*[local-name() = 'custodianship']") as XmlElement,
-                systemNode = coreNode.SelectSingleNode("./*[local-name() = 'system']") as XmlElement;
+                systemNode = coreNode.SelectSingleNode("./*[local-name() = 'system']") as XmlElement,
+                serviceProviderNode = coreNode.SelectSingleNode("./*[local-name() = 'serviceProviders']") as XmlElement;
+
+            if (serviceProviderNode == null)
+            {
+                serviceProviderNode = configurationDom.CreateElement("serviceProviders");
+                coreNode.AppendChild(serviceProviderNode);
+            }
+            // Is there an XmlLocalization Service?
+            var xmlLocalizationServiceAsm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a=>a.GetTypes().FirstOrDefault(t=>t.Name == "XmlLocalizationService") != null);
+            var xmlLocalizationService = xmlLocalizationServiceAsm.GetTypes().FirstOrDefault(o => o.Name == "XmlLocalizationService");
+            if (serviceProviderNode.SelectSingleNode(String.Format("./*[local-name() = 'add' and ./@type = '{0}']", xmlLocalizationService.AssemblyQualifiedName)) == null)
+            {
+                var localeServiceNode = serviceProviderNode.AppendChild(configurationDom.CreateElement("add"));
+                var typeAttribute = localeServiceNode.Attributes.Append(configurationDom.CreateAttribute("type"));
+                typeAttribute.Value = xmlLocalizationService.AssemblyQualifiedName;
+            }
 
             // System data
             if (systemNode == null)
@@ -261,7 +277,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             this.m_custodianData = this.m_panel.Custodianship;
             this.m_deviceId = this.m_panel.DeviceId;
             this.m_jurisdictionData = this.m_panel.Jurisdiction;
-
+            
             return !String.IsNullOrEmpty(this.m_jurisdictionData.ClientDomain) &&
                 !String.IsNullOrEmpty(this.m_jurisdictionData.ProviderDomain) &&
                 !String.IsNullOrEmpty(this.m_jurisdictionData.PlaceDomain) &&

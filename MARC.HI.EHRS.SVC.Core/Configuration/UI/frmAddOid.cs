@@ -325,7 +325,9 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                     cbxOid.SelectedIndex = cbxOid.Items.IndexOf(regOid);
                 else
                     cbxOid.Text = Oid.Oid ;
-                this.txtUrl.Text = Oid.Ref.ToString();
+
+                if(Oid.Ref != null)
+                    this.txtUrl.Text = Oid.Ref.ToString();
                 this.pgAttributes.SelectedObject = epc;
             }
         }

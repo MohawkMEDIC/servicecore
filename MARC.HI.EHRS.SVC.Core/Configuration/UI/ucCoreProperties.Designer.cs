@@ -59,9 +59,14 @@
             this.txtJurisdictionId = new System.Windows.Forms.TextBox();
             this.btnBrowseJurisdiction = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.cbxLanguage = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -70,9 +75,9 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Location = new System.Drawing.Point(0, 52);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(386, 20);
+            this.label1.Size = new System.Drawing.Size(354, 20);
             this.label1.TabIndex = 3;
             this.label1.Text = "Device Information";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -85,9 +90,9 @@
             this.panel1.Controls.Add(this.txtDeviceId);
             this.panel1.Controls.Add(this.btnBrowseDevice);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 20);
+            this.panel1.Location = new System.Drawing.Point(0, 72);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(386, 75);
+            this.panel1.Size = new System.Drawing.Size(354, 75);
             this.panel1.TabIndex = 4;
             // 
             // label5
@@ -96,7 +101,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.Location = new System.Drawing.Point(8, 9);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(370, 29);
+            this.label5.Size = new System.Drawing.Size(338, 29);
             this.label5.TabIndex = 2;
             this.label5.Text = "The following information will be used to identify the system on which this servi" +
     "ce runs to solicitors";
@@ -117,13 +122,13 @@
             this.txtDeviceId.Location = new System.Drawing.Point(67, 43);
             this.txtDeviceId.Name = "txtDeviceId";
             this.txtDeviceId.ReadOnly = true;
-            this.txtDeviceId.Size = new System.Drawing.Size(265, 20);
+            this.txtDeviceId.Size = new System.Drawing.Size(233, 20);
             this.txtDeviceId.TabIndex = 88;
             // 
             // btnBrowseDevice
             // 
             this.btnBrowseDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseDevice.Location = new System.Drawing.Point(338, 41);
+            this.btnBrowseDevice.Location = new System.Drawing.Point(306, 41);
             this.btnBrowseDevice.Name = "btnBrowseDevice";
             this.btnBrowseDevice.Size = new System.Drawing.Size(38, 23);
             this.btnBrowseDevice.TabIndex = 2;
@@ -140,9 +145,9 @@
             this.panel2.Controls.Add(this.txtCustodianId);
             this.panel2.Controls.Add(this.btnBrowseCustodian);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 115);
+            this.panel2.Location = new System.Drawing.Point(0, 167);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(386, 95);
+            this.panel2.Size = new System.Drawing.Size(354, 95);
             this.panel2.TabIndex = 6;
             // 
             // txtCustodianName
@@ -151,7 +156,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCustodianName.Location = new System.Drawing.Point(67, 66);
             this.txtCustodianName.Name = "txtCustodianName";
-            this.txtCustodianName.Size = new System.Drawing.Size(309, 20);
+            this.txtCustodianName.Size = new System.Drawing.Size(277, 20);
             this.txtCustodianName.TabIndex = 4;
             // 
             // label8
@@ -169,7 +174,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.Location = new System.Drawing.Point(8, 6);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(370, 29);
+            this.label6.Size = new System.Drawing.Size(338, 29);
             this.label6.TabIndex = 6;
             this.label6.Text = "The following information is used to logically identify the custodian of any reco" +
     "rds created by this sservice or other instances within the logical group.";
@@ -190,13 +195,13 @@
             this.txtCustodianId.Location = new System.Drawing.Point(67, 40);
             this.txtCustodianId.Name = "txtCustodianId";
             this.txtCustodianId.ReadOnly = true;
-            this.txtCustodianId.Size = new System.Drawing.Size(265, 20);
+            this.txtCustodianId.Size = new System.Drawing.Size(233, 20);
             this.txtCustodianId.TabIndex = 88;
             // 
             // btnBrowseCustodian
             // 
             this.btnBrowseCustodian.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseCustodian.Location = new System.Drawing.Point(338, 38);
+            this.btnBrowseCustodian.Location = new System.Drawing.Point(306, 38);
             this.btnBrowseCustodian.Name = "btnBrowseCustodian";
             this.btnBrowseCustodian.Size = new System.Drawing.Size(38, 23);
             this.btnBrowseCustodian.TabIndex = 3;
@@ -210,9 +215,9 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(0, 95);
+            this.label2.Location = new System.Drawing.Point(0, 147);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(386, 20);
+            this.label2.Size = new System.Drawing.Size(354, 20);
             this.label2.TabIndex = 5;
             this.label2.Text = "Custodianship Information";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -237,11 +242,11 @@
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.txtJurisdictionId);
             this.panel3.Controls.Add(this.btnBrowseJurisdiction);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 230);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 282);
             this.panel3.MinimumSize = new System.Drawing.Size(0, 188);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(386, 190);
+            this.panel3.Size = new System.Drawing.Size(354, 190);
             this.panel3.TabIndex = 8;
             // 
             // label14
@@ -269,13 +274,13 @@
             this.txtELID.Location = new System.Drawing.Point(88, 148);
             this.txtELID.Name = "txtELID";
             this.txtELID.ReadOnly = true;
-            this.txtELID.Size = new System.Drawing.Size(244, 20);
+            this.txtELID.Size = new System.Drawing.Size(214, 20);
             this.txtELID.TabIndex = 88;
             // 
             // btnBrowseELID
             // 
             this.btnBrowseELID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseELID.Location = new System.Drawing.Point(338, 146);
+            this.btnBrowseELID.Location = new System.Drawing.Point(308, 146);
             this.btnBrowseELID.Name = "btnBrowseELID";
             this.btnBrowseELID.Size = new System.Drawing.Size(38, 23);
             this.btnBrowseELID.TabIndex = 9;
@@ -290,13 +295,13 @@
             this.txtEPID.Location = new System.Drawing.Point(88, 122);
             this.txtEPID.Name = "txtEPID";
             this.txtEPID.ReadOnly = true;
-            this.txtEPID.Size = new System.Drawing.Size(244, 20);
+            this.txtEPID.Size = new System.Drawing.Size(214, 20);
             this.txtEPID.TabIndex = 88;
             // 
             // btnBrowseEPID
             // 
             this.btnBrowseEPID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseEPID.Location = new System.Drawing.Point(338, 120);
+            this.btnBrowseEPID.Location = new System.Drawing.Point(308, 120);
             this.btnBrowseEPID.Name = "btnBrowseEPID";
             this.btnBrowseEPID.Size = new System.Drawing.Size(38, 23);
             this.btnBrowseEPID.TabIndex = 8;
@@ -320,13 +325,13 @@
             this.txtECID.Location = new System.Drawing.Point(88, 96);
             this.txtECID.Name = "txtECID";
             this.txtECID.ReadOnly = true;
-            this.txtECID.Size = new System.Drawing.Size(244, 20);
+            this.txtECID.Size = new System.Drawing.Size(214, 20);
             this.txtECID.TabIndex = 88;
             // 
             // btnBrowseECID
             // 
             this.btnBrowseECID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseECID.Location = new System.Drawing.Point(338, 94);
+            this.btnBrowseECID.Location = new System.Drawing.Point(308, 94);
             this.btnBrowseECID.Name = "btnBrowseECID";
             this.btnBrowseECID.Size = new System.Drawing.Size(38, 23);
             this.btnBrowseECID.TabIndex = 7;
@@ -340,7 +345,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtJurisdictionName.Location = new System.Drawing.Point(88, 70);
             this.txtJurisdictionName.Name = "txtJurisdictionName";
-            this.txtJurisdictionName.Size = new System.Drawing.Size(288, 20);
+            this.txtJurisdictionName.Size = new System.Drawing.Size(258, 20);
             this.txtJurisdictionName.TabIndex = 6;
             // 
             // label9
@@ -358,7 +363,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.Location = new System.Drawing.Point(8, 10);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(370, 29);
+            this.label10.Size = new System.Drawing.Size(626, 29);
             this.label10.TabIndex = 12;
             this.label10.Text = "The following information is used to identify the jurisdiction to which records s" +
     "tored in this service belong.";
@@ -379,13 +384,13 @@
             this.txtJurisdictionId.Location = new System.Drawing.Point(88, 44);
             this.txtJurisdictionId.Name = "txtJurisdictionId";
             this.txtJurisdictionId.ReadOnly = true;
-            this.txtJurisdictionId.Size = new System.Drawing.Size(244, 20);
+            this.txtJurisdictionId.Size = new System.Drawing.Size(214, 20);
             this.txtJurisdictionId.TabIndex = 88;
             // 
             // btnBrowseJurisdiction
             // 
             this.btnBrowseJurisdiction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseJurisdiction.Location = new System.Drawing.Point(338, 42);
+            this.btnBrowseJurisdiction.Location = new System.Drawing.Point(308, 42);
             this.btnBrowseJurisdiction.Name = "btnBrowseJurisdiction";
             this.btnBrowseJurisdiction.Size = new System.Drawing.Size(38, 23);
             this.btnBrowseJurisdiction.TabIndex = 5;
@@ -399,13 +404,55 @@
             this.label3.Dock = System.Windows.Forms.DockStyle.Top;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(0, 210);
+            this.label3.Location = new System.Drawing.Point(0, 262);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(386, 20);
+            this.label3.Size = new System.Drawing.Size(354, 20);
             this.label3.TabIndex = 7;
             this.label3.Text = "Jurisdiction Information";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label3.UseMnemonic = false;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.cbxLanguage);
+            this.panel4.Controls.Add(this.label16);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(0, 20);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(354, 32);
+            this.panel4.TabIndex = 9;
+            // 
+            // label15
+            // 
+            this.label15.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label15.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label15.Location = new System.Drawing.Point(0, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(354, 20);
+            this.label15.TabIndex = 10;
+            this.label15.Text = "Localization";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label15.UseMnemonic = false;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(8, 9);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(97, 13);
+            this.label16.TabIndex = 0;
+            this.label16.Text = "Service Language:";
+            // 
+            // cbxLanguage
+            // 
+            this.cbxLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxLanguage.FormattingEnabled = true;
+            this.cbxLanguage.Location = new System.Drawing.Point(111, 6);
+            this.cbxLanguage.Name = "cbxLanguage";
+            this.cbxLanguage.Size = new System.Drawing.Size(121, 21);
+            this.cbxLanguage.TabIndex = 1;
             // 
             // ucCoreProperties
             // 
@@ -419,14 +466,18 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.label15);
             this.Name = "ucCoreProperties";
-            this.Size = new System.Drawing.Size(386, 420);
+            this.Size = new System.Drawing.Size(354, 420);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -464,5 +515,9 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox txtJurisdictionId;
         private System.Windows.Forms.Button btnBrowseJurisdiction;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.ComboBox cbxLanguage;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
     }
 }

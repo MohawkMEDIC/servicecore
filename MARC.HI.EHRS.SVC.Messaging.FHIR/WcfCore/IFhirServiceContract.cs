@@ -43,6 +43,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         XmlSchema GetSchema(int schemaId);
 
         /// <summary>
+        /// Gets the current time on the service
+        /// </summary>
+        /// <returns></returns>
+        [WebGet(UriTemplate = "/time")]
+        DateTime Time();
+
+        /// <summary>
         /// Read a resource
         /// </summary>
         [WebGet(UriTemplate = "/{resourceType}/@{id}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]

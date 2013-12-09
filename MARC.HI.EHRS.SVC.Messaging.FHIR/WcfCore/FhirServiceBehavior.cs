@@ -590,6 +590,18 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
         #endregion
 
+        #region IFhirServiceContract Members
+
+        /// <summary>
+        /// Get the current time
+        /// </summary>
+        public DateTime Time()
+        {
+            return DateTime.Now;
+        }
+
+        #endregion
+
         /// <summary>
         /// Create or update
         /// </summary>
