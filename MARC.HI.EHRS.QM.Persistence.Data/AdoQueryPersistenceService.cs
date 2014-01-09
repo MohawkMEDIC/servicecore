@@ -270,7 +270,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     qryQtyParam.ParameterName = "qty_in";
                     qryIdParam.Value = queryId;
                     qryQtyParam.Value = nRecords;
-                    qryStartParam.Value = startRecord;
+                    qryStartParam.Value = startRecord == -1 ? DBNull.Value : (object)startRecord;
 
                     // Add parameters
                     cmd.Parameters.Add(qryIdParam);
