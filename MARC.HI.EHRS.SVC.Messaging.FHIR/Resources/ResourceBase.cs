@@ -6,6 +6,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -15,8 +16,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("ResourceBase", Namespace = "http://hl7.org/fhir")]
     public abstract class ResourceBase : Shareable
     {
+
+        /// <summary>
+        /// Resource tags
+        /// </summary>
+        public ResourceBase()
+        {
+            this.Attributes = new List<ResourceAttributeBase>();
+        }
+
         // The narrative
         private Narrative m_narrative;
+
+        /// <summary>
+        /// Extended observations about the resource that can be used to tag the resource
+        /// </summary>
+        [XmlIgnore]
+        public List<ResourceAttributeBase> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the internal identifier for the resource

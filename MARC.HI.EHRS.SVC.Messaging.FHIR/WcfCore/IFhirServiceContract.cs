@@ -52,28 +52,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Read a resource
         /// </summary>
-        [WebGet(UriTemplate = "/{resourceType}/@{id}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "read")]
         ResourceBase ReadResource(string resourceType, string id, string mimeType);
 
         /// <summary>
         /// Version read a resource
         /// </summary>
-        [WebGet(UriTemplate = "/{resourceType}/@{id}/history/@{vid}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/{resourceType}/{id}/_history/{vid}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "vread")]
         ResourceBase VReadResource(string resourceType, string id, string vid, string mimeType);
 
         /// <summary>
         /// Update a resource
         /// </summary>
-        [WebInvoke(UriTemplate = "/{resourceType}/@{id}?_format={mimeType}", Method = "PUT", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", Method = "PUT", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "update")]
         ResourceBase UpdateResource(string resourceType, string id, string mimeType, ResourceBase target);
 
         /// <summary>
         /// Delete a resource
         /// </summary>
-        [WebInvoke(UriTemplate = "/{resourceType}/@{id}?_format={mimeType}", Method = "DELETE", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", Method = "DELETE", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "delete")]
         ResourceBase DeleteResource(string resourceType, string id, string mimeType);
 
@@ -87,14 +87,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Create a resource
         /// </summary>
-        [WebInvoke(UriTemplate = "/{resourceType}/@{id}?_format={mimeType}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract]
         ResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, ResourceBase target);
 
         /// <summary>
         /// Validate a resource
         /// </summary>
-        [WebInvoke(UriTemplate = "/{resourceType}/validate/@{id}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(UriTemplate = "/{resourceType}/_validate/{id}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "validate")]
         OperationOutcome ValidateResource(string resourceType, string id, ResourceBase target);
 
@@ -109,7 +109,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Version read a resource
         /// </summary>
-        [WebGet(UriTemplate = "/{resourceType}/search", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/{resourceType}/_search", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract()]
         Object SearchResourceAlt(string resourceType);
 
@@ -134,20 +134,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Get history
         /// </summary>
-        [WebGet(UriTemplate = "/{resourceType}/@{id}/history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/{resourceType}/{id}/_history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "history-instance")]
         Atom10FeedFormatter GetResourceInstanceHistory(string resourceType, string id, string mimeType);
 
         /// <summary>
         /// Get history
         /// </summary>
-        [WebGet(UriTemplate = "/{resourceType}/history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/{resourceType}/_history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         Atom10FeedFormatter GetResourceHistory(string resourceType, string mimeType);
 
         /// <summary>
         /// Get history for all
         /// </summary>
-        [WebGet(UriTemplate = "/history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/_history?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         Atom10FeedFormatter GetHistory(string mimeType);
 
     }

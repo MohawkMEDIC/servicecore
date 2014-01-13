@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using System.ServiceModel.Web;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.Everest.Connectors;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -16,19 +17,51 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
     /// </summary>
     public static class MessageUtil
     {
+
+        // Escape characters
+        private static readonly Dictionary<String, String> s_escapeChars = new Dictionary<string, string>()
+        {
+            { "\\,", "\\#002C" },
+            { "\\$", "\\#0024" },
+            { "\\|", "\\#007C" },
+            { "\\\\", "\\#005C" },
+        };
+
+        /// <summary>
+        /// Escape a string
+        /// </summary>
+        public static String Escape(String str)
+        {
+            string retVal = str;
+            foreach (var itm in s_escapeChars)
+                retVal = retVal.Replace(itm.Key, itm.Value);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Un-escape a string
+        /// </summary>
+        public static string UnEscape(String str)
+        {
+            string retVal = str;
+            foreach (var itm in s_escapeChars)
+                retVal = retVal.Replace(itm.Value, itm.Key);
+            return retVal;
+        }
+
         /// <summary>
         /// Populate a domain identifier from a FHIR token
         /// </summary>
         public static DomainIdentifier IdentifierFromToken(string token)
         {
-            string[] tokens = token.Split('!');
+            string[] tokens = token.Split('|');
             if (tokens.Length == 1)
-                return new DomainIdentifier() { Identifier = tokens[0] };
+                return new DomainIdentifier() { Identifier = MessageUtil.UnEscape(tokens[0]) };
             else
                 return new DomainIdentifier()
                 {
-                    Domain = TranslateFhirDomain(tokens[0]),
-                    Identifier = tokens[1]
+                    Domain = TranslateFhirDomain(MessageUtil.UnEscape(tokens[0])),
+                    Identifier = MessageUtil.UnEscape(tokens[1])
                 };
         }
 
@@ -76,14 +109,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// </summary>
         public static CodeValue CodeFromToken(string token)
         {
-            string[] tokens = token.Split('!');
+            string[] tokens = token.Split('|');
             if (tokens.Length == 1)
-                return new CodeValue() { Code = tokens[0] };
+                return new CodeValue() { Code = MessageUtil.UnEscape(tokens[0]) };
             else
                 return new CodeValue()
                 {
-                    CodeSystem = tokens[0],
-                    Code = tokens[1]
+                    CodeSystem = MessageUtil.UnEscape(tokens[0]),
+                    Code = MessageUtil.UnEscape(tokens[1])
                 };
         }
 
@@ -176,7 +209,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     feedResult.PublishDate = DateTime.Now;
                     feedResult.Authors.Add(new SyndicationPerson(null, Environment.MachineName, null));
 
-                    // TODO: author
+                    // Add confidence if the attribute permits
+                    ConfidenceAttribute confidence = itm.Attributes.Find(a => a is ConfidenceAttribute) as ConfidenceAttribute;
+                    if(confidence != null)
+                        feedResult.ElementExtensions.Add("score", "http://a9.com/-/opensearch/extensions/relevance/1.0/", confidence.Confidence);
                     feedItems.Add(feedResult);
                 }
                 retVal.Items = feedItems;

@@ -89,6 +89,8 @@
     <Compile Include="ReflectionExtensionMethods.cs" />
     <Compile Include="Resources\Accreditation.cs" />
     <Compile Include="Resources\Animal.cs" />
+    <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
+    <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
     <Compile Include="Resources\BindingDefinition.cs" />
     <Compile Include="Resources\ComposeDefinition.cs" />
     <Compile Include="Resources\ConceptDefinition.cs" />
