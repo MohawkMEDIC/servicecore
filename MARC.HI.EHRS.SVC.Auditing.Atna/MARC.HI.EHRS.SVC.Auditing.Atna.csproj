@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AtnaApi">
+      <HintPath>..\Solution Items\AtnaApi.dll</HintPath>
+    </Reference>
     <Reference Include="MARC.Everest, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ba5b2480018546af, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
@@ -72,6 +75,7 @@
     <Compile Include="Configuration\ConfigurationSectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\ITranspoter.cs" />
     <Compile Include="Configuration\UI\AtnaConfigurationPanel.cs" />
     <Compile Include="Configuration\UI\pnlConfigureAudit.cs">
       <SubType>UserControl</SubType>
@@ -79,30 +83,7 @@
     <Compile Include="Configuration\UI\pnlConfigureAudit.Designer.cs">
       <DependentUpon>pnlConfigureAudit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Format\ActionType.cs" />
-    <Compile Include="Format\AuditableObejctType.cs" />
-    <Compile Include="Format\AuditableObject.cs" />
-    <Compile Include="Format\AuditableObjectIdType.cs" />
-    <Compile Include="Format\AuditableObjectLifecycle.cs" />
-    <Compile Include="Format\AuditableObjectRole.cs" />
-    <Compile Include="Format\AuditActorData.cs" />
-    <Compile Include="Format\AuditCode.cs" />
-    <Compile Include="Format\AuditMessage.cs" />
-    <Compile Include="Format\AuditSourceIdentificationType.cs" />
-    <Compile Include="Format\AuditSourceType.cs" />
-    <Compile Include="Format\CodeValue.cs" />
-    <Compile Include="Format\EventIdentificationType.cs" />
-    <Compile Include="Format\NetworkAccessPointType.cs" />
-    <Compile Include="Format\ObjectDataChoiceType.cs" />
-    <Compile Include="Format\ObjectDetailType.cs" />
-    <Compile Include="Format\OutcomeIndicator.cs" />
-    <Compile Include="IMessagePublisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyslogPublisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">

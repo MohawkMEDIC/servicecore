@@ -74,7 +74,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
             retVal.AuditTarget = new IPEndPoint(IPAddress.Parse(ipAddress), port);
 
             // Create the publisher
-            retVal.MessagePublisher = ci.Invoke(new object[] { retVal.AuditTarget }) as IMessagePublisher;
+            retVal.MessagePublisher = ci.Invoke(new object[] { retVal.AuditTarget }) as AtnaApi.Transport.ITransporter;
             
             return retVal;
         }

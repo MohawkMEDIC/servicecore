@@ -24,7 +24,7 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Auditing.Atna.Configuration;
 using System.Configuration;
 using MARC.HI.EHRS.SVC.Core.Services;
-using MARC.HI.EHRS.SVC.Auditing.Atna.Format;
+using AtnaApi.Model;
 using System.Threading;
 using System.ComponentModel;
 using System.Net;

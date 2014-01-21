@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using AtnaApi.Transport;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
 {
@@ -39,6 +40,6 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
         /// <summary>
         /// Gets or sets the message publisher to use for this audit
         /// </summary>
-        public IMessagePublisher MessagePublisher { get; set; }
+        public ITransporter MessagePublisher { get; set; }
     }
 }

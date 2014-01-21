@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using AtnaApi.Transport;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
 {
@@ -102,7 +103,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
         private void InitializeSenders()
         {
             foreach(Type t in this.GetType().Assembly.GetTypes())
-                if (t.GetInterface(typeof(IMessagePublisher).FullName) != null)
+                if (t.GetInterface(typeof(ITransporter).FullName) != null)
                     cbxTransport.Items.Add(new TypeDescription(t));
         }
 
