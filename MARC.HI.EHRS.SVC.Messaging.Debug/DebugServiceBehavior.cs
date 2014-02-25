@@ -19,6 +19,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Debug
         /// </summary>
         public System.IO.Stream GetMessage(string messageId)
         {
+            
             var imps = ApplicationContext.CurrentContext.GetService(typeof(IMessagePersistenceService)) as IMessagePersistenceService;
             WebOperationContext.Current.OutgoingResponse.ContentType = "application/vnd.marc.message";
             if (imps != null)

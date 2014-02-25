@@ -119,6 +119,9 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
             int nMatched = 0;
             foreach (var part in this.Parts)
                 nMatched += other.Parts.Count(o => o.Type == part.Type && o.Value.ToLower()== part.Value.ToLower());
+
+            if (this.Parts.Count == 0 && other.Parts.Count == 0)
+                return 1;
             return (float)nMatched / this.Parts.Count;
         }
     }

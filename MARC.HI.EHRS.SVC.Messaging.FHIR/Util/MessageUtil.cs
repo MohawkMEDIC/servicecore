@@ -198,8 +198,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 var feedItems = new List<SyndicationItem>();
                 foreach (ResourceBase itm in result.Results)
                 {
-                    Uri resourceUrl = new Uri(String.Format("{0}/{1}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/@{1}/history/@{2}", itm.GetType().Name, itm.Id, itm.VersionId)));
-                    SyndicationItem feedResult = new SyndicationItem(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null,null);
+                    Uri resourceUrl = new Uri(String.Format("{0}/{1}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/{1}/_history/{2}", itm.GetType().Name, itm.Id, itm.VersionId)));
+                    SyndicationItem feedResult = new SyndicationItem(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null ,resourceUrl);
                     feedResult.Links.Add(new SyndicationLink(resourceUrl, "self", null, null, 0));
 
                     string summary = "<div xmlns=\"http://www.w3.org/1999/xhtml\">" + itm.Text.ToString() + "</div>";
