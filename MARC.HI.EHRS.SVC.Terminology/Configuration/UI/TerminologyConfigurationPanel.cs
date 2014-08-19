@@ -242,10 +242,18 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
                 {
                     if(this.EnableLocal)
                     {
-                        this.DatabaseConfigurator.DeployFeature("QDCDB", this.ConnectionString, configurationDom);
-                        this.DatabaseConfigurator.DeployFeature("LOINC", this.ConnectionString, configurationDom);
-                        this.DatabaseConfigurator.DeployFeature("ISO639-1", this.ConnectionString, configurationDom);
-                        this.DatabaseConfigurator.DeployFeature("ISO639-3", this.ConnectionString, configurationDom);
+                        try { this.DatabaseConfigurator.DeployFeature("QDCDB", this.ConnectionString, configurationDom); }
+                        catch (InvalidOperationException) { }
+                        try { this.DatabaseConfigurator.DeployFeature("LOINC", this.ConnectionString, configurationDom); }
+                        catch (InvalidOperationException) { }
+                        try { this.DatabaseConfigurator.DeployFeature("ICD10", this.ConnectionString, configurationDom); }
+                        catch (InvalidOperationException) { }
+                        try { this.DatabaseConfigurator.DeployFeature("SNOMED", this.ConnectionString, configurationDom); }
+                        catch (InvalidOperationException) { }
+                        try { this.DatabaseConfigurator.DeployFeature("ISO639-1", this.ConnectionString, configurationDom); }
+                        catch (InvalidOperationException) { }
+                        try { this.DatabaseConfigurator.DeployFeature("ISO639-3", this.ConnectionString, configurationDom); }
+                        catch (InvalidOperationException) { }
                     }
                     shouldQuit = true;
                 }
