@@ -92,7 +92,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         {
             get
             {
-                return cbxLanguage.SelectedValue.ToString();
+                return cbxLanguage.Text;
             }
             set
             {
