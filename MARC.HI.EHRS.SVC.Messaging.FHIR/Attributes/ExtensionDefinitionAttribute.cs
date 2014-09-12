@@ -11,6 +11,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
     public class ExtensionDefinitionAttribute : Attribute
     {
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public ExtensionDefinitionAttribute()
+        {
+            this.MaxOccurs = 1;
+            this.MinOccurs = 0;
+        }
 
         /// <summary>
         /// Gets or sets the name of the extension
@@ -51,7 +59,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         /// <summary>
         /// True if the implementer must understand
         /// </summary>
-        public bool MustUnderstand { get; set; }
+        public bool IsModifier { get; set; }
 
         /// <summary>
         /// Identifies the binding (value set)
@@ -64,5 +72,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         public String RemoteBinding { get; set; }
 
 
+        /// <summary>
+        /// Min-occurs
+        /// </summary>
+        public int MinOccurs { get; set; }
+
+        /// <summary>
+        /// Max-occurs
+        /// </summary>
+        public int MaxOccurs { get; set; }
     }
 }

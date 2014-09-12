@@ -27,9 +27,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Gets or sets the source of the search parameter definition
         /// </summary>
-        [XmlElement("source")]
+        [XmlElement("definition")]
         [Description("The source of the search parameter definition")]
-        public FhirUri Source { get; set; }
+        public FhirUri Definition { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the parameter

@@ -79,7 +79,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 w.WriteStartElement("td");
                 w.WriteStartElement("a");
                 w.WriteAttributeString("href", String.Format("#{0}", this.Definition.Binding));
-                w.WriteString(this.Definition.Binding);
+                this.Definition.Binding.Reference.WriteText(w);
                 w.WriteEndElement(); // a
                 w.WriteEndElement(); //td
                 w.WriteEndElement(); //tr

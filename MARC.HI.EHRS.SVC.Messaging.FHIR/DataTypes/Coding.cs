@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
 {
@@ -36,6 +37,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public FhirUri System { get; set; }
 
         /// <summary>
+        /// Version of the codification system
+        /// </summary>
+        [XmlElement("version")]
+        public FhirString Version { get; set; }
+
+        /// <summary>
         /// The code 
         /// </summary>
         [XmlElement("code")]
@@ -48,12 +55,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public FhirString Display { get; set; }
 
         /// <summary>
+        /// Primary code?
+        /// </summary>
+        [XmlElement("primary")]
+        public FhirBoolean Primary { get; set; }
+
+        /// <summary>
+        /// The valueset from which the code was drawn
+        /// </summary>
+        [XmlElement("valueSet")]
+        public Resource<ValueSet> ValueSet { get; set; }
+
+        /// <summary>
         /// Write text
         /// </summary>
         /// <param name="w"></param>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
-            w.WriteString(this.Code);
+            if (this.Display != null)
+                w.WriteString(this.Display);
+            else
+                w.WriteString(this.Code);
             if (this.System != null)
             {
                 w.WriteString(" (");

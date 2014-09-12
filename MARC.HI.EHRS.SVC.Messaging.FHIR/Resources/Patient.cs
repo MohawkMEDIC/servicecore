@@ -18,7 +18,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("Patient", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Patient", Namespace = "http://hl7.org/fhir")] 
     [ParticipantObjectMap(IdType = AuditableObjectIdType.PatientNumber, Role = AuditableObjectRole.Patient, Type = AuditableObjectType.Person, OidName = "CR_CID")]
-    [Profile(ProfileId = "svccore", Name = "MARC-HI ServiceCore FHIR Profile", Import = "http://hl7.org/implement/standards/fhir/profiles-resources.xml")]
+    [Profile(ProfileId = "svccore", Name = "MARC-HI ServiceCore FHIR Profile")]
     [ResourceProfile(Name = "ServiceCore Resource - Patient")]
     public class Patient : ResourceBase
     {
@@ -139,9 +139,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Provider of the patient resource
         /// </summary>
-        [XmlElement("provider")]
+        [XmlElement("careProvider")]
+        [Description("Provider managing this patient")]
+        public Resource Provider { get; set; }
+
+        /// <summary>
+        /// Provider of the patient resource
+        /// </summary>
+        [XmlElement("managingOrganization")]
         [Description("Organization managing this patient")]
-        public Resource<Organization> Provider { get; set; }
+        public Resource<Organization> ManagingOrganization { get; set; }
 
         /// <summary>
         /// Link between this patient and others
@@ -162,9 +169,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         internal override void WriteText(XmlWriter xw)
         {
+            xw.WriteStartElement("div");
+            xw.WriteAttributeString("class", "h1");
+            xw.WriteString(String.Format("Patient {0}", this.Id));
+            xw.WriteEndElement(); // div
 
             // Now output
             xw.WriteStartElement("table", NS_XHTML);
+            xw.WriteAttributeString("border", "1");
             xw.WriteElementString("caption", NS_XHTML, "Identifiers");
             xw.WriteStartElement("tbody", NS_XHTML);
             base.WriteTableRows(xw, "Identifiers", this.Identifier.ToArray());
@@ -173,6 +185,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 
             // Now output demographics
             xw.WriteStartElement("table", NS_XHTML);
+            xw.WriteAttributeString("border", "1");
             xw.WriteElementString("caption", NS_XHTML, "Demographic Information");
             xw.WriteStartElement("tbody", NS_XHTML);
             base.WriteTableRows(xw, "Name", this.Name.ToArray());
@@ -185,11 +198,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 base.WriteTableRows(xw, "Contacts", this.Contact.ToArray());
             // Extended Attributes
             base.WriteTableRows(xw, "Extended Attributes", this.Extension.ToArray());
+
+            if (this.Contained != null)
+                base.WriteTableRows(xw, "Contained Resources", this.Contained.ToArray());
+
             xw.WriteEndElement(); // tbody
             xw.WriteEndElement(); // table
 
             
         }
 
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Patient] {0}", this.Name.FirstOrDefault());
+        }
     }
 }

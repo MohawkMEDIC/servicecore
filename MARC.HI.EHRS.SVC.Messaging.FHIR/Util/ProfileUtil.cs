@@ -187,70 +187,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         }
 
         /// <summary>
-        /// Find or create a binding element
-        /// </summary>
-        public static BindingDefinition FindOrCreateBinding(this Profile me, ElementProfileAttribute attribute)
-        {
-            BindingDefinition retVal = null;
-
-            // Binding ? Get the name and set er up
-            string bindingName = null;
-            if (attribute.Binding != null)
-            {
-                var structAtt = attribute.Binding.GetCustomAttribute<StructureAttribute>();
-                if (structAtt != null)
-                    bindingName = structAtt.Name;
-                else
-                {
-                    var xtypeName = attribute.Binding.GetCustomAttribute<XmlTypeAttribute>();
-                    if (xtypeName != null)
-                        bindingName = xtypeName.TypeName;
-                    else
-                        bindingName = attribute.Binding.Name;
-                }
-            }
-            else if (attribute.RemoteBinding != null)
-                bindingName = new Uri(attribute.RemoteBinding).Segments.Last();
-
-            // Create the binding?
-            if (bindingName != null)
-            {
-                retVal = me.Binding.Find(o => o.Name == bindingName);
-                if (retVal == null)
-                {
-                    retVal = new BindingDefinition()
-                    {
-                        Name = bindingName,
-                        IsExtensible = attribute.Binding == null,
-                        Conformance = new PrimitiveCode<string>("preferred"),
-                        Reference = attribute.RemoteBinding == null ? 
-                            (Shareable)new Resource<ValueSet>()
-                            {
-                                Reference = attribute.Binding.GetValueSetDefinition()
-                            } : (FhirUri)new Uri(attribute.RemoteBinding)
-                    };
-                    me.Binding.Add(retVal);
-                }
-                else
-                    ; // TODO: Update
-            }
-
-            return retVal;
-        }
-
-        /// <summary>
-        /// Find or create a binding element
-        /// </summary>
-        public static BindingDefinition FindOrCreateBinding(this Profile me, ExtensionDefinitionAttribute attribute)
-        {
-            return me.FindOrCreateBinding(new ElementProfileAttribute()
-            {
-                Binding = attribute.Binding,
-                RemoteBinding = attribute.RemoteBinding
-            });
-        }
-
-        /// <summary>
         /// Find a structure definition, barring that create one
         /// </summary>
         public static Structure FindOrCreateStructureDefinition(this Profile me, Type resourceType)
@@ -330,13 +266,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     if (attribute != null)
                     {
 
-                        BindingDefinition binding = profile.FindOrCreateBinding(attribute);
-                        definition.Definition.Binding = binding == null ? definition.Definition.Binding : binding.Name;
+                        if (attribute.Binding != null || attribute.RemoteBinding != null)
+                        {
+                            BindingDefinition binding = new BindingDefinition(attribute);
+                            definition.Definition.Binding = binding == null ? definition.Definition.Binding : binding;
+                        }
                         definition.Definition.FormalDefinition = attribute.FormalDefinition ?? definition.Definition.FormalDefinition;
                         definition.Definition.MaxOccurs = attribute.MaxOccurs == -1 ? "*" : attribute.MaxOccurs.ToString();
                         definition.Definition.MinOccurs = attribute.MinOccurs;
                         definition.Definition.MustSupport = attribute.MustSupport;
-                        definition.Definition.MustUnderstand = attribute.MustUnderstand;
+                        definition.Definition.IsModifier = attribute.IsModifier;
                         definition.Definition.ShortDefinition = attribute.ShortDescription ?? definition.Definition.ShortDefinition;
                         definition.Definition.Comments = attribute.Comment;
                     }
@@ -408,8 +347,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                 Trace.TraceWarning("Could not find resource path {0}, not applying profile attribute", definitionPath);
                             else
                             {
-                                BindingDefinition binding = context.FindOrCreateBinding(attribute);
-                                definition.Definition.Binding = binding == null ? definition.Definition.Binding : binding.Name;
+                                if (attribute.Binding != null || attribute.RemoteBinding != null)
+                                {
+                                    BindingDefinition binding = new BindingDefinition(attribute);
+                                    definition.Definition.Binding = binding == null ? definition.Definition.Binding : binding;
+                                }
 
                                 if (attribute.ValueType != null)
                                 {
@@ -422,7 +364,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                 definition.Definition.MaxOccurs = attribute.MaxOccurs == -1 ? "*" : attribute.MaxOccurs.ToString();
                                 definition.Definition.MinOccurs = attribute.MinOccurs;
                                 definition.Definition.MustSupport = attribute.MustSupport;
-                                definition.Definition.MustUnderstand = attribute.MustUnderstand;
+                                definition.Definition.IsModifier = attribute.IsModifier;
                                 definition.Definition.ShortDefinition = attribute.ShortDescription ?? definition.Definition.ShortDefinition;
                                 definition.Definition.Comments = attribute.Comment ?? definition.Definition.Comments;
                             }
@@ -487,21 +429,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             {
 
                                 // Binding
-                                var bindingRef = context.FindOrCreateBinding(ext);
-
+                                 
                                 definition = new ExtensionDefinition()
                                 {
                                     Code = new PrimitiveCode<string>(ext.Name),
                                     Definition = new ElementDefinition()
                                     {
-                                        Binding = bindingRef == null ? null : bindingRef.Name,
                                         FormalDefinition = ext.FormalDefinition,
                                         ShortDefinition = ext.ShortDescription,
                                         MustSupport = ext.MustSupport,
-                                        MustUnderstand = ext.MustUnderstand,
-                                        Type = new List<TypeRef>() { TypeRef.MakeTypeRef(ext.ValueType) }
+                                        IsModifier = ext.IsModifier,
+                                        Type = new List<TypeRef>() { TypeRef.MakeTypeRef(ext.ValueType) }, 
+                                        MinOccurs = ext.MinOccurs,
+                                        MaxOccurs = ext.MaxOccurs == -1 ? "*" : ext.MaxOccurs.ToString()
                                     }
                                 };
+                                if (ext.Binding != null || ext.RemoteBinding != null)
+                                {
+                                    var bindingRef = new BindingDefinition(ext);
+                                    definition.Definition.Binding = bindingRef;
+                                }
+
                                 // Add the type and contexts
                                 definition.Context.Add(definitionPath);
 
@@ -537,16 +485,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             context.Description = "Automatically generated by the MARC-HI Service Core Framework"; // TODO: Put this in strings file
             context.Publisher = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyCompanyAttribute>().Company;
             
-            // Import URL
-            if (profileAttribute.Import != null)
-            {
-                Uri importUrl = null;
-                if (!Uri.TryCreate(profileAttribute.Import, UriKind.Absolute, out importUrl))
-                    importUrl = new Uri(String.Format("{0}/Profile/@{1}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, profileAttribute.Import));
-                if (!context.Import.Exists(o => o.Uri.Value.Equals(importUrl)))
-                    context.Import.Add(new ProfileImport() { Uri = importUrl });
-            }
-
         }
 
 

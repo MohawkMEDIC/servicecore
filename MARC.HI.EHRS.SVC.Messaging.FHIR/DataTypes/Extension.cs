@@ -16,8 +16,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// URL of the extension definition
         /// </summary>
-        [XmlElement("url")]
-        public FhirUri Url { get; set; }
+        [XmlAttribute("url")]
+        public String Url { get; set; }
 
         /// <summary>
         /// True if is modifier
@@ -63,8 +63,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
             if(this.Value != null)
                 this.Value.WriteText(w);
             w.WriteString(" - Profile: ");
-            this.Url.WriteText(w);
-            
+            w.WriteStartElement("a");
+            w.WriteAttributeString("href", this.Url);
+            w.WriteString(this.Url);
+            w.WriteEndElement(); //a
         }
 
     }

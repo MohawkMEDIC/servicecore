@@ -23,10 +23,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public ResourceBase()
         {
             this.Attributes = new List<ResourceAttributeBase>();
+            this.Contained = new List<ContainedResource>();
         }
 
         // The narrative
         private Narrative m_narrative;
+
+        /// <summary>
+        /// A list of contained resources
+        /// </summary>
+        [XmlElement("contained")]
+        public List<ContainedResource> Contained { get; set; }
 
         /// <summary>
         /// Extended observations about the resource that can be used to tag the resource
@@ -54,7 +61,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             get
             {
-                if (this.m_narrative == null)
+                if (this.m_narrative == null && !this.SuppressText)
                     this.m_narrative = this.GenerateNarrative();
                 return this.m_narrative;
             }
@@ -63,6 +70,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 this.m_narrative = value;
             }
         }
+
+
+        /// <summary>
+        /// Suppress generation of text
+        /// </summary>
+        [XmlIgnore]
+        public bool SuppressText { get; set; }
 
         /// <summary>
         /// Generate a narrative
@@ -107,5 +121,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlIgnore]
         public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// Add a contained resource
+        /// </summary>
+        public void AddContainedResource(ResourceBase resource)
+        {
+            resource.MakeIdRef();
+            this.Contained.Add(new ContainedResource() { Item = resource });
+        }
     }
 }

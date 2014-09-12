@@ -25,6 +25,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     [ServiceKnownType(typeof(ValueSet))]
     [ServiceKnownType(typeof(Profile))]
     [ServiceKnownType(typeof(Conformance))]
+    [ServiceKnownType(typeof(RelatedPerson))]
     [ServiceKnownType(typeof(System.ServiceModel.Syndication.Atom10FeedFormatter))]
     [XmlSerializerFormat (SupportFaults = true)]
     public interface IFhirServiceContract
@@ -102,7 +103,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// Version read a resource
         /// </summary>
         [WebGet(UriTemplate = "/{resourceType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
-        [OperationContract(Name = "search")]
+        [OperationContract(Name = "search-type")]
         Object SearchResource(string resourceType);
 
 

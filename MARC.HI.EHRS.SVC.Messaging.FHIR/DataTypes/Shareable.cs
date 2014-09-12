@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Collections;
 using System.Xml;
 using System.Runtime.Serialization;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
 {
@@ -32,9 +33,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
             this.Extension = new List<Extension>();
         }
 
+
         /// <summary>
         /// Represents the ID of the object via XS:ID
-        /// </summary>
+        /// </summary> 
         [XmlAttribute("id")]
         [DataMember(Name = "id")]
         public string XmlId { get; set; }
@@ -53,13 +55,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [DataMember(Name = "extension")]
         public List<Extension> Extension { get { return this.m_extensions; } set { this.m_extensions = value; } }
 
+
         /// <summary>
         /// Make this a reference type
         /// </summary>
         public Shareable MakeReference()
         {
             if(String.IsNullOrEmpty(this.XmlId))
-                this.XmlId = this.GetHashCode().ToString();
+                this.XmlId = String.Format("objid{0}", this.GetHashCode().ToString());
             
             return new Shareable()
             {

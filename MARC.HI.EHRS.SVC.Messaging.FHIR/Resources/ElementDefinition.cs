@@ -43,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 this.MaxOccurs = "1";
                 this.MinOccurs = 1;
                 this.MustSupport = false;
-                this.MustUnderstand = false;
+                this.IsModifier = false;
             }
 
             // Next description attribute
@@ -74,12 +74,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 
             // First, populate what we can
             this.ShortDefinition = profile.ShortDescription;
-            this.FormalDefinition = profile.FormalDefinition;
+            this.FormalDefinition = profile.FormalDefinition ?? profile.ShortDescription;
             this.MaxOccurs = profile.MaxOccurs == -1 ? "*" : profile.MaxOccurs.ToString();
             this.MinOccurs = profile.MinOccurs;
             this.MustSupport = profile.MustSupport;
-            this.MustUnderstand = profile.MustUnderstand;
-            this.Binding = profile.Binding != null ? profile.Binding.GetValueSetDefinition().ToString() : null;
+            this.IsModifier = profile.IsModifier;
+
+            if(profile.Binding != null || profile.RemoteBinding != null)
+                this.Binding = new BindingDefinition(profile);
 
             // Next description attribute
             if (description != null)
@@ -165,15 +167,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// True if the object must be understood
         /// </summary>
         [Description("If true, the element cannot be ignored by systems unless they recognize the element and a pre-determination has been made that it is not relevant to their particular system")]
-        [XmlElement("mustUnderstand")]
-        public FhirBoolean MustUnderstand { get; set; }
+        [XmlElement("isModifier")]
+        public FhirBoolean IsModifier { get; set; }
 
         /// <summary>
         /// The external binding if applicable
         /// </summary>
         [Description("Identifies the set of codes that applies to this element if a data type supporting codes is used")]
         [XmlElement("binding")]
-        public FhirString Binding { get; set; }
+        public BindingDefinition Binding { get; set; }
 
         /// <summary>
         /// Write text utility
@@ -213,13 +215,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             {
                 w.WriteStartElement("br");
                 w.WriteEndElement();
-                w.WriteStartElement("em");
-                w.WriteString("Note: This value is bound to ");
-                w.WriteStartElement("a");
-                w.WriteAttributeString("href", String.Format("#{0}", this.Binding));
                 this.Binding.WriteText(w);
-                w.WriteEndElement(); // a
-                w.WriteEndElement(); // wm
             }
             w.WriteEndElement(); // span
 

@@ -121,6 +121,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
+            w.WriteStartElement("div");
+            w.WriteAttributeString("class", "h1");
+            w.WriteString(String.Format("Conformance Statement {0}", this.Id));
+            w.WriteEndElement(); // div
+
             w.WriteStartElement("table");
             w.WriteAttributeString("border", "1");
             w.WriteStartElement("caption");

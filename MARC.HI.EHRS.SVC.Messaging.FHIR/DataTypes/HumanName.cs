@@ -98,5 +98,34 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
             }
             w.WriteString(String.Format("({0})", this.Use));
         }
+
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            foreach (var n in this.Family)
+                sb.Append(n + " ");
+
+            sb.Append(",");
+            if (this.Prefix.Count > 0)
+            {
+                foreach (var n in this.Prefix)
+                    sb.Append(n + " ");
+            }
+
+            foreach (var n in this.Given)
+                sb.Append(n + " ");
+
+            if (this.Suffix.Count > 0)
+            {
+                foreach (var n in this.Suffix)
+                    sb.Append(n + " ");
+            }
+
+            return sb.ToString();
+        }
     }
 }

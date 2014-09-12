@@ -61,6 +61,7 @@
     <Compile Include="DataTypes\Choice.cs" />
     <Compile Include="DataTypes\CodeableConcept.cs" />
     <Compile Include="DataTypes\Coding.cs" />
+    <Compile Include="DataTypes\ContainedResource.cs" />
     <Compile Include="DataTypes\Date.cs" />
     <Compile Include="DataTypes\Extension.cs" />
     <Compile Include="DataTypes\HumanName.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Resources\ProfileImport.cs" />
     <Compile Include="Resources\Qualification.cs" />
     <Compile Include="Resources\RawXmlWrapper.cs" />
+    <Compile Include="Resources\RelatedPerson.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceBase.cs" />
     <Compile Include="Resources\ResourceDefinition.cs" />

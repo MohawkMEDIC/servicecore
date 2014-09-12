@@ -35,8 +35,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Identifies the key (unique value) of the primitive
         /// </summary>
-        [XmlElement("key")]
-        public FhirString Key { get; set; }
+        [XmlElement("value")]
+        public FhirString Value { get; set; }
 
         /// <summary>
         /// Identifies the period the identifier is valid
@@ -66,7 +66,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
 
 
 
-            this.Key.WriteText(w);
+            this.Value.WriteText(w);
 
             // System in brackets
             if (this.System != null)

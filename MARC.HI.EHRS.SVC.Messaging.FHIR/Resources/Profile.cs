@@ -46,8 +46,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             this.Structure = new List<Structure>();
             this.ExtensionDefinition = new List<ExtensionDefinition>();
-            this.Binding = new List<BindingDefinition>();
-            this.Import = new List<ProfileImport>();
             this.Telecom = new List<Telecom>();
             this.Code = new List<Coding>();
 
@@ -112,13 +110,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public StatusType Status { get; set; }
 
         /// <summary>
-        /// Represents an import of a profile
-        /// </summary>
-        [XmlElement("import")]
-        [Description("Import of another profile")]
-        public List<ProfileImport> Import { get; set; }
-
-        /// <summary>
         /// The resource or data type constraint
         /// </summary>
         [Description("A constraint on a resource or datatype")]
@@ -133,19 +124,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public List<ExtensionDefinition> ExtensionDefinition { get; set; }
 
         /// <summary>
-        /// Identifies a concept binding
-        /// </summary>
-        [XmlElement("binding")]
-        [Description("Defines a linkage between a vocabulary binding name used in the profile (or expected to be used in profile importing this one) and a value set or code list")]
-        public List<BindingDefinition> Binding { get; set; }
-
-        /// <summary>
         /// Write a text representation of the profile
         /// </summary>
         /// <param name="w"></param>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
-
             w.WriteStartElement("div");
             w.WriteAttributeString("class", "h1");
             this.Name.WriteText(w);
@@ -170,10 +153,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             // Extensions
             foreach (var ext in this.ExtensionDefinition)
                 ext.WriteText(w);
+        }
 
-            // Bindings
-            foreach (var bind in this.Binding)
-                bind.WriteText(w);
+        /// <summary>
+        /// Represent the profile as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Profile] {0}", this.Name);
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.ComponentModel;
+using MARC.Everest.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -14,24 +16,73 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("Binding", Namespace = "http://hl7.org/fhir")]
     public class BindingDefinition : Shareable
     {
+
+        /// <summary>
+        /// Default CTOR
+        /// </summary>
+        public BindingDefinition()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new binding definition
+        /// </summary>
+        public BindingDefinition(FHIR.Attributes.ElementProfileAttribute profile)
+        {
+            // Binding ? Get the name and set er up
+            string bindingName = null;
+            if (profile.Binding != null)
+            {
+                var structAtt = profile.Binding.GetCustomAttribute<StructureAttribute>();
+                if (structAtt != null)
+                    bindingName = structAtt.Name;
+                else
+                {
+                    var xtypeName = profile.Binding.GetCustomAttribute<XmlTypeAttribute>();
+                    if (xtypeName != null)
+                        bindingName = xtypeName.TypeName;
+                    else
+                        bindingName = profile.Binding.Name;
+                }
+            }
+            else if (profile.RemoteBinding != null)
+                bindingName = new Uri(profile.RemoteBinding).Segments.Last();
+
+            // Create the binding?
+            if (bindingName != null)
+            {
+                this.Name = bindingName;
+                this.IsExtensible = profile.Binding == null;
+                this.Conformance = new PrimitiveCode<string>("preferred");
+                this.Reference = profile.RemoteBinding == null ?
+                            (Shareable)new Resource<ValueSet>()
+                            {
+                                Reference = profile.Binding.GetValueSetDefinition().ToString()
+                            } : (FhirUri)new Uri(profile.RemoteBinding);
+            }
+        }
+
+        /// <summary>
+        /// Binding definition
+        /// </summary>
+        /// <param name="ext"></param>
+        public BindingDefinition(FHIR.Attributes.ExtensionDefinitionAttribute ext) : this(new ElementProfileAttribute()
+            {
+                Binding = ext.Binding,
+                RemoteBinding = ext.RemoteBinding
+            })
+        {
+            
+        }
+
         /// <summary>
         /// The name of the binding
         /// </summary>
         [XmlElement("name")]
         [Description("Defines a linkage between a vocabulary binding name used in the profile (or expected to be used in profile importing this one) and a value set or code list")]
         public FhirString Name { get; set; }
-        /// <summary>
-        /// The definition (description) of the binding
-        /// </summary>
-        [XmlElement("definition")]
-        [Description("Describes the intended use of this particular set of codes")]
-        public FhirString Definition { get; set; }
-        /// <summary>
-        /// The type of binding
-        /// </summary>
-        [XmlElement("type")]
-        [Description("Identifies how the set of codes for this binding is being defined")]
-        public PrimitiveCode<String> Type { get; set; }
+
         /// <summary>
         /// True if codes can be added to the binding
         /// </summary>
@@ -44,6 +95,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("conformance")]
         [Description("Indicates the degree of conformance expectations associated with this binding")]
         public PrimitiveCode<String> Conformance { get; set; }
+        /// <summary>
+        /// The definition (description) of the binding
+        /// </summary>
+        [XmlElement("definition")]
+        [Description("Describes the intended use of this particular set of codes")]
+        public FhirString Definition { get; set; }
         /// <summary>
         /// Identifies the referenced value set
         /// </summary>
@@ -67,7 +124,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             w.WriteStartElement("tbody");
 
             // Output the 
-            base.WriteTableRows(w, "Type", this.Type);
             base.WriteTableRows(w, "Extensible", this.IsExtensible);
             base.WriteTableRows(w, "Conformance", this.Conformance);
             base.WriteTableRows(w, "Reference", this.Reference);

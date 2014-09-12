@@ -22,10 +22,5 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Import for the profile
-        /// </summary>
-        public string Import { get; set; }
-
     }
 }

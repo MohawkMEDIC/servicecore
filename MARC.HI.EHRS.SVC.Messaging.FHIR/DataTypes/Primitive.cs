@@ -134,7 +134,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType("uri", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-
     public class FhirUri : Primitive<Uri> { 
         public FhirUri() : base() { }
         public FhirUri(Uri value) : base(value) { }

@@ -67,13 +67,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 this.Name.First().WriteText(xw);
 
             xw.WriteString(" - ");
-            xw.WriteStartElement("em", NS_XHTML);
             foreach (var rel in this.Relationship)
             {
                 rel.WriteText(xw);
                 xw.WriteRaw(", ");
             }
-            xw.WriteEndElement(); // em
         }
     }
 }

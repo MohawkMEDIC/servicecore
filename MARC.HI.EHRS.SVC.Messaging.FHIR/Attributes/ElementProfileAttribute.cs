@@ -20,7 +20,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
             this.MaxOccurs = 1;
             this.MinOccurs = 0;
             this.MustSupport = true;
-            this.MustUnderstand = true;
+            this.IsModifier = false;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         /// <summary>
         /// True if the implementer must understand
         /// </summary>
-        public bool MustUnderstand { get; set; }
+        public bool IsModifier { get; set; }
 
         /// <summary>
         /// Identifies the binding (value set)

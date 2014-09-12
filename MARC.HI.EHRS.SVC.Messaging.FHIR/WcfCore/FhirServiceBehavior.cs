@@ -101,8 +101,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 result = this.PerformRead(resourceType, id, null);
                 String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
-
-                    WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}/history/@{1}", baseUri, result.Results[0].VersionId));
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}/_history/{1}", baseUri, result.Results[0].VersionId));
                 return result.Results[0];
             }
             catch (Exception e)
@@ -166,7 +165,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 audit = AuditUtil.CreateAuditData(result.Results);
 
                 String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.AbsoluteUri;
-                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}{1}/@{2}/history/@{3}", baseUri, resourceType, result.Results[0].Id, result.Results[0].VersionId));
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}{1}/{2}/_history/{3}", baseUri, resourceType, result.Results[0].Id, result.Results[0].VersionId));
                 WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
                 WebOperationContext.Current.OutgoingResponse.ETag = result.Results[0].VersionId;
 
@@ -271,7 +270,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 audit = AuditUtil.CreateAuditData(result.Results);
 
                 String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.AbsoluteUri;
-                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}{1}/@{2}/history/@{3}", baseUri, resourceType, result.Results[0].Id, result.Results[0].VersionId));
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}{1}/{2}/_history/{3}", baseUri, resourceType, result.Results[0].Id, result.Results[0].VersionId));
                 WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
                 WebOperationContext.Current.OutgoingResponse.ETag = result.Results[0].VersionId;
 
@@ -400,7 +399,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         {
             var retVal = ConformanceUtil.GetConformanceStatement();
             WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
-            WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/@{1}/history/@{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/{1}/_history/{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
             WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"conformance.xml\"");

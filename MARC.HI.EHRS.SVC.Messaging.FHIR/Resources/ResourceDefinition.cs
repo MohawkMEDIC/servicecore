@@ -89,7 +89,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 foreach (var itm in this.SearchParams)
                 {
                     w.WriteStartElement("a");
-                    w.WriteAttributeString("href", itm.Source.Value.ToString());
+                    w.WriteAttributeString("href", itm.Definition.Value.ToString());
                     itm.Name.WriteText(w);
                     w.WriteEndElement(); // a
                     w.WriteStartElement("br");

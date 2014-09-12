@@ -17,21 +17,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("Resource1", Namespace  = "http://hl7.org/fhir")]
     public class Resource : Shareable
     {
-        /// <summary>
-        /// Gets or sets the type
-        /// </summary>
-        [XmlElement("type")]
-        public virtual PrimitiveCode<String> Type
-        {
-            get;
-            set;
-        }
+
 
         /// <summary>
         /// Gets or sets the reference
         /// </summary>
         [XmlElement("reference")]
-        public FhirUri Reference { get; set; }
+        public FhirString Reference { get; set; }
 
         /// <summary>
         /// Gets or sets the display
@@ -46,10 +38,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             return new Resource()
             {
-                Type = new PrimitiveCode<string>(instance.GetType().GetCustomAttribute<XmlRootAttribute>() != null ? instance.GetType().GetCustomAttribute<XmlRootAttribute>().ElementName : instance.GetType().Name),
+                Display = instance.ToString(),
+                //Type = new PrimitiveCode<string>(instance.GetType().GetCustomAttribute<XmlRootAttribute>() != null ? instance.GetType().GetCustomAttribute<XmlRootAttribute>().ElementName : instance.GetType().Name),
                 Reference = String.IsNullOrEmpty(instance.VersionId) ?
-                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}", instance.GetType().Name, instance.Id)) :
-                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}/history/@{2}", instance.GetType().Name, instance.Id, instance.VersionId))
+                    baseUri.ToString() + String.Format("/{0}/{1}", instance.GetType().Name, instance.Id) :
+                    baseUri.ToString() + String.Format("/{0}/{1}/_history/{2}", instance.GetType().Name, instance.Id, instance.VersionId)
+            };
+        }
+
+        /// <summary>
+        /// Create resource refernece for local
+        /// </summary>
+        public static Resource CreateLocalResourceReference(ResourceBase instance)
+        {
+            IdRef idRef = instance.MakeIdRef();
+            return new Resource() {
+                Reference = idRef.Value,
+                Display = instance.ToString()
             };
         }
 
@@ -58,27 +63,36 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
-            this.Reference.WriteText(w);
-
+            w.WriteStartElement("a");
+            w.WriteAttributeString("href", this.Reference.Value);
+            w.WriteString((this.Display ?? this.Reference).Value);
+            w.WriteEndElement();// a
         }
 
         /// <summary>
         /// Fetch the resource described by this item
         /// </summary>
-        public ResourceBase FetchResource(Uri baseUri)
+        public ResourceBase FetchResource(Uri baseUri, Type resourceType)
         {
-            return this.FetchResource(baseUri, null);
+            return this.FetchResource(baseUri, null, null, resourceType);
         }
 
         /// <summary>
         /// Fetch a resource from the specified uri with the specified credentials
         /// </summary>
-        public ResourceBase FetchResource(Uri baseUri, ICredentials credentials)
+        public ResourceBase FetchResource(Uri baseUri, ICredentials credentials, ResourceBase context, Type resourceType)
         {
             // Request uri
             Uri requestUri = null;
 
-            if (!this.Reference.Value.IsAbsoluteUri)
+            // Contained?
+            if (this.Reference.Value.StartsWith("#") && context.Contained != null)
+            {
+                var res = context.Contained.Find(o => o.Item.Id == this.Reference.Value.ToString().Substring(1));
+                if (res != null)
+                    return res.Item;
+            }
+            else if (Uri.TryCreate(this.Reference.Value, UriKind.RelativeOrAbsolute, out requestUri))
                 requestUri = new Uri(baseUri, this.Reference.Value.ToString());
 
             // Make request to URI
@@ -94,9 +108,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 {
                     if (response.StatusCode != HttpStatusCode.Accepted)
                         throw new WebException(String.Format("Server responded with {0}", response.StatusCode));
-
-                    // Get the response stream
-                    Type resourceType = typeof(Resource).Assembly.GetType(String.Format("{0}.{1}", typeof(Resource).Namespace, this.Type.Value));
 
                     XmlSerializer xsz = new XmlSerializer(resourceType);
                     return xsz.Deserialize(response.GetResponseStream()) as ResourceBase;
@@ -117,10 +128,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             return new Resource<T>()
             {
-                Type = new PrimitiveCode<string>(instance.GetType().GetCustomAttribute<XmlRootAttribute>() != null ? instance.GetType().GetCustomAttribute<XmlRootAttribute>().ElementName : instance.GetType().Name),
+                Display = instance.ToString(),
                 Reference = String.IsNullOrEmpty(instance.VersionId) ?
-                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}", instance.GetType().Name, instance.Id)) :
-                    new Uri(baseUri.ToString() + String.Format("/{0}/@{1}/history/@{2}", instance.GetType().Name, instance.Id, instance.VersionId))
+                    baseUri.ToString() + String.Format("/{0}/{1}", instance.GetType().Name, instance.Id) :
+                    baseUri.ToString() + String.Format("/{0}/{1}/_history/{2}", instance.GetType().Name, instance.Id, instance.VersionId)
+            };
+        }
+
+        /// <summary>
+        /// Create a reasource reference to the specified resource
+        /// </summary>
+        public static Resource<T> CreateLocalResourceReference<T>(T instance) where T : ResourceBase
+        {
+            IdRef idRef = instance.MakeIdRef();
+            return new Resource<T>()
+            {
+                Display = instance.ToString(),
+                Reference = idRef.Value
             };
         }
     }
@@ -135,24 +159,24 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Fetch the resource described by this item
         /// </summary>
-        public T FetchResource(Uri baseUri)
+        public T FetchResource(Uri baseUri, ResourceBase context)
         {
-            return this.FetchResource(baseUri, null);
+            return this.FetchResource(baseUri, null, context);
         }
 
         /// <summary>
         /// Fetch a resource from the specified uri with the specified credentials
         /// </summary>
-        public T FetchResource(Uri baseUri, ICredentials credentials) 
+        public T FetchResource(Uri baseUri, ICredentials credentials, ResourceBase context) 
         {
-            return (T)base.FetchResource(baseUri, credentials);
+            return (T)base.FetchResource(baseUri, credentials, context, typeof(T));
         }
 
         /// <summary>
         /// Gets or sets the type
         /// </summary>
-        [XmlElement("type")]
-        public override PrimitiveCode<String> Type 
+        [XmlIgnore]
+        public PrimitiveCode<String> Type 
         {
             get
             {
@@ -161,14 +185,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                     return new PrimitiveCode<String>((atts[0] as XmlRootAttribute).ElementName);
                 return new PrimitiveCode<string>(typeof(T).Name);
             }
-            set
-            {
-                ;
-            }        
         }
-
-
-       
 
     }
 }
