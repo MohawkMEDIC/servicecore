@@ -30,7 +30,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// Gets or sets the data for the attachment
         /// </summary>
         [XmlElement("data")]
-        public Primitive<byte[]> Data { get; set; }
+        public FhirBinary Data { get; set; }
 
         /// <summary>
         /// Gets or sets a url reference

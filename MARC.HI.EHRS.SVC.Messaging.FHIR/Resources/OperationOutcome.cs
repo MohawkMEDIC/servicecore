@@ -20,6 +20,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     {
 
         /// <summary>
+        /// Namespace Declarations
+        /// </summary>
+        [XmlNamespaceDeclarations]
+        public XmlSerializerNamespaces Namespaces { get { return this.m_namespaces; } }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public OperationOutcome()

@@ -368,7 +368,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 // Process incoming request
                 result = resourceProcessor.Query(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters);
 
-                if (result.Outcome == ResultCode.Rejected)
+                if (result == null || result.Outcome == ResultCode.Rejected)
                     throw new InvalidDataException("Message was rejected");
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Query failed");
@@ -515,7 +515,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
         }
 
-
+        
         /// <summary>
         /// Perform a read against the underlying IFhirResourceHandler
         /// </summary>

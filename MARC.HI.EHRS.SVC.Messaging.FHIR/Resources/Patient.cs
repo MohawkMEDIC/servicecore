@@ -22,6 +22,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [ResourceProfile(Name = "ServiceCore Resource - Patient")]
     public class Patient : ResourceBase
     {
+        /// <summary>
+        /// Namespace Declarations
+        /// </summary>
+        [XmlNamespaceDeclarations]
+        public XmlSerializerNamespaces Namespaces { get { return this.m_namespaces; } }
 
         /// <summary>
         /// Patient constructor

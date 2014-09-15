@@ -49,6 +49,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
                 this.m_webHost = new WebServiceHost(typeof(FhirServiceBehavior));
                 this.m_webHost.Description.ConfigurationName = this.m_configuration.WcfEndpoint;
                 (this.m_webHost.Description.Endpoints[0].Binding as WebHttpBinding).ContentTypeMapper = new FhirContentTypeHandler();
+                this.m_webHost.Description.Endpoints[0].Behaviors.Add(new FhirRestEndpointBehavior());
+
                 // Start the web host
                 this.m_webHost.Open();
                 return true;

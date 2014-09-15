@@ -45,6 +45,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         {
             get {
 
+                if (this.Value is byte[])
+                    return Convert.ToBase64String(this.Value as Byte[]);
                 if (this.Value != null)
                     return this.Value.ToString();
                 else

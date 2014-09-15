@@ -16,12 +16,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("ResourceBase", Namespace = "http://hl7.org/fhir")]
     public abstract class ResourceBase : Shareable
     {
+        protected XmlSerializerNamespaces m_namespaces = new XmlSerializerNamespaces();
 
         /// <summary>
         /// Resource tags
         /// </summary>
         public ResourceBase()
         {
+            this.m_namespaces.Add("", "http://hl7.org/fhir");
             this.Attributes = new List<ResourceAttributeBase>();
             this.Contained = new List<ContainedResource>();
         }

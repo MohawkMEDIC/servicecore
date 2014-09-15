@@ -65,8 +65,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
                 w.WriteEndElement();//strong
 
 
-
-            this.Value.WriteText(w);
+            if(this.Value != null)
+                this.Value.WriteText(w);
 
             // System in brackets
             if (this.System != null)

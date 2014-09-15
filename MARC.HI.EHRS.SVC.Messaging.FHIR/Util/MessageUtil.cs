@@ -9,6 +9,7 @@ using System.ServiceModel.Web;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.Everest.Connectors;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -70,6 +71,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// </summary>
         public static string TranslateFhirDomain(string fhirDomain)
         {
+            if (String.IsNullOrEmpty(fhirDomain))
+                return null;
             Uri fhirDomainUri = null;
             if (fhirDomain.StartsWith("urn:oid:"))
                 return fhirDomain.Replace("urn:oid:", "");
@@ -161,9 +164,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                 break;
                         }
 
-                if(!baseUri.Contains("stateid="))
+                if(!baseUri.Contains("stateid=") && queryResult.Query.QueryId != Guid.Empty)
                     baseUri += String.Format("stateid={0}&", queryResult.Query.QueryId);
             }
+
+            // Format
+            string format = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["_format"];
+            if (String.IsNullOrEmpty(format))
+                format = "xml";
+            else if (format == "application/xml+fhir")
+                format = "xml";
+            else if (format == "application/json+fhir")
+                format = "json";
+
+            if (!baseUri.Contains("_format"))
+                baseUri += String.Format("_format={0}", format);
 
             // Self URI
             if (nPages > 1)
@@ -198,13 +213,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 var feedItems = new List<SyndicationItem>();
                 foreach (ResourceBase itm in result.Results)
                 {
-                    Uri resourceUrl = new Uri(String.Format("{0}/{1}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/{1}/_history/{2}", itm.GetType().Name, itm.Id, itm.VersionId)));
+                    Uri resourceUrl = new Uri(String.Format("{0}/{1}?_format={2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/{1}/_history/{2}", itm.GetType().Name, itm.Id, itm.VersionId), format));
                     SyndicationItem feedResult = new SyndicationItem(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null ,resourceUrl);
                     feedResult.Links.Add(new SyndicationLink(resourceUrl, "self", null, null, 0));
 
                     string summary = "<div xmlns=\"http://www.w3.org/1999/xhtml\">" + itm.Text.ToString() + "</div>";
                     feedResult.Summary = new TextSyndicationContent(summary, TextSyndicationContentKind.XHtml);
-                    feedResult.Content = new XmlSyndicationContent("text/xml", new SyndicationElementExtension(itm, new XmlSerializer(itm.GetType())));
+                    feedResult.Content = new XmlSyndicationContent("text/xml", new SyndicationElementExtension(itm, new FhirXmlObjectSerializer()));
                     feedResult.LastUpdatedTime = itm.Timestamp;
                     feedResult.PublishDate = DateTime.Now;
                     feedResult.Authors.Add(new SyndicationPerson(null, Environment.MachineName, null));

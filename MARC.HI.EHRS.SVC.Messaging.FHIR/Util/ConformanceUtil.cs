@@ -68,6 +68,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 s_conformance.Experimental = true;
                 s_conformance.FhirVersion = "0.80";
                 s_conformance.Format.Add(new DataTypes.PrimitiveCode<string>("xml"));
+                s_conformance.Format.Add(new DataTypes.PrimitiveCode<string>("json"));
+
                 s_conformance.Implementation = new ImplementationDefinition()
                 {
                     Url = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri,
@@ -108,9 +110,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 defn.Type = new DataTypes.PrimitiveCode<string>(hdlr.ResourceName);
                 
                 // Find all applicable profiles
-                var appliedProfiles = ProfileUtil.GetProfiles().Where(o => o.Structure.Exists(s => s.Type == hdlr.ResourceName));
-                foreach (var ap in appliedProfiles)
+                var appliedProfiles = ProfileUtil.GetProfiles().LastOrDefault(o => o.Structure.Exists(s => s.Type == hdlr.ResourceName));
+                if(appliedProfiles != null)
                 {
+                    var ap = appliedProfiles;
                     Resource<Profile> profileRef = Resource<Profile>.CreateResourceReference(ap, WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri);
                     defn.Profile.Add(profileRef);
                     if(ap.Structure.Find(s => s.Type == hdlr.ResourceName).SearchParams != null)
