@@ -110,12 +110,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 defn.Type = new DataTypes.PrimitiveCode<string>(hdlr.ResourceName);
                 
                 // Find all applicable profiles
-                var appliedProfiles = ProfileUtil.GetProfiles().LastOrDefault(o => o.Structure.Exists(s => s.Type == hdlr.ResourceName));
+                var appliedProfiles = ProfileUtil.GetProfiles().FirstOrDefault(o => o.Structure.Exists(s => s.Type == hdlr.ResourceName) && o.Name != "svccore" );
+                if (appliedProfiles != null)
+                    appliedProfiles = ProfileUtil.GetProfiles().FirstOrDefault(o => o.Structure.Exists(s => s.Type == hdlr.ResourceName));
                 if(appliedProfiles != null)
                 {
                     var ap = appliedProfiles;
                     Resource<Profile> profileRef = Resource<Profile>.CreateResourceReference(ap, WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri);
-                    defn.Profile.Add(profileRef);
+                    defn.Profile = profileRef;
                     if(ap.Structure.Find(s => s.Type == hdlr.ResourceName).SearchParams != null)
                         defn.SearchParams.AddRange(ap.Structure.Find(s => s.Type.ToString() == hdlr.ResourceName).SearchParams);
                     foreach(var sp in defn.SearchParams)

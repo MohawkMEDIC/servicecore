@@ -21,7 +21,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         public ResourceDefinition()
         {
-            this.Profile = new List<Resource<Profile>>();
             this.Operation = new List<OperationDefinition>();
             this.SearchParams = new List<SearchParam>();
         }
@@ -39,7 +38,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("profile")]
         [Description("Resource profiles supported")]
-        public List<Resource<Profile>> Profile { get; set; }
+        public Resource<Profile> Profile { get; set; }
 
         /// <summary>
         /// Gets or sets the operations supported
@@ -69,18 +68,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             this.Type.WriteText(w);
             // Now profiles?
-            if (this.Profile.Count > 0)
+            if (this.Profile != null)
             {
                 w.WriteStartElement("blockquote");
                 w.WriteElementString("strong", "Profiles:");
                 w.WriteStartElement("br");
                 w.WriteEndElement();
-                foreach (var itm in this.Profile)
-                {
-                    itm.WriteText(w);
-                    w.WriteStartElement("br");
-                    w.WriteEndElement();
-                }
+                this.Profile.WriteText(w);
+                w.WriteStartElement("br");
+                w.WriteEndElement();
                 w.WriteEndElement(); // blockquote
                 w.WriteStartElement("blockquote");
                 w.WriteElementString("strong", "Search Parameters:");
