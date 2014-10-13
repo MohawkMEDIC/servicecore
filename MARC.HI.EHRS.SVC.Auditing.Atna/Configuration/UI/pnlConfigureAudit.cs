@@ -102,7 +102,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
         /// </summary>
         private void InitializeSenders()
         {
-            foreach(Type t in this.GetType().Assembly.GetTypes())
+            foreach(Type t in typeof(ITransporter).Assembly.GetTypes())
                 if (t.GetInterface(typeof(ITransporter).FullName) != null)
                     cbxTransport.Items.Add(new TypeDescription(t));
         }

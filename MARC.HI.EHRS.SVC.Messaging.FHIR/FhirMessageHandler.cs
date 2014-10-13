@@ -10,6 +10,8 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
 using System.Diagnostics;
 using System.ServiceModel;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
@@ -45,11 +47,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
                 // Set the context
                 ApplicationContext.CurrentContext = this.Context;
 
-
                 this.m_webHost = new WebServiceHost(typeof(FhirServiceBehavior));
                 this.m_webHost.Description.ConfigurationName = this.m_configuration.WcfEndpoint;
                 (this.m_webHost.Description.Endpoints[0].Binding as WebHttpBinding).ContentTypeMapper = new FhirContentTypeHandler();
                 this.m_webHost.Description.Endpoints[0].Behaviors.Add(new FhirRestEndpointBehavior());
+
+                // Configuration 
+                foreach (Type t in this.m_configuration.ResourceHandlers)
+                {
+                    ConstructorInfo ci = t.GetConstructor(Type.EmptyTypes);
+                    if (ci == null)
+                    {
+                        Trace.TraceWarning("Type {0} has no default constructor", t.FullName);
+                        continue;
+                    }
+                    FhirResourceHandlerUtil.RegisterResourceHandler(ci.Invoke(null) as IFhirResourceHandler);
+                }
 
                 // Start the web host
                 this.m_webHost.Open();

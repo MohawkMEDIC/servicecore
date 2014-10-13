@@ -28,6 +28,7 @@ using System.Windows.Forms;
 using System.Xml;
 using MARC.HI.EHRS.SVC.Core.Configuration;
 using System.IO;
+using System.Configuration;
 
 namespace ServiceConfigurator
 {
@@ -86,9 +87,17 @@ namespace ServiceConfigurator
                     configDocument.Load(ConfigurationApplicationContext.s_configFile);
                     foreach (IConfigurationPanel itm in apply.chkActions.CheckedItems)
                     {
-                        if (!itm.Validate(configDocument))
+                        try
                         {
-                            MessageBox.Show(String.Format("Configuration of item '{0}' failed, validation failed", itm), "Validation Failure");
+                            if (!itm.Validate(configDocument))
+                            {
+                                MessageBox.Show(String.Format("Configuration of item '{0}' failed, validation failed", itm), "Validation Failure");
+                                continue;
+                            }
+                        }
+                        catch (ConfigurationException e)
+                        {
+                            MessageBox.Show(String.Format("Configuration of item '{0}' failed, validation failed with reason {1}", itm, e.Message), "Validation Failure");
                             continue;
                         }
                         progress.Status = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);

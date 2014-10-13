@@ -18,6 +18,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         {
             this.WcfEndpoint = wcfEndpoint;
             this.LandingPage = landingPage;
+            this.ResourceHandlers = new List<Type>();
         }
 
         /// <summary>
@@ -29,5 +30,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// The landing page file
         /// </summary>
         public string LandingPage { get; private set; }
+
+        /// <summary>
+        /// Gets the resource handlers registered
+        /// </summary>
+        public List<Type> ResourceHandlers { get; private set; }
     }
 }

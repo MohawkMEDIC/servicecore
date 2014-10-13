@@ -13,6 +13,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Diagnostics;
 using MARC.Everest.Exceptions;
 using MARC.Everest.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -66,9 +67,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         {
             Trace.TraceInformation("Starting profile compilation process...");           
             lock (s_syncLock)
-                foreach(var asm in AppDomain.CurrentDomain.GetAssemblies())
-                    foreach (var typ in asm.GetTypes())
+                foreach(var itm in FhirResourceHandlerUtil.ResourceHandlers)
                     {
+                        Type typ = itm.GetType();
                         ProfileAttribute profileAtt = typ.GetCustomAttribute<ProfileAttribute>();
 
                         if (profileAtt == null)
@@ -79,7 +80,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         if(!s_builtProfiles.TryGetValue(profileAtt.ProfileId, out context))
                         {
                             context = new Profile();
-                            context.VersionId = asm.GetName().Version.ToString();
+                            context.VersionId = typ.Assembly.GetName().Version.ToString();
                             s_builtProfiles.Add(profileAtt.ProfileId, context);
                         }
 

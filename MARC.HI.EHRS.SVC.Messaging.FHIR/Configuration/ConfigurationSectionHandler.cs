@@ -22,6 +22,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             
             // Section
             XmlElement serviceElement = section.SelectSingleNode("./*[local-name() = 'service']") as XmlElement;
+            XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']");
+
             string wcfServiceName = String.Empty,
                 landingPage = String.Empty;
 
@@ -39,7 +41,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             else
                 throw new ConfigurationErrorsException("Missing serviceElement", section);
 
-            return new FhirServiceConfiguration(wcfServiceName, landingPage);
+            var retVal = new FhirServiceConfiguration(wcfServiceName, landingPage);
+
+            // Add instructions
+            foreach (XmlElement addInstruction in resourceElements)
+            {
+                if (addInstruction.Attributes["type"] == null)
+                    throw new ConfigurationErrorsException("add instruction missing @type attribute");
+                Type tType = Type.GetType(addInstruction.Attributes["type"].Value);
+                if (tType == null)
+                    throw new ConfigurationErrorsException(String.Format("Could not find type described by '{0}'", addInstruction.Attributes["type"].Value));
+                retVal.ResourceHandlers.Add(tType);
+            }
+
+            return retVal;
         }
 
         #endregion

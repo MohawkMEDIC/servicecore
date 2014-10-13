@@ -28,18 +28,32 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         static FhirResourceHandlerUtil()
         {
 
-            foreach(var asm in AppDomain.CurrentDomain.GetAssemblies())
-                foreach (var t in asm.GetTypes().Where(o => o.GetInterface(typeof(IFhirResourceHandler).FullName) != null))
-                {
-                    var ctor = t.GetConstructor(Type.EmptyTypes);
-                    if (ctor == null)
-                        continue; // cannot construct
-                    var processor = ctor.Invoke(null) as IFhirResourceHandler;
-                    s_messageProcessors.Add(processor);
-                }
+            foreach (var t in typeof(FhirResourceHandlerUtil).Assembly.GetTypes().Where(o => o.GetInterface(typeof(IFhirResourceHandler).FullName) != null))
+            {
+                var ctor = t.GetConstructor(Type.EmptyTypes);
+                if (ctor == null)
+                    continue; // cannot construct
+                var processor = ctor.Invoke(null) as IFhirResourceHandler;
+                s_messageProcessors.Add(processor);
+            }
 
         }
 
+        /// <summary>
+        /// Register resource handler
+        /// </summary>
+        public static void RegisterResourceHandler(IFhirResourceHandler handler)
+        {
+            s_messageProcessors.Add(handler);
+        }
+
+        /// <summary>
+        /// Register resource handler
+        /// </summary>
+        public static void UnRegisterResourceHandler(IFhirResourceHandler handler)
+        {
+            s_messageProcessors.Remove(handler);
+        }
       
         /// <summary>
         /// Get the message processor type based on resource name
