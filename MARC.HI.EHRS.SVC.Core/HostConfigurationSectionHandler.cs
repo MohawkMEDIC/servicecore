@@ -52,6 +52,8 @@ namespace MARC.HI.EHRS.SVC.Core
     public class HostConfigurationSectionHandler : IConfigurationSectionHandler, ISystemConfigurationService
     {
 
+        private IOidRegistrarService m_oidService = null;
+
         /// <summary>
         /// Get the modules that are to be loaded 
         /// </summary>
@@ -80,7 +82,15 @@ namespace MARC.HI.EHRS.SVC.Core
         /// <summary>
         /// Gets the Oid Registrar that can be used to lookup oids
         /// </summary>
-        public OidRegistrar OidRegistrar { get; private set; }
+        public IOidRegistrarService OidRegistrar
+        {
+            get
+            {
+                if (this.m_oidService == null)
+                    this.m_oidService = this.ServiceProviders.Find(o => o is IOidRegistrarService);
+                return this.m_oidService;
+            }
+        }
 
         /// <summary>
         /// Valid senders
@@ -111,7 +121,6 @@ namespace MARC.HI.EHRS.SVC.Core
                 throw new InvalidOperationException("Can't find configuration section");
             this.SectionName = section.LocalName;
             this.ServiceProviders = new List<object>() { this };
-            this.OidRegistrar = new OidRegistrar();
             this.ServiceAssemblies = new List<Assembly>();
 
             XmlNode serviceAssemblySection = section.SelectSingleNode("./*[local-name() = 'serviceAssemblies']"),
@@ -156,22 +165,8 @@ namespace MARC.HI.EHRS.SVC.Core
                     else
                         Trace.TraceError("HostConfiguration: Can't load {0}", asmFile);
                 }
-            if (oidSection != null) // load oids
-            {
-                foreach (XmlNode xn in oidSection.SelectNodes("./*[local-name() = 'add']"))
-                {
-                    if (xn.Attributes["name"] != null && xn.Attributes["oid"] != null && xn.Attributes["desc"] != null)
-                    {
-                        var data = OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
-                        if(xn.ChildNodes != null)
-                            foreach (XmlElement child in xn.ChildNodes)
-                            {
-                                if (child.Name == "attribute" && child.Attributes["name"] != null)
-                                    data.Attributes.Add(new KeyValuePair<string,string>(child.Attributes["name"].Value, child.Attributes["value"] != null ? child.Attributes["value"].Value : null));
-                            }
-                    }
-                }
-            }
+
+
             if (systemSection != null) // load system information
             {
                 XmlNode deviceElement = systemSection.SelectSingleNode("./*[local-name() = 'device']");
@@ -181,6 +176,7 @@ namespace MARC.HI.EHRS.SVC.Core
                     this.DeviceName = deviceElement.Attributes["name"].Value;
                 }
             }
+
             if(jurisdictionSection != null) // jurisdiction data
             {
                 this.JurisdictionData = new MARC.HI.EHRS.SVC.Core.DataTypes.Jurisdiction();
@@ -208,6 +204,7 @@ namespace MARC.HI.EHRS.SVC.Core
                 data = jurisdictionSection.SelectSingleNode("./*[local-name() = 'defaultLanguageCode']/@code");
                 this.JurisdictionData.DefaultLanguageCode = data != null ? data.Value : null;  
             }
+
             if(custodianSection != null)
             {
                 this.Custodianship = new MARC.HI.EHRS.SVC.Core.DataTypes.CustodianshipData();
@@ -216,6 +213,7 @@ namespace MARC.HI.EHRS.SVC.Core
                     this.Custodianship.Id = new MARC.HI.EHRS.SVC.Core.DataTypes.DomainIdentifier() { Domain = idElement.Attributes["domain"].Value, Identifier = idElement.Attributes["value"].Value };
                 this.Custodianship.Name = custodianSection.SelectSingleNode("./*[local-name() = 'name']").InnerText;
             }
+
             if (serviceProviderSection != null && !(configContext is IConfigurationPanel)) // Load providers data
                 foreach (XmlNode nd in serviceProviderSection.SelectNodes("./*[local-name() = 'add']/@type"))
                 {
@@ -234,6 +232,29 @@ namespace MARC.HI.EHRS.SVC.Core
                     else
                         Trace.TraceWarning("Can't find type described by '{0}'", nd.Value);
                 }
+
+            
+            // Default OID service
+            if (this.OidRegistrar == null)
+            {
+                this.m_oidService = new OidRegistrar();
+                if (oidSection != null) // load oids for internal oids
+                {
+                    foreach (XmlNode xn in oidSection.SelectNodes("./*[local-name() = 'add']"))
+                    {
+                        if (xn.Attributes["name"] != null && xn.Attributes["oid"] != null && xn.Attributes["desc"] != null)
+                        {
+                            var data = OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
+                            if (xn.ChildNodes != null)
+                                foreach (XmlElement child in xn.ChildNodes)
+                                {
+                                    if (child.Name == "attribute" && child.Attributes["name"] != null)
+                                        data.Attributes.Add(new KeyValuePair<string, string>(child.Attributes["name"].Value, child.Attributes["value"] != null ? child.Attributes["value"].Value : null));
+                                }
+                        }
+                    }
+                }
+            }
 
             return this;
         }

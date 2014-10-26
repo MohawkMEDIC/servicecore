@@ -23,7 +23,6 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// </summary>
         public OidRegistrarConfigurationPanel()
         {
-            
             OidRegistrar.ExtendedAttributes.Add("AssigningAuthorityName", typeof(String));
             OidRegistrar.ExtendedAttributes.Add("OIDType", typeof(HL7IdentifierType));
             OidRegistrar.ExtendedAttributes.Add("HL70396Name", typeof(String));

@@ -22,13 +22,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Core.DataTypes
 {
     /// <summary>
     /// Provides a mechanism for locating OIDs by friendly name
     /// </summary>
-    public class OidRegistrar : IEnumerable<MARC.HI.EHRS.SVC.Core.DataTypes.OidRegistrar.OidData>
+    public class OidRegistrar : IOidRegistrarService
     {
 
         /// <summary>
