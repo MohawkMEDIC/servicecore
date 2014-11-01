@@ -54,7 +54,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Gets the registrar that can be used to locate OIDs based on a friendly name
         /// </summary>
-        OidRegistrar OidRegistrar { get; }
+        IOidRegistrarService OidRegistrar { get; }
 
         /// <summary>
         /// Determine if the specified device is a valid sender

@@ -87,7 +87,7 @@ namespace MARC.HI.EHRS.SVC.Core
             get
             {
                 if (this.m_oidService == null)
-                    this.m_oidService = this.ServiceProviders.Find(o => o is IOidRegistrarService);
+                    this.m_oidService = this.ServiceProviders.Find(o => o is IOidRegistrarService) as IOidRegistrarService;
                 return this.m_oidService;
             }
         }
