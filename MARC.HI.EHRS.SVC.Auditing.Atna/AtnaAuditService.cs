@@ -77,7 +77,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     null
                 );
                 if (ad.EventTypeCode != null)
-                    am.EventIdentification.EventType.Add(new CodeValue<String>(ad.EventTypeCode.Code, ad.EventTypeCode.CodeSystem));
+                    am.EventIdentification.EventType.Add(new CodeValue<String>(ad.EventTypeCode.Code, ad.EventTypeCode.CodeSystem) { DisplayName = ad.EventTypeCode.DisplayName });
 
                 am.SourceIdentification.Add(new AuditSourceIdentificationType()
                 {

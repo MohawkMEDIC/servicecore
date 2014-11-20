@@ -25,6 +25,8 @@ using System.Configuration;
 using System.Xml;
 using System.Net;
 using System.Reflection;
+using AtnaApi.Transport;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
 {
@@ -48,6 +50,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
 
             if (section.Attributes["messagePublisher"] == null)
                 throw new ConfigurationErrorsException("You must specify a message publisher interface to use for sending audit messages", section);
+            
 
             // Create the message handler
             Type auditType = Type.GetType(section.Attributes["messagePublisher"].Value);
@@ -59,7 +62,6 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
 
             if (auditTargetNode.Attributes["endpoint"] == null)
                 throw new ConfigurationErrorsException("The URI element in the auditTarget element is missing", section);
-            
 
             // Parse IP Address
             string ipAddress = auditTargetNode.Attributes["endpoint"].Value;
@@ -75,10 +77,51 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration
 
             // Create the publisher
             retVal.MessagePublisher = ci.Invoke(new object[] { retVal.AuditTarget }) as AtnaApi.Transport.ITransporter;
-            
+
+            // Secure?
+            if (retVal.MessagePublisher is AtnaApi.Transport.STcpSyslogTransport)
+            {
+                var secureTransport = retVal.MessagePublisher as STcpSyslogTransport;
+                if (auditTargetNode.Attributes["certificateThumbprint"] == null)
+                    throw new ConfigurationErrorsException("When secure TCP is used a certificate must be specified");
+                secureTransport.ClientCertificate = ConfigurationSectionHandler.FindCertificate(StoreName.My, StoreLocation.LocalMachine, X509FindType.FindByThumbprint, auditTargetNode.Attributes["certificateThumbprint"].Value);
+                if (auditTargetNode.Attributes["serverCertificateThumbprint"] != null)
+                    secureTransport.ServerCertificate = ConfigurationSectionHandler.FindCertificate(StoreName.My, StoreLocation.LocalMachine, X509FindType.FindByThumbprint, auditTargetNode.Attributes["serverCertificateThumbprint"].Value);
+
+            }
+
+            if (section.Attributes["format"] != null && section.Attributes["format"].Value == "DICOM")
+                retVal.MessagePublisher.MessageFormat = MessageFormatType.DICOM;
+            else
+                retVal.MessagePublisher.MessageFormat = MessageFormatType.RFC3881;
+
             return retVal;
         }
 
         #endregion
+
+        /// <summary>
+        /// Find a certificate
+        /// </summary>
+        public static X509Certificate2 FindCertificate(StoreName storeName, StoreLocation storeLocation, X509FindType findType, string findValue)
+        {
+            X509Store store = new X509Store(storeName, storeLocation);
+            try
+            {
+                store.Open(OpenFlags.ReadOnly);
+                var certs = store.Certificates.Find(findType, findValue, false);
+                if (certs.Count > 0)
+                    return certs[0];
+                else
+                    throw new InvalidOperationException("Cannot locate certificate");
+
+            }
+            finally
+            {
+                store.Close();
+            }
+
+        }
+
     }
 }

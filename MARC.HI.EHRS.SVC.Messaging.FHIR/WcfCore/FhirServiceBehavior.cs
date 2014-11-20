@@ -22,6 +22,7 @@ using System.Configuration;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Reflection;
+using System.IO.Compression;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 {

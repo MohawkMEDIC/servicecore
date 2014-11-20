@@ -104,6 +104,24 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <param name="correlationState"></param>
         public void BeforeSendReply(ref System.ServiceModel.Channels.Message reply, object correlationState)
         {
+            string encodings = WebOperationContext.Current.IncomingRequest.Headers.Get("Accept-Encoding");
+
+            if (!string.IsNullOrEmpty(encodings))
+            {
+                encodings = encodings.ToLowerInvariant();
+
+                if (encodings.Contains("gzip"))
+                {
+                    //context.Response.Filter = new GZipStream(context.Response.Filter, CompressionMode.Compress);
+                    WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Encoding", "gzip");
+                    WebOperationContext.Current.OutgoingResponse.Headers.Add("X-CompressResponseStream", "gzip");
+                }
+                else
+                {
+                    WebOperationContext.Current.OutgoingResponse.Headers.Add("X-CompressResponseStream", "no-known-accept");
+                }
+            }
+
             // Need to translate
             if (correlationState != null && correlationState.ToString() == "application/json+fhir")
             {
@@ -143,7 +161,32 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     xmlMessage.Properties.Remove(WebBodyFormatMessageProperty.Name);
                     xmlMessage.Properties.Add(WebBodyFormatMessageProperty.Name, new WebBodyFormatMessageProperty(WebContentFormat.Json));
                     reply = xmlMessage;
-                            
+                }
+            }
+
+            // Compress
+            if (WebOperationContext.Current.OutgoingResponse.Headers["Content-Encoding"] == "gzip")
+            {
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    // Write out the XML
+                    using (var xdr = XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false))
+                        reply.WriteBodyContents(xdr);
+                    ms.Flush();
+
+                    try
+                    {
+                        Message compressedMessage = Message.CreateMessage(reply.Version, reply.Headers.Action, new GZipWriter(ms.ToArray()));
+                        compressedMessage.Properties.CopyProperties(reply.Properties);
+                        compressedMessage.Properties.Remove(WebBodyFormatMessageProperty.Name);
+                        compressedMessage.Properties.Add(WebBodyFormatMessageProperty.Name, new WebBodyFormatMessageProperty(WebContentFormat.Raw));
+                        reply = compressedMessage;
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError(e.ToString());
+                    }
                 }
             }
         }

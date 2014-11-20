@@ -164,6 +164,7 @@
     <Compile Include="WcfCore\FhirRestEndpointBehavior.cs" />
     <Compile Include="WcfCore\FhirServiceBehavior.cs" />
     <Compile Include="WcfCore\FhirXmlObjectSerializer.cs" />
+    <Compile Include="WcfCore\GZipWriter.cs" />
     <Compile Include="WcfCore\IFhirServiceContract.cs" />
   </ItemGroup>
   <ItemGroup>
