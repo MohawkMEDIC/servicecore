@@ -39,10 +39,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 {
                     gzs.Write(this.m_data, 0, this.m_data.Length);
                     gzs.Flush();
-                    writer.WriteStartElement("Binary");
-                    writer.WriteBase64(ms.ToArray(), 0, (int)ms.Length);
-                    writer.WriteEndElement();
                 }
+                writer.WriteStartElement("Binary");
+                byte[] arr = ms.ToArray();
+                writer.WriteBase64(arr, 0, arr.Length);
+                writer.WriteEndElement();
+                
             }
             writer.WriteEndDocument();
         }

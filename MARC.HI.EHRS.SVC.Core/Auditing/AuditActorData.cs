@@ -57,5 +57,10 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// Default ctor
         /// </summary>
         public AuditActorData() { ActorRoleCode = new List<CodeValue>(); }
+
+        /// <summary>
+        /// Alternative user identifier
+        /// </summary>
+        public string AlternativeUserId { get; set; }
     }
 }

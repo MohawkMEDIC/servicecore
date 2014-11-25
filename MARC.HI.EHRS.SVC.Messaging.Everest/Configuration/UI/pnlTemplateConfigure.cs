@@ -207,7 +207,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
             try
             {
                 store.Open(OpenFlags.ReadOnly);
-                var certs = store.Certificates.Find(X509FindType.FindByApplicationPolicy, "1.3.6.1.5.5.7.3.1", true);
+                var certs = store.Certificates.Find(X509FindType.FindByApplicationPolicy, "1.3.6.1.5.5.7.3.1", false);
                 var selected = X509Certificate2UI.SelectFromCollection(certs, "Select Certificate", "Select a server certificate for this endpoint", X509SelectionFlag.SingleSelection);
 
                 if (selected.Count > 0) 

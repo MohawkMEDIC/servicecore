@@ -103,7 +103,8 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                         NetworkAccessPointTypeSpecified = adActor.NetworkAccessPointType != 0,
                         UserIdentifier = adActor.UserIdentifier,
                         UserIsRequestor = adActor.UserIsRequestor,
-                        UserName = adActor.UserName
+                        UserName = adActor.UserName,
+                        AlternativeUserId = adActor.AlternativeUserId
                     };
                     foreach (var rol in adActor.ActorRoleCode)
                         act.ActorRoleCode.Add(new CodeValue<string>(rol.Code, rol.CodeSystem)
@@ -116,7 +117,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 
                 foreach (var aoPtctpt in ad.AuditableObjects)
                 {
-                    am.AuditableObjects.Add(new AuditableObject()
+                    var atnaAo = new AuditableObject()
                     {
                         IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
                             aoPtctpt.IDTypeCode.Value != Core.DataTypes.AuditableObjectIdType.Custom ?
@@ -132,8 +133,14 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                         TypeSpecified = aoPtctpt.Type != 0,
                         ObjectSpec = aoPtctpt.QueryData ?? aoPtctpt.NameData,
                         ObjectSpecChoice = aoPtctpt.QueryData == null ? ObjectDataChoiceType.ParticipantObjectName : ObjectDataChoiceType.ParticipantObjectQuery
-                    });
+                    };
                     // TODO: Object Data
+                    foreach(var kv in aoPtctpt.ObjectData)
+                        atnaAo.ObjectDetail.Add(new ObjectDetailType() {
+                            Type = kv.Key,
+                            Value = kv.Value
+                        });
+                    am.AuditableObjects.Add(atnaAo);
                 }
 
                 // Was a record of this service found?

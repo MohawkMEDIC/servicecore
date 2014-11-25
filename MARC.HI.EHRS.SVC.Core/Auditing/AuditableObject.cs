@@ -30,6 +30,13 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     public class AuditableObject
     {
         /// <summary>
+        /// New object data
+        /// </summary>
+        public AuditableObject()
+        {
+            this.ObjectData = new Dictionary<string, byte[]>();
+        }
+        /// <summary>
         /// Identifies the object in the event
         /// </summary>
         public string ObjectId { get; set; }
@@ -61,5 +68,10 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// Data associated with the object
         /// </summary>
         public string NameData { get; set; }
+
+        /// <summary>
+        /// Additional object data
+        /// </summary>
+        public Dictionary<String, byte[]> ObjectData { get; set; }
     }
 }

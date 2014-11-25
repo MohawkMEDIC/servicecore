@@ -49,8 +49,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 
                 this.m_webHost = new WebServiceHost(typeof(FhirServiceBehavior));
                 this.m_webHost.Description.ConfigurationName = this.m_configuration.WcfEndpoint;
-                (this.m_webHost.Description.Endpoints[0].Binding as WebHttpBinding).ContentTypeMapper = new FhirContentTypeHandler();
-                this.m_webHost.Description.Endpoints[0].Behaviors.Add(new FhirRestEndpointBehavior());
+
+                foreach (var endpoint in this.m_webHost.Description.Endpoints)
+                {
+                    (endpoint.Binding as WebHttpBinding).ContentTypeMapper = new FhirContentTypeHandler();
+                    endpoint.Behaviors.Add(new FhirRestEndpointBehavior());
+                }
 
                 // Configuration 
                 foreach (Type t in this.m_configuration.ResourceHandlers)
