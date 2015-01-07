@@ -50,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
             typeof(MaskingIndicator),
             typeof(PersonalRelationship),
             typeof(QueryRestriction),
-            typeof(ServiceDeliveryLocation)
+            typeof(Place)
         };
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         [XmlElement("mask", typeof(MaskingIndicator))]
         [XmlElement("personalRelationship", typeof(PersonalRelationship))]
         [XmlElement("queryRestriction", typeof(QueryRestriction))]
-        [XmlElement("serviceDeliveryLocation", typeof(ServiceDeliveryLocation))]
+        [XmlElement("serviceDeliveryLocation", typeof(Place))]
         public virtual List<HealthServiceRecordComponent> XmlComponents
         {
             get

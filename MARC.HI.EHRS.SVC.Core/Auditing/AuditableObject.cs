@@ -29,6 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// </summary>
     public class AuditableObject
     {
+
         /// <summary>
         /// New object data
         /// </summary>
@@ -68,7 +69,6 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
         /// Data associated with the object
         /// </summary>
         public string NameData { get; set; }
-
         /// <summary>
         /// Additional object data
         /// </summary>

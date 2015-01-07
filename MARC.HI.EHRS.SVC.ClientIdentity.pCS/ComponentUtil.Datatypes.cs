@@ -716,9 +716,9 @@ namespace MARC.HI.EHRS.SHR.Messaging
         /// <summary>
         /// Create location component
         /// </summary>
-        private ServiceDeliveryLocation CreateLocationComponent(MARC.Everest.RMIM.CA.R020402.COCT_MT240003CA.ServiceDeliveryLocation serviceDeliveryLocation, List<IResultDetail> dtls)
+        private Place CreateLocationComponent(MARC.Everest.RMIM.CA.R020402.COCT_MT240003CA.ServiceDeliveryLocation serviceDeliveryLocation, List<IResultDetail> dtls)
         {
-            ServiceDeliveryLocation retVal = new ServiceDeliveryLocation();
+            Place retVal = new Place();
 
             // Check for identifier
             if (serviceDeliveryLocation.Id == null || serviceDeliveryLocation.Id.IsNull)
@@ -843,9 +843,9 @@ namespace MARC.HI.EHRS.SHR.Messaging
         /// <summary>
         /// Create location component
         /// </summary>
-        private ServiceDeliveryLocation CreateLocationComponent(MARC.Everest.RMIM.CA.R020402.COCT_MT240002CA.ServiceDeliveryLocation serviceDeliveryLocation, List<IResultDetail> dtls)
+        private Place CreateLocationComponent(MARC.Everest.RMIM.CA.R020402.COCT_MT240002CA.ServiceDeliveryLocation serviceDeliveryLocation, List<IResultDetail> dtls)
         {
-            ServiceDeliveryLocation retVal = new ServiceDeliveryLocation();
+            Place retVal = new Place();
 
             // Check for identifier
             if(serviceDeliveryLocation.Id == null || serviceDeliveryLocation.Id.IsNull)
@@ -870,9 +870,9 @@ namespace MARC.HI.EHRS.SHR.Messaging
         /// <summary>
         /// Create a location component
         /// </summary>
-        private ServiceDeliveryLocation CreateLocationComponent(MARC.Everest.RMIM.CA.R020402.COCT_MT240007CA.ServiceDeliveryLocation serviceDeliveryLocation, List<IResultDetail> dtls)
+        private Place CreateLocationComponent(MARC.Everest.RMIM.CA.R020402.COCT_MT240007CA.ServiceDeliveryLocation serviceDeliveryLocation, List<IResultDetail> dtls)
         {
-            ServiceDeliveryLocation retVal = new ServiceDeliveryLocation();
+            Place retVal = new Place();
 
             // Check for identifier
             if (serviceDeliveryLocation.Id == null || serviceDeliveryLocation.Id.IsNull)

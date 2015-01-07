@@ -30,7 +30,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// Identifies a service delivery location
     /// </summary>
     [Serializable][XmlType("ServiceDeliveryLocation")]
-    public class ServiceDeliveryLocation : HealthServiceRecordComponent
+    public class Place : HealthServiceRecordComponent
     {
         /// <summary>
         /// Gets or sets the SHRID of the service delivery location
@@ -42,6 +42,11 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// </summary>
         [XmlAttribute("name")]
         public string Name { get; set; }
+        /// <summary>
+        /// The class of place
+        /// </summary>
+        [XmlAttribute("class")]
+        public String Class { get; set; }
         /// <summary>
         /// Gets or sets the perminant address of the service delivery location
         /// </summary>
@@ -66,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// <summary>
         /// Creates a new instance of the service delivery location
         /// </summary>
-        public ServiceDeliveryLocation()
+        public Place()
         {
             this.AlternateIdentifiers = new List<DomainIdentifier>();
             this.TelecomAddresses = new List<TelecommunicationsAddress>();

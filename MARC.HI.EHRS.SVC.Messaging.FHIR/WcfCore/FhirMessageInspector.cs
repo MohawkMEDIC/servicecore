@@ -104,9 +104,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <param name="correlationState"></param>
         public void BeforeSendReply(ref System.ServiceModel.Channels.Message reply, object correlationState)
         {
+            
             string encodings = WebOperationContext.Current.IncomingRequest.Headers.Get("Accept-Encoding");
 
-            if (!string.IsNullOrEmpty(encodings))
+            if (!string.IsNullOrEmpty(encodings) && this.GetContentFormat(reply) != WebContentFormat.Raw)
             {
                 encodings = encodings.ToLowerInvariant();
 

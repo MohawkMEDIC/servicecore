@@ -58,7 +58,7 @@
     <Compile Include="Components\PersonalRelationship.cs" />
     <Compile Include="Components\PolicyOverride.cs" />
     <Compile Include="Components\QueryRestriction.cs" />
-    <Compile Include="Components\ServiceDeliveryLocation.cs" />
+    <Compile Include="Components\Place.cs" />
     <Compile Include="Components\StatusType.cs" />
     <Compile Include="HealthServiceRecordComponent.cs" />
     <Compile Include="HealthServiceRecordContainer.cs" />
