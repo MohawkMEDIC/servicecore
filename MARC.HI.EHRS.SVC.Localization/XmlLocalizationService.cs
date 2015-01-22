@@ -25,12 +25,14 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using System.IO;
 using System.Reflection;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Localization
 {
     /// <summary>
     /// Xml Localization service
     /// </summary>
+    [Description("XML Localization Service")]
     public class XmlLocalizationService : ILocalizationService
     {
 

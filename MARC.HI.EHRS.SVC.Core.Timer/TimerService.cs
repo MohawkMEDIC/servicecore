@@ -27,12 +27,14 @@ using System.Configuration;
 using System.Threading;
 using System.Diagnostics;
 using System.Timers;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Core.Timer
 {
     /// <summary>
     /// Represents the default implementation of the timer
     /// </summary>
+    [Description("Default Timer Service")]
     public class TimerService : ITimerService
     {
         // Host context

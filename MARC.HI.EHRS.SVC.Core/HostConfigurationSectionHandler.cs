@@ -29,6 +29,7 @@ using System.IO;
 using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Core.Configuration;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Core
 {
@@ -49,6 +50,7 @@ namespace MARC.HI.EHRS.SVC.Core
     /// </code>
     /// </example>
     /// </summary>
+    [Description("MARC-HI Service Core Configuration")]
     public class HostConfigurationSectionHandler : IConfigurationSectionHandler, ISystemConfigurationService
     {
 

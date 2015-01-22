@@ -122,7 +122,12 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                         IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
                             aoPtctpt.IDTypeCode.Value != Core.DataTypes.AuditableObjectIdType.Custom ?
                                 new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) :
-                                new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.CustomIdTypeCode.Code)) :
+                                  new CodeValue<AuditableObjectIdType>()
+                                  {
+                                      Code = aoPtctpt.CustomIdTypeCode.Code,
+                                      CodeSystem = aoPtctpt.CustomIdTypeCode.CodeSystem,
+                                      DisplayName = aoPtctpt.CustomIdTypeCode.DisplayName
+                                  } :
                             null,
                         LifecycleType = aoPtctpt.LifecycleType.HasValue ? (AuditableObjectLifecycle)Enum.Parse(typeof(AuditableObjectLifecycle), aoPtctpt.LifecycleType.ToString()) : 0,
                         LifecycleTypeSpecified = aoPtctpt.LifecycleType.HasValue,

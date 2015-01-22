@@ -43,12 +43,14 @@ using MARC.HI.EHRS.SVC.Core.Issues;
 using MARC.HI.EHRS.SVC.Core.ComponentModel.Components;
 using MARC.Everest.Threading;
 using MARC.HI.EHRS.SVC.Subscription.Core;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Subscription.Data
 {
     /// <summary>
     /// Subscription management service
     /// </summary>
+    [Description("ADO.NET RSS Subscription Service")]
     public class AdoSubscriptionManagementService : ISubscriptionManagementService, IDisposable
     {
 

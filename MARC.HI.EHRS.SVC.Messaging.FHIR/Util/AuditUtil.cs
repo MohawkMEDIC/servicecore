@@ -10,6 +10,8 @@ using System.Net;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
+using System.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -18,6 +20,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
     /// </summary>
     public static class AuditUtil
     {
+
+        // Config
+        private static FhirServiceConfiguration s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
 
         /// <summary>
         /// Create audit data
@@ -43,13 +48,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             if(endpoint != null)
                 remoteEndpoint = endpoint.Address;
 
+            CodeValue itiNameMap = null;
+
+            if (records.FirstOrDefault() == null ||
+                !s_configuration.ActionMap.TryGetValue(String.Format("{0} {1}", WebOperationContext.Current.IncomingRequest.Method, records.FirstOrDefault().GetType().Name), out itiNameMap))
+                itiNameMap = new CodeValue(
+                    WebOperationContext.Current.IncomingRequest.Method,
+                    "urn:ietf:rfc:2616"
+                ) { DisplayName = WebOperationContext.Current.IncomingRequest.Method };
+                
             // TODO: Clean this up
             switch (WebOperationContext.Current.IncomingRequest.Method)
             {
                 case "GET":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Read, OutcomeIndicator.Success, EventIdentifierType.Query, new CodeValue(
-                            "GET", "urn:ietf:rfc:2616"));
+                        retVal = new AuditData(DateTime.Now, ActionType.Execute, OutcomeIndicator.Success, EventIdentifierType.Query, 
+                            itiNameMap);
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
@@ -79,16 +93,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         {
                             Type = AuditableObjectType.SystemObject,
                             Role = AuditableObjectRole.Query,
-                            IDTypeCode = AuditableObjectIdType.SearchCritereon,
-                            QueryData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.Query))
+                            IDTypeCode = AuditableObjectIdType.Custom,
+                            CustomIdTypeCode = itiNameMap,
+                            ObjectId = itiNameMap.DisplayName.Replace(" ", ""),
+                            QueryData = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.Query,
+                            ObjectData = new Dictionary<string, byte[]>()
+                            {
+                                { String.Empty, WebOperationContext.Current.IncomingRequest.Headers.ToByteArray() }
+                            }
                         });
 
                         break;
                     }
                 case "POST":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Create, OutcomeIndicator.Success, EventIdentifierType.Import, new CodeValue(
-                            "POST", "urn:ietf:rfc:2616"));
+                        retVal = new AuditData(DateTime.Now, ActionType.Create, OutcomeIndicator.Success, EventIdentifierType.Import, itiNameMap);
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
@@ -117,8 +136,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     }
                 case "PUT":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Update, OutcomeIndicator.Success, EventIdentifierType.Import, new CodeValue(
-                            "PUT", "urn:ietf:rfc:2616"));
+                        retVal = new AuditData(DateTime.Now, ActionType.Update, OutcomeIndicator.Success, EventIdentifierType.Import, itiNameMap);
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
@@ -147,8 +165,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     }
                 case "DELETE":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Delete, OutcomeIndicator.Success, EventIdentifierType.Import, new CodeValue(
-                            "DELETE", "urn:ietf:rfc:2616"));
+                        retVal = new AuditData(DateTime.Now, ActionType.Delete, OutcomeIndicator.Success, EventIdentifierType.Import, itiNameMap);
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()

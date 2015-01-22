@@ -30,7 +30,7 @@ using MARC.HI.EHRS.SVC.Core.Terminology;
 using System.Diagnostics;
 using MARC.HI.EHRS.SVC.Terminology.CTS12;
 using MARC.HI.EHRS.SVC.Core;
-using System.EnterpriseServices;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
 {

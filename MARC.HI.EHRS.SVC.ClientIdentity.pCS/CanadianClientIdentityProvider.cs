@@ -36,6 +36,7 @@ using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SHR.Messaging;
 using MARC.Everest.Connectors;
 using MARC.HI.EHRS.SVC.Core.ComponentModel.Components;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.ClientIdentity.pCS
 {
@@ -43,6 +44,7 @@ namespace MARC.HI.EHRS.SVC.ClientIdentity.pCS
     /// Implementation of the IClientIdentityService that provides identity
     /// services for pCS v3
     /// </summary>
+    [Description("pCS v3 HWR Interface")]
     public class CanadianClientIdentityProvider : IClientIdentityService
     {
 

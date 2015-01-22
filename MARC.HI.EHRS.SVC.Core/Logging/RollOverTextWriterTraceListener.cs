@@ -32,10 +32,17 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
     /// </summary>
     public class RollOverTextWriterTraceListener : TraceListener
     {
+        private Object s_lockObject = new object();
+
         string _fileName;
         System.DateTime _currentDate;
-        System.IO.StreamWriter _traceWriter;
-        FileStream _stream;
+        //System.IO.StreamWriter _traceWriter;
+        //FileStream _stream;
+
+        /// <summary>
+        /// Filename
+        /// </summary>
+        public String FileName { get { return _fileName; } }
 
         public RollOverTextWriterTraceListener(string fileName)
         {
@@ -45,56 +52,69 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
             if (!Path.IsPathRooted(fileName))
                 _fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
                Path.GetFileName(_fileName));
-            _stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-            _stream.Seek(0, SeekOrigin.End);
-            _traceWriter = new StreamWriter(_stream);
-            _traceWriter.AutoFlush = true;
+            //_stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            //_stream.Seek(0, SeekOrigin.End);
+            //_traceWriter = new StreamWriter(_stream);
+            //_traceWriter.AutoFlush = true;
         }
 
         public override void Write(string value)
         {
-            checkRollover();
-            _traceWriter.Write("{1}", DateTime.Now, value);
-            _traceWriter.Flush();
-            _stream.Flush();
+            //checkRollover();
+            lock(s_lockObject)
+                using (FileStream fs = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+                {
+                    fs.Seek(0, SeekOrigin.End);
+
+                    using (StreamWriter sw = new StreamWriter(fs))
+                        sw.Write("{1}", DateTime.Now, value);
+                }
+//            _traceWriter.Flush();
+//            _stream.Flush();
         }
 
         public override void WriteLine(string value)
         {
-            checkRollover();
-            _traceWriter.WriteLine("{0}:{1}", DateTime.Now, value);
-            _traceWriter.Flush();
-            _stream.Flush();
+
+            lock (s_lockObject)
+                using (FileStream fs = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+                {
+                    fs.Seek(0, SeekOrigin.End);
+                    using (StreamWriter sw = new StreamWriter(fs))
+                        sw.WriteLine("{1}", DateTime.Now, value);
+                }
+
+            //checkRollover();
+            //_traceWriter.WriteLine("{0}:{1}", DateTime.Now, value);
+            //_traceWriter.Flush();
+            //_stream.Flush();
         }
 
         private string generateFilename()
         {
             _currentDate = System.DateTime.Today;
-
-            
             return Path.Combine(Path.GetDirectoryName(_fileName),  Path.GetFileNameWithoutExtension(_fileName) + "_" +
                _currentDate.ToString("yyyyMMdd") + Path.GetExtension(_fileName));
         }
 
         private void checkRollover()
         {
-            // If the date has changed, close the current stream and create a new file for today's date
-            if (_currentDate.CompareTo(System.DateTime.Today) != 0)
-            {
-                
-                _traceWriter.Close();
-                _stream.Close();
-                _stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-                _traceWriter = new StreamWriter(_stream);
-                _traceWriter.AutoFlush = true;
-            }
+            //// If the date has changed, close the current stream and create a new file for today's date
+            //if (_currentDate.CompareTo(System.DateTime.Today) != 0)
+            //{
+            //    _traceWriter.Close();
+            //    _stream.Close();
+            //    _stream = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            //    _traceWriter = new StreamWriter(_stream);
+            //    _traceWriter.AutoFlush = true;
+            //}
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _traceWriter.Close();
+                //_traceWriter.Close();
             }
         }
 

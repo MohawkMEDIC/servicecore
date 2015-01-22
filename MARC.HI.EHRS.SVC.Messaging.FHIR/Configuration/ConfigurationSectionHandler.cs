@@ -22,7 +22,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             
             // Section
             XmlElement serviceElement = section.SelectSingleNode("./*[local-name() = 'service']") as XmlElement;
-            XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']");
+            XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']"),
+                actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']");
 
             string wcfServiceName = String.Empty,
                 landingPage = String.Empty;
@@ -54,6 +55,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
                 retVal.ResourceHandlers.Add(tType);
             }
 
+            foreach (XmlElement mapInstruction in actionMap)
+            {
+                String resourceName = String.Empty,
+                    resourceAction = String.Empty,
+                    eventTypeCode = String.Empty,
+                    eventTypeCodeSystem = String.Empty,
+                    eventTypeCodeName = String.Empty;
+
+                if (mapInstruction.Attributes["resource"] != null)
+                    resourceName = mapInstruction.Attributes["resource"].Value;
+                if (mapInstruction.Attributes["action"] != null)
+                    resourceAction = mapInstruction.Attributes["action"].Value;
+                if (mapInstruction.Attributes["code"] != null)
+                    eventTypeCode = mapInstruction.Attributes["code"].Value;
+                if (mapInstruction.Attributes["codeSystem"] != null)
+                    eventTypeCodeSystem = mapInstruction.Attributes["codeSystem"].Value;
+                if (mapInstruction.Attributes["displayName"] != null)
+                    eventTypeCodeName = mapInstruction.Attributes["displayName"].Value;
+
+                retVal.ActionMap.Add(String.Format("{0} {1}", resourceAction, resourceName), new Core.DataTypes.CodeValue(
+                    eventTypeCode, eventTypeCodeSystem) { DisplayName = eventTypeCodeName });
+            }
             return retVal;
         }
 

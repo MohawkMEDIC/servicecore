@@ -25,12 +25,14 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Messaging.Multi.Configuration;
 using System.Configuration;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Multi
 {
     /// <summary>
     /// A message handler that starts and enables multiple message handlers
     /// </summary>
+    [Description("Multi-Interface Message Handler")]
     public class MultiMessageHandler : IMessageHandlerService
     {
 

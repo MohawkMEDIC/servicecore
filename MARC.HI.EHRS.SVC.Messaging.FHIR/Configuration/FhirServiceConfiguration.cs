@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MARC.HI.EHRS.SVC.Core.DataTypes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
 {
@@ -19,6 +20,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             this.WcfEndpoint = wcfEndpoint;
             this.LandingPage = landingPage;
             this.ResourceHandlers = new List<Type>();
+            this.ActionMap = new Dictionary<string, CodeValue>();
         }
 
         /// <summary>
@@ -35,5 +37,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// Gets the resource handlers registered
         /// </summary>
         public List<Type> ResourceHandlers { get; private set; }
+
+        /// <summary>
+        /// Get or set
+        /// </summary>
+        public Dictionary<String, CodeValue> ActionMap { get; private set; }
     }
 }

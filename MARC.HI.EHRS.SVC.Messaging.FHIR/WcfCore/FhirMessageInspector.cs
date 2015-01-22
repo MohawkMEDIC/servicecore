@@ -61,7 +61,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                         // Read the memory stream
                         messageContent = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
 
-                        Trace.TraceInformation("IN: {0}", messageContent);
+                        Trace.TraceInformation("FHIR IN: {0}", messageContent);
                         // Then we serialize to XML
                         ms = new MemoryStream();
                         // Use the FHIR serializer to read the JSON
@@ -79,7 +79,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
                         // Seek to begin
                         ms.Seek(0, SeekOrigin.Begin);
-                        Trace.TraceInformation("IN TX: {0}", Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length));
+                        Trace.TraceInformation("FHIR IN TX: {0}", Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length));
 
                         XmlDictionaryReader xdr = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max);
                         Message xmlMessage = Message.CreateMessage(request.Version, request.Headers.Action, xdr);
@@ -123,6 +123,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 }
             }
 
+            String messageContent = String.Empty;
+            MessageProperties properties = OperationContext.Current.IncomingMessageProperties;
+            RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+            string remoteEndpoint = "http://anonymous";
+            if (endpoint != null)
+                remoteEndpoint = endpoint.Address;
+
             // Need to translate
             if (correlationState != null && correlationState.ToString() == "application/json+fhir")
             {
@@ -133,8 +140,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                         reply.WriteBodyContents(xdr);
 
                     // Read in the JSON
-                    String messageContent = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
-                    Trace.TraceInformation("OUT: {0}", messageContent);
+                    messageContent = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
 
                     if (WebOperationContext.Current.OutgoingResponse.ContentType.StartsWith("application/atom+xml")) // bundle
                     {
@@ -147,7 +153,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                         messageContent = FhirSerializer.SerializeResourceToJson(resource);
                     }
 
-                    Trace.TraceInformation("OUT TX: {0}", messageContent);
+                    //Trace.TraceInformation("OUT TX: {0}", messageContent);
                     // Correct the headers
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/json+fhir; charset=UTF-8";
                     if (WebOperationContext.Current.OutgoingResponse.Headers["Content-Disposition"] != null)
@@ -164,30 +170,47 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     reply = xmlMessage;
                 }
             }
+            else
+            {
+                
+                using(var ms = new MemoryStream())
+                {
+                    using (var xdr = XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false))
+                    {
+                        reply.WriteBodyContents(xdr);
+                        xdr.Flush();
+                        ms.Flush();
+                    }
+                    messageContent = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
+
+                    var outMs = new MemoryStream(Encoding.UTF8.GetBytes(messageContent));
+                    var rdr = XmlDictionaryReader.CreateTextReader(outMs, XmlDictionaryReaderQuotas.Max);
+                    Message xmlMessage = Message.CreateMessage(rdr, int.MaxValue, reply.Version);
+                    xmlMessage.Properties.CopyProperties(reply.Properties);
+                    xmlMessage.Headers.CopyHeadersFrom(reply.Headers);
+                    reply = xmlMessage;
+
+                }
+
+            }
+
+            // Output message
+            Trace.TraceInformation("FHIR OUT (TO:{1}): {0}", messageContent, remoteEndpoint);
 
             // Compress
             if (WebOperationContext.Current.OutgoingResponse.Headers["Content-Encoding"] == "gzip")
             {
-
-                using (MemoryStream ms = new MemoryStream())
+                try
                 {
-                    // Write out the XML
-                    using (var xdr = XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false))
-                        reply.WriteBodyContents(xdr);
-                    ms.Flush();
-
-                    try
-                    {
-                        Message compressedMessage = Message.CreateMessage(reply.Version, reply.Headers.Action, new GZipWriter(ms.ToArray()));
-                        compressedMessage.Properties.CopyProperties(reply.Properties);
-                        compressedMessage.Properties.Remove(WebBodyFormatMessageProperty.Name);
-                        compressedMessage.Properties.Add(WebBodyFormatMessageProperty.Name, new WebBodyFormatMessageProperty(WebContentFormat.Raw));
-                        reply = compressedMessage;
-                    }
-                    catch (Exception e)
-                    {
-                        Trace.TraceError(e.ToString());
-                    }
+                    Message compressedMessage = Message.CreateMessage(reply.Version, reply.Headers.Action, new GZipWriter(System.Text.Encoding.UTF8.GetBytes(messageContent)));
+                    compressedMessage.Properties.CopyProperties(reply.Properties);
+                    compressedMessage.Properties.Remove(WebBodyFormatMessageProperty.Name);
+                    compressedMessage.Properties.Add(WebBodyFormatMessageProperty.Name, new WebBodyFormatMessageProperty(WebContentFormat.Raw));
+                    reply = compressedMessage;
+                }
+                catch (Exception e)
+                {
+                    Trace.TraceError(e.ToString());
                 }
             }
         }
