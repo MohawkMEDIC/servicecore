@@ -77,7 +77,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
             }
 
             // Italic (the name of the maintainer
-            if (this.Assigner != null)
+            if (this.Assigner != null && this.Assigner.Display != null)
             {
                 w.WriteStartElement("br", NS_XHTML);
                 w.WriteEndElement();

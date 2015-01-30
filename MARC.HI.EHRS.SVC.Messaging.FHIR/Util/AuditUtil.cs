@@ -50,7 +50,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             CodeValue itiNameMap = null;
 
-            if (records.FirstOrDefault() == null ||
+            if (records.FirstOrDefault() == null && 
+                !s_configuration.ActionMap.TryGetValue(String.Format("{0} ", WebOperationContext.Current.IncomingRequest.Method), out itiNameMap)
+                ||
+                records.FirstOrDefault() != null && 
                 !s_configuration.ActionMap.TryGetValue(String.Format("{0} {1}", WebOperationContext.Current.IncomingRequest.Method, records.FirstOrDefault().GetType().Name), out itiNameMap))
                 itiNameMap = new CodeValue(
                     WebOperationContext.Current.IncomingRequest.Method,
@@ -96,7 +99,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             IDTypeCode = AuditableObjectIdType.Custom,
                             CustomIdTypeCode = itiNameMap,
                             ObjectId = itiNameMap.DisplayName.Replace(" ", ""),
-                            QueryData = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.Query,
+                            QueryData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.Query)),
                             ObjectData = new Dictionary<string, byte[]>()
                             {
                                 { String.Empty, WebOperationContext.Current.IncomingRequest.Headers.ToByteArray() }

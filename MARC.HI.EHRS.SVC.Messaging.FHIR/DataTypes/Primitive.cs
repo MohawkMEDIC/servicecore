@@ -145,10 +145,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         internal override void WriteText(System.Xml.XmlWriter w)
         {
-            w.WriteStartElement("a", NS_XHTML);
-            w.WriteAttributeString("href", this.Value.ToString());
-            w.WriteString(this.Value.ToString());
-            w.WriteEndElement(); // a
+            if (this.Value.Scheme == "http" ||
+                this.Value.Scheme == "https")
+            {
+                w.WriteStartElement("a", NS_XHTML);
+                w.WriteAttributeString("href", this.Value.ToString());
+                w.WriteString(this.Value.ToString());
+                w.WriteEndElement(); // a
+            }
+            else
+                w.WriteString(this.Value.ToString());
+
         }
 
     }

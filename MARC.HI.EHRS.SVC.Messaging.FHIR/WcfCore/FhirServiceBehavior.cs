@@ -423,6 +423,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             FhirOperationResult readResult = null;
             try
             {
+
                 WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 readResult = this.PerformRead(resourceType, id, String.Empty);
                 WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");

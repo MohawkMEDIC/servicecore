@@ -44,6 +44,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters["_format"] == "application/json+fhir"))
                 format = WebContentFormat.Json;
 
+            String messageContent = String.Empty, retVal = null;
+            MessageProperties properties = OperationContext.Current.IncomingMessageProperties;
+            RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+            string remoteEndpoint = "http://anonymous";
+            if (endpoint != null)
+                remoteEndpoint = endpoint.Address;
+
             // If the requested response or the incoming request is not XML we need to translate to XML for the WCF contract 
             // behavior
             switch (format)
@@ -54,14 +61,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     if (!request.IsEmpty)
                     {
                         // Message content - We read the JSON content
-                        String messageContent = String.Empty;
                         var ms = new MemoryStream();
                         using (var jw = JsonReaderWriterFactory.CreateJsonWriter(ms, Encoding.UTF8, false))
                             request.WriteBodyContents(jw);
+                        
                         // Read the memory stream
                         messageContent = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
 
-                        Trace.TraceInformation("FHIR IN: {0}", messageContent);
                         // Then we serialize to XML
                         ms = new MemoryStream();
                         // Use the FHIR serializer to read the JSON
@@ -79,7 +85,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
                         // Seek to begin
                         ms.Seek(0, SeekOrigin.Begin);
-                        Trace.TraceInformation("FHIR IN TX: {0}", Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length));
 
                         XmlDictionaryReader xdr = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max);
                         Message xmlMessage = Message.CreateMessage(request.Version, request.Headers.Action, xdr);
@@ -89,12 +94,41 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                         xmlMessage.Properties.Add(WebBodyFormatMessageProperty.Name, new WebBodyFormatMessageProperty(WebContentFormat.Xml));
                         request = xmlMessage;
                     }
-                    return "application/json+fhir";
 
+                    retVal = "application/json+fhir";
+                    break;
+                }
+                case WebContentFormat.Xml:
+                {
+                    if (!request.IsEmpty)
+                    {
+                        // Dump
+                        using (var ms = new MemoryStream())
+                        {
+                            using (var xdr = XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false))
+                            {
+                                request.WriteBodyContents(xdr);
+                                xdr.Flush();
+                                ms.Flush();
+                            }
+                            messageContent = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
+
+                            var outMs = new MemoryStream(Encoding.UTF8.GetBytes(messageContent));
+                            var rdr = XmlDictionaryReader.CreateTextReader(outMs, XmlDictionaryReaderQuotas.Max);
+                            Message xmlMessage = Message.CreateMessage(rdr, int.MaxValue, request.Version);
+                            xmlMessage.Properties.CopyProperties(request.Properties);
+                            xmlMessage.Headers.CopyHeadersFrom(request.Headers);
+                            request = xmlMessage;
+                            retVal = null;
+                        }
+                    }
+                    break;
                 }
             }
-            
-            return null;
+
+            Trace.TraceInformation("FHIR IN (FROM {0} ON {1}): {2}", remoteEndpoint, request.Properties.Via, messageContent);
+
+            return retVal;
         }
 
         /// <summary>
@@ -193,6 +227,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 }
 
             }
+
+
+            // TODO: Add a configuration option to disable this
+            Dictionary<String, String> requiredHeaders = new Dictionary<string, string>() {
+                {"Access-Control-Allow-Origin", "*"},
+                {"Access-Control-Request-Method", "GET,OPTIONS"},
+                {"Access-Control-Allow-Headers", "X-Requested-With,Content-Type"}
+            };
+            foreach (var kv in requiredHeaders)
+                if (!WebOperationContext.Current.OutgoingResponse.Headers.AllKeys.Contains(kv.Key))
+                    WebOperationContext.Current.OutgoingResponse.Headers.Add(kv.Key, kv.Value);
 
             // Output message
             Trace.TraceInformation("FHIR OUT (TO:{1}): {0}", messageContent, remoteEndpoint);

@@ -244,9 +244,9 @@ namespace MARC.HI.EHRS.SVC.Core
                 {
                     foreach (XmlNode xn in oidSection.SelectNodes("./*[local-name() = 'add']"))
                     {
-                        if (xn.Attributes["name"] != null && xn.Attributes["oid"] != null && xn.Attributes["desc"] != null)
+                        if (xn.Attributes["name"] != null && xn.Attributes["oid"] != null)
                         {
-                            var data = OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"].Value, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
+                            var data = OidRegistrar.Register(xn.Attributes["name"].Value, xn.Attributes["oid"].Value, xn.Attributes["desc"] != null ? xn.Attributes["desc"].Value : null, xn.Attributes["ref"] == null ? null : xn.Attributes["ref"].Value);
                             if (xn.ChildNodes != null)
                                 foreach (XmlElement child in xn.ChildNodes)
                                 {

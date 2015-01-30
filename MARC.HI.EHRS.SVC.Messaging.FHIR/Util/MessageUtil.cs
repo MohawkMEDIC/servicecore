@@ -135,7 +135,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             int pageNo = queryResult == null || queryResult.Query.Quantity == 0 ? 0 : queryResult.Query.Start / queryResult.Query.Quantity,
                 nPages = queryResult == null || queryResult.Query.Quantity == 0 ? 1 : (queryResult.TotalResults / queryResult.Query.Quantity);
-
+            
             if (result.Details.Exists(o => o.Type == ResultDetailType.Error))
                 retVal.Title = new TextSyndicationContent(String.Format("Error", pageNo));
             else
@@ -178,10 +178,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 format = "json";
 
             if (!baseUri.Contains("_format"))
-                baseUri += String.Format("_format={0}", format);
-
+                baseUri += String.Format("_format={0}&", format);
             // Self URI
-            if (nPages > 1)
+            if (queryResult != null && queryResult.TotalResults > queryResult.Results.Count)
             {
                 retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo)), "self", null, null, 0));
                 if (pageNo > 0)
@@ -200,7 +199,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             // Updated
             retVal.LastUpdatedTime = DateTime.Now;
-            retVal.Generator = "MARC-HI Service Core Framework";
+            //retVal.Generator = "MARC-HI Service Core Framework";
 
             // HACK: Remove me
             if(queryResult != null)
