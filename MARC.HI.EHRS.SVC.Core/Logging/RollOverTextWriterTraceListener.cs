@@ -67,7 +67,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
                     fs.Seek(0, SeekOrigin.End);
 
                     using (StreamWriter sw = new StreamWriter(fs))
-                        sw.Write("{1}", DateTime.Now, value);
+                        sw.Write("{0} : {1}", DateTime.Now, value);
                 }
 //            _traceWriter.Flush();
 //            _stream.Flush();
@@ -81,7 +81,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
                 {
                     fs.Seek(0, SeekOrigin.End);
                     using (StreamWriter sw = new StreamWriter(fs))
-                        sw.WriteLine("{1}", DateTime.Now, value);
+                        sw.WriteLine("{0} : {1}", DateTime.Now, value);
                 }
 
             //checkRollover();

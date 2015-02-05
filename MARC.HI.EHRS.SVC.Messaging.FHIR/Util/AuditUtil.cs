@@ -50,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             CodeValue itiNameMap = null;
 
-            if (records.FirstOrDefault() == null && 
+            if (records == null || records.FirstOrDefault() == null && 
                 !s_configuration.ActionMap.TryGetValue(String.Format("{0} ", WebOperationContext.Current.IncomingRequest.Method), out itiNameMap)
                 ||
                 records.FirstOrDefault() != null && 

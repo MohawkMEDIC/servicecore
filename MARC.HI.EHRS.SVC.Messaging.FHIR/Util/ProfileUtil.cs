@@ -65,34 +65,39 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// </summary>
         private static void BuildAllProfiles()
         {
-            Trace.TraceInformation("Starting profile compilation process...");           
+            Trace.TraceInformation("Starting profile compilation process...");
             lock (s_syncLock)
-                foreach(var itm in FhirResourceHandlerUtil.ResourceHandlers)
+                foreach (var itm in FhirResourceHandlerUtil.ResourceHandlers)
+                {
+                    Type typ = itm.GetType();
+                    ProfileAttribute profileAtt = typ.GetCustomAttribute<ProfileAttribute>();
+
+                    if (profileAtt == null)
+                        continue; // No profile not interested
+
+                    // First, have we already started a profile with this name
+                    Profile context = null;
+                    if (!s_builtProfiles.TryGetValue(profileAtt.ProfileId, out context))
                     {
-                        Type typ = itm.GetType();
-                        ProfileAttribute profileAtt = typ.GetCustomAttribute<ProfileAttribute>();
-
-                        if (profileAtt == null)
-                            continue; // No profile not interested
-
-                        // First, have we already started a profile with this name
-                        Profile context = null;
-                        if(!s_builtProfiles.TryGetValue(profileAtt.ProfileId, out context))
-                        {
-                            context = new Profile();
-                            context.VersionId = typ.Assembly.GetName().Version.ToString();
-                            s_builtProfiles.Add(profileAtt.ProfileId, context);
-                        }
-
-                        ProcessProfileAttribute(profileAtt, context);
-
-                        // Next we want to process any ResourceProfiles to set resource scope
-                        ResourceProfileAttribute resourceAtt = typ.GetCustomAttribute<ResourceProfileAttribute>();
-                        if (typeof(ResourceBase).IsAssignableFrom(typ))
-                            ProcessResourceMembers(typ, context, resourceAtt);
-                        else
-                            ProcessMembers(typ, context, resourceAtt);
+                        context = new Profile();
+                        context.VersionId = typ.Assembly.GetName().Version.ToString();
+                        s_builtProfiles.Add(profileAtt.ProfileId, context);
                     }
+
+                    ProcessProfileAttribute(profileAtt, context);
+
+                    // Next we want to process any ResourceProfiles to set resource scope
+                    ResourceProfileAttribute resourceAtt = typ.GetCustomAttribute<ResourceProfileAttribute>();
+                    if (typeof(ResourceBase).IsAssignableFrom(typ))
+                        ProcessResourceMembers(typ, context, resourceAtt);
+                    else
+                        ProcessMembers(typ, context, resourceAtt);
+
+                    var extndefn = typ.GetCustomAttributes<ExtensionProfileAttribute>();
+                    if(extndefn != null)
+                        foreach (ExtensionProfileAttribute defn in extndefn)
+                            ProcessMembers(defn.ExtensionClass, context, resourceAtt);
+                }
             Trace.TraceInformation("Profile compilation process complete : {0} profiles supported by this service", s_builtProfiles.Count);
 
         }

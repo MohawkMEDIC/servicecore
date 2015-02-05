@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="ApplicationContext.cs" />
     <Compile Include="Attributes\ExtensionDefinitionAttribute.cs" />
+    <Compile Include="Attributes\ExtensionProfileAttribute.cs" />
     <Compile Include="Attributes\ParticipantObjectMapAttribute.cs" />
     <Compile Include="Attributes\ElementProfileAttribute.cs" />
     <Compile Include="Attributes\ProfileAttribute.cs" />

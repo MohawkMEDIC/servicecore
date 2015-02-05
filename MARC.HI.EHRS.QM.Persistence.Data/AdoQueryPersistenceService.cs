@@ -76,8 +76,15 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 RegisterQuery(dbc, queryId, results.Length, tag);
 
                 // Push each result into 
-                foreach (var id in results)
-                    PushResult(dbc, queryId, id);
+                try
+                {
+                    PushResults(dbc, queryId, results);
+                }
+                catch
+                {
+                    foreach(var id in results)
+                        this.PushResult(dbc, queryId, id);
+                }
                 // Return true
                 return true;
             }
@@ -91,6 +98,51 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 dbc.Dispose();
             }
         }
+
+        /// <summary>
+        /// Push a result into the data store
+        /// </summary>
+        private void PushResults(IDbConnection conn, string queryId, VersionedDomainIdentifier[] resultId)
+        {
+            IDbCommand cmd = conn.CreateCommand();
+            try
+            {
+                
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "push_qry_rslts";
+
+                StringBuilder resultIds = new StringBuilder("{");
+                foreach (var id in resultId)
+                {
+                    resultIds.AppendFormat("{{{0},{1}}},", id.Identifier, id.Version);
+                }
+                resultIds.Remove(resultIds.Length - 1, 1);
+                resultIds.Append("}");
+
+                // Setup parameters
+                IDataParameter qryIdParam = cmd.CreateParameter(),
+                    qryRsltParam = cmd.CreateParameter();
+                qryIdParam.DbType = DbType.String;
+                qryRsltParam.DbType = DbType.String;
+                qryIdParam.Direction = qryRsltParam.Direction = ParameterDirection.Input;
+                qryIdParam.ParameterName = "qry_id_in";
+                qryRsltParam.ParameterName = "rslt_ent_id_in";
+                qryRsltParam.Value = resultIds.ToString();
+                qryIdParam.Value = queryId;
+
+                // Add parameters
+                cmd.Parameters.Add(qryIdParam);
+                cmd.Parameters.Add(qryRsltParam);
+
+                // Execute
+                cmd.ExecuteNonQuery();
+            }
+            finally
+            {
+                cmd.Dispose();
+            }
+        }
+
 
         /// <summary>
         /// Push a result into the data store
