@@ -31,7 +31,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
     /// <summary>
     /// Identifies 
     /// </summary>
-    [Serializable][XmlType("HealthServiceRecordComponent")]
+    [Serializable]
+    [XmlType("HealthServiceRecordComponent", Namespace = "urn:marc-hi:svc:componentModel")]
     public abstract class HealthServiceRecordComponent : IComponent, IUsesHostContext, ICloneable
     {
 

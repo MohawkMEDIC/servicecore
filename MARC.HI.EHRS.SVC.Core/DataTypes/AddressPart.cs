@@ -28,7 +28,7 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Represents one part of an address
     /// </summary>
-    [Serializable][XmlType("AddressPart")]
+    [Serializable][XmlType("AddressPart", Namespace="urn:marc-hi:svc:componentModel")]
     public class AddressPart
     {
         /// <summary>

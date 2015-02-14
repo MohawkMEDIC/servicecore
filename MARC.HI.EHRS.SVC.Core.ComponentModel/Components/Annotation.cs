@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Identifies an annotation component
     /// </summary>
-    [Serializable][XmlType("Annotation")]
+    [Serializable]
+    [XmlType("Annotation", Namespace = "urn:marc-hi:svc:componentModel")]
     public class Annotation : HealthServiceRecordContainer
     {
         /// <summary>

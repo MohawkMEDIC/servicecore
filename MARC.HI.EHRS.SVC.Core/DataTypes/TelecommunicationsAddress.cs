@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Identifies an address within  a telecommunications context
     /// </summary>
-    [Serializable][XmlType("TelecomAddress")]
+    [Serializable]
+    [XmlType("TelecomAddress", Namespace = "urn:marc-hi:svc:componentModel")]
     public class TelecommunicationsAddress : Datatype
     {
         /// <summary>

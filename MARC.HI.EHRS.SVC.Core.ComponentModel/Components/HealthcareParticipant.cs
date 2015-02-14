@@ -29,12 +29,14 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Represents a healthcare participant within a clinical act
     /// </summary>
-    [Serializable][XmlType("HealthcareParticipant")]
+    [Serializable]
+    [XmlType("HealthcareParticipant", Namespace = "urn:marc-hi:svc:componentModel")]
     public class HealthcareParticipant : HealthServiceRecordContainer
     {
         /// <summary>
         /// Identifies the healthcare participant type
         /// </summary>
+        [XmlType("HealthcareParticipantType", Namespace="urn:marc-hi:svc:componentModel")]
         public enum HealthcareParticipantType
         {
             Person = 0x01,

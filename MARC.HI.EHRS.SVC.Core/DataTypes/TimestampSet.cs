@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Identifies a set of timestamp parts
     /// </summary>
-    [Serializable][XmlType("TimestampSet")]
+    [Serializable]
+    [XmlType("TimestampSet", Namespace = "urn:marc-hi:svc:componentModel")]
     public class TimestampSet : Datatype,  ICloneable
     {
         /// <summary>

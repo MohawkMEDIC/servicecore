@@ -32,7 +32,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
     /// <summary>
     /// Identifies an ISite for health service records
     /// </summary>
-    [Serializable][XmlType("HealthServiceRecordSite")]
+    [Serializable]
+    [XmlType("HealthServiceRecordSite", Namespace = "urn:marc-hi:svc:componentModel")]
     public class HealthServiceRecordSite : ISite, IUsesHostContext
     {
 

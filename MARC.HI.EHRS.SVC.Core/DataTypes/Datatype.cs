@@ -56,7 +56,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Represents the base of all data types
     /// </summary>
-    [Serializable][XmlType("Datatype")]
+    [Serializable]
+    [XmlType("Datatype", Namespace = "urn:marc-hi:svc:componentModel")]
     public abstract class Datatype
     {
 

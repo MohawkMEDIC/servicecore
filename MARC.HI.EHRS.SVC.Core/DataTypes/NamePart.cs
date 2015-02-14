@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Identifies a single component of a more complex name
     /// </summary>
-    [Serializable][XmlType("NamePart")]
+    [Serializable]
+    [XmlType("NamePart", Namespace = "urn:marc-hi:svc:componentModel")]
     public class NamePart
     {
         /// <summary>

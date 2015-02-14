@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Identifies something within a particular domain
     /// </summary>
-    [Serializable][XmlType("DomainIdentifier")]
+    [Serializable]
+    [XmlType("DomainIdentifier", Namespace = "urn:marc-hi:svc:componentModel")]
     public class DomainIdentifier : Datatype
     {
 

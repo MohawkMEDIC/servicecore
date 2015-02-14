@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Identifies a client of a healthcare transaction
     /// </summary>
-    [Serializable][XmlType("Client")]
+    [Serializable]
+    [XmlType("Client", Namespace = "urn:marc-hi:svc:componentModel")]
     public class Client : HealthServiceRecordContainer
     {
         /// <summary>

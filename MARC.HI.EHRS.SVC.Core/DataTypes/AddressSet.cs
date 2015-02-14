@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Represents a set of address components
     /// </summary>
-    [Serializable][XmlType("AddressSet")]
+    [Serializable]
+    [XmlType("AddressSet", Namespace = "urn:marc-hi:svc:componentModel")]
     public class AddressSet : Datatype
     {
         /// <summary>

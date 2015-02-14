@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
     /// <summary>
     /// Represents a health service component that is also a component container
     /// </summary>
-    [Serializable][XmlType("HealthServiceRecordContainer")]
+    [Serializable]
+    [XmlType("HealthServiceRecordContainer", Namespace = "urn:marc-hi:svc:componentModel")]
     public abstract class HealthServiceRecordContainer : HealthServiceRecordComponent, IContainer
     {
         #region IContainer Members

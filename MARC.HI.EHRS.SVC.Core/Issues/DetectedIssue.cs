@@ -121,7 +121,8 @@ namespace MARC.HI.EHRS.SVC.Core.Issues
     /// <summary>
     /// A class representing a business issue
     /// </summary>
-    [Serializable][XmlType("DetectedIssue")]
+    [Serializable]
+    [XmlType("DetectedIssue", Namespace = "urn:marc-hi:svc:componentModel")]
     public class DetectedIssue
     {
 

@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Core.ComponentModel
 {
@@ -28,6 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
     /// Identifies the record site role
     /// </summary>
     [Flags]
+    [XmlType("HealthServiceRecordSiteRoleType", Namespace = "urn:marc-hi:svc:componentModel")]
     public enum HealthServiceRecordSiteRoleType
     {
         /// <summary>

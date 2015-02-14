@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Change summary component
     /// </summary>
-    [Serializable][XmlType("ChangeSummary")]
+    [Serializable]
+    [XmlType("ChangeSummary", Namespace = "urn:marc-hi:svc:componentModel")]
     public class ChangeSummary : HealthServiceRecordContainer
     {
 

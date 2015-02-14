@@ -30,7 +30,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// Query restriction component is used to filter additional 
     /// data from a query match object
     /// </summary>
-    [Serializable][XmlType("QueryRestriction")]
+    [Serializable]
+    [XmlType("QueryRestriction", Namespace = "urn:marc-hi:svc:componentModel")]
     public class QueryRestriction : HealthServiceRecordComponent
     {
 

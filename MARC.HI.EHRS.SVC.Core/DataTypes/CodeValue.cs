@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Represents codified data
     /// </summary>
-    [Serializable][XmlType("CodeValue")]
+    [Serializable]
+    [XmlType("CodeValue", Namespace = "urn:marc-hi:svc:componentModel")]
     public class CodeValue : Datatype
     {
         /// <summary>

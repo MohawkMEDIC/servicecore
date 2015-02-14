@@ -21,12 +21,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Core.ComponentModel
 {
     /// <summary>
     /// Update mode
     /// </summary>
+    [XmlType("UpdateMode", Namespace = "urn:marc-hi:svc:componentModel")]
+
     public enum UpdateMode
     {
         /// <summary>

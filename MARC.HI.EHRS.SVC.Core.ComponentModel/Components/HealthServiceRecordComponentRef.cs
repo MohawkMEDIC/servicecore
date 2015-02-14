@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Health service record component reference
     /// </summary>'
-    [Serializable][XmlType("HealthServiceRecordComponentRef")]
+    [Serializable]
+    [XmlType("HealthServiceRecordComponentRef", Namespace = "urn:marc-hi:svc:componentModel")]
     public class HealthServiceRecordComponentRef : HealthServiceRecordContainer
     {
 

@@ -30,6 +30,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Policy override reason
     /// </summary>
+    [XmlType("PolicyOverrideReason", Namespace="urn:marc-hi:svc:componentModel")]
     public enum PolicyOverrideReason
     {
         Emergency,
@@ -39,7 +40,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Consent policy override!
     /// </summary>
-    [Serializable][XmlType("PolicyOverride")]
+    [Serializable]
+    [XmlType("PolicyOverride", Namespace = "urn:marc-hi:svc:componentModel")]
     public class PolicyOverride : HealthServiceRecordContainer
     {
 

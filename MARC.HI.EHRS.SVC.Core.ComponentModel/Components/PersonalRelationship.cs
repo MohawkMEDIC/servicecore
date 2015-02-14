@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// Identifies a personal relationship component. A personal relationship
     /// is a client relation with another client
     /// </summary>
-    [Serializable][XmlType("PersonalRelationship")]
+    [Serializable]
+    [XmlType("PersonalRelationship", Namespace = "urn:marc-hi:svc:componentModel")]
     public class PersonalRelationship : Client
     {
         /// <summary>
@@ -41,6 +42,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// <summary>
         /// Gets or sets the status
         /// </summary>
+        [XmlAttribute("status")]
         public StatusType Status { get; set; }
     }
 }

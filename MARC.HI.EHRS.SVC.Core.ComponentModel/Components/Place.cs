@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Identifies a service delivery location
     /// </summary>
-    [Serializable][XmlType("ServiceDeliveryLocation")]
+    [Serializable]
+    [XmlType("ServiceDeliveryLocation", Namespace = "urn:marc-hi:svc:componentModel")]
     public class Place : HealthServiceRecordComponent
     {
         /// <summary>

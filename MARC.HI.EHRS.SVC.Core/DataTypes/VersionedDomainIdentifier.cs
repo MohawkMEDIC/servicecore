@@ -28,7 +28,8 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     /// <summary>
     /// Represents a domain identifier that also carries version information
     /// </summary>
-    [Serializable][XmlType("VersionedIdentifier")]
+    [Serializable]
+    [XmlType("VersionedIdentifier", Namespace = "urn:marc-hi:svc:componentModel")]
     public class VersionedDomainIdentifier : DomainIdentifier
     {
         /// <summary>

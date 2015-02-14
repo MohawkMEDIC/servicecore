@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
 {
@@ -28,6 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// Identifies the status codes that an object can be "in"
     /// </summary>
     [Flags]
+    [XmlType("StatusType", Namespace="urn:marc-hi:svc:componentModel")]
     public enum StatusType
     {
         Unknown = 0x0,

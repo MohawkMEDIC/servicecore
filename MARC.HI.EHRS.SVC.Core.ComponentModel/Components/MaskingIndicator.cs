@@ -29,7 +29,8 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
     /// <summary>
     /// Represents a masking indicator
     /// </summary>
-    [Serializable][XmlType("MaskingIndicator")]
+    [Serializable]
+    [XmlType("MaskingIndicator", Namespace = "urn:marc-hi:svc:componentModel")]
     public class MaskingIndicator : HealthServiceRecordComponent
     {
         /// <summary>
