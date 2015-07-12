@@ -99,6 +99,7 @@
     <Compile Include="Configuration\IAlwaysDeployedConfigurationPanel.cs" />
     <Compile Include="Configuration\IConfigurationPanel.cs" />
     <Compile Include="Configuration\IDatabaseConfigurator.cs" />
+    <Compile Include="Configuration\IDatabaseUpdater.cs" />
     <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
     <Compile Include="Configuration\UI\EndpointValidationConfigurationPanel.cs" />
     <Compile Include="Configuration\UI\frmAddDomainIdentifier.cs">
@@ -141,6 +142,7 @@
     <Compile Include="Configuration\UI\ucValidateSolicitors.Designer.cs">
       <DependentUpon>ucValidateSolicitors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Configuration\Update\DbSchemaUpdate.cs" />
     <Compile Include="DataTypes\AddressPart.cs" />
     <Compile Include="DataTypes\AddressSet.cs" />
     <Compile Include="DataTypes\CodeValue.cs" />

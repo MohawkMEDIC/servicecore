@@ -27,13 +27,15 @@ using System.Xml;
 using System.IO;
 using System.Reflection;
 using System.Data;
+using MARC.HI.EHRS.SVC.Core.Configuration.Update;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
 {
     /// <summary>
     /// Database configurator for PostgreSQL 9.0
     /// </summary>
-    public class DatabaseConfigurator : IDatabaseConfigurator
+    public class DatabaseConfigurator : IDatabaseConfigurator, IDatabaseUpdater
     {
         #region IDatabaseConfigurator Members
 
@@ -395,5 +397,85 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         }
 
         #endregion
+
+        /// <summary>
+        /// Get the updates 
+        /// </summary>
+        public List<Core.Configuration.Update.DbSchemaUpdate> GetUpdates(string connectionStringName, XmlDocument configurationDom)
+        {
+            List<DbSchemaUpdate> retVal = new List<DbSchemaUpdate>();
+            // Search the PSQL9 directory for update.xml
+            String searchPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "SQL", "PSQL9", "Updates");
+            if (!Directory.Exists(searchPath))
+                return retVal;
+
+            // Get connection string
+            string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
+            NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder(connectionString);
+            builder.MaxPoolSize = 1;
+            builder.MinPoolSize = 1;
+            builder.Pooling = false;
+
+            // Parse update files
+            foreach(var itm in Directory.GetFiles(searchPath, "*.update.xml"))
+            {
+                DbSchemaUpdate update = DbSchemaUpdate.Load(itm);
+                if (update != null)
+                {
+                    using(NpgsqlConnection conn = new NpgsqlConnection(builder.ConnectionString))
+                    {
+                        conn.Open();
+                        using (NpgsqlCommand cmd = new NpgsqlCommand(update.VersionFunction, conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            string version = cmd.ExecuteScalar().ToString();
+                            Trace.TraceInformation("Version of component {0}, update {1} applies to {2} - {3}", version, update.Id, update.FromVersion, update.ToVersion);
+                            Version v = new Version(version);
+                            if(v < new Version(update.ToVersion))
+                            {
+                                Trace.TraceInformation("Update applies!");
+                                retVal.Add(update);
+                            }
+                        }
+
+
+                    }
+
+                }
+            }
+            retVal.Sort((a, b) => new Version(a.FromVersion).CompareTo(new Version(b.FromVersion)));
+            return retVal;
+            
+        }
+
+        /// <summary>
+        /// Deploy the update
+        /// </summary>
+        public void DeployUpdate(Core.Configuration.Update.DbSchemaUpdate update, string connectionStringName, XmlDocument configurationDom)
+        {
+            foreach(var scr in update.InstallScript)
+                using(TextReader tr = new StreamReader(File.OpenRead(scr.File)))
+                {
+                    // Deploy the feature
+                    string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
+                    NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder(connectionString);
+                    builder.MaxPoolSize = 1;
+                    builder.MinPoolSize = 1;
+                    builder.Pooling = false;
+                    NpgsqlConnection conn = new NpgsqlConnection(builder.ConnectionString);
+                    try
+                    {
+                        conn.Open();
+                        using (NpgsqlCommand cmd = new NpgsqlCommand(tr.ReadToEnd(), conn))
+                            cmd.ExecuteNonQuery();
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+        }
+
+    
     }
 }
