@@ -210,7 +210,28 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         public override object Clone()
         {
             var retVal = base.Clone();
-            (retVal as HealthServiceRecordContainer).m_components = new List<IComponent>(this.m_components);
+            (retVal as HealthServiceRecordContainer).m_components = new List<IComponent>(this.m_components.Count);
+            foreach (var cmp in this.m_components)
+            {
+                if (cmp is ICloneable)
+                {
+                    var clone = (cmp as ICloneable).Clone() as IComponent;
+                    var originalSite = cmp.Site as HealthServiceRecordSite;
+                    clone.Site = new HealthServiceRecordSite()
+                    {
+                        Component = clone,
+                        Container = retVal as IContainer,
+                        Context = originalSite.Context,
+                        ContextConduction = originalSite.ContextConduction,
+                        IsSymbolic = originalSite.IsSymbolic,
+                        Name = originalSite.Name,
+                        OriginalIdentifier = originalSite.OriginalIdentifier,
+                        SiteRoleType = originalSite.SiteRoleType,
+                        UpdateMode = originalSite.UpdateMode
+                    };
+                    (retVal as HealthServiceRecordContainer).m_components.Add(clone);
+                }
+            }
             (retVal as IComponent).Site = null;
             return retVal;
         }
