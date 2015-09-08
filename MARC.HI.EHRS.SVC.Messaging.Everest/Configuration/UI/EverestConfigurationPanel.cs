@@ -39,7 +39,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest.Configuration.UI
         /// </summary>
         public EverestConfigurationPanel()
         {
-            String etplPath = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Config"), "Everest");
+            String etplPath = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "config"), "everest");
             XmlSerializer xsz = new XmlSerializer(typeof(RevisionTemplate));
             foreach (var etpFileName in Directory.GetFiles(etplPath))
             {

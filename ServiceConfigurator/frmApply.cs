@@ -122,8 +122,11 @@ namespace ServiceConfigurator
                 }
                 catch (Exception ex)
                 {
+#if DEBUG
+                    MessageBox.Show(ex.ToString(), "Error Configuring Service");
+#else
                     MessageBox.Show(ex.Message, "Error Configuring Service");
-
+#endif
                     foreach (IConfigurationPanel itm in apply.chkActions.CheckedItems)
                     {
 

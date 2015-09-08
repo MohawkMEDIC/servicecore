@@ -62,6 +62,15 @@ namespace MARC.HI.EHRS.SVC.Core.DataTypes
     {
 
         /// <summary>
+        /// Effective time
+        /// </summary>
+        public DateTime EffectiveTime { get; set; }
+
+        /// <summary>
+        /// Obsolete time
+        /// </summary>
+        public DateTime? ObsoleteTime { get; set; }
+        /// <summary>
         /// Represents the key for the items
         /// </summary>
         [XmlAttribute("key")]

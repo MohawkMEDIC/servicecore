@@ -6,6 +6,7 @@ using System.Xml;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Reflection;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
 {
@@ -122,7 +123,17 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 coreNode.AppendChild(serviceProviderNode);
             }
             // Is there an XmlLocalization Service?
-            var xmlLocalizationServiceAsm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a=>a.GetTypes().FirstOrDefault(t=>t.Name == "XmlLocalizationService") != null);
+            var xmlLocalizationServiceAsm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => {
+                try
+                {
+                    return a.GetTypes().FirstOrDefault(t => t.Name == "XmlLocalizationService") != null;
+                }
+                catch(Exception e)
+                {
+                    Trace.TraceError("{0} : {1}", a.Location, e.ToString());
+                    return false;
+                }
+            });
             var xmlLocalizationService = xmlLocalizationServiceAsm.GetTypes().FirstOrDefault(o => o.Name == "XmlLocalizationService");
             if (serviceProviderNode.SelectSingleNode(String.Format("./*[local-name() = 'add' and ./@type = '{0}']", xmlLocalizationService.AssemblyQualifiedName)) == null)
             {
