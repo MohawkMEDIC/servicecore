@@ -38,7 +38,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// Gets or sets the alternate identifier
         /// </summary>
         [XmlElement("altId")]
-        public DomainIdentifier AlternateIdentifier { get; set; }
+        public Identifier AlternateIdentifier { get; set; }
 
     }
 }

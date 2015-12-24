@@ -106,7 +106,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
             {
                 var sub = xsz.Deserialize(ms) as Subscription.Core.Subscription;
                 sub.SubscriptionId = rdr["sub_id"].ToString();
-                sub.ParticipantId = new DomainIdentifier()
+                sub.ParticipantId = new Identifier()
                 {
                     Domain = ApplicationContext.ConfigurationService.OidRegistrar.GetOid("SUBSC_PID").Oid,
                     Identifier = rdr["aut_ent_id"].ToString()
@@ -206,7 +206,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                             SubscriptionQueryContainer rqo = new SubscriptionQueryContainer();
                             var hcId = identityService.FindParticipant(ms.ParticipantId); // get the hc participant for the subscription
                             // Add the components to the request filter
-                            rqo.Add(hcId, "AUT", HealthServiceRecordSiteRoleType.AuthorOf, new List<DomainIdentifier>() { ms.ParticipantId });
+                            rqo.Add(hcId, "AUT", HealthServiceRecordSiteRoleType.AuthorOf, new List<Identifier>() { ms.ParticipantId });
                             var tEvent = policyService.ApplyPolicies(rqo, Event, new List<DetectedIssue>());
                             if (tEvent == null || tEvent.IsMasked) // the event is masked for this subscription, so don't include it
                             {
@@ -521,7 +521,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                     Subscription.Core.Subscription sub = new Core.Subscription()
                     {
                         Where = subscriptionDefinition,
-                        ParticipantId = new DomainIdentifier() { Identifier = provId, Domain = configService.OidRegistrar.GetOid("SUBSC_PID").Oid },
+                        ParticipantId = new Identifier() { Identifier = provId, Domain = configService.OidRegistrar.GetOid("SUBSC_PID").Oid },
                         SubscriptionId = subscriptionId.ToString()
                     };
                     MemoryStream ms = new MemoryStream();

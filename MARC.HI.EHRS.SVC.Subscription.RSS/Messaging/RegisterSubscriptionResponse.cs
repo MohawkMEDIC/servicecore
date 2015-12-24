@@ -39,7 +39,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data.Messaging
         /// Represents the subscription id
         /// </summary>
         [XmlElement("id")]
-        public List<DomainIdentifier> SubscriptionId { get; set; }
+        public List<Identifier> SubscriptionId { get; set; }
 
         /// <summary>
         /// Detected issues with the subscription

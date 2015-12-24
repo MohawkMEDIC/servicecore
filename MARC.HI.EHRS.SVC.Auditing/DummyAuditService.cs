@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.Services;
 using System.Diagnostics;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Auditing;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
@@ -40,7 +40,7 @@ namespace MARC.HI.EHRS.SVC.Auditing
         /// <summary>
         /// Send an audit
         /// </summary>
-        public bool SendAudit(MARC.HI.EHRS.SVC.Core.DataTypes.AuditData ad)
+        public bool SendAudit(MARC.HI.EHRS.SVC.Auditing.AuditData ad)
         {
             ISystemConfigurationService configService = Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
 

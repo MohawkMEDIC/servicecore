@@ -53,13 +53,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Populate a domain identifier from a FHIR token
         /// </summary>
-        public static DomainIdentifier IdentifierFromToken(string token)
+        public static Identifier IdentifierFromToken(string token)
         {
             string[] tokens = token.Split('|');
             if (tokens.Length == 1)
-                return new DomainIdentifier() { Identifier = MessageUtil.UnEscape(tokens[0]) };
+                return new Identifier() { Identifier = MessageUtil.UnEscape(tokens[0]) };
             else
-                return new DomainIdentifier()
+                return new Identifier()
                 {
                     Domain = TranslateFhirDomain(MessageUtil.UnEscape(tokens[0])),
                     Identifier = MessageUtil.UnEscape(tokens[1])

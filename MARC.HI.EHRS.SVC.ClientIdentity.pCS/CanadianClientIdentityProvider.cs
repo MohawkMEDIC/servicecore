@@ -65,7 +65,7 @@ namespace MARC.HI.EHRS.SVC.ClientIdentity.pCS
         /// <summary>
         /// Find a client by identifier
         /// </summary>
-        public Core.ComponentModel.Components.Client FindClient(Core.DataTypes.DomainIdentifier identifier)
+        public Core.ComponentModel.Components.Client FindClient(Core.DataTypes.Identifier identifier)
         {
 
             // System Configuration 

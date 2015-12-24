@@ -52,7 +52,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         /// Identifies the original identifier that was used to establish the link
         /// </summary>
         [XmlElement("originalIdentifier")]
-        public List<DomainIdentifier> OriginalIdentifier { get; set; }
+        public List<Identifier> OriginalIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets the update mode

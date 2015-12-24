@@ -20,7 +20,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         private CustodianshipData m_custodianData;
         private string m_languageCode;
         private Jurisdiction m_jurisdictionData;
-        private DomainIdentifier m_deviceId;
+        private Identifier m_deviceId;
         private OidRegistrar m_oidRegistrar;
         private ucCoreProperties m_panel = new ucCoreProperties();
 
@@ -37,19 +37,19 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         {
             this.m_custodianData = new CustodianshipData()
             {
-                Id = new DomainIdentifier() { Domain = "OID OF YOUR CLUSTERS", Identifier = "SVC CLUSTER ID" },
+                Id = new Identifier() { Domain = "OID OF YOUR CLUSTERS", Identifier = "SVC CLUSTER ID" },
                 Name = Assembly.GetEntryAssembly().GetName().Name
             };
             this.m_languageCode = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
             this.m_jurisdictionData = new Jurisdiction()
             {
-                Id = new DomainIdentifier() { Domain = "OID OF JURISDICTION", Identifier = "FAKE_JURISDICTION" },
+                Id = new Identifier() { Domain = "OID OF JURISDICTION", Identifier = "FAKE_JURISDICTION" },
                 Name = "Fake Jurisdiction",
                 ClientDomain = "OID OF ENTERPRISE CLIENT ID",
                 ProviderDomain = "OID OF ENTERPRISE PROVIDER ID",
                 PlaceDomain = "OID OF ENTERPRISE LOCATION ID"
             };
-            this.m_deviceId = new DomainIdentifier()
+            this.m_deviceId = new Identifier()
             {
                 Domain = "OID OF YOUR MACHINES",
                 Identifier = Environment.MachineName.ToUpper()
@@ -183,15 +183,15 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             idNode = jurisdictionNode.SelectSingleNode("./*[local-name() = 'clientExport']") as XmlElement;
             if (idNode == null)
                 idNode = jurisdictionNode.AppendChild(configurationDom.CreateElement("clientExport")) as XmlElement;
-            this.PopulateIdNode(new DomainIdentifier() { Domain = this.m_jurisdictionData.ClientDomain }, idNode, configurationDom);
+            this.PopulateIdNode(new Identifier() { Domain = this.m_jurisdictionData.ClientDomain }, idNode, configurationDom);
             idNode = jurisdictionNode.SelectSingleNode("./*[local-name() = 'providerExport']") as XmlElement;
             if (idNode == null)
                 idNode = jurisdictionNode.AppendChild(configurationDom.CreateElement("providerExport")) as XmlElement;
-            this.PopulateIdNode(new DomainIdentifier() { Domain = this.m_jurisdictionData.ProviderDomain }, idNode, configurationDom);
+            this.PopulateIdNode(new Identifier() { Domain = this.m_jurisdictionData.ProviderDomain }, idNode, configurationDom);
             idNode = jurisdictionNode.SelectSingleNode("./*[local-name() = 'sdlExport']") as XmlElement;
             if (idNode == null)
                 idNode = jurisdictionNode.AppendChild(configurationDom.CreateElement("sdlExport")) as XmlElement;
-            this.PopulateIdNode(new DomainIdentifier() { Domain = this.m_jurisdictionData.PlaceDomain }, idNode, configurationDom);
+            this.PopulateIdNode(new Identifier() { Domain = this.m_jurisdictionData.PlaceDomain }, idNode, configurationDom);
             var languageNode = jurisdictionNode.SelectSingleNode("./*[local-name() = 'defaultLanguageCode']") as XmlElement;
             if (languageNode == null)
                 languageNode = jurisdictionNode.AppendChild(configurationDom.CreateElement("defaultLanguageCode")) as XmlElement;
@@ -205,7 +205,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// <summary>
         /// Populate ID Node
         /// </summary>
-        private void PopulateIdNode(DomainIdentifier domainIdentifier, XmlElement idNode, XmlDocument configurationDom)
+        private void PopulateIdNode(Identifier domainIdentifier, XmlElement idNode, XmlDocument configurationDom)
         {
             if (!String.IsNullOrEmpty(domainIdentifier.Domain))
             {
@@ -257,7 +257,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                     var configuration = new HostConfigurationSectionHandler().Create(null, this, configSection) as HostConfigurationSectionHandler;
 
                     if (systemNode != null)
-                        this.m_deviceId = new DomainIdentifier() { Identifier = configuration.DeviceName, Domain = configuration.DeviceIdentifier };
+                        this.m_deviceId = new Identifier() { Identifier = configuration.DeviceName, Domain = configuration.DeviceIdentifier };
                     if (jurisdictionNode != null)
                     {
                         this.m_jurisdictionData = configuration.JurisdictionData;

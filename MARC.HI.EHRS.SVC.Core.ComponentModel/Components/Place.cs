@@ -62,7 +62,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// Gets a list of alternate identifiers for the SDL
         /// </summary>
         [XmlElement("altId")]
-        public List<DomainIdentifier> AlternateIdentifiers { get; set; }
+        public List<Identifier> AlternateIdentifiers { get; set; }
         /// <summary>
         /// Telecommunications addresses
         /// </summary>
@@ -74,7 +74,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// </summary>
         public Place()
         {
-            this.AlternateIdentifiers = new List<DomainIdentifier>();
+            this.AlternateIdentifiers = new List<Identifier>();
             this.TelecomAddresses = new List<TelecommunicationsAddress>();
         }
     }

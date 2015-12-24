@@ -121,7 +121,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         /// <param name="component">The component being added</param>
         /// <param name="name">The unique name for the component</param>
         /// <param name="siteType">The type of component being added</param>
-        public void Add(IComponent component, string name, HealthServiceRecordSiteRoleType siteType, List<DomainIdentifier> originalIdentifiers)
+        public void Add(IComponent component, string name, HealthServiceRecordSiteRoleType siteType, List<Identifier> originalIdentifiers)
         {
             Add(component, name, siteType, originalIdentifiers, true);
         }
@@ -138,7 +138,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel
         /// <summary>
         /// Add a component
         /// </summary>
-        public void Add(IComponent component, string name, HealthServiceRecordSiteRoleType siteType, List<DomainIdentifier> originalIdentifiers, bool contextConduction)
+        public void Add(IComponent component, string name, HealthServiceRecordSiteRoleType siteType, List<Identifier> originalIdentifiers, bool contextConduction)
         {
             Add(component, name);
             (component.Site as HealthServiceRecordSite).SiteRoleType = siteType;

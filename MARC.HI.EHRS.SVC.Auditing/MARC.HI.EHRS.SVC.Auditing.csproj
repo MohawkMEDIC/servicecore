@@ -98,6 +98,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionType.cs" />
+    <Compile Include="AuditableObejctType.cs" />
+    <Compile Include="AuditableObject.cs" />
+    <Compile Include="AuditableObjectIdType.cs" />
+    <Compile Include="AuditableObjectLifecycle.cs" />
+    <Compile Include="AuditableObjectRole.cs" />
+    <Compile Include="AuditActorData.cs" />
+    <Compile Include="AuditData.cs" />
+    <Compile Include="AuditSourceType.cs" />
+    <Compile Include="Services\IAuditorService.cs" />
+    <Compile Include="NetworkAccessPointType.cs" />
+    <Compile Include="OutcomeIndicator.cs" />
     <Compile Include="DummyAuditService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

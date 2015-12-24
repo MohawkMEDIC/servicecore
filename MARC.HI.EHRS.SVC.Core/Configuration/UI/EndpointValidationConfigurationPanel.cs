@@ -38,7 +38,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// <summary>
         /// Solicitors
         /// </summary>
-        public List<DomainIdentifier> Solicitors { get; set; }
+        public List<Identifier> Solicitors { get; set; }
         
         /// <summary>
         /// Gets the configuration panel
@@ -169,7 +169,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
 
                 // register the oid
                 if(!this.Solicitors.Exists(o=>(o.Domain ?? "") == (domain ?? "") && (o.Identifier ?? "") == (value ?? "")))
-                    this.Solicitors.Add(new DataTypes.DomainIdentifier()
+                    this.Solicitors.Add(new DataTypes.Identifier()
                     {
                         Identifier = value,
                         Domain = domain

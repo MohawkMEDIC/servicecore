@@ -27,7 +27,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Represents a service which executes timer jobs
     /// </summary>
-    public interface ITimerService : IUsesHostContext
+    public interface ITimerService
     {
 
         /// <summary>

@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Core.Configuration;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -59,6 +61,6 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Determine if the specified device is a valid sender
         /// </summary>
-        bool IsRegisteredDevice(DomainIdentifier deviceId);
+        bool IsRegisteredDevice(Identifier<String> deviceId);
     }
 }

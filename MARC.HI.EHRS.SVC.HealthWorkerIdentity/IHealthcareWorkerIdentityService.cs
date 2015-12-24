@@ -37,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.HealthWorkerIdentity
         /// <summary>
         /// Lookup a participant by their identifier
         /// </summary>
-        HealthcareParticipant FindParticipant(DomainIdentifier identifier);
+        HealthcareParticipant FindParticipant(Identifier identifier);
 
         /// <summary>
         /// Register the participant

@@ -22,23 +22,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.DataTypes
+namespace MARC.HI.EHRS.SVC.Auditing
 {
     /// <summary>
-    /// Identifies data related to a custodian
+    /// Audit source type
     /// </summary>
-    public class CustodianshipData
+    public enum AuditSourceType
     {
-
-        /// <summary>
-        /// Gets or sets the name of the custodian
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the id of the custodian
-        /// </summary>
-        public DomainIdentifier Id { get; set; }
-
+        EndUserInterface = 1,
+        DeviceOrInstrument = 2,
+        WebServerProcess = 3,
+        ApplicationServerProcess = 4,
+        DatabaseServerProcess = 5,
+        SecurityServerProcess = 6,
+        ISOLevel1or3Component = 7,
+        ISOLevel4or6Software = 8,
+        Other = 9
     }
 }

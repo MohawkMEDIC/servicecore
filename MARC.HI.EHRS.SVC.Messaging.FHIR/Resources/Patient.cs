@@ -34,7 +34,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public Patient()
         {
             this.Link = new List<Resource<Patient>>();
-            this.Identifier = new List<Identifier>();
+            this.Identifier = new List<DataTypes.Identifier>();
             this.Active = new FhirBoolean(true);
             this.Name = new List<HumanName>();
             this.Telecom = new List<Telecom>();
@@ -50,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("identifier")]
         [Description("An identifier for the person as this patient")]
         [ElementProfile(MaxOccurs = -1)]
-        public List<Identifier> Identifier { get; set; }
+        public List<DataTypes.Identifier> Identifier { get; set; }
 
         /// <summary>
         /// The name of the individual

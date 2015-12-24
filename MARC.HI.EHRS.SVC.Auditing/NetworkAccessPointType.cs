@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.DataTypes
+namespace MARC.HI.EHRS.SVC.Auditing
 {
     /// <summary>
     /// Represents the type of network access point

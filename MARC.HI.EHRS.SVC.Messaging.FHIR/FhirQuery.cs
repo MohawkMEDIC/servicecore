@@ -21,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
             this.QueryId = Guid.Empty;
             this.IncludeHistory = false;
             this.MinimumDegreeMatch = 1.0f;
-            this.TargetDomains = new List<DomainIdentifier>();
+            this.TargetDomains = new List<Identifier>();
             this.Start = 0;
             this.Quantity = 25;
         }
@@ -44,7 +44,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// <summary>
         /// Gets or sets the target domains
         /// </summary>
-        public List<DomainIdentifier> TargetDomains { get; set; }
+        public List<Identifier> TargetDomains { get; set; }
 
         /// <summary>
         /// Minimum degree natcg

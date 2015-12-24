@@ -44,7 +44,7 @@ namespace MARC.HI.EHRS.SVC.Subscription.Core
         /// Represents the participant local identifier
         /// </summary>
         [XmlIgnore]
-        public DomainIdentifier ParticipantId { get; set; }
+        public Identifier ParticipantId { get; set; }
 
         /// <summary>
         /// Gets the last updated time
@@ -58,6 +58,6 @@ namespace MARC.HI.EHRS.SVC.Subscription.Core
     public class SubscriptionDisclosure
     {
         [XmlElement("participantId")]
-        public DomainIdentifier ParticipantId { get; set; }
+        public Identifier ParticipantId { get; set; }
     }
 }

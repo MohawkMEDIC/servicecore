@@ -97,7 +97,7 @@ namespace MARC.HI.EHRS.SVC.Core
         /// <summary>
         /// Valid senders
         /// </summary>
-        private List<DomainIdentifier> m_validSenders = new List<DomainIdentifier>();
+        private List<Identifier> m_validSenders = new List<Identifier>();
 
         /// <summary>
         /// Validate senders
@@ -107,7 +107,7 @@ namespace MARC.HI.EHRS.SVC.Core
         /// <summary>
         /// Determine if the sender is a valid sender
         /// </summary>
-        public bool IsRegisteredDevice(DomainIdentifier device)
+        public bool IsRegisteredDevice(Identifier device)
         {
             return !this.m_validateSenders || this.m_validSenders.Exists(o => o.Domain == device.Domain && o.Identifier == device.Identifier);
         }
@@ -143,7 +143,7 @@ namespace MARC.HI.EHRS.SVC.Core
                 // Add registered senders
                 foreach(XmlElement nd in sendersSection.SelectNodes("./*[local-name() = 'add']"))
                 {
-                    this.m_validSenders.Add(new DomainIdentifier() {
+                    this.m_validSenders.Add(new Identifier() {
                         Domain = nd.Attributes["domain"] == null ? null : nd.Attributes["domain"].Value,
                         Identifier = nd.Attributes["value"] == null ? null : nd.Attributes["value"].Value
                     });
@@ -187,10 +187,10 @@ namespace MARC.HI.EHRS.SVC.Core
 
 
                 if(idElement != null)
-                    this.JurisdictionData.Id = new MARC.HI.EHRS.SVC.Core.DataTypes.DomainIdentifier()
+                    this.JurisdictionData.Id = new MARC.HI.EHRS.SVC.Core.DataTypes.Identifier()
                      { Domain = idElement.Attributes["domain"].Value, Identifier = idElement.Attributes["value"].Value };
                 if (defaultOnrampDeviceElement != null)
-                    this.JurisdictionData.DefaultOnrampDeviceId = new DomainIdentifier()
+                    this.JurisdictionData.DefaultOnrampDeviceId = new Identifier()
                     {
                         Domain = defaultOnrampDeviceElement.Attributes["domain"].Value,
                         Identifier = defaultOnrampDeviceElement.Attributes["value"].Value
@@ -212,7 +212,7 @@ namespace MARC.HI.EHRS.SVC.Core
                 this.Custodianship = new MARC.HI.EHRS.SVC.Core.DataTypes.CustodianshipData();
                 XmlNode idElement = custodianSection.SelectSingleNode("./*[local-name() = 'id']");
                 if (idElement != null)
-                    this.Custodianship.Id = new MARC.HI.EHRS.SVC.Core.DataTypes.DomainIdentifier() { Domain = idElement.Attributes["domain"].Value, Identifier = idElement.Attributes["value"].Value };
+                    this.Custodianship.Id = new MARC.HI.EHRS.SVC.Core.DataTypes.Identifier() { Domain = idElement.Attributes["domain"].Value, Identifier = idElement.Attributes["value"].Value };
                 this.Custodianship.Name = custodianSection.SelectSingleNode("./*[local-name() = 'name']").InnerText;
             }
 

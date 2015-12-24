@@ -27,7 +27,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Represents a service that handles messages
     /// </summary>
-    public interface IMessageHandlerService : IUsesHostContext
+    public interface IMessageHandlerService
     {
         /// <summary>
         /// Start the service 

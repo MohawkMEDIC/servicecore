@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -46,7 +47,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// Interface that defines a data persistence service which is used to 
     /// store, query, update and list data
     /// </summary>
-    public interface IDataPersistenceService : IUsesHostContext
+    public interface IDataPersistenceService<TContainer>
     {
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The identifiers representing the identifier of the stored container object</returns>
         /// <exception cref="System.ArgumentException">Thrown when the storage data container is of an unknown type</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when there is not sufficient data known to store the container</exception>
-        VersionedDomainIdentifier StoreContainer(IContainer storageData, DataPersistenceMode mode);
+        TContainer StoreContainer(TContainer storageData, DataPersistenceMode mode);
 
         /// <summary>
         /// Update the specified <see cref="T:System.ComponentModel.IContainer"/> into the
@@ -68,7 +69,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The </returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
         /// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
-        VersionedDomainIdentifier UpdateContainer(IContainer storageData, DataPersistenceMode mode);
+        TContainer UpdateContainer(TContainer storageData, DataPersistenceMode mode);
 
         /// <summary>
         /// Get the object represention of the specified container as specified by <paramref name="containerId"/>
@@ -76,7 +77,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="containerId">The versioned domain identifier of the container to retrieve</param>
         /// <returns>An IContainer object that represents the stored container</returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the <paramref name="containerId"/> is not present in the database</exception>
-        IContainer GetContainer(VersionedDomainIdentifier containerId, bool loadFast);
+        TContainer GetContainer<TIdentifier>(Identifier<TIdentifier> containerId, bool loadFast);
 
        }
 }

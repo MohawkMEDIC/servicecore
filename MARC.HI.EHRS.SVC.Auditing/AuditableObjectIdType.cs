@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.DataTypes
+namespace MARC.HI.EHRS.SVC.Auditing
 {
     /// <summary>
     /// Classifies the type of identifier that a auditable object may have

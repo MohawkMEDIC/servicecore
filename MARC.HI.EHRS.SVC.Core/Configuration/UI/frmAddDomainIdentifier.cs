@@ -33,11 +33,11 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// <summary>
         /// Gets the domain identifier result
         /// </summary>
-        public DomainIdentifier Identifier
+        public Identifier Identifier
         {
             get
             {
-                return new DomainIdentifier()
+                return new Identifier()
                 {
                     Domain = cbxDomain.SelectedItem != null ? (cbxDomain.SelectedItem as OidRegistrar.OidData).Oid : cbxDomain.Text,
                     Identifier = txtId.Text

@@ -21,22 +21,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MARC.HI.EHRS.SVC.Core.DataTypes;
 
-namespace MARC.HI.EHRS.SVC.Core.DataTypes
+namespace MARC.HI.EHRS.SVC.Auditing.Services
 {
     /// <summary>
-    /// Audit source type
+    /// This interface defines a framework for implementing a auditing service
     /// </summary>
-    public enum AuditSourceType
+    public interface IAuditorService
     {
-        EndUserInterface = 1,
-        DeviceOrInstrument = 2,
-        WebServerProcess = 3,
-        ApplicationServerProcess = 4,
-        DatabaseServerProcess = 5,
-        SecurityServerProcess = 6,
-        ISOLevel1or3Component = 7,
-        ISOLevel4or6Software = 8,
-        Other = 9
+        /// <summary>
+        /// Send an audit
+        /// </summary>
+        bool SendAudit(AuditData ad);
+
     }
 }

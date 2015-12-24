@@ -85,17 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auditing\ActionType.cs" />
-    <Compile Include="Auditing\AuditableObejctType.cs" />
-    <Compile Include="Auditing\AuditableObject.cs" />
-    <Compile Include="Auditing\AuditableObjectIdType.cs" />
-    <Compile Include="Auditing\AuditableObjectLifecycle.cs" />
-    <Compile Include="Auditing\AuditableObjectRole.cs" />
-    <Compile Include="Auditing\AuditActorData.cs" />
-    <Compile Include="Auditing\AuditData.cs" />
-    <Compile Include="Auditing\AuditSourceType.cs" />
-    <Compile Include="Auditing\NetworkAccessPointType.cs" />
-    <Compile Include="Auditing\OutcomeIndicator.cs" />
     <Compile Include="Configuration\IAlwaysDeployedConfigurationPanel.cs" />
     <Compile Include="Configuration\IConfigurationPanel.cs" />
     <Compile Include="Configuration\IDatabaseConfigurator.cs" />
@@ -146,11 +135,13 @@
     <Compile Include="DataTypes\AddressPart.cs" />
     <Compile Include="DataTypes\AddressSet.cs" />
     <Compile Include="DataTypes\CodeValue.cs" />
-    <Compile Include="DataTypes\CustodianshipData.cs" />
+    <Compile Include="Configuration\CustodianshipData.cs" />
     <Compile Include="DataTypes\Datatype.cs" />
-    <Compile Include="DataTypes\DomainIdentifier.cs" />
+    <Compile Include="Data\Identifier.cs" />
+    <Compile Include="Data\IIdentified.cs" />
+    <Compile Include="Data\OidData.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
-    <Compile Include="DataTypes\Jurisdiction.cs" />
+    <Compile Include="Configuration\Jurisdiction.cs" />
     <Compile Include="DataTypes\MessageState.cs" />
     <Compile Include="DataTypes\NamePart.cs" />
     <Compile Include="DataTypes\NameSet.cs" />
@@ -158,7 +149,6 @@
     <Compile Include="DataTypes\TelecommunicationsAddress.cs" />
     <Compile Include="DataTypes\TimestampPart.cs" />
     <Compile Include="DataTypes\TimestampSet.cs" />
-    <Compile Include="DataTypes\VersionedDomainIdentifier.cs" />
     <Compile Include="Exceptions\InvalidStateTransitionException.cs" />
     <Compile Include="Exceptions\IssueException.cs" />
     <Compile Include="HostConfigurationSectionHandler.cs" />
@@ -167,7 +157,6 @@
     <Compile Include="Issues\DetectedIssue.cs" />
     <Compile Include="Logging\RollOverTextWriterTraceListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IAuditorService.cs" />
     <Compile Include="Services\IDataPersistenceService.cs" />
     <Compile Include="Services\IDataRegistrationService.cs" />
     <Compile Include="Services\ILocalizationService.cs" />
@@ -177,7 +166,6 @@
     <Compile Include="Services\IMessageHandlerService.cs" />
     <Compile Include="Services\ITerminologyService.cs" />
     <Compile Include="Services\ITimerService.cs" />
-    <Compile Include="Services\IUsesHostContext.cs" />
     <Compile Include="ServiceUtil.cs" />
     <Compile Include="Terminology\ConceptValidationResult.cs" />
     <Compile Include="Terminology\ValidationOutcome.cs" />

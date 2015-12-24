@@ -27,24 +27,12 @@ using System.Workflow.Activities;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
-    /// <summary>
-    /// Code system names
-    /// </summary>
-    public enum CodeSystemName
-    {
-        LOINC,
-        SNOMEDCT,
-        ICD9,
-        ICD10,
-        UCUM,
-        ISO639
-    }
-    
+   
     /// <summary>
     /// Identifies a service that can validate and/or correct terminology problems
     /// </summary>
     [ExternalDataExchange]
-    public interface ITerminologyService : IUsesHostContext
+    public interface ITerminologyService
     {
 
         /// <summary>
@@ -55,12 +43,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Validate a code value
         /// </summary>
-        ConceptValidationResult ValidateEx(string code, string displayName, CodeSystemName codeSystem);
-
-        /// <summary>
-        /// Get the code system domain for the specified code system
-        /// </summary>
-        string GetCodeSystemDomain(CodeSystemName codeSystemName);
+        ConceptValidationResult ValidateEx(string code, string displayName, String codeSystem);
 
         /// <summary>
         /// Translate the specified code into a code within the specified

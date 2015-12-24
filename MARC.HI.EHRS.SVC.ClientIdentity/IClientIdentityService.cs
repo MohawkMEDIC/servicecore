@@ -35,7 +35,7 @@ namespace MARC.HI.EHRS.SVC.ClientIdentity
         /// <summary>
         /// Lookup a client by their domain identifier
         /// </summary>
-        Client FindClient(DomainIdentifier identifier);
+        Client FindClient(Identifier identifier);
 
         /// <summary>
         /// Find client by their name

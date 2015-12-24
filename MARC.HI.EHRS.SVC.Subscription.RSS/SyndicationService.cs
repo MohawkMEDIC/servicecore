@@ -288,9 +288,9 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
                 // Register a subscription response
                 return new RegisterSubscriptionResponse()
                 {
-                    SubscriptionId = new List<DomainIdentifier>()
+                    SubscriptionId = new List<Identifier>()
                     {
-                        new DomainIdentifier()
+                        new Identifier()
                         {
                             Identifier = id.ToString()
                         }
@@ -350,8 +350,8 @@ namespace MARC.HI.EHRS.SVC.Subscription.Data
         {
             return new Messaging.RegisterSubscriptionResponse()
             {
-                SubscriptionId = new List<DomainIdentifier>() {
-                    new DomainIdentifier()
+                SubscriptionId = new List<Identifier>() {
+                    new Identifier()
                     {
                         Identifier = id
                     }

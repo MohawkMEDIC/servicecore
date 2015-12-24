@@ -32,7 +32,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             {
                 CustodianshipData retVal = new CustodianshipData()
                 {
-                    Id = txtCustodianId.Tag as DomainIdentifier,
+                    Id = txtCustodianId.Tag as Identifier,
                     Name = txtCustodianName.Text
                 };
                 return retVal;
@@ -49,11 +49,11 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// <summary>
         /// Gets or sets the device identifier configuration
         /// </summary>
-        public DomainIdentifier DeviceId 
+        public Identifier DeviceId 
         {
             get
             {
-                return txtDeviceId.Tag as DomainIdentifier;
+                return txtDeviceId.Tag as Identifier;
             }
             set
             {
@@ -67,11 +67,11 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             {
                 return new Jurisdiction()
                 {
-                    Id = txtJurisdictionId.Tag as DomainIdentifier,
-                    ClientDomain = (txtECID.Tag as DomainIdentifier).Domain,
+                    Id = txtJurisdictionId.Tag as Identifier,
+                    ClientDomain = (txtECID.Tag as Identifier).Domain,
                     DefaultLanguageCode = this.Locale,
-                    PlaceDomain = (txtELID.Tag as DomainIdentifier).Domain,
-                    ProviderDomain = (txtEPID.Tag as DomainIdentifier).Domain,
+                    PlaceDomain = (txtELID.Tag as Identifier).Domain,
+                    ProviderDomain = (txtEPID.Tag as Identifier).Domain,
                     Name = txtJurisdictionName.Text,
                     
                 };
@@ -82,9 +82,9 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
                 txtJurisdictionName.Text = value.Name;
 
                 this.ShowIdOnTextBox(txtJurisdictionId, value.Id);
-                this.ShowIdOnTextBox(txtECID, new DomainIdentifier() { Domain = value.ClientDomain });
-                this.ShowIdOnTextBox(txtEPID, new DomainIdentifier() { Domain = value.ProviderDomain });
-                this.ShowIdOnTextBox(txtELID, new DomainIdentifier() { Domain = value.PlaceDomain });
+                this.ShowIdOnTextBox(txtECID, new Identifier() { Domain = value.ClientDomain });
+                this.ShowIdOnTextBox(txtEPID, new Identifier() { Domain = value.ProviderDomain });
+                this.ShowIdOnTextBox(txtELID, new Identifier() { Domain = value.PlaceDomain });
             }
         }
 
@@ -128,7 +128,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// </summary>
         /// <param name="target"></param>
         /// <param name="domainIdentifier"></param>
-        private void ShowIdOnTextBox(TextBox target, DomainIdentifier domainIdentifier)
+        private void ShowIdOnTextBox(TextBox target, Identifier domainIdentifier)
         {
             target.Tag = domainIdentifier;
             if (domainIdentifier != null)
@@ -140,7 +140,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         private void BrowseDomainIdentifier(TextBox target)
         {
             frmAddDomainIdentifier addId = new frmAddDomainIdentifier(this.OidData);
-            addId.Identifier = target.Tag as DomainIdentifier;
+            addId.Identifier = target.Tag as Identifier;
             if (addId.ShowDialog() == DialogResult.OK)
             {
                 target.Tag = addId.Identifier;

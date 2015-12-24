@@ -137,11 +137,11 @@ namespace MARC.HI.EHRS.SHR.Messaging
         /// <summary>
         /// Create a domain identifier list from the list 
         /// </summary>
-        public List<DomainIdentifier> CreateDomainIdentifierList(IEnumerable<II> iiList)
+        public List<Identifier> CreateDomainIdentifierList(IEnumerable<II> iiList)
         {
-            List<DomainIdentifier> retVal = new List<DomainIdentifier>(10);
+            List<Identifier> retVal = new List<Identifier>(10);
             foreach (var ii in iiList)
-                retVal.Add(new DomainIdentifier()
+                retVal.Add(new Identifier()
                 {
                     Domain = ii.Root,
                     Identifier = ii.Extension
@@ -449,7 +449,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
             }
 
             // Add identifier
-            retVal.AlternateIdentifiers.Add(new DomainIdentifier()
+            retVal.AlternateIdentifiers.Add(new Identifier()
             {
                 Domain = assignedEntity.RepresentedOrganization.Id.Root,
                 Identifier = assignedEntity.RepresentedOrganization.Id.Extension
@@ -504,7 +504,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
                 dtls.Add(new MandatoryElementMissingResultDetail(ResultDetailType.Error, this.m_localeService.GetString("MSGE02C"), null));
                 return null;
             }
-            retVal.AlternateIdentifiers.Add(new DomainIdentifier()
+            retVal.AlternateIdentifiers.Add(new Identifier()
                 {
                     Domain = personalRelationship.Id.Root,
                     Identifier = personalRelationship.Id.Extension
@@ -594,7 +594,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
             if (assignedEntity.AssignedPerson.AsHealthCareProvider != null &&
                 assignedEntity.AssignedPerson.AsHealthCareProvider.Id != null &&
                 !assignedEntity.AssignedPerson.AsHealthCareProvider.Id.IsNull)
-                retVal.AlternateIdentifiers.Add(new DomainIdentifier()
+                retVal.AlternateIdentifiers.Add(new Identifier()
                 {
                     Domain = assignedEntity.AssignedPerson.AsHealthCareProvider.Id.Root,
                     Identifier = assignedEntity.AssignedPerson.AsHealthCareProvider.Id.Extension,
@@ -625,7 +625,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
                 dtls.Add(new MandatoryElementMissingResultDetail(ResultDetailType.Error, this.m_localeService.GetString("MSGE032"), null));
                 return null;
             }
-            retVal.AlternateIdentifiers.Add(new DomainIdentifier()
+            retVal.AlternateIdentifiers.Add(new Identifier()
             {
                 Domain = organization.Id.Root,
                 Identifier = organization.Id.Extension
@@ -694,7 +694,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
             if(assignedEntity.AssignedPerson.AsHealthCareProvider != null &&
                 assignedEntity.AssignedPerson.AsHealthCareProvider.Id != null &&
                 !assignedEntity.AssignedPerson.AsHealthCareProvider.Id.IsNull)
-                retVal.AlternateIdentifiers.Add(new DomainIdentifier() { 
+                retVal.AlternateIdentifiers.Add(new Identifier() { 
                     Domain = assignedEntity.AssignedPerson.AsHealthCareProvider.Id.Root, 
                     Identifier = assignedEntity.AssignedPerson.AsHealthCareProvider.Id.Extension,
                     IsLicenseAuthority = true
@@ -727,7 +727,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
                 return null;
             }
             retVal.AlternateIdentifiers.Add(
-                new DomainIdentifier()
+                new Identifier()
                 {
                     Domain = serviceDeliveryLocation.Id.Root,
                     Identifier = serviceDeliveryLocation.Id.Extension
@@ -775,7 +775,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
                 dtls.Add(new MandatoryElementMissingResultDetail(ResultDetailType.Error, this.m_localeService.GetString("MSGE032"), null));
                 return null;
             }
-            retVal.AlternateIdentifiers.Add(new DomainIdentifier()
+            retVal.AlternateIdentifiers.Add(new Identifier()
                 {
                     Domain = organization.Id.Root,
                     Identifier = organization.Id.Extension
@@ -818,7 +818,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
             }
 
             // Add identifier
-            retVal.AlternateIdentifiers.Add(new DomainIdentifier()
+            retVal.AlternateIdentifiers.Add(new Identifier()
             {
                 Domain = assignedEntity.RepresentedOrganization.Id.Root,
                 Identifier = assignedEntity.RepresentedOrganization.Id.Extension
@@ -854,7 +854,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
                 return null;
             }
             retVal.AlternateIdentifiers.Add(
-                new DomainIdentifier() 
+                new Identifier() 
                 {
                     Domain = serviceDeliveryLocation.Id.Root, 
                     Identifier = serviceDeliveryLocation.Id.Extension
@@ -879,7 +879,7 @@ namespace MARC.HI.EHRS.SHR.Messaging
                 dtls.Add(new ResultDetail(ResultDetailType.Error, this.m_localeService.GetString("MSGE033"), null, null));
             else
                 retVal.AlternateIdentifiers.Add(
-                    new DomainIdentifier()
+                    new Identifier()
                     {
                         Domain = serviceDeliveryLocation.Id.Root,
                         Identifier = serviceDeliveryLocation.Id.Extension
@@ -916,9 +916,9 @@ namespace MARC.HI.EHRS.SHR.Messaging
         /// </summary>
         /// <param name="iI"></param>
         /// <returns></returns>
-        private DomainIdentifier CreateDomainIdentifier(MARC.Everest.DataTypes.II iI)
+        private Identifier CreateDomainIdentifier(MARC.Everest.DataTypes.II iI)
         {
-            return new DomainIdentifier()
+            return new Identifier()
             {
                 Domain = iI.Root,
                 Identifier = iI.Extension

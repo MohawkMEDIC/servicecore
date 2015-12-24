@@ -62,7 +62,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Identifies a structure for message persistence service implementations
     /// </summary>
-    public interface IMessagePersistenceService : IUsesHostContext
+    public interface IMessagePersistenceService 
     {
 
         /// <summary>

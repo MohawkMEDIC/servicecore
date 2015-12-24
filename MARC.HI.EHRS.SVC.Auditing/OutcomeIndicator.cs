@@ -22,16 +22,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.DataTypes
+namespace MARC.HI.EHRS.SVC.Auditing
 {
     /// <summary>
-    /// Identifies the type of auditable objects in the system
+    /// Represents potential outcomes
     /// </summary>
-    public enum AuditableObjectType
+    public enum OutcomeIndicator
     {
-        Person = 1,
-        SystemObject = 2,
-        Organization = 3, 
-        Other = 4
+        /// <summary>
+        /// Successful operation
+        /// </summary>
+        Success = 0x00,
+        /// <summary>
+        /// Minor failure, action should be restarted
+        /// </summary>
+        MinorFail = 0x04,
+        /// <summary>
+        /// Action was terminated
+        /// </summary>
+        SeriousFail = 0x08,
+        /// <summary>
+        /// Major failure, action is made unavailable
+        /// </summary>
+        EpicFail = 0x0C
     }
 }

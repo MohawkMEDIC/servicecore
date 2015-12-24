@@ -49,7 +49,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// Gets the set of alternate domain identifiers that the client is known as
         /// </summary>
         [XmlElement("altId")]
-        public List<DomainIdentifier> AlternateIdentifiers { get; set; }
+        public List<Identifier> AlternateIdentifiers { get; set; }
 
         /// <summary>
         /// Gets a list of telecommunications addresses for the client
@@ -74,7 +74,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// </summary>
         public Client()
         {
-            this.AlternateIdentifiers = new List<DomainIdentifier>();
+            this.AlternateIdentifiers = new List<Identifier>();
             this.TelecomAddresses = new List<TelecommunicationsAddress>();
         }
 

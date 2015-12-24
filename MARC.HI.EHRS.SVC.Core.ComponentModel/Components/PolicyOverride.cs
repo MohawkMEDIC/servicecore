@@ -49,7 +49,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// Identifies the form where the policy override is active
         /// </summary>
         [XmlElement("formId")]
-        public DomainIdentifier FormId { get; set; }
+        public Identifier FormId { get; set; }
 
         /// <summary>
         /// Identifies the reason for the policy override

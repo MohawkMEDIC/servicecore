@@ -71,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// Gets alternative identifiers for the participant
         /// </summary>
         [XmlElement("altId")]
-        public List<DomainIdentifier> AlternateIdentifiers { get; set; }
+        public List<Identifier> AlternateIdentifiers { get; set; }
 
         /// <summary>
         /// Gets a list of telecommunications addresses that the participant can be contacted at
@@ -84,7 +84,7 @@ namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components
         /// </summary>
         public HealthcareParticipant()
         {
-            this.AlternateIdentifiers = new List<DomainIdentifier>();
+            this.AlternateIdentifiers = new List<Identifier>();
             this.TelecomAddresses = new List<TelecommunicationsAddress>();
         }
     }

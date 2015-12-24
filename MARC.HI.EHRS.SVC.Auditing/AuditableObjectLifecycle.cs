@@ -21,21 +21,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.SVC.Core.DataTypes
+namespace MARC.HI.EHRS.SVC.Auditing
 {
     /// <summary>
-    /// Represents a domain identifier that also carries version information
+    /// Auditable object lifecycle
     /// </summary>
-    [Serializable]
-    [XmlType("VersionedIdentifier", Namespace = "urn:marc-hi:svc:componentModel")]
-    public class VersionedDomainIdentifier : DomainIdentifier
+    public enum AuditableObjectLifecycle
     {
-        /// <summary>
-        /// Gets or sets the identity of the version of the identifier
-        /// </summary>
-        [XmlAttribute("ver")]
-        public string Version { get; set; }
+        Creation = 0x01,
+        Import = 0x02,
+        Amendment = 0x03,
+        Verification = 0x04,
+        Translation = 0x05,
+        Access = 0x06,
+        Deidentification = 0x07,
+        Aggregation = 0x08,
+        Report = 0x09,
+        Export = 0x0a,
+        Disclosure = 0x0b,
+        ReceiptOfDisclosure = 0x0c,
+        Archiving = 0x0d,
+        LogicalDeletion = 0x0e,
+        PermanentErasure = 0x0f
     }
 }

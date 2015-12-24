@@ -36,13 +36,13 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
         /// <summary>
         /// Gets or sets the valid solicitors
         /// </summary>
-        public List<DomainIdentifier> Solicitors
+        public List<Identifier> Solicitors
         {
             get
             {
-                List<DomainIdentifier> retVal = new List<DomainIdentifier>();
-                foreach (DomainIdentifier itm in lstValidSolicitors.Items)
-                    retVal.Add(itm as DomainIdentifier);
+                List<Identifier> retVal = new List<Identifier>();
+                foreach (Identifier itm in lstValidSolicitors.Items)
+                    retVal.Add(itm as Identifier);
                 return retVal;
             }
             set
@@ -78,7 +78,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.UI
             if (lstValidSolicitors.SelectedItem == null)
                 return;
             frmAddDomainIdentifier domainAdd = new frmAddDomainIdentifier(this.Oids);
-            domainAdd.Identifier = lstValidSolicitors.SelectedItem as DomainIdentifier;
+            domainAdd.Identifier = lstValidSolicitors.SelectedItem as Identifier;
             domainAdd.ShowDialog();
             var idx = lstValidSolicitors.SelectedIndex;
             lstValidSolicitors.Items.Insert(idx, domainAdd.Identifier);

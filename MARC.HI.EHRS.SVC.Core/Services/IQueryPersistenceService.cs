@@ -23,13 +23,14 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
     /// <summary>
     /// Defines a structure for query persistence services
     /// </summary>
-    public interface IQueryPersistenceService : IUsesHostContext
+    public interface IQueryPersistenceService 
     {
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="results">The results to be stored in the query</param>
         /// <param name="tag">A user tag for the query result set. Can be used to determine
         /// the type of data being returned</param>
-        bool RegisterQuerySet(string queryId, VersionedDomainIdentifier[] results, object tag);
+        bool RegisterQuerySet<TIdentifier>(string queryId, Identifier<TIdentifier> results, object tag);
 
         /// <summary>
         /// Returns true if the query identifier is already registered
@@ -53,7 +54,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// </summary>
         /// <param name="queryId">The identifier for the query</param>
         /// <param name="nRecords">The number of records to pop</param>
-        VersionedDomainIdentifier[] GetQueryResults(string queryId, int startRecord, int nRecords);
+        Identifier<TIdentifier> GetQueryResults<TIdentifier>(string queryId, int startRecord, int nRecords);
 
         /// <summary>
         /// Get the query tag value from the result store

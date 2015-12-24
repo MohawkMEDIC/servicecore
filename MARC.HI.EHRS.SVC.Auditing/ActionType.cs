@@ -22,17 +22,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing
 {
     /// <summary>
-    /// Any service that runs within the shared health record host process implements the
-    /// shared health record service interface
+    /// Represents types of actions
     /// </summary>
-    public interface IUsesHostContext
+    public enum ActionType
     {
         /// <summary>
-        /// Gets the context of the shared health record service
+        /// Data was created in the system
         /// </summary>
-        IServiceProvider Context { get; set; }
+        Create,
+        /// <summary>
+        /// Data was viewed, printed, displayed, etc...
+        /// </summary>
+        Read,
+        /// <summary>
+        /// Data was revised in the system
+        /// </summary>
+        Update,
+        /// <summary>
+        /// Data was removed from the system
+        /// </summary>
+        Delete,
+        /// <summary>
+        /// A system, or application function was performed
+        /// </summary>
+        Execute
     }
 }

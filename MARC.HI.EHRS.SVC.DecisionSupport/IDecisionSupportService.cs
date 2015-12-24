@@ -48,7 +48,7 @@ namespace MARC.HI.EHRS.SVC.DecisionSupport
         /// </summary>
         /// <remarks>This function is called prior to connecting to the database
         /// and de-persisting a record</remarks>
-        List<DetectedIssue> RetrievingRecord(DomainIdentifier recordId);
+        List<DetectedIssue> RetrievingRecord(Identifier recordId);
 
         /// <summary>
         /// Record has been retrieved
