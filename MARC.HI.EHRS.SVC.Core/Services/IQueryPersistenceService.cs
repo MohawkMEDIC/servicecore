@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
@@ -30,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Defines a structure for query persistence services
     /// </summary>
-    public interface IQueryPersistenceService 
+    public interface IQueryPersistenceService
     {
 
         /// <summary>

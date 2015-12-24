@@ -10,7 +10,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Oid Registrar Service - A service that is responsible for storing data related to registered object identifiers
     /// </summary>
-    public interface IOidRegistrarService : IEnumerable//<MARC.HI.EHRS.SVC.Core.DataTypes.OidRegistrar.OidData>
+    public interface IOidRegistrarService//<MARC.HI.EHRS.SVC.Core.DataTypes.OidRegistrar.OidData>
     {
         /// <summary>
         /// Register an identifier type

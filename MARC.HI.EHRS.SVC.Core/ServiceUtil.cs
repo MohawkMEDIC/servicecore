@@ -23,7 +23,6 @@ using System.Text;
 using System.Diagnostics;
 using MARC.HI.EHRS.SVC.Core.Services;
 using System.Reflection;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Core
@@ -34,13 +33,6 @@ namespace MARC.HI.EHRS.SVC.Core
     public static class ServiceUtil
     {
 
-
-        // Msg handler service
-        private static IMessageHandlerService s_messageHandlerService;
-        // timer service
-        private static ITimerService s_timerService;
-        // Audit service
-        private static IAuditorService s_auditorService;
 
         /// <summary>
         /// Helper function to start the services
@@ -60,37 +52,17 @@ namespace MARC.HI.EHRS.SVC.Core
             try
             {
                 // Initialize 
-                HostContext context = new HostContext();
-
                 Trace.TraceInformation("Getting default message handler service.");
-                s_messageHandlerService = context.GetService(typeof(IMessageHandlerService)) as IMessageHandlerService;
-                s_timerService = context.GetService(typeof(ITimerService)) as ITimerService;
-                s_auditorService = context.GetService(typeof(IAuditorService)) as IAuditorService;
-
-                if (s_messageHandlerService == null)
-                {
-                    Trace.TraceError("PANIC! Can't find a default message handler service: {0}", "No IMessageHandlerService classes are registered with this host context");
-                    return 1911;
+                if(ApplicationContext.Current.Start())
+                { 
+                    Trace.TraceInformation("Service Started Successfully");
+                    return 0;
                 }
                 else
                 {
-                    Trace.TraceInformation("Starting message handler service {0}", s_messageHandlerService);
-                    if (s_messageHandlerService.Start())
-                    {
-                        if (s_timerService != null)
-                            s_timerService.Start();
-                        // audit startup
-                        if (s_auditorService != null)
-                            s_auditorService.SendAudit(CreateApplicationStartAudit());
-                        Trace.TraceInformation("Service Started Successfully");
-                        return 0;
-                    }
-                    else
-                    {
-                        Trace.TraceError("No message handler service started. Terminating program");
-                        Stop();
-                        return 1911;
-                    }
+                    Trace.TraceError("No message handler service started. Terminating program");
+                    Stop();
+                    return 1911;
                 }
             }
             catch (Exception e)
@@ -109,18 +81,7 @@ namespace MARC.HI.EHRS.SVC.Core
         /// </summary>
         public static void Stop()
         {
-            if (s_messageHandlerService != null)
-            {
-                if (s_timerService != null)
-                    s_timerService.Stop();
-                // audit stop
-                if (s_auditorService != null)
-                    s_auditorService.SendAudit(CreateApplicationStopAudit());
-                Trace.TraceInformation("Stopping message handler service {0}", s_messageHandlerService);
-                s_messageHandlerService.Stop();
-
-                (s_messageHandlerService.Context as IDisposable).Dispose();
-            }
+            ApplicationContext.Current.Stop();
         }
 
         /// <summary>
@@ -144,57 +105,6 @@ namespace MARC.HI.EHRS.SVC.Core
 
             return null;
         }
-
-        /// <summary>
-        /// Create an application start audit
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static Core.DataTypes.AuditData CreateApplicationStartAudit()
-        {
-            return new SVC.Core.DataTypes.AuditData(
-                                DateTime.Now,
-                                SVC.Core.DataTypes.ActionType.Execute,
-                                SVC.Core.DataTypes.OutcomeIndicator.Success,
-                                SVC.Core.DataTypes.EventIdentifierType.ApplicationActivity,
-                                new SVC.Core.DataTypes.CodeValue("110120", "DCM") { DisplayName = "Application Start" }
-                            )
-            {
-                Actors = new List<SVC.Core.DataTypes.AuditActorData>() {
-                                    new MARC.HI.EHRS.SVC.Core.DataTypes.AuditActorData() {
-                                        UserIdentifier = Environment.UserName,
-                                        UserIsRequestor = false,
-                                        ActorRoleCode = new List<SVC.Core.DataTypes.CodeValue>() { 
-                                            new CodeValue("110150","DCM") { DisplayName = "Application" }
-                                        }
-                                    }
-                                }
-            };
-        }
-
-        /// <summary>
-        /// Create an application stop audit
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static Core.DataTypes.AuditData CreateApplicationStopAudit()
-        {
-            return new SVC.Core.DataTypes.AuditData(
-                                DateTime.Now,
-                                SVC.Core.DataTypes.ActionType.Execute,
-                                SVC.Core.DataTypes.OutcomeIndicator.Success,
-                                SVC.Core.DataTypes.EventIdentifierType.ApplicationActivity,
-                                new SVC.Core.DataTypes.CodeValue("110121", "DCM") { DisplayName = "Application Stop" }
-                            )
-            {
-                Actors = new List<SVC.Core.DataTypes.AuditActorData>() {
-                                    new MARC.HI.EHRS.SVC.Core.DataTypes.AuditActorData() {
-                                        UserIdentifier = Environment.UserName,
-                                        UserIsRequestor = false,
-                                        ActorRoleCode = new List<SVC.Core.DataTypes.CodeValue>() { 
-                                            new CodeValue("110150","DCM") { DisplayName = "Application" }
-                                        }
-                                    }
-                                }
-            };
-        }
+        
     }
 }

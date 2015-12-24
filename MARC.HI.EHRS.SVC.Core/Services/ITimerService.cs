@@ -27,17 +27,9 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Represents a service which executes timer jobs
     /// </summary>
-    public interface ITimerService
+    public interface ITimerService : IDaemonService
     {
 
-        /// <summary>
-        /// Start the timer
-        /// </summary>
-        void Start();
-
-        /// <summary>
-        /// Stop the timer
-        /// </summary>
-        void Stop();
+       
     }
 }

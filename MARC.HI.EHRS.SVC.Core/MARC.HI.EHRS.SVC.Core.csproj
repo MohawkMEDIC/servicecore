@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MARC.HI.EHRS.SVC.Core</RootNamespace>
     <AssemblyName>MARC.HI.EHRS.SVC.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -35,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,6 +55,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -63,6 +66,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -71,6 +75,8 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Workflow.Activities">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -85,74 +91,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\AuthorizationContext.cs" />
+    <Compile Include="Configuration\HostConfiguration.cs" />
     <Compile Include="Configuration\IAlwaysDeployedConfigurationPanel.cs" />
     <Compile Include="Configuration\IConfigurationPanel.cs" />
     <Compile Include="Configuration\IDatabaseConfigurator.cs" />
-    <Compile Include="Configuration\IDatabaseUpdater.cs" />
     <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\EndpointValidationConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\frmAddDomainIdentifier.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\frmAddDomainIdentifier.Designer.cs">
-      <DependentUpon>frmAddDomainIdentifier.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\frmAddOid.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\frmAddOid.Designer.cs">
-      <DependentUpon>frmAddOid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\HL7IdentifierType.cs" />
-    <Compile Include="Configuration\UI\LogConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\OidRegistrarConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\ServiceCoreConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\ucCoreProperties.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\ucCoreProperties.Designer.cs">
-      <DependentUpon>ucCoreProperties.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\ucLogging.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\ucLogging.Designer.cs">
-      <DependentUpon>ucLogging.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\ucOidRegistrarConfiguration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\ucOidRegistrarConfiguration.Designer.cs">
-      <DependentUpon>ucOidRegistrarConfiguration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\ucValidateSolicitors.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\ucValidateSolicitors.Designer.cs">
-      <DependentUpon>ucValidateSolicitors.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\Update\DbSchemaUpdate.cs" />
-    <Compile Include="DataTypes\AddressPart.cs" />
-    <Compile Include="DataTypes\AddressSet.cs" />
-    <Compile Include="DataTypes\CodeValue.cs" />
     <Compile Include="Configuration\CustodianshipData.cs" />
-    <Compile Include="DataTypes\Datatype.cs" />
+    <Compile Include="Data\CodeValue.cs" />
     <Compile Include="Data\Identifier.cs" />
     <Compile Include="Data\IIdentified.cs" />
+    <Compile Include="Data\User.cs" />
     <Compile Include="Data\OidData.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
     <Compile Include="Configuration\Jurisdiction.cs" />
-    <Compile Include="DataTypes\MessageState.cs" />
-    <Compile Include="DataTypes\NamePart.cs" />
-    <Compile Include="DataTypes\NameSet.cs" />
-    <Compile Include="DataTypes\OidRegistrar.cs" />
-    <Compile Include="DataTypes\TelecommunicationsAddress.cs" />
-    <Compile Include="DataTypes\TimestampPart.cs" />
-    <Compile Include="DataTypes\TimestampSet.cs" />
     <Compile Include="Exceptions\InvalidStateTransitionException.cs" />
     <Compile Include="Exceptions\IssueException.cs" />
-    <Compile Include="HostConfigurationSectionHandler.cs" />
-    <Compile Include="HostContext.cs" />
+    <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
+    <Compile Include="ApplicationContext.cs" />
     <Compile Include="Configuration\IAutoDeployConfigurationPanel.cs" />
     <Compile Include="Issues\DetectedIssue.cs" />
     <Compile Include="Logging\RollOverTextWriterTraceListener.cs" />
@@ -162,10 +118,12 @@
     <Compile Include="Services\ILocalizationService.cs" />
     <Compile Include="Services\IMessagePersistenceService.cs" />
     <Compile Include="Services\IQueryPersistenceService.cs" />
-    <Compile Include="Services\ISystemConfigurationService.cs" />
+    <Compile Include="Services\IDaemonService.cs" />
+    <Compile Include="Services\Security\IRoleProviderService.cs" />
     <Compile Include="Services\IMessageHandlerService.cs" />
     <Compile Include="Services\ITerminologyService.cs" />
     <Compile Include="Services\ITimerService.cs" />
+    <Compile Include="Services\Security\IUserProviderService.cs" />
     <Compile Include="ServiceUtil.cs" />
     <Compile Include="Terminology\ConceptValidationResult.cs" />
     <Compile Include="Terminology\ValidationOutcome.cs" />
@@ -180,26 +138,6 @@
     <None Include="marc.hi.ehrs.svc.core.xsd">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\frmAddDomainIdentifier.resx">
-      <DependentUpon>frmAddDomainIdentifier.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\UI\frmAddOid.resx">
-      <DependentUpon>frmAddOid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\UI\ucCoreProperties.resx">
-      <DependentUpon>ucCoreProperties.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\UI\ucLogging.resx">
-      <DependentUpon>ucLogging.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\UI\ucOidRegistrarConfiguration.resx">
-      <DependentUpon>ucOidRegistrarConfiguration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\UI\ucValidateSolicitors.resx">
-      <DependentUpon>ucValidateSolicitors.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

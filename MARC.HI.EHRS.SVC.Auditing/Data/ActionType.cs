@@ -21,38 +21,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.Terminology;
-using System.Workflow.Activities;
-using MARC.HI.EHRS.SVC.Core.Data;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
-   
     /// <summary>
-    /// Identifies a service that can validate and/or correct terminology problems
+    /// Represents types of actions
     /// </summary>
-    public interface ITerminologyService
+    public enum ActionType
     {
-
         /// <summary>
-        /// Validate the specified code
+        /// Data was created in the system
         /// </summary>
-        ConceptValidationResult Validate(CodeValue code);
-
+        Create,
         /// <summary>
-        /// Validate a code value
+        /// Data was viewed, printed, displayed, etc...
         /// </summary>
-        ConceptValidationResult ValidateEx(string code, string displayName, String codeSystem);
-
+        Read,
         /// <summary>
-        /// Translate the specified code into a code within the specified
-        /// target domain
+        /// Data was revised in the system
         /// </summary>
-        CodeValue Translate(CodeValue code, string targetDomain);
-
+        Update,
         /// <summary>
-        /// Fill in code details
+        /// Data was removed from the system
         /// </summary>
-        CodeValue FillInDetails(CodeValue codeValue);
+        Delete,
+        /// <summary>
+        /// A system, or application function was performed
+        /// </summary>
+        Execute
     }
 }

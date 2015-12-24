@@ -22,13 +22,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service that handles messages
+    /// Audit source type
     /// </summary>
-    public interface IMessageHandlerService : IDaemonService
+    public enum AuditSourceType
     {
-       
+        EndUserInterface = 1,
+        DeviceOrInstrument = 2,
+        WebServerProcess = 3,
+        ApplicationServerProcess = 4,
+        DatabaseServerProcess = 5,
+        SecurityServerProcess = 6,
+        ISOLevel1or3Component = 7,
+        ISOLevel4or6Software = 8,
+        Other = 9
     }
 }

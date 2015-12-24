@@ -1,6 +1,7 @@
 ﻿
 
 using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core.Services;
 /**
 * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
 * 
@@ -31,25 +32,6 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
     /// </summary>
     public class Jurisdiction : CustodianshipData
     {
-        /// <summary>
-        /// Identifies the domain (OID) that primary client identifiers
-        /// undertake within the jurisdiction. This is the OID that is used
-        /// by a system to communicate with systems in the jurisdiction.
-        /// </summary>
-        public OidData ClientDomain { get; set; }
-
-        /// <summary>
-        /// Identifies the domain under which the provider data is
-        /// used by the containing environment. This is the OID that is used
-        /// to communicate with systems in the jurisdiction
-        /// </summary>
-        public OidData ProviderDomain { get; set; }
-
-        /// <summary>
-        /// Identifies the domain under which service delivery location
-        /// data is used by the containing environment
-        /// </summary>
-        public OidData PlaceDomain { get; set; }
 
         /// <summary>
         /// Gets or sets the default language code

@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Core.Data;
 
@@ -32,7 +31,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// Framework for classes that update record registries. A record regsitry is a system
     /// that registers document meta-data in a manner that allows it to be queried.
     /// </summary>
-    public interface IDataRegistrationService<TContainer>
+    public interface IDataRegistrationService<TContainer> 
     {
 
         /// <summary>

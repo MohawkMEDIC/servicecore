@@ -21,38 +21,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.Terminology;
-using System.Workflow.Activities;
-using MARC.HI.EHRS.SVC.Core.Data;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
-   
     /// <summary>
-    /// Identifies a service that can validate and/or correct terminology problems
+    /// Represents the type of network access point
     /// </summary>
-    public interface ITerminologyService
+    public enum NetworkAccessPointType
     {
-
         /// <summary>
-        /// Validate the specified code
+        /// The identifier is a machine name
         /// </summary>
-        ConceptValidationResult Validate(CodeValue code);
-
+        MachineName = 0x1,
         /// <summary>
-        /// Validate a code value
+        /// Identifier is an IP address
         /// </summary>
-        ConceptValidationResult ValidateEx(string code, string displayName, String codeSystem);
-
+        IPAddress = 0x2,
         /// <summary>
-        /// Translate the specified code into a code within the specified
-        /// target domain
+        /// Identifier is a telephone number
         /// </summary>
-        CodeValue Translate(CodeValue code, string targetDomain);
-
-        /// <summary>
-        /// Fill in code details
-        /// </summary>
-        CodeValue FillInDetails(CodeValue codeValue);
+        TelephoneNumber = 0x3
     }
 }

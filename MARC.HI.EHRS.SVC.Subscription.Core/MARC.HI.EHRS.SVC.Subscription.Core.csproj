@@ -63,10 +63,6 @@
     <Compile Include="Subscription\Subscription.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core.ComponentModel\MARC.HI.EHRS.SVC.Core.ComponentModel.csproj">
-      <Project>{EF8358CF-797B-473D-A36D-1464C8CA6670}</Project>
-      <Name>MARC.HI.EHRS.SVC.Core.ComponentModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
       <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>

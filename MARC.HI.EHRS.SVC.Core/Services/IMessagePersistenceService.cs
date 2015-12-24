@@ -21,11 +21,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.IO;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
+
+    /// <summary>
+    /// Identifies the status of a message
+    /// </summary>
+    public enum MessageState
+    {
+        /// <summary>
+        /// The message has never been received by the system
+        /// </summary>
+        New,
+        /// <summary>
+        /// The message has been received by the system and is in process
+        /// </summary>
+        Active,
+        /// <summary>
+        /// The message has been received by the system and processing is complete
+        /// </summary>
+        Complete
+    }
 
     /// <summary>
     /// Message information
@@ -62,7 +80,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Identifies a structure for message persistence service implementations
     /// </summary>
-    public interface IMessagePersistenceService 
+    public interface IMessagePersistenceService
     {
 
         /// <summary>

@@ -21,38 +21,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.Terminology;
-using System.Workflow.Activities;
-using MARC.HI.EHRS.SVC.Core.Data;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
-   
     /// <summary>
-    /// Identifies a service that can validate and/or correct terminology problems
+    /// Represents potential outcomes
     /// </summary>
-    public interface ITerminologyService
+    public enum OutcomeIndicator
     {
-
         /// <summary>
-        /// Validate the specified code
+        /// Successful operation
         /// </summary>
-        ConceptValidationResult Validate(CodeValue code);
-
+        Success = 0x00,
         /// <summary>
-        /// Validate a code value
+        /// Minor failure, action should be restarted
         /// </summary>
-        ConceptValidationResult ValidateEx(string code, string displayName, String codeSystem);
-
+        MinorFail = 0x04,
         /// <summary>
-        /// Translate the specified code into a code within the specified
-        /// target domain
+        /// Action was terminated
         /// </summary>
-        CodeValue Translate(CodeValue code, string targetDomain);
-
+        SeriousFail = 0x08,
         /// <summary>
-        /// Fill in code details
+        /// Major failure, action is made unavailable
         /// </summary>
-        CodeValue FillInDetails(CodeValue codeValue);
+        EpicFail = 0x0C
     }
 }

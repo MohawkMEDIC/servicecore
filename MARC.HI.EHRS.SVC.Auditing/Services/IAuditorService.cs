@@ -21,14 +21,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Core.Services;
+using MARC.HI.EHRS.SVC.Auditing.Data;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Services
 {
     /// <summary>
     /// This interface defines a framework for implementing a auditing service
     /// </summary>
-    public interface IAuditorService
+    public interface IAuditorService 
     {
         /// <summary>
         /// Send an audit

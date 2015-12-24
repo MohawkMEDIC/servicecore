@@ -66,10 +66,6 @@
     <Compile Include="SyndicationService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core.ComponentModel\MARC.HI.EHRS.SVC.Core.ComponentModel.csproj">
-      <Project>{EF8358CF-797B-473D-A36D-1464C8CA6670}</Project>
-      <Name>MARC.HI.EHRS.SVC.Core.ComponentModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
       <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>
@@ -77,10 +73,6 @@
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Subscription.Core\MARC.HI.EHRS.SVC.Subscription.Core.csproj">
       <Project>{FF3C06E6-CA24-49FB-B202-4F6A12CF5FE5}</Project>
       <Name>MARC.HI.EHRS.SVC.Subscription.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.HealthWorkerIdentity\MARC.HI.EHRS.SVC.HealthWorkerIdentity.csproj">
-      <Project>{525848D3-2001-4009-8C92-B43870388C4B}</Project>
-      <Name>MARC.HI.EHRS.SVC.HealthWorkerIdentity</Name>
     </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.PolicyEnforcement\MARC.HI.EHRS.SVC.PolicyEnforcement.csproj">
       <Project>{2DD0E817-8D5F-482E-BCEC-21B1FF98D079}</Project>

@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Core.ComponentModel.Components

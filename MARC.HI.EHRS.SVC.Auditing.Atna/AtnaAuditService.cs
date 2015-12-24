@@ -30,6 +30,8 @@ using System.ComponentModel;
 using System.Net;
 using System.Diagnostics;
 using MARC.Everest.Threading;
+using MARC.HI.EHRS.SVC.Auditing.Services;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
@@ -40,7 +42,12 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
     [Description("RFC3881 Audit Service")]
     public class AtnaAuditService : IAuditorService, IDisposable
     {
-    
+
+        /// <summary>
+        /// Is the audit data running
+        /// </summary>
+        private bool m_isRunning = false;
+
         // Configuration
         protected AuditConfiguration m_configuration;
 
@@ -53,6 +60,9 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         public AtnaAuditService()
         {
             this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.auditing.atna") as AuditConfiguration;
+            ApplicationContext.Current.Started += ApplicationContext_Started;
+            ApplicationContext.Current.Stopped += ApplicationContext_Stopped;
+
         }
 
         #region IAuditorService Members
@@ -66,7 +76,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
             try
             {
-                var ad = state as MARC.HI.EHRS.SVC.Core.DataTypes.AuditData;
+                var ad = state as MARC.HI.EHRS.SVC.Auditing.Data.AuditData;
                 ISystemConfigurationService sysConfigSvc = this.Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
 
                 // Create the audit basic
@@ -95,7 +105,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                 foreach (var adActor in ad.Actors)
                 {
                     thisFound |= (adActor.NetworkAccessPointId == Environment.MachineName || adActor.NetworkAccessPointId == dnsName) &&
-                        adActor.NetworkAccessPointType == MARC.HI.EHRS.SVC.Core.DataTypes.NetworkAccessPointType.MachineName;
+                        adActor.NetworkAccessPointType == MARC.HI.EHRS.SVC.Auditing.Data.NetworkAccessPointType.MachineName;
                     var act = new AuditActorData()
                     {
                         NetworkAccessPointId = adActor.NetworkAccessPointId,
@@ -120,7 +130,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     var atnaAo = new AuditableObject()
                     {
                         IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
-                            aoPtctpt.IDTypeCode.Value != Core.DataTypes.AuditableObjectIdType.Custom ?
+                            aoPtctpt.IDTypeCode.Value != Auditing.Data.AuditableObjectIdType.Custom ?
                                 new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) :
                                   new CodeValue<AuditableObjectIdType>()
                                   {
@@ -168,9 +178,62 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         }
 
         /// <summary>
+        /// Create an application start audit
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void ApplicationContext_Started(object sender, EventArgs e)
+        {
+            this.SendAudit(new Data.AuditData(
+                                DateTime.Now,
+                                Data.ActionType.Execute,
+                                Data.OutcomeIndicator.Success,
+                                Data.EventIdentifierType.ApplicationActivity,
+                                new Data.CodeValue("110120", "DCM") { DisplayName = "Application Start" }
+                            )
+            {
+                Actors = new List<Data.AuditActorData>() {
+                                    new Data.AuditActorData() {
+                                        UserIdentifier = Environment.UserName,
+                                        UserIsRequestor = false,
+                                        ActorRoleCode = new List<Data.CodeValue>() {
+                                            new Data.CodeValue("110150","DCM") { DisplayName = "Application" }
+                                        }
+                                    }
+                                }
+            });
+        }
+
+        /// <summary>
+        /// Create an application stop audit
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void ApplicationContext_Stopped(object sender, EventArgs e)
+        {
+            this.SendAudit(new Data.AuditData(
+                                DateTime.Now,
+                                Data.ActionType.Execute,
+                                Data.OutcomeIndicator.Success,
+                                Data.EventIdentifierType.ApplicationActivity,
+                                new Data.CodeValue("110121", "DCM") { DisplayName = "Application Stop" }
+                            )
+            {
+                Actors = new List<Data.AuditActorData>() {
+                                    new Data.AuditActorData() {
+                                        UserIdentifier = Environment.UserName,
+                                        UserIsRequestor = false,
+                                        ActorRoleCode = new List<Data.CodeValue>() {
+                                            new Data.CodeValue("110150","DCM") { DisplayName = "Application" }
+                                        }
+                                    }
+                                }
+            });
+        }
+      
+
+        /// <summary>
         /// Send an audit to the endpoint
         /// </summary>
-        public bool SendAudit(MARC.HI.EHRS.SVC.Core.DataTypes.AuditData ad)
+        public bool SendAudit(MARC.HI.EHRS.SVC.Auditing.Data.AuditData ad)
         {
 
             this.m_waitThreadPool.QueueUserWorkItem(SendAuditAsync, ad);
@@ -179,14 +242,6 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
         #endregion
 
-        #region IUsesHostContext Members
-
-        /// <summary>
-        /// Gets or sets the context of the ATNA message
-        /// </summary>
-        public IServiceProvider Context { get; set; }
-
-        #endregion
 
         #region IDisposable Members
 

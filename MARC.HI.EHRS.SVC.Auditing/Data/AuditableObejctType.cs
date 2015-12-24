@@ -22,13 +22,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service that handles messages
+    /// Identifies the type of auditable objects in the system
     /// </summary>
-    public interface IMessageHandlerService : IDaemonService
+    public enum AuditableObjectType
     {
-       
+        Person = 1,
+        SystemObject = 2,
+        Organization = 3, 
+        Other = 4
     }
 }

@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.Data;
 
@@ -70,6 +69,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <exception cref="System.KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
         /// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
         TContainer UpdateContainer(TContainer storageData, DataPersistenceMode mode);
+        
+        /// <summary>
+        /// Obsoletes a particular container object
+        /// </summary>
+        TContainer ObsoleteContainer(TContainer storageData, DataPersistenceMode mode);
 
         /// <summary>
         /// Get the object represention of the specified container as specified by <paramref name="containerId"/>
@@ -79,5 +83,5 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <exception cref="System.KeyNotFoundException">Thrown when the <paramref name="containerId"/> is not present in the database</exception>
         TContainer GetContainer<TIdentifier>(Identifier<TIdentifier> containerId, bool loadFast);
 
-       }
+    }
 }

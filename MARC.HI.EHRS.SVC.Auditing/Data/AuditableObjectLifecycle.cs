@@ -22,13 +22,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service that handles messages
+    /// Auditable object lifecycle
     /// </summary>
-    public interface IMessageHandlerService : IDaemonService
+    public enum AuditableObjectLifecycle
     {
-       
+        Creation = 0x01,
+        Import = 0x02,
+        Amendment = 0x03,
+        Verification = 0x04,
+        Translation = 0x05,
+        Access = 0x06,
+        Deidentification = 0x07,
+        Aggregation = 0x08,
+        Report = 0x09,
+        Export = 0x0a,
+        Disclosure = 0x0b,
+        ReceiptOfDisclosure = 0x0c,
+        Archiving = 0x0d,
+        LogicalDeletion = 0x0e,
+        PermanentErasure = 0x0f
     }
 }
