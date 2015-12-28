@@ -7,7 +7,6 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Syndication;
 using System.Diagnostics;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
 using System.ComponentModel;
 using MARC.Everest.Connectors;
@@ -23,6 +22,9 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Reflection;
 using System.IO.Compression;
+using MARC.HI.EHRS.SVC.Auditing.Data;
+using MARC.HI.EHRS.SVC.Auditing.Services;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 {
@@ -137,7 +139,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         {
             FhirOperationResult result = null;
             AuditData audit = null;
-            IAuditorService auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+            IAuditorService auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
             try
             {
@@ -193,7 +195,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         {
             FhirOperationResult result = null;
             AuditData audit = null;
-            IAuditorService auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+            IAuditorService auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
             try
             {
@@ -243,7 +245,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             FhirOperationResult result = null;
 
             AuditData audit = null;
-            IAuditorService auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+            IAuditorService auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
             try
             {
@@ -341,7 +343,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         public Object SearchResource(string resourceType)
         {
             // Get the services from the service registry
-            var auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+            var auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
             // Stuff for auditing and exception handling
             AuditData audit = null;
@@ -524,7 +526,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         private FhirOperationResult PerformRead(string resourceType, string id, string vid)
         {
             // Get the services from the service registry
-            var auditService = ApplicationContext.CurrentContext.GetService(typeof(IAuditorService)) as IAuditorService;
+            var auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
             // Stuff for auditing and exception handling
             AuditData audit = null;

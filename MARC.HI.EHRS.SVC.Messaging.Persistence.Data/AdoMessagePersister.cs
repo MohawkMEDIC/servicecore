@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.Services;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration;
 using System.Configuration;
 using System.Data;
@@ -30,6 +29,7 @@ using System.Diagnostics;
 using System.IO;
 using System.ComponentModel;
 using System.Threading;
+using MARC.HI.EHRS.SVC.Core.Event;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
 {
@@ -66,6 +66,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// Configuration for the persistence service
         /// </summary>
         private static ConfigurationSectionHandler m_configuration;
+
+        /// <summary>
+        /// Fired when a message is being persisted
+        /// </summary>
+        public event EventHandler<PrePersistenceEventArgs<MessageInfo>> Persisting;
+        /// <summary>
+        /// Fired when a message has been persisted
+        /// </summary>
+        public event EventHandler<PostPersistenceEventArgs<MessageInfo>> Persisted;
+        /// <summary>
+        /// Fired when a message is being retrieved
+        /// </summary>
+        public event EventHandler<PreRetrievalEventArgs<MessageInfo>> Retrieving;
+        /// <summary>
+        /// Fired after a message has been retrieved
+        /// </summary>
+        public event EventHandler<PostRetrievalEventArgs<MessageInfo>> Retrieved;
 
         /// <summary>
         /// Static ctor for the database message persister
@@ -228,6 +245,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
 
             try
             {
+
+                var mpe = new PrePersistenceEventArgs<MessageInfo>(args.MessageInfo);
+                this.Persisting?.Invoke(this, mpe);
+
+                if (mpe.Cancel)
+                {
+                    Trace.TraceInformation("Message persistence event indicates cancel");
+                    return;
+                }
+
                 conn.Open();
 
                 // Create the database command
@@ -282,8 +309,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     cmd.Parameters.Add(msgDstParm);
 
                     // Execute the query without result
-                    
                     cmd.ExecuteNonQuery();
+
+                    this.Persisted?.Invoke(this, new PostPersistenceEventArgs<MessageInfo>(args.MessageInfo));
+
                 }
                 finally
                 {
@@ -416,6 +445,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
 
             try
             {
+
+                var mpe = new PreRetrievalEventArgs<MessageInfo>(new MessageInfo() { Id = messageId });
+                this.Retrieving?.Invoke(this, mpe);
+                if(mpe.Cancel)
+                {
+                    Trace.TraceInformation("GetMessageInfo: Event handler indicates cancel");
+                    return null;
+                }
+
                 conn.Open();
 
                 // Create the database command
@@ -438,7 +476,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                     // Execute
                     using (IDataReader rdr = cmd.ExecuteReader())
                         if (rdr.Read())
-                            return new MessageInfo()
+                        {
+                            var retVal = new MessageInfo()
                             {
                                 Body = (byte[])rdr["msg_body"],
                                 Destination = rdr["msg_dst"] == DBNull.Value ? null : new Uri(Convert.ToString(rdr["msg_dst"])),
@@ -447,8 +486,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
                                 Source = rdr["msg_src"] == DBNull.Value ? null : new Uri(Convert.ToString(rdr["msg_src"])),
                                 Timestamp = (DateTime)rdr["msg_utc"]
                             };
+
+                            this.Retrieved?.Invoke(this, new PostRetrievalEventArgs<MessageInfo>(retVal));
+                            return retVal;
+                        }
                         else
+                        {
+                            this.Retrieved?.Invoke(this, new PostRetrievalEventArgs<MessageInfo>(null));
                             return null;
+                        }
 
                 }
                 finally

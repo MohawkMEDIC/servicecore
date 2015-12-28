@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Xml;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
 {
@@ -74,7 +75,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
                 if (mapInstruction.Attributes["displayName"] != null)
                     eventTypeCodeName = mapInstruction.Attributes["displayName"].Value;
 
-                retVal.ActionMap.Add(String.Format("{0} {1}", resourceAction, resourceName), new Core.DataTypes.CodeValue(
+                retVal.ActionMap.Add(String.Format("{0} {1}", resourceAction, resourceName), new CodeValue(
                     eventTypeCode, eventTypeCodeSystem) { DisplayName = eventTypeCodeName });
             }
             return retVal;

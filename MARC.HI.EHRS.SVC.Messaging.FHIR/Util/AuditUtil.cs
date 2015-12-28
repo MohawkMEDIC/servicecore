@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
@@ -12,6 +11,10 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
 using System.Configuration;
+using MARC.HI.EHRS.SVC.Auditing.Data;
+using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -216,7 +219,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     if(ptcptObjMap.Length > 0)
                     {
                         var mapAttribute = ptcptObjMap[0] as ParticipantObjectMapAttribute;
-                        domain = ApplicationContext.ConfigurationService.OidRegistrar.GetOid(mapAttribute.OidName).Oid;
+                        domain = ApplicationContext.Current.GetService<IOidRegistrarService>()?.GetOid(mapAttribute.OidName)?.Oid;
                         aud = new AuditableObject() {
                             IDTypeCode = mapAttribute.IdType,
                             Role = mapAttribute.Role,

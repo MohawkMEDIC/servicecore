@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.Services;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Data;
 using System.Configuration;
 using MARC.HI.EHRS.SVC.Terminology.Configuration;
@@ -31,6 +30,7 @@ using System.Diagnostics;
 using MARC.HI.EHRS.SVC.Terminology.CTS12;
 using MARC.HI.EHRS.SVC.Core;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
 {
@@ -67,7 +67,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
         /// <summary>
         /// Validate a code
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.Terminology.ConceptValidationResult Validate(MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue code)
+        public MARC.HI.EHRS.SVC.Core.Terminology.ConceptValidationResult Validate(CodeValue code)
         {
 
             // Return value
@@ -154,7 +154,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
         /// <summary>
         /// Validate a code using a named code system
         /// </summary>
-        public ConceptValidationResult ValidateEx(string code, string displayName, CodeSystemName codeSystem)
+        public ConceptValidationResult ValidateEx(string code, string displayName, string codeSystem)
         {
             return Validate(new CodeValue(code, GetCodeSystemDomain(codeSystem)) { DisplayName = displayName });
         }
@@ -162,16 +162,19 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
         /// <summary>
         /// Get the code system's domain
         /// </summary>
-        public string GetCodeSystemDomain(CodeSystemName codeSystemName)
+        public string GetCodeSystemDomain(String codeSystemName)
         {
-            ISystemConfigurationService configService = Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
-            return configService.OidRegistrar.GetOid(codeSystemName.ToString()).Oid;
+            var oidService = ApplicationContext.Current.GetService<IOidRegistrarService>();
+            if (oidService == null)
+                throw new InvalidOperationException("OID Registrar service not registered");
+
+            return oidService.GetOid(codeSystemName.ToString())?.Oid;
         }
-        
+
         /// <summary>
         /// Translate a code
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue Translate(MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue code, string targetDomain)
+        public CodeValue Translate(CodeValue code, string targetDomain)
         {
 
             CodeValue retVal = null;
@@ -242,7 +245,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
         /// <summary>
         /// Fill in the details of a code
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue FillInDetails(MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue codeValue)
+        public CodeValue FillInDetails(CodeValue codeValue)
         {
             CodeValue retVal = codeValue;
             string codeKey = String.Format("{0}@{1}", codeValue.CodeSystem, codeValue.Code);

@@ -32,6 +32,7 @@ using System.Diagnostics;
 using MARC.Everest.Threading;
 using MARC.HI.EHRS.SVC.Auditing.Services;
 using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna
 {
@@ -77,7 +78,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
             try
             {
                 var ad = state as MARC.HI.EHRS.SVC.Auditing.Data.AuditData;
-                ISystemConfigurationService sysConfigSvc = this.Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
+                var configuration = ApplicationContext.Current.Configuration;
 
                 // Create the audit basic
                 AuditMessage am = new AuditMessage(
@@ -91,7 +92,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
                 am.SourceIdentification.Add(new AuditSourceIdentificationType()
                 {
-                    AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName),
+                    AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", configuration.DeviceIdentifier, configuration.DeviceName),
                     AuditSourceID = Dns.GetHostName(),
                     AuditSourceTypeCode = new List<CodeValue<AuditSourceType>>()
                     {
@@ -164,7 +165,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     {
                         NetworkAccessPointId = Environment.MachineName,
                         NetworkAccessPointType = NetworkAccessPointType.MachineName,
-                        UserIdentifier = String.Format("{1}^^^&{0}&ISO", sysConfigSvc.DeviceIdentifier, sysConfigSvc.DeviceName)
+                        UserIdentifier = String.Format("{1}^^^&{0}&ISO", configuration.DeviceIdentifier, configuration.DeviceName)
                     });
 
 
@@ -188,15 +189,15 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                                 Data.ActionType.Execute,
                                 Data.OutcomeIndicator.Success,
                                 Data.EventIdentifierType.ApplicationActivity,
-                                new Data.CodeValue("110120", "DCM") { DisplayName = "Application Start" }
+                                new CodeValue("110120", "DCM") { DisplayName = "Application Start" }
                             )
             {
                 Actors = new List<Data.AuditActorData>() {
                                     new Data.AuditActorData() {
                                         UserIdentifier = Environment.UserName,
                                         UserIsRequestor = false,
-                                        ActorRoleCode = new List<Data.CodeValue>() {
-                                            new Data.CodeValue("110150","DCM") { DisplayName = "Application" }
+                                        ActorRoleCode = new List<CodeValue>() {
+                                            new CodeValue("110150","DCM") { DisplayName = "Application" }
                                         }
                                     }
                                 }
@@ -214,15 +215,15 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                                 Data.ActionType.Execute,
                                 Data.OutcomeIndicator.Success,
                                 Data.EventIdentifierType.ApplicationActivity,
-                                new Data.CodeValue("110121", "DCM") { DisplayName = "Application Stop" }
+                                new CodeValue("110121", "DCM") { DisplayName = "Application Stop" }
                             )
             {
                 Actors = new List<Data.AuditActorData>() {
                                     new Data.AuditActorData() {
                                         UserIdentifier = Environment.UserName,
                                         UserIsRequestor = false,
-                                        ActorRoleCode = new List<Data.CodeValue>() {
-                                            new Data.CodeValue("110150","DCM") { DisplayName = "Application" }
+                                        ActorRoleCode = new List<CodeValue>() {
+                                            new CodeValue("110150","DCM") { DisplayName = "Application" }
                                         }
                                     }
                                 }

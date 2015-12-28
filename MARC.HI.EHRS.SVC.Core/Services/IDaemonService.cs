@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
     /// <summary>
@@ -19,5 +21,22 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// Returns an indicator whether the service is running
         /// </summary>
         bool IsRunning { get; }
+
+        /// <summary>
+        /// Fired when the daemon service is starting
+        /// </summary>
+        event EventHandler Starting;
+        /// <summary>
+        /// Fired when the daemon service is stopping
+        /// </summary>
+        event EventHandler Stopping;
+        /// <summary>
+        /// Fired when the daemon service has finished starting
+        /// </summary>
+        event EventHandler Started;
+        /// <summary>
+        /// Fired when the daemon service has finished stopping
+        /// </summary>
+        event EventHandler Stopped;
     }
 }

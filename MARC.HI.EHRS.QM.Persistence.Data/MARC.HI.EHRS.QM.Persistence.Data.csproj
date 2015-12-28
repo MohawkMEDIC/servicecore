@@ -63,13 +63,6 @@
   <ItemGroup>
     <Compile Include="AdoQueryPersistenceService.cs" />
     <Compile Include="Configuration\ConfigurationHandler.cs" />
-    <Compile Include="Configuration\UI\Panels\pnlConfigureQueryPersistence.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\Panels\pnlConfigureQueryPersistence.designer.cs">
-      <DependentUpon>pnlConfigureQueryPersistence.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\QueryPersistenceConfigurationPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryPersistenceCleanJob.cs" />
   </ItemGroup>
@@ -108,11 +101,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\Panels\pnlConfigureQueryPersistence.resx">
-      <DependentUpon>pnlConfigureQueryPersistence.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

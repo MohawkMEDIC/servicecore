@@ -28,6 +28,17 @@ namespace MARC.HI.EHRS.SVC.Core.Data
         /// Gets or sets the system in which the code value is drawn
         /// </summary>
         public String CodeSystem { get; set; }
+
+        /// <summary>
+        /// Gets or sets the human readable name of the code sytsem
+        /// </summary>
+        public string CodeSystemName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version of the code system
+        /// </summary>
+        public string CodeSystemVersion { get; set; }
+
         /// <summary>
         /// Gets or sets the display name
         /// </summary>

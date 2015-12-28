@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MARC.HI.EHRS.SVC.Core.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
 {

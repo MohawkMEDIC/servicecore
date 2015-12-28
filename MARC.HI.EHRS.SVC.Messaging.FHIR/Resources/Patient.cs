@@ -7,8 +7,8 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.IO;
 using System.Xml;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Auditing.Data;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {

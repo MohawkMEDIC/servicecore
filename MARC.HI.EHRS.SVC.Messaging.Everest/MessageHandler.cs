@@ -35,12 +35,14 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Core;
 using MARC.Everest.Interfaces;
 using MARC.HI.EHRS.SVC.Messaging.Everest.Exception;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.Runtime.InteropServices;
 using MARC.Everest.Connectors.WCF;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.ServiceModel;
+using MARC.HI.EHRS.SVC.Auditing.Services;
+using MARC.HI.EHRS.SVC.Auditing.Data;
+using MARC.HI.EHRS.SVC.Core.Data;
 //using MARC.HI.EHRS.SVC.Messaging.Everest.ClientAccess;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Everest
@@ -63,6 +65,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
         private EverestConfigurationSectionHandler m_configuration;
 
         /// <summary>
+        /// Fired when the message handler is starting
+        /// </summary>
+        public event EventHandler Starting;
+        /// <summary>
+        /// Fired when the message handler is stopping
+        /// </summary>
+        public event EventHandler Stopping;
+        /// <summary>
+        /// Fired when the messaging handler has started
+        /// </summary>
+        public event EventHandler Started;
+        /// <summary>
+        /// Fired when the nmessaging handler has stopped
+        /// </summary>
+        public event EventHandler Stopped;
+
+        /// <summary>
         /// Create a new instance of the MessageHandler
         /// </summary>
         public MessageHandler()
@@ -74,7 +93,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
         public bool Start()
         {
-            
+            this.Starting?.Invoke(this, EventArgs.Empty);
+               
             // Start each of the listeners for each of the ITS(es)
             foreach (var itsConfig in m_configuration.Revisions)
             {
@@ -111,9 +131,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 }
                 if (formatter is IValidatingStructureFormatter)
                     (formatter as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
-                // Message handlers
-                foreach(var mh in itsConfig.MessageHandlers)
-                    mh.Handler.Context = this.Context;
+                
 
                 // Iterate through listeners and start em up
                 foreach (var listenerConfig in itsConfig.Listeners)
@@ -174,6 +192,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
             }
 
+            if (this.m_activeConnectors.Count > 0)
+                this.Started?.Invoke(this, EventArgs.Empty);
+
             return m_activeConnectors.Count > 0;
         }
 
@@ -206,7 +227,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                     DateTime.Now, ActionType.Execute,
                     OutcomeIndicator.Success,
                     EventIdentifierType.ApplicationActivity,
-                    new CodeValue("GEN")
+                    new CodeValue("GEN", null)
                 );
             audit.Actors.Add(new AuditActorData()
             {
@@ -288,7 +309,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                 else
                 {
                     
-                    var messageState = MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New;
+                    var messageState = Core.Services.MessageState.New;
                     IInteraction response = null;
                     
                     InteractionConfiguration interactionConfig = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
@@ -303,7 +324,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
                     switch (messageState)
                     {
-                        case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.New:
+                        case Core.Services.MessageState.New:
 
                             // Persist the message 
                             if (persistenceService != null)
@@ -338,12 +359,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                             }
 
                             break;
-                        case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.Complete:
+                        case Core.Services.MessageState.Complete:
                             var rms = persistenceService.GetMessageResponseMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
                             var parseResult = (sender as IFormattedConnector).Formatter.Parse(rms);
                             response = parseResult.Structure as IInteraction;
                             break;
-                        case MARC.HI.EHRS.SVC.Core.DataTypes.MessageState.Active:
+                        case Core.Services.MessageState.Active:
                             throw new ApplicationException("Message is already being processed");
                     }
                     // Send back
@@ -472,11 +493,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
 
         public bool Stop()
         {
+            this.Stopping?.Invoke(this, EventArgs.Empty);
+
             foreach (var connector in m_activeConnectors)
             {
                 Trace.TraceInformation("Stopping listener {0}", connector.ConnectionString);
                 connector.Close();
             }
+
+            this.Stopped?.Invoke(this, EventArgs.Empty);
 
             return true;
         }
@@ -489,6 +514,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
         {
             get;
             set; 
+        }
+
+        /// <summary>
+        /// Running?
+        /// </summary>
+        public bool IsRunning
+        {
+            get
+            {
+                return this.m_activeConnectors.Count > 0;
+            }
         }
 
         #endregion

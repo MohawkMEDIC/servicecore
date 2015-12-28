@@ -23,6 +23,8 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core.Event;
+using MARC.HI.EHRS.SVC.Core.Authorization;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -46,7 +48,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// Interface that defines a data persistence service which is used to 
     /// store, query, update and list data
     /// </summary>
-    public interface IDataPersistenceService<TContainer>
+    public interface IDataPersistenceService<TData>
     {
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The identifiers representing the identifier of the stored container object</returns>
         /// <exception cref="System.ArgumentException">Thrown when the storage data container is of an unknown type</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when there is not sufficient data known to store the container</exception>
-        TContainer StoreContainer(TContainer storageData, DataPersistenceMode mode);
+        TData Insert(TData storageData, AuthorizationContext authContext, DataPersistenceMode mode);
 
         /// <summary>
         /// Update the specified <see cref="T:System.ComponentModel.IContainer"/> into the
@@ -68,12 +70,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The </returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
         /// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
-        TContainer UpdateContainer(TContainer storageData, DataPersistenceMode mode);
+        TData Update(TData storageData, AuthorizationContext authContext, DataPersistenceMode mode);
         
         /// <summary>
         /// Obsoletes a particular container object
         /// </summary>
-        TContainer ObsoleteContainer(TContainer storageData, DataPersistenceMode mode);
+        TData Obsolete(TData storageData, AuthorizationContext authContext, DataPersistenceMode mode);
 
         /// <summary>
         /// Get the object represention of the specified container as specified by <paramref name="containerId"/>
@@ -81,7 +83,52 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="containerId">The versioned domain identifier of the container to retrieve</param>
         /// <returns>An IContainer object that represents the stored container</returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the <paramref name="containerId"/> is not present in the database</exception>
-        TContainer GetContainer<TIdentifier>(Identifier<TIdentifier> containerId, bool loadFast);
+        TData Get<TIdentifier>(Identifier<TIdentifier> containerId, AuthorizationContext authContext, bool loadFast);
 
+        /// <summary>
+        /// Query the data persistence store for data
+        /// </summary>
+        IQueryable<TData> Query(Func<TData, bool> query, AuthorizationContext authContext);
+
+        /// <summary>
+        /// Fired prior to an insertion into the database
+        /// </summary>
+        event EventHandler<PrePersistenceEventArgs<TData>> Inserting;
+        /// <summary>
+        /// Fired after an insertion to the database is completed
+        /// </summary>
+        event EventHandler<PostPersistenceEventArgs<TData>> Inserted;
+        /// <summary>
+        /// Fired prior to an update occurring
+        /// </summary>
+        event EventHandler<PrePersistenceEventArgs<TData>> Updating;
+        /// <summary>
+        /// Fired after an update has completed
+        /// </summary>
+        event EventHandler<PostPersistenceEventArgs<TData>> Updated;
+        /// <summary>
+        /// Fired prior to a record being obsoleted
+        /// </summary>
+        event EventHandler<PrePersistenceEventArgs<TData>> Obsoleting;
+        /// <summary>
+        /// Fired after a record has been obsoleted
+        /// </summary>
+        event EventHandler<PostPersistenceEventArgs<TData>> Obsoleted;
+        /// <summary>
+        /// Fired prior to a record being retrieved
+        /// </summary>
+        event EventHandler<PreRetrievalEventArgs<TData>> Retrieving;
+        /// <summary>
+        /// Fired after a record has been retrieved
+        /// </summary>
+        event EventHandler<PostRetrievalEventArgs<TData>> Retrieved;
+        /// <summary>
+        /// Fired prior to a record being queried
+        /// </summary>
+        event EventHandler<PreQueryEventArgs<TData>> Querying;
+        /// <summary>
+        /// Fired after a record has been retrieved
+        /// </summary>
+        event EventHandler<PostQueryEventArgs<TData>> Queried;
     }
 }

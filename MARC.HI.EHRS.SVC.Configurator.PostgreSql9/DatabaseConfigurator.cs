@@ -27,7 +27,6 @@ using System.Xml;
 using System.IO;
 using System.Reflection;
 using System.Data;
-using MARC.HI.EHRS.SVC.Core.Configuration.Update;
 using System.Diagnostics;
 
 namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
@@ -35,7 +34,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
     /// <summary>
     /// Database configurator for PostgreSQL 9.0
     /// </summary>
-    public class DatabaseConfigurator : IDatabaseConfigurator, IDatabaseUpdater
+    public class DatabaseConfigurator : IDatabaseConfigurator //, IDatabaseUpdater
     {
         #region IDatabaseConfigurator Members
 
@@ -417,12 +416,12 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
             builder.Pooling = false;
 
             // Parse update files
-            foreach(var itm in Directory.GetFiles(searchPath, "*.update.xml"))
+            foreach (var itm in Directory.GetFiles(searchPath, "*.update.xml"))
             {
                 DbSchemaUpdate update = DbSchemaUpdate.Load(itm);
                 if (update != null)
                 {
-                    using(NpgsqlConnection conn = new NpgsqlConnection(builder.ConnectionString))
+                    using (NpgsqlConnection conn = new NpgsqlConnection(builder.ConnectionString))
                     {
                         conn.Open();
                         using (NpgsqlCommand cmd = new NpgsqlCommand(update.VersionFunction, conn))
@@ -431,7 +430,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                             string version = cmd.ExecuteScalar().ToString();
                             Trace.TraceInformation("Version of component {0}, update {1} applies to {2} - {3}", version, update.Id, update.FromVersion, update.ToVersion);
                             Version v = new Version(version);
-                            if(v < new Version(update.ToVersion))
+                            if (v < new Version(update.ToVersion))
                             {
                                 Trace.TraceInformation("Update applies!");
                                 retVal.Add(update);
@@ -445,7 +444,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
             }
             retVal.Sort((a, b) => new Version(a.FromVersion).CompareTo(new Version(b.FromVersion)));
             return retVal;
-            
+
         }
 
         /// <summary>
@@ -453,8 +452,8 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         /// </summary>
         public void DeployUpdate(Core.Configuration.Update.DbSchemaUpdate update, string connectionStringName, XmlDocument configurationDom)
         {
-            foreach(var scr in update.InstallScript)
-                using(TextReader tr = new StreamReader(File.OpenRead(scr.File)))
+            foreach (var scr in update.InstallScript)
+                using (TextReader tr = new StreamReader(File.OpenRead(scr.File)))
                 {
                     // Deploy the feature
                     string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
@@ -476,6 +475,6 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 }
         }
 
-    
+
     }
 }

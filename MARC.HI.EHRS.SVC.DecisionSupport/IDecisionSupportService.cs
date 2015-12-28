@@ -18,8 +18,6 @@
  */
 
 using System.Collections.Generic;
-using MARC.HI.EHRS.SVC.Core.ComponentModel;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Core.Issues;
 
 namespace MARC.HI.EHRS.SVC.DecisionSupport

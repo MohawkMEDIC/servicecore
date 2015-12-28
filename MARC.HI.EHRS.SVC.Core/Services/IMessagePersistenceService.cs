@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using MARC.HI.EHRS.SVC.Core.Event;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -48,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Message information
     /// </summary>
-    public class MessageInfo
+    public class MessageInfo 
     {
         /// <summary>
         /// Gets the id of the message
@@ -74,6 +76,10 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// Gets the body of the message
         /// </summary>
         public byte[] Body { get; set; }
+        /// <summary>
+        /// Gets or sets the state of the message
+        /// </summary>
+        public MessageState State { get; set; }
 
     }
 
@@ -106,7 +112,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Get a message
         /// </summary>
-        /// <param name="messageId"></param>
+        /// <param name="messageId">Body</param>
         /// <returns></returns>
         Stream GetMessage(string messageId);
 
@@ -125,8 +131,24 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Get message extended attribute
         /// </summary>
-        MessageInfo GetMessageInfo(string messageId);
+        MessageInfo GetMessageInfo(String messageId);
 
+        /// <summary>
+        /// Fired prior to persisting
+        /// </summary>
+        event EventHandler<PrePersistenceEventArgs<MessageInfo>> Persisting;
+        /// <summary>
+        /// Fired after persisting
+        /// </summary>
+        event EventHandler<PostPersistenceEventArgs<MessageInfo>> Persisted;
+        /// <summary>
+        /// Fired before message information is persisted
+        /// </summary>
+        event EventHandler<PreRetrievalEventArgs<MessageInfo>> Retrieving;
+        /// <summary>
+        /// Fired after message information is retrieved
+        /// </summary>
+        event EventHandler<PostRetrievalEventArgs<MessageInfo>> Retrieved;
 
     }
 }

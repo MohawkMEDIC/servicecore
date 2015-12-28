@@ -16,12 +16,6 @@ namespace MARC.HI.EHRS.SVC.Core.Data
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Returns true if the user is in the specified role
-        /// </summary>
-        public bool IsInRole(String roleName)
-        {
-
-        }
+        
     }
 }

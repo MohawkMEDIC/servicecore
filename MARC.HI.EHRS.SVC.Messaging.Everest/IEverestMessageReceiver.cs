@@ -31,7 +31,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
     /// Defines a framework for writing receivers for message receivers for the everest
     /// message handler
     /// </summary>
-    public interface IEverestMessageReceiver : IUsesHostContext, ICloneable
+    public interface IEverestMessageReceiver : ICloneable
     {
 
         /// <summary>

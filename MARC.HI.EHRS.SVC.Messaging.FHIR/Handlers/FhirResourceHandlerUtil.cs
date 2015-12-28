@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel.Syndication;
 using System.ServiceModel.Web;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.Everest.Connectors;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;

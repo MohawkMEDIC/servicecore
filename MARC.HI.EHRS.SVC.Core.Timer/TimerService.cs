@@ -37,9 +37,6 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
     [Description("Default Timer Service")]
     public class TimerService : ITimerService
     {
-        // Host context
-        private IServiceProvider m_hostContext;
-
         /// <summary>
         /// Timer configuration
         /// </summary>
@@ -49,6 +46,23 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         /// Timer thread
         /// </summary>
         private System.Timers.Timer[] m_timers;
+
+        /// <summary>
+        /// Timer service is starting
+        /// </summary>
+        public event EventHandler Starting;
+        /// <summary>
+        /// Timer service is stopping
+        /// </summary>
+        public event EventHandler Stopping;
+        /// <summary>
+        /// Timer service is started
+        /// </summary>
+        public event EventHandler Started;
+        /// <summary>
+        /// Timer service is stopped
+        /// </summary>
+        public event EventHandler Stopped;
 
         /// <summary>
         /// Creates a new instance of the timer
@@ -64,12 +78,16 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         /// <summary>
         /// Start the timer
         /// </summary>
-        public void Start()
+        public bool Start()
         {
+
             if (this.m_timers != null)
                 this.Stop();
 
             Trace.TraceInformation("Starting timer service...");
+
+            // Invoke the starting event handler
+            this.Starting?.Invoke(this, EventArgs.Empty);
 
             // Setup timers based on the jobs
             this.m_timers = new System.Timers.Timer[this.m_configuration.Jobs.Count];
@@ -90,16 +108,20 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                 job.Job.Elapsed(timer, null);
             }
 
+            this.Started?.Invoke(this, EventArgs.Empty);
+
             Trace.TraceInformation("Timer service started successfully");
+            return true;
         }
 
         /// <summary>
         /// Stops the timer
         /// </summary>
-        public void Stop()
+        public bool Stop()
         {
             // Stop all timers
             Trace.TraceInformation("Stopping timer service...");
+            this.Stopping?.Invoke(this, EventArgs.Empty);
 
             if(this.m_timers != null)
                 foreach (var timer in this.m_timers)
@@ -108,26 +130,17 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                     timer.Dispose();
                 }
             this.m_timers = null;
+
+            this.Stopped?.Invoke(this, EventArgs.Empty);
+
             Trace.TraceInformation("Timer service stopped successfully");
+            return true;
         }
-
-        #endregion
-
-        #region IUsesHostContext Members
 
         /// <summary>
-        /// Gets or sets the host context
+        /// Returns true when the service is running
         /// </summary>
-        public IServiceProvider Context
-        {
-            get { return this.m_hostContext; }
-            set
-            {
-                this.m_hostContext = value;
-                this.m_configuration.Context = value;
-            }
-        }
-
+        public bool IsRunning { get { return this.m_timers != null; } }
         #endregion
     }
 }

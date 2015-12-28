@@ -6,10 +6,12 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using System.ServiceModel.Syndication;
 using System.Xml.Serialization;
 using System.ServiceModel.Web;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.Everest.Connectors;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
+using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -53,43 +55,47 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Populate a domain identifier from a FHIR token
         /// </summary>
-        public static Identifier IdentifierFromToken(string token)
+        public static Identifier<String> IdentifierFromToken(string token)
         {
             string[] tokens = token.Split('|');
             if (tokens.Length == 1)
-                return new Identifier() { Identifier = MessageUtil.UnEscape(tokens[0]) };
+                return new Identifier<String>() { Id = MessageUtil.UnEscape(tokens[0]) };
             else
-                return new Identifier()
+                return new Identifier<String>()
                 {
-                    Domain = TranslateFhirDomain(MessageUtil.UnEscape(tokens[0])),
-                    Identifier = MessageUtil.UnEscape(tokens[1])
+                    AssigningAuthority = TranslateFhirDomain(MessageUtil.UnEscape(tokens[0])),
+                    Id = MessageUtil.UnEscape(tokens[1])
                 };
         }
 
         /// <summary>
         /// Attempt to translate fhir domain
         /// </summary>
-        public static string TranslateFhirDomain(string fhirDomain)
+        public static OidData TranslateFhirDomain(string fhirDomain)
         {
+            var oidService = ApplicationContext.Current.GetService<IOidRegistrarService>();
+            if (oidService == null)
+                throw new InvalidOperationException("No OID Registrar service has been registered");
+
             if (String.IsNullOrEmpty(fhirDomain))
                 return null;
             Uri fhirDomainUri = null;
             if (fhirDomain.StartsWith("urn:oid:"))
-                return fhirDomain.Replace("urn:oid:", "");
+                return oidService.FindData("urn:oid:", "");
             else if (fhirDomain.StartsWith("urn:ietf:rfc:3986"))
-                return fhirDomain;
-            
+                return oidService.GetOid("UUID");
+
             else if (Uri.TryCreate(fhirDomain, UriKind.Absolute, out fhirDomainUri))
             {
-                var oid = ApplicationContext.ConfigurationService.OidRegistrar.FindData(fhirDomainUri);
+                var oid = oidService.FindData(fhirDomainUri);
                 if (oid == null)
                     throw new InvalidOperationException(String.Format("Could not locate identity system '{0}'", fhirDomain));
-                return oid.Oid;
+                return oid;
             }
             else if (MARC.Everest.DataTypes.II.IsValidOidFlavor(new MARC.Everest.DataTypes.II(fhirDomain)))
-                return fhirDomain;
+                return oidService.FindData(fhirDomain);
             else
-                return fhirDomain;
+                return null;
         }
 
         /// <summary>
@@ -98,7 +104,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         public static string TranslateDomain(string crDomain)
         {
             // Attempt to lookup the OID
-            var oid = ApplicationContext.ConfigurationService.OidRegistrar.FindData(crDomain);
+            var oidService = ApplicationContext.Current.GetService<IOidRegistrarService>();
+            if (oidService == null)
+                throw new InvalidOperationException("No OID Registrar service has been registered");
+
+            var oid = oidService.FindData(crDomain);
             if (oid == null)
                 return String.Format("urn:oid:{0}", crDomain);
             else if (crDomain == "urn:ietf:rfc:3986")
@@ -114,13 +124,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         {
             string[] tokens = token.Split('|');
             if (tokens.Length == 1)
-                return new CodeValue() { Code = MessageUtil.UnEscape(tokens[0]) };
+                return new CodeValue(MessageUtil.UnEscape(tokens[0]), null);
             else
-                return new CodeValue()
-                {
-                    CodeSystem = MessageUtil.UnEscape(tokens[0]),
-                    Code = MessageUtil.UnEscape(tokens[1])
-                };
+                return new CodeValue(MessageUtil.UnEscape(tokens[1]), MessageUtil.UnEscape(tokens[0]));
         }
 
 
@@ -179,19 +185,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
             if (!baseUri.Contains("_format"))
                 baseUri += String.Format("_format={0}&", format);
+
+            var localizationService = ApplicationContext.Current.GetService<ILocalizationService>();
+
             // Self URI
             if (queryResult != null && queryResult.TotalResults > queryResult.Results.Count)
             {
                 retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo)), "self", null, null, 0));
                 if (pageNo > 0)
                 {
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page=0", baseUri)), "first", ApplicationContext.LocalizationService.GetString("FHIR001"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo - 1)), "previous", ApplicationContext.LocalizationService.GetString("FHIR002"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page=0", baseUri)), "first", localizationService.GetString("FHIR001"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo - 1)), "previous", localizationService.GetString("FHIR002"), null, 0));
                 }
                 if (pageNo <= nPages)
                 {
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo + 1)), "next", ApplicationContext.LocalizationService.GetString("FHIR003"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, nPages + 1)), "last", ApplicationContext.LocalizationService.GetString("FHIR004"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo + 1)), "next", localizationService.GetString("FHIR003"), null, 0));
+                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, nPages + 1)), "last", localizationService.GetString("FHIR004"), null, 0));
                 }
             }
             else

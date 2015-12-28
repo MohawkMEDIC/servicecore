@@ -23,16 +23,14 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Linq.Expressions;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Core.Services;
-using MARC.HI.EHRS.SVC.Core.ComponentModel.Components;
 
 namespace MARC.HI.EHRS.SVC.Subscription.Core.Services
 {
     /// <summary>
     /// Represents a subscription service
     /// </summary>
-    public interface ISubscriptionManagementService : IUsesHostContext
+    public interface ISubscriptionManagementService 
     {
 
         /// <summary>

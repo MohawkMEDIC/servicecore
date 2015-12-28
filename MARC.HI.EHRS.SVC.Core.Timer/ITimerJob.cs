@@ -28,8 +28,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
     /// <summary>
     /// Represents a timer job
     /// </summary>
-    public interface ITimerJob : IUsesHostContext
-    {
+    public interface ITimerJob     {
 
         /// <summary>
         /// Execute the timer job

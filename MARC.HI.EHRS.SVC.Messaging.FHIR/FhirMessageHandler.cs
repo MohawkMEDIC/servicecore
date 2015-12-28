@@ -30,6 +30,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         private WebServiceHost m_webHost;
 
         /// <summary>
+        /// Fired when the FHIR message handler is starting
+        /// </summary>
+        public event EventHandler Starting;
+        /// <summary>
+        /// Fired when the FHIR message handler is stopping
+        /// </summary>
+        public event EventHandler Stopping;
+        /// <summary>
+        /// Fired when the FHIR message handler has started 
+        /// </summary>
+        public event EventHandler Started;
+        /// <summary>
+        /// Fired when the FHIR message handler has stopped
+        /// </summary>
+        public event EventHandler Stopped;
+
+        /// <summary>
         /// Constructor, load configuration
         /// </summary>
         public FhirMessageHandler()
@@ -44,8 +61,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         {
             try
             {
-                // Set the context
-                ApplicationContext.CurrentContext = this.Context;
+
+                this.Starting?.Invoke(this, EventArgs.Empty);
 
                 this.m_webHost = new WebServiceHost(typeof(FhirServiceBehavior));
                 this.m_webHost.Description.ConfigurationName = this.m_configuration.WcfEndpoint;
@@ -70,6 +87,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 
                 // Start the web host
                 this.m_webHost.Open();
+
+                this.Started?.Invoke(this, EventArgs.Empty);
+
                 return true;
             }
             catch (Exception e)
@@ -86,24 +106,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// <returns></returns>
         public bool Stop()
         {
-            if(this.m_webHost != null)
+            this.Stopping?.Invoke(this, EventArgs.Empty);
+
+            if (this.m_webHost != null)
+            {
                 this.m_webHost.Close();
+                this.m_webHost = null;
+            }
+
+            this.Stopped?.Invoke(this, EventArgs.Empty);
+
             return true;
         }
 
         #endregion
 
-        #region IUsesHostContext Members
-
-        /// <summary>
-        /// Gets or sets the hosting context
-        /// </summary>
-        public IServiceProvider Context
+        public bool IsRunning
         {
-            get;
-            set;
+            get
+            {
+                return this.m_webHost != null;
+            }
         }
-
-        #endregion
     }
 }

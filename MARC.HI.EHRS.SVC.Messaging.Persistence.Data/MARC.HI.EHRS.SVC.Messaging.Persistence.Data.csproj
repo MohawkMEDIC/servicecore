@@ -84,13 +84,6 @@
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="AdoMessagePersister.cs" />
-    <Compile Include="Configuration\UI\MessagePersistenceConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\Panels\pnlConfigureMessagePersistence.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\Panels\pnlConfigureMessagePersistence.designer.cs">
-      <DependentUpon>pnlConfigureMessagePersistence.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -110,11 +103,6 @@
     <None Include="Configuration\marc.hi.ehrs.svc.messaging.persistence.xsd">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\Panels\pnlConfigureMessagePersistence.resx">
-      <DependentUpon>pnlConfigureMessagePersistence.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="SQL\PSQL9\MDB.SQL">

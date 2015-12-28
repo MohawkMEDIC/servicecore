@@ -19,7 +19,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using MARC.HI.EHRS.SVC.Core.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.Issues;
 using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Core.Authorization;
@@ -29,7 +28,7 @@ namespace MARC.HI.EHRS.SVC.PolicyEnforcement
     /// <summary>
     /// An interface that represents a policy enforcement target
     /// </summary>
-    public interface IPolicyEnforcementService
+    public interface IPolicyEnforcementService<TContainer>
     {
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.PolicyEnforcement
         /// <param name="comp">The component record that is to have policies applied</param>
         /// <param name="reqContainer">The original request container that was used to query the data</param>
         /// <param name="issues">Any detected issues</param>
-        TContainer ApplyPolicies<TContainer>(AuthorizationContext reqContainer, TContainer comp, List<DetectedIssue> issues);
+        TContainer ApplyPolicies(AuthorizationContext reqContainer, TContainer comp, List<DetectedIssue> issues);
 
     }
 }
