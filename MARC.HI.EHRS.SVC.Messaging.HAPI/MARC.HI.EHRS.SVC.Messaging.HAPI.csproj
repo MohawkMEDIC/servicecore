@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{257710CF-713E-4534-B562-DB25CDBADD79}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MARC.HI.EHRS.CR.Messaging.HAPI</RootNamespace>
+    <AssemblyName>MARC.HI.EHRS.CR.Messaging.HAPI</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NHapi.Base">
+      <HintPath>..\Solution Items\NHapi.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="NHapi.Model.V231">
+      <HintPath>..\Solution Items\NHapi.Model.V231.dll</HintPath>
+    </Reference>
+    <Reference Include="NHapi.Model.V25">
+      <HintPath>..\Solution Items\NHapi.Model.V25.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
+    <Compile Include="Configuration\HL7ConfigurationSection.cs" />
+    <Compile Include="HL7MessageHandler.cs" />
+    <Compile Include="IHL7MessageHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceHandler.cs" />
+    <Compile Include="TransportProtocol\ITransportProtocol.cs" />
+    <Compile Include="TransportProtocol\SllpTransport.cs" />
+    <Compile Include="TransportProtocol\LlpTransport.cs" />
+    <Compile Include="TransportProtocol\TcpTransport.cs" />
+    <Compile Include="TransportProtocol\TransportUtil.cs" />
+    <Compile Include="TransportProtocol\X509CertificateEditor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\MARC.HI.EHRS.CR.licenseheader">
+      <Link>MARC.HI.EHRS.CR.licenseheader</Link>
+    </None>
+    <None Include="Configuration\marc.hi.ehrs.cr.messaging.hl7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj">
+      <Project>{27ba9e20-3952-4a9a-92c4-01c86ba2ba50}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
+      <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>
+      <Name>MARC.HI.EHRS.SVC.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
