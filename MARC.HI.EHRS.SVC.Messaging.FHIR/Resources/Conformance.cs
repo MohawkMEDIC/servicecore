@@ -19,9 +19,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 
         public Conformance()
         {
-            this.Telecom = new List<Telecom>();
+            this.Telecom = new List<FhirTelecom>();
             this.Rest = new List<RestDefinition>();
-            this.Format = new List<PrimitiveCode<string>>();
+            this.Format = new List<FhirCode<string>>();
         }
         /// <summary>
         /// Logical identifier to this resource
@@ -52,7 +52,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Contacts for the organization")]
         [XmlElement("telecom")]
-        public List<Telecom> Telecom { get; set; }
+        public List<FhirTelecom> Telecom { get; set; }
         /// <summary>
         /// Description of the conformance statement
         /// </summary>
@@ -64,7 +64,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Status of the conformance statement")]
         [XmlElement("status")]
-        public PrimitiveCode<String> Status { get; set; }
+        public FhirCode<String> Status { get; set; }
         /// <summary>
         /// True if the conformance statement is experimental
         /// </summary>
@@ -76,7 +76,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Date of publication")]
         [XmlElement("date")]
-        public Date Date { get; set; }
+        public FhirDateTime Date { get; set; }
         /// <summary>
         /// Describes the software that is covered by this conformance statement
         /// </summary>
@@ -108,7 +108,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Formats supported")]
         [XmlElement("format")]
-        public List<PrimitiveCode<String>> Format { get; set; }
+        public List<FhirCode<String>> Format { get; set; }
         /// <summary>
         /// Endpoint if restful
         /// </summary>

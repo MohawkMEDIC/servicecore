@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents an accreditation
     /// </summary>
     [XmlType("Accreditation", Namespace = "http://hl7.org/fhir")]
-    public class Accreditation : Shareable
+    public class Accreditation : FhirElement
     {
         /// <summary>
         /// Gets or sets the identifier for the accreditation
@@ -23,17 +23,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the code (type) of the accreditation
         /// </summary>
         [XmlElement("code")]
-        public CodeableConcept Code { get; set; }
+        public FhirCodeableConcept Code { get; set; }
         /// <summary>
         /// Gets or sets the issuing organization of the accreditation
         /// </summary>
         [XmlElement("issuer")]
-        public Resource<Organization> Issuer { get; set; }
+        public Reference<Organization> Issuer { get; set; }
         /// <summary>
         /// Gets or sets the period of the accreditation
         /// </summary>
         [XmlElement("period")]
-        public Period Period { get; set; }
+        public FhirPeriod Period { get; set; }
 
     }
 }

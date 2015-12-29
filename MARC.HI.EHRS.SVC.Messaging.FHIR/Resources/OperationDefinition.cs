@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Operation definition
     /// </summary>
     [XmlType("Operation", Namespace = "http://hl7.org/fhir")]
-    public class OperationDefinition : Shareable
+    public class OperationDefinition : FhirElement
     {
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Type of operation")]
         [XmlElement("code")]
-        public PrimitiveCode<String> Type { get; set; }
+        public FhirCode<String> Type { get; set; }
 
         /// <summary>
         /// Documentation related to the operation

@@ -14,7 +14,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Describes an element
     /// </summary>
     [XmlType("Element", Namespace = "http://hl7.org/fhir")]
-    public class Element : Shareable
+    public class Element : FhirElement
     {
 
         /// <summary>

@@ -269,7 +269,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 Issue issue = new Issue()
                 {
                     Details = new DataTypes.FhirString(dtl.Message),
-                    Severity = new DataTypes.PrimitiveCode<string>(dtl.Type.ToString().ToLower())
+                    Severity = new DataTypes.FhirCode<string>(dtl.Type.ToString().ToLower())
                 };
 
                 if (!String.IsNullOrEmpty(dtl.Location))
@@ -277,13 +277,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
                 // Type
                 if (dtl.Exception is TimeoutException)
-                    issue.Type = new DataTypes.Coding(fhirIssue, "timeout");
+                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "timeout");
                 else if (dtl is FixedValueMisMatchedResultDetail)
-                    issue.Type = new DataTypes.Coding(fhirIssue, "value");
+                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "value");
                 else if (dtl is PersistenceResultDetail)
-                    issue.Type = new DataTypes.Coding(fhirIssue, "no-store");
+                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "no-store");
                 else
-                    issue.Type = new DataTypes.Coding(fhirIssue, "exception");
+                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "exception");
 
                 retVal.Issue.Add(issue);
             }
@@ -294,8 +294,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     retVal.Issue.Add(new Issue()
                     {
                         Details = new DataTypes.FhirString(iss.Text),
-                        Severity = new DataTypes.PrimitiveCode<string>(iss.Severity.ToString().ToLower()),
-                        Type = new DataTypes.Coding(fhirIssue, "business-rule")
+                        Severity = new DataTypes.FhirCode<string>(iss.Severity.ToString().ToLower()),
+                        Type = new DataTypes.FhirCoding(fhirIssue, "business-rule")
                     });
 
             return retVal;

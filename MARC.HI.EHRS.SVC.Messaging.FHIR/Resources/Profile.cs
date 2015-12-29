@@ -30,7 +30,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             /// </summary>
             [XmlElement("code")]
             [Description("draft | testing | review | production | withdrawn | superseded")]
-            public PrimitiveCode<String> Code { get; set; }
+            public FhirCode<String> Code { get; set; }
             /// <summary>
             /// A comment containing supplemental status info
             /// </summary>
@@ -46,8 +46,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             this.Structure = new List<Structure>();
             this.ExtensionDefinition = new List<ExtensionDefinition>();
-            this.Telecom = new List<Telecom>();
-            this.Code = new List<Coding>();
+            this.Telecom = new List<FhirTelecom>();
+            this.Code = new List<FhirCoding>();
 
         }
 
@@ -85,7 +85,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Contact information of the publisher")]
         [XmlElement("telecom")]
-        public List<Telecom> Telecom { get; set; }
+        public List<FhirTelecom> Telecom { get; set; }
 
         /// <summary>
         /// Description of the profile
@@ -99,7 +99,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("A code to assist with indexing and finding")]
         [XmlElement("code")]
-        public List<Coding> Code { get; set; }
+        public List<FhirCoding> Code { get; set; }
 
         /// <summary>
         /// Gets or sets the status

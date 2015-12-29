@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Import for a profile
     /// </summary>
     [XmlType("Import", Namespace = "http://hl7.org/fhir")]
-    public class ProfileImport : Shareable
+    public class ProfileImport : FhirElement
     {
 
         /// <summary>

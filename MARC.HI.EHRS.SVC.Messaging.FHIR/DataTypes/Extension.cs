@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents an extension
     /// </summary>
     [XmlType("Extension", Namespace = "http://hl7.org/fhir")]
-    public class Extension : Shareable
+    public class Extension : FhirElement
     {
         /// <summary>
         /// URL of the extension definition
@@ -30,29 +30,29 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         [XmlElement("valueInteger", typeof(FhirInt))]
         [XmlElement("valueDecimal", typeof(FhirDecimal))]
-        [XmlElement("valueDateTime", typeof(Date))]
-        [XmlElement("valueDate", typeof(DateOnly))]
+        [XmlElement("valueDateTime", typeof(FhirDateTime))]
+        [XmlElement("valueDate", typeof(FhirDate))]
         [XmlElement("valueInstant", typeof(Primitive<DateTime>))]
         [XmlElement("valueString", typeof(FhirString))]
         [XmlElement("valueUri", typeof(FhirUri))]
         [XmlElement("valueBoolean", typeof(FhirBoolean))]
-        [XmlElement("valueCode", typeof(PrimitiveCode<String>))]
-        [XmlElement("valueBase64Binary", typeof(FhirBinary))]
-        [XmlElement("valueCoding", typeof(Coding))]
-        [XmlElement("valueCodeableConcept", typeof(CodeableConcept))]
+        [XmlElement("valueCode", typeof(FhirCode<String>))]
+        [XmlElement("valueBase64Binary", typeof(FhirBase64Binary))]
+        [XmlElement("valueCoding", typeof(FhirCoding))]
+        [XmlElement("valueCodeableConcept", typeof(FhirCodeableConcept))]
         [XmlElement("valueAttachment", typeof(Attachment))]
         [XmlElement("valueIdentifier", typeof(Identifier))]
-        [XmlElement("valueQuantity", typeof(Quantity))]
-        [XmlElement("valueChoice", typeof(Choice))]
-        [XmlElement("valueRange", typeof(Range))]
-        [XmlElement("valuePeriod", typeof(Period))]
-        [XmlElement("valueRatio", typeof(Ratio))]
-        [XmlElement("valueHumanName", typeof(HumanName))]
-        [XmlElement("valueAddress", typeof(Address))]
-        [XmlElement("valueContact" ,typeof(Telecom))]
-        [XmlElement("valueSchedule", typeof(Schedule))]
-        [XmlElement("valueResource", typeof(Resource))]
-        public Shareable Value { get; set; }
+        [XmlElement("valueQuantity", typeof(FhirQuantity))]
+        [XmlElement("valueChoice", typeof(FhirChoice))]
+        [XmlElement("valueRange", typeof(FhirRange))]
+        [XmlElement("valuePeriod", typeof(FhirPeriod))]
+        [XmlElement("valueRatio", typeof(FhirRatio))]
+        [XmlElement("valueHumanName", typeof(FhirHumanName))]
+        [XmlElement("valueAddress", typeof(FhirAddress))]
+        [XmlElement("valueContact" ,typeof(FhirTelecom))]
+        [XmlElement("valueSchedule", typeof(FhirSchedule))]
+        [XmlElement("valueResource", typeof(Reference))]
+        public FhirElement Value { get; set; }
 
 
         /// <summary>

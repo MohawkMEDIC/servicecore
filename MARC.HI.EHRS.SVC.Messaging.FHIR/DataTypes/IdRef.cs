@@ -22,9 +22,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Resolve reference
         /// </summary>
-        public Shareable ResolveReference(Shareable context)
+        public FhirElement ResolveReference(FhirElement context)
         {
-            return new Shareable() { IdRef = this.Value }.ResolveReference(context);
+            return new FhirElement() { IdRef = this.Value }.ResolveReference(context);
         }
     }
 }

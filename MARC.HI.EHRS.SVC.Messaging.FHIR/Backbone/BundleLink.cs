@@ -1,0 +1,48 @@
+﻿using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.Xml;
+
+namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
+{
+    /// <summary>
+    /// Represents a link used within bundles
+    /// </summary>
+    [XmlType("Bundle.Link", Namespace = "http://hl7.org/fhir")]
+    public class BundleLink : BackboneElement
+    {
+
+        /// <summary>
+        /// Gets or sets the relationship the link has to the bundle
+        /// </summary>
+        [ElementProfile(MinOccurs = 1)]
+        [Description("http://www.iana.org/assignments/link-relations/link-relations.xhtml")]
+        [XmlElement("relation")]
+        public FhirString Relation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url of the link
+        /// </summary>
+        [ElementProfile(MinOccurs = 1)]
+        [XmlElement("url")]
+        [Description("Reference detailes for the link")]
+        public FhirUri Url { get; set; }
+
+        /// <summary>
+        /// Write text
+        /// </summary>
+        internal override void WriteText(XmlWriter w)
+        {
+            w.WriteStartElement("a");
+            w.WriteAttributeString("href", this.Url?.Value?.ToString());
+            this.Relation?.WriteText(w);
+            w.WriteEndElement(); // a
+        }
+    }
+}

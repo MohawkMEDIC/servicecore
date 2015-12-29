@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType(Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public abstract class Primitive<T> : Shareable
+    public abstract class Primitive<T> : FhirElement
     {
 
         /// <summary>
@@ -187,11 +187,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType("base64Binary", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public class FhirBinary : Primitive<byte[]>
+    public class FhirBase64Binary : Primitive<byte[]>
     {
-        public FhirBinary() : base() { }
-        public FhirBinary(byte[] value) : base(value) { }
-        public static implicit operator FhirBinary(byte[] v) { return new FhirBinary(v); }
+        public FhirBase64Binary() : base() { }
+        public FhirBase64Binary(byte[] value) : base(value) { }
+        public static implicit operator FhirBase64Binary(byte[] v) { return new FhirBase64Binary(v); }
         [XmlAttribute("value")]
         public override string XmlValue
         {

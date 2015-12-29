@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType("ContainedResource", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public class ContainedResource : Shareable
+    public class ContainedResource : FhirElement
     {
         /// <summary>
         /// The contained resource collection

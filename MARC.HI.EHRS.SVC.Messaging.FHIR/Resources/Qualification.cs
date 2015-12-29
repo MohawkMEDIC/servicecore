@@ -11,23 +11,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Qualification
     /// </summary>
     [XmlType("Qualification", Namespace = "http://hl7.org/fhir")]
-    public class Qualification : Shareable
+    public class Qualification : FhirElement
     {
         /// <summary>
         /// Gets or sets the code
         /// </summary>
         [XmlElement("code")]
-        public CodeableConcept Code { get; set; }
+        public FhirCodeableConcept Code { get; set; }
         /// <summary>
         /// Gets or sets the period of time
         /// </summary>
         [XmlElement("period")]
-        public Period Period { get; set; }
+        public FhirPeriod Period { get; set; }
         /// <summary>
         /// Gets or sets the issuer organization
         /// </summary>
         [XmlElement("issuer")]
-        public Resource<Organization> Issuer { get; set; }
+        public Reference<Organization> Issuer { get; set; }
 
     }
 }

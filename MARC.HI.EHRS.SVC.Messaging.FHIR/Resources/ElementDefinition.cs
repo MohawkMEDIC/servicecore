@@ -15,7 +15,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Element definition
     /// </summary>
     [XmlType("ElementDefinition", Namespace = "http://hl7.org/fhir")]
-    public class ElementDefinition : Shareable
+    public class ElementDefinition : FhirElement
     {
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 this.FormalDefinition = this.FormalDefinition ?? description.Description;
             }
 
-            this.Type.Add(new TypeRef() { Code = new PrimitiveCode<string>("Resource") });
+            this.Type.Add(new TypeRef() { Code = new FhirCode<string>("Resource") });
         }
 
         /// <summary>

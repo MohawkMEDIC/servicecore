@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Search parameter
     /// </summary>
     [XmlType("SearchParam", Namespace = "http://hl7.org/fhir")]
-    public class SearchParam : Shareable
+    public class SearchParam : FhirElement
     {
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("type")]
         [Description("The type of the search parameter")]
         [ElementProfile(MinOccurs = 1)]
-        public PrimitiveCode<String> Type { get; set; }
+        public FhirCode<String> Type { get; set; }
 
         /// <summary>
         /// Gets or sets the documentation related to the parameter

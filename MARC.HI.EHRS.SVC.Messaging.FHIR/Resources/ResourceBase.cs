@@ -14,7 +14,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Base for all resources
     /// </summary>
     [XmlType("ResourceBase", Namespace = "http://hl7.org/fhir")]
-    public abstract class ResourceBase : Shareable
+    public abstract class ResourceBase : FhirElement
     {
         protected XmlSerializerNamespaces m_namespaces = new XmlSerializerNamespaces();
 
@@ -89,7 +89,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             Narrative retVal = new Narrative();
 
             XmlDocument narrativeContext = new XmlDocument();
-            retVal.Status = new PrimitiveCode<string>("generated");
+            retVal.Status = new FhirCode<string>("generated");
             StringWriter writer = new StringWriter();
 
             using (XmlWriter xw = XmlWriter.Create(writer, new XmlWriterSettings() { ConformanceLevel = ConformanceLevel.Fragment }))

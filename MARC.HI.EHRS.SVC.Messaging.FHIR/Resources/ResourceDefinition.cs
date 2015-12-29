@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Resource definition
     /// </summary>
     [XmlType("Resource", Namespace = "http://hl7.org/fhir")]
-    public class ResourceDefinition : Shareable
+    public class ResourceDefinition : FhirElement
     {
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("type")]
         [Description("Resource type")]
         [ElementProfile(MinOccurs = 1)]
-        public PrimitiveCode<String> Type { get; set; }
+        public FhirCode<String> Type { get; set; }
 
         /// <summary>
         /// The profile reference
         /// </summary>
         [XmlElement("profile")]
         [Description("Resource profiles supported")]
-        public Resource<Profile> Profile { get; set; }
+        public Reference<Profile> Profile { get; set; }
 
         /// <summary>
         /// Gets or sets the operations supported

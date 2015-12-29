@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Implementation definition
     /// </summary>
     [XmlType("Implementation", Namespace = "http://hl7.org/fhir")]
-    public class ImplementationDefinition : Shareable
+    public class ImplementationDefinition : FhirElement
     {
 
         /// <summary>

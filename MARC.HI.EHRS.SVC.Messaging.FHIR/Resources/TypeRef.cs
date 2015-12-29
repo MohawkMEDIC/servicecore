@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Type reference of the profile
     /// </summary>
     [XmlType("TypeRef", Namespace = "http://hl7.org/fhir")]
-    public class TypeRef : Shareable
+    public class TypeRef : FhirElement
     {
 
         private Type m_type = null;
@@ -40,9 +40,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             if (xta == null)
                 return null;
             else if (typeof(ResourceBase).IsAssignableFrom(realType))
-                retVal.Code = new PrimitiveCode<string>(String.Format("Resource({0})", xta.TypeName));
+                retVal.Code = new FhirCode<string>(String.Format("Resource({0})", xta.TypeName));
             else
-                retVal.Code = new PrimitiveCode<string>(xta.TypeName);
+                retVal.Code = new FhirCode<string>(xta.TypeName);
 
             return retVal;
         }
@@ -51,7 +51,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// The codified primitive
         /// </summary>
         [XmlElement("code")]
-        public PrimitiveCode<String> Code { get; set; }
+        public FhirCode<String> Code { get; set; }
 
         /// <summary>
         /// The url to the code profile

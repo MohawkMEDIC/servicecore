@@ -14,7 +14,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents a binding definition
     /// </summary>
     [XmlType("Binding", Namespace = "http://hl7.org/fhir")]
-    public class BindingDefinition : Shareable
+    public class BindingDefinition : FhirElement
     {
 
         /// <summary>
@@ -54,11 +54,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             {
                 this.Name = bindingName;
                 this.IsExtensible = profile.Binding == null;
-                this.Conformance = new PrimitiveCode<string>("preferred");
+                this.Conformance = new FhirCode<string>("preferred");
                 this.Reference = profile.RemoteBinding == null ?
-                            (Shareable)new Resource<ValueSet>()
+                            (FhirElement)new Reference<ValueSet>()
                             {
-                                Reference = profile.Binding.GetValueSetDefinition().ToString()
+                                ReferenceUrl = profile.Binding.GetValueSetDefinition().ToString()
                             } : (FhirUri)new Uri(profile.RemoteBinding);
             }
         }
@@ -94,7 +94,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("conformance")]
         [Description("Indicates the degree of conformance expectations associated with this binding")]
-        public PrimitiveCode<String> Conformance { get; set; }
+        public FhirCode<String> Conformance { get; set; }
         /// <summary>
         /// The definition (description) of the binding
         /// </summary>
@@ -105,9 +105,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Identifies the referenced value set
         /// </summary>
         [XmlElement("referenceUri", typeof(FhirUri))]
-        [XmlElement("referenceResource", typeof(Resource<ValueSet>))]
+        [XmlElement("referenceResource", typeof(Reference<ValueSet>))]
         [Description("Points to the value set or external definition that identifies the set of codes to be used")]
-        public Shareable Reference { get; set; }
+        public FhirElement Reference { get; set; }
 
         /// <summary>
         /// Write text

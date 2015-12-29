@@ -15,7 +15,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Software definition
     /// </summary>
     [XmlType("Software", Namespace = "http://hl7.org/fhir")]
-    public class SoftwareDefinition : Shareable
+    public class SoftwareDefinition : FhirElement
     {
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("releaseDate")]
         [Description("The date this version was released")]
-        public Date ReleaseDate { get; set; }
+        public FhirDateTime ReleaseDate { get; set; }
 
     }
 }

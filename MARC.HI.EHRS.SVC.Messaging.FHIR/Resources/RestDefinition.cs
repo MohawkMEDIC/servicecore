@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// RESTFul definition
     /// </summary>
     [XmlType("Rest", Namespace = "http://hl7.org/fhir")]
-    public class RestDefinition : Shareable
+    public class RestDefinition : FhirElement
     {
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("mode")]
         [Description("Describes the mode of REST implementation")]
-        public PrimitiveCode<String> Mode { get; set; }
+        public FhirCode<String> Mode { get; set; }
         /// <summary>
         /// Gets or sets the documentation about the REST 
         /// </summary>
@@ -57,8 +57,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             w.WriteStartElement("tbody");
 
             // Setup table headers
-            List<PrimitiveCode<String>> headers = new List<PrimitiveCode<String>>();
-            headers.Add(new PrimitiveCode<string>("Resource"));
+            List<FhirCode<String>> headers = new List<FhirCode<String>>();
+            headers.Add(new FhirCode<string>("Resource"));
             foreach (var res in this.Resource)
                 foreach (var op in res.Operation)
                     if (!headers.Exists(o=>o.Value == op.Type.Value))

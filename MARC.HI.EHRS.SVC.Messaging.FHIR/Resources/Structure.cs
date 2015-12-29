@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents a structure definition
     /// </summary>
     [XmlType("Structure", Namespace = "http://hl7.org/fhir")]
-    public class Structure : Shareable
+    public class Structure : FhirElement
     {
         /// <summary>
         /// Sharable structure
@@ -36,14 +36,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("type")]
         [Description("The Resource or Data type being described")]
         [ElementProfile(MinOccurs = 1)]
-        public PrimitiveCode<String> Type { 
+        public FhirCode<String> Type { 
             get
             {
                 object[] typeName = this.ResouceType.GetCustomAttributes(typeof(XmlTypeAttribute), true);
                 if(typeName == null)
                     return null;
                 else
-                    return new PrimitiveCode<String>((typeName[0] as XmlTypeAttribute).TypeName);
+                    return new FhirCode<String>((typeName[0] as XmlTypeAttribute).TypeName);
             }
             set
             {

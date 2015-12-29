@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Represents an issue detail
     /// </summary>
     [XmlType("Issue", Namespace = "http://hl7.org/fhir")]
-    public class Issue : Shareable
+    public class Issue : FhirElement
     {
         /// <summary>
         /// Default constructor
@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("severity")]
         [Description("Identifies the severity of operation")]
         [ElementProfile(MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/issue-severity")]
-        public PrimitiveCode<String> Severity { get; set; }
+        public FhirCode<String> Severity { get; set; }
 
         /// <summary>
         /// Gets or sets the type of error
@@ -37,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("type")]
         [Description("Identifies the type of issue detected")]
         [ElementProfile(RemoteBinding = "http://hl7.org/fhir/issue-type")]
-        public Coding Type { get; set; }
+        public FhirCoding Type { get; set; }
 
         /// <summary>
         /// Gets or sets the details of the issue

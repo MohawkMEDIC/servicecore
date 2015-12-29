@@ -14,14 +14,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Narrative", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public class Narrative : Shareable
+    public class Narrative : FhirElement
     {
 
         /// <summary>
         /// Gets or sets the status of the narrative
         /// </summary>
         [XmlElement("status")]
-        public PrimitiveCode<String> Status { get; set; }
+        public FhirCode<String> Status { get; set; }
 
         /// <summary>
         /// Gets or sets the contents

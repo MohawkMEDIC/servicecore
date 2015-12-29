@@ -11,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// Represents an identifier
     /// </summary>
     [XmlType("Identifier", Namespace = "http://hl7.org/fhir")]
-    public class Identifier : Shareable
+    public class Identifier : FhirElement
     {
 
         /// <summary>
@@ -42,13 +42,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// Identifies the period the identifier is valid
         /// </summary>
         [XmlElement("period")]
-        public Period Period { get; set; }
+        public FhirPeriod Period { get; set; }
 
         /// <summary>
         /// Identifies the assigning organization of the identifier
         /// </summary>
         [XmlElement("assigner")]
-        public Resource<Organization> Assigner { get; set; }
+        public Reference<Organization> Assigner { get; set; }
 
         /// <summary>
         /// Identifier

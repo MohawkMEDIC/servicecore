@@ -399,7 +399,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                 {
                                     Name = sp.Name,
                                     Documentation = sp.Description,
-                                    Type = new PrimitiveCode<string>(sp.Type)
+                                    Type = new FhirCode<string>(sp.Type)
                                 };
                                 structureContext.SearchParams.Add(definition);
                             }
@@ -407,7 +407,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             {
                                 definition.Name = sp.Name;
                                 definition.Documentation = sp.Description;
-                                definition.Type = new PrimitiveCode<string>(sp.Type);
+                                definition.Type = new FhirCode<string>(sp.Type);
                             };
                         }
                     } // search parameters
@@ -438,7 +438,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                  
                                 definition = new ExtensionDefinition()
                                 {
-                                    Code = new PrimitiveCode<string>(ext.Name),
+                                    Code = new FhirCode<string>(ext.Name),
                                     Definition = new ElementDefinition()
                                     {
                                         FormalDefinition = ext.FormalDefinition,
@@ -460,11 +460,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                 definition.Context.Add(definitionPath);
 
                                 if (ext.Property == null)
-                                    definition.ContextType = new PrimitiveCode<string>(typeof(ResourceBase).IsAssignableFrom(typeContext) ? "resource" : "datatype");
+                                    definition.ContextType = new FhirCode<string>(typeof(ResourceBase).IsAssignableFrom(typeContext) ? "resource" : "datatype");
                                 else if (extensionTarget == null)
-                                    definition.ContextType = new PrimitiveCode<string>("extension");
+                                    definition.ContextType = new FhirCode<string>("extension");
                                 else
-                                    definition.ContextType = new PrimitiveCode<string>("datatype");
+                                    definition.ContextType = new FhirCode<string>("datatype");
 
                                 context.ExtensionDefinition.Add(definition);
 

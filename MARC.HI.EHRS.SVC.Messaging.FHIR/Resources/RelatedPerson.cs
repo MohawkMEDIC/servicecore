@@ -24,7 +24,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public RelatedPerson()
         {
             this.Identifier = new List<Identifier>();
-            this.Telecom = new List<Telecom>();
+            this.Telecom = new List<FhirTelecom>();
             this.Photo = new List<Attachment>();
         }
 
@@ -42,7 +42,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("The person to which this person is related")]
         [ElementProfile(MaxOccurs = 1, MinOccurs = 1)]
         [XmlElement("patient")]
-        public Resource<Patient> Patient { get; set; }
+        public Reference<Patient> Patient { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship type
@@ -50,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("The relationship this person has with the patient")]
         [ElementProfile(MaxOccurs = 0, MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/vs/relatedperson-relationshiptype")]
         [XmlElement("relationship")]
-        public CodeableConcept Relationship { get; set; }
+        public FhirCodeableConcept Relationship { get; set; }
 
         /// <summary>
         /// Gets or sets the person's name
@@ -58,7 +58,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("The name of the related person")]
         [ElementProfile(MaxOccurs = 1)]
         [XmlElement("name")]
-        public HumanName Name { get; set; }
+        public FhirHumanName Name { get; set; }
 
         /// <summary>
         /// Gets or sets the person's telecom addresses
@@ -66,7 +66,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Telecommunications addresses")]
         [ElementProfile(MaxOccurs = -1)]
         [XmlElement("telecom")]
-        public List<Telecom> Telecom { get; set; }
+        public List<FhirTelecom> Telecom { get; set; }
 
         /// <summary>
         /// Gets or sets the gender of the patient
@@ -74,7 +74,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("gender")]
         [Description("Gender for administrative purposes")]
         [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
-        public CodeableConcept Gender { get; set; }
+        public FhirCodeableConcept Gender { get; set; }
 
         /// <summary>
         /// Gets or sets the address of the related person
@@ -82,7 +82,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("address")]
         [Description("Address of the related person")]
         [ElementProfile(MaxOccurs = 1)]
-        public Address Address { get; set; }
+        public FhirAddress Address { get; set; }
 
         /// <summary>
         /// Gets or sets the photograph of the person

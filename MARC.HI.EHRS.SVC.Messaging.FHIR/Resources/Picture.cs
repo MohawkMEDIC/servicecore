@@ -22,21 +22,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("subject")]
         [Description("Who/What this image is taken of")]
-        public Resource<Patient> Subject { get; set; }
+        public Reference<Patient> Subject { get; set; }
 
         /// <summary>
         /// The date/time the picture was taken
         /// </summary>
         [XmlElement("dateTime")]
         [Description("When the image was taken")]
-        public Date DateTime { get; set; }
+        public FhirDateTime DateTime { get; set; }
 
         /// <summary>
         /// Gets or sets the operator of the image
         /// </summary>
         [XmlElement("operator")]
         [Description("The person who generated the image")]
-        public Resource<Practictioner> Operator { get; set; }
+        public Reference<Practictioner> Operator { get; set; }
 
         /// <summary>
         /// Identifies the image
@@ -71,14 +71,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("method")]
         [Description("How the image was taken")]
-        public CodeableConcept Method { get; set; }
+        public FhirCodeableConcept Method { get; set; }
 
         /// <summary>
         /// identifies the person that requested the image
         /// </summary>
         [XmlElement("requester")]
         [Description("Who asked that this image be taken")]
-        public Resource<Practictioner> Requester { get; set; }
+        public Reference<Practictioner> Requester { get; set; }
 
         /// <summary>
         /// Identifies the modality of the image
@@ -86,7 +86,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("modality")]
         [Description("The type of image machinery")]
         [ElementProfile(MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/picture-type")]
-        public PrimitiveCode<String> Modality { get; set; }
+        public FhirCode<String> Modality { get; set; }
 
         /// <summary>
         /// Identifies the name of the manufacturer
@@ -128,14 +128,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("frameDelay")]
         [Description("The delay between frames")]
-        public Quantity FrameDelay { get; set; }
+        public FhirQuantity FrameDelay { get; set; }
 
         /// <summary>
         /// Identifies the view (lateral, AP, etc)
         /// </summary>
         [XmlElement("view")]
         [Description("The view e.g. Lateral or Anero-posterior (AP)")]
-        public CodeableConcept View { get; set; }
+        public FhirCodeableConcept View { get; set; }
 
         /// <summary>
         /// Identifies the content - ref or data
