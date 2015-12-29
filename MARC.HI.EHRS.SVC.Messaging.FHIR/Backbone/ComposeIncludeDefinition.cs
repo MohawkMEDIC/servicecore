@@ -20,7 +20,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         public ComposeIncludeDefinition()
         {
-            this.Code = new List<ConceptDefinition>();
+            this.Concept = new List<ConceptDefinition>();
         }
 
         /// <summary>

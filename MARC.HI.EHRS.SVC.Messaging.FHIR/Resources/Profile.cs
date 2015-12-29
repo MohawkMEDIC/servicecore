@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -44,7 +45,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         public Profile()
         {
-            this.Structure = new List<Structure>();
+            this.Structure = new List<StructureDefinition>();
             this.ExtensionDefinition = new List<ExtensionDefinition>();
             this.Telecom = new List<FhirTelecom>();
             this.Code = new List<FhirCoding>();
@@ -114,7 +115,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("A constraint on a resource or datatype")]
         [XmlElement("structure")]
-        public List<Structure> Structure { get; set; }
+        public List<StructureDefinition> Structure { get; set; }
 
         /// <summary>
         /// Gets or sets a list of extension definitions

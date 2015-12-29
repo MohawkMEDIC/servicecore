@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes
         /// <summary>
         /// Search type
         /// </summary>
-        public string Type { get; set; }
+        public SearchParamType Type { get; set; }
 
         /// <summary>
         /// Description of the search item

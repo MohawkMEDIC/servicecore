@@ -57,14 +57,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Primary code?
         /// </summary>
-        [XmlElement("primary")]
+        [XmlIgnore]
         public FhirBoolean Primary { get; set; }
-
-        /// <summary>
-        /// The valueset from which the code was drawn
-        /// </summary>
-        [XmlElement("valueSet")]
-        public Reference<ValueSet> ValueSet { get; set; }
 
         /// <summary>
         /// Write text

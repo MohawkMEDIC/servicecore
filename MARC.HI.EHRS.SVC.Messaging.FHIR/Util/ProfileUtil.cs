@@ -14,6 +14,7 @@ using System.Diagnostics;
 using MARC.Everest.Exceptions;
 using MARC.Everest.Attributes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -195,12 +196,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Find a structure definition, barring that create one
         /// </summary>
-        public static Structure FindOrCreateStructureDefinition(this Profile me, Type resourceType)
+        public static StructureDefinition FindOrCreateStructureDefinition(this Profile me, Type resourceType)
         {
-            Structure retVal = me.Structure.Find(o => o.ResouceType == resourceType);
+            StructureDefinition retVal = me.Structure.Find(o => o.ResouceType == resourceType);
             if (retVal == null)
             {
-                retVal = new Structure()
+                retVal = new StructureDefinition()
                 {
                     ResouceType = resourceType
                 };
@@ -218,7 +219,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         private static void ProcessResourceMembers(Type resourceType, Profile context, ResourceProfileAttribute resourceAtt)
         {
             // Get the resource name
-            Structure structureContext = context.FindOrCreateStructureDefinition(resourceType);
+            StructureDefinition structureContext = context.FindOrCreateStructureDefinition(resourceType);
 
             // Now process the resource members
             structureContext.Name = resourceAtt.Name == null ? null : resourceAtt.Name;
@@ -237,7 +238,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Process all properties in a resource
         /// </summary>
-        private static void ProcessResourceProperties(Stack<Type> stack, Structure context, Profile profile, string path)
+        private static void ProcessResourceProperties(Stack<Type> stack, StructureDefinition context, Profile profile, string path)
         {
 
             Type resourceType = stack.Last(),
@@ -312,7 +313,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             if (typeof(ResourceBase).IsAssignableFrom(hostType))
                 throw new ArgumentException("Use ProcessResourceMembers to process source resource members");
             
-            Structure structureContext = null;
+            StructureDefinition structureContext = null;
             // Do we have a resource attribute, if so it becomes the master context
             if (resourceAtt != null)
             {
@@ -395,11 +396,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             var definition = structureContext.SearchParams.Find(o => o.Name == sp.Name);
                             if (definition == null)
                             {
-                                definition = new SearchParam()
+                                definition = new SearchParamDefinition()
                                 {
                                     Name = sp.Name,
                                     Documentation = sp.Description,
-                                    Type = new FhirCode<string>(sp.Type)
+                                    Type = new FhirCode<SearchParamType>(sp.Type)
                                 };
                                 structureContext.SearchParams.Add(definition);
                             }
@@ -407,7 +408,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             {
                                 definition.Name = sp.Name;
                                 definition.Documentation = sp.Description;
-                                definition.Type = new FhirCode<string>(sp.Type);
+                                definition.Type = new FhirCode<SearchParamType>(sp.Type);
                             };
                         }
                     } // search parameters

@@ -63,6 +63,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backbone\ConformancePublisher.cs" />
+    <Compile Include="Backbone\ExpansionContainsDefinition.cs" />
+    <Compile Include="Backbone\ExpansionDefinition.cs" />
     <Compile Include="Attributes\ExtensionDefinitionAttribute.cs" />
     <Compile Include="Attributes\ExtensionProfileAttribute.cs" />
     <Compile Include="Attributes\FhirValueSetAttribute.cs" />
@@ -80,6 +83,8 @@
     <Compile Include="Backbone\ComposeFilterDefinition.cs" />
     <Compile Include="Backbone\ConceptDesignation.cs" />
     <Compile Include="Backbone\PatientLink.cs" />
+    <Compile Include="Backbone\SecurityCertificateDefinition.cs" />
+    <Compile Include="Backbone\SecurityDefinition.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Configuration\FhirServiceConfiguration.cs" />
     <Compile Include="Configuration\UI\FhirServiceConfigurationPanel.cs" />
@@ -132,7 +137,7 @@
     <Compile Include="Backbone\Animal.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
     <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
-    <Compile Include="Resources\BindingDefinition.cs" />
+    <Compile Include="Backbone\BindingDefinition.cs" />
     <Compile Include="Resources\Bundle.cs" />
     <Compile Include="Backbone\ComposeDefinition.cs" />
     <Compile Include="Backbone\ConceptDefinition.cs" />
@@ -140,14 +145,14 @@
     <Compile Include="Resources\Conformance.cs" />
     <Compile Include="Backbone\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
-    <Compile Include="Resources\Element.cs" />
-    <Compile Include="Resources\ElementDefinition.cs" />
-    <Compile Include="Resources\ExtensionDefinition.cs" />
-    <Compile Include="Resources\ImplementationDefinition.cs" />
+    <Compile Include="Backbone\Element.cs" />
+    <Compile Include="Backbone\ElementDefinition.cs" />
+    <Compile Include="Backbone\ExtensionDefinition.cs" />
+    <Compile Include="Backbone\ImplementationDefinition.cs" />
     <Compile Include="Resources\Issue.cs" />
     <Compile Include="Backbone\Communication.cs" />
     <Compile Include="Resources\Narrative.cs" />
-    <Compile Include="Resources\OperationDefinition.cs" />
+    <Compile Include="Backbone\InteractionDefinition.cs" />
     <Compile Include="Resources\OperationOutcome.cs" />
     <Compile Include="Resources\Organization.cs" />
     <Compile Include="Resources\Patient.cs" />
@@ -160,12 +165,12 @@
     <Compile Include="Resources\RelatedPerson.cs" />
     <Compile Include="Resources\Reference.cs" />
     <Compile Include="Resources\ResourceBase.cs" />
-    <Compile Include="Resources\ResourceDefinition.cs" />
-    <Compile Include="Resources\RestDefinition.cs" />
-    <Compile Include="Resources\SearchParam.cs" />
-    <Compile Include="Resources\SoftwareDefinition.cs" />
-    <Compile Include="Resources\Structure.cs" />
-    <Compile Include="Resources\TypeRef.cs" />
+    <Compile Include="Backbone\ResourceDefinition.cs" />
+    <Compile Include="Backbone\RestDefinition.cs" />
+    <Compile Include="Backbone\SearchParamDefinition.cs" />
+    <Compile Include="Backbone\SoftwareDefinition.cs" />
+    <Compile Include="Backbone\StructureDefinition.cs" />
+    <Compile Include="Backbone\TypeRef.cs" />
     <Compile Include="Resources\ValueSet.cs" />
     <Compile Include="Backbone\CodeSystemDefinition.cs" />
     <Compile Include="ResultDetailClasses.cs" />

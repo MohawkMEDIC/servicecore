@@ -10,6 +10,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
 using System.ServiceModel;
 using System.Diagnostics;
 using System.ServiceModel.Syndication;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -77,7 +78,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 };
                 s_conformance.Name = "SVC-CORE FHIR";
                 s_conformance.Publisher = entryAssembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
-                s_conformance.Status = new DataTypes.FhirCode<string>("draft");
+                s_conformance.Status = new DataTypes.FhirCode<ConformanceResourceStatus>(ConformanceResourceStatus.Draft);
 
                 // Generate the rest description
                 // TODO: Reflect the current WCF context and get all the types of communication supported
@@ -170,7 +171,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
                     // Supported
                     if(supported)
-                        defn.Operation.Add(new OperationDefinition()
+                        defn.Interaction.Add(new InteractionDefinition()
                         {
                             Type = new DataTypes.FhirCode<string>(mi.GetCustomAttribute<OperationContractAttribute>().Name)
                         });

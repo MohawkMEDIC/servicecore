@@ -21,6 +21,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     {
 
         /// <summary>
+        /// Creates a new value set
+        /// </summary>
+        public ValueSet()
+        {
+            this.Contact = new List<ConformancePublisher>();
+        }
+
+        /// <summary>
         /// Gets or sets the globally unique identifier for the value set
         /// </summary>
         [XmlElement("url")]
@@ -75,7 +83,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("contact")]
         [Description("Contact details of the publisher")]
-        public PublisherContact Contact { get; set; }
+        public List<ConformancePublisher> Contact { get; set; }
 
         /// <summary>
         /// The date of publication
@@ -146,7 +154,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("compose")]
         public ComposeDefinition Compose { get; set; }
 
-        // TODO: Expansion
+        /// <summary>
+        /// Gets or sets the expanded value set definition
+        /// </summary>
+        [XmlElement("expansion")]
+        public ExpansionDefinition Expansion { get; set; }
 
         /// <summary>
         /// Write text
@@ -199,12 +211,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                 w.WriteEndElement(); // tr
 
                 foreach (var itm in this.Compose.Include)
-                    foreach (var code in itm.Code)
+                    foreach (var code in itm.Concept)
                     {
                         w.WriteStartElement("tr");
 
-                        if(code == itm.Code.FirstOrDefault())
-                            this.WriteTableCell(w, itm.System, 1, itm.Code.Count);
+                        if(code == itm.Concept.FirstOrDefault())
+                            this.WriteTableCell(w, itm.System, 1, itm.Concept.Count);
                         this.WriteTableCell(w, code);
                         w.WriteEndElement(); // tr
                     }
