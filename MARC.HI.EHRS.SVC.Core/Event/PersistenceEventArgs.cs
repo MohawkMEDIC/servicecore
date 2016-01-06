@@ -4,6 +4,7 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -138,7 +139,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
     public class PreQueryEventArgs<TData> : SecureAccessEventArgs
     {
 
-        public PreQueryEventArgs(Func<TData, bool> predicate, AuthorizationContext authContext = null) : base(authContext)
+        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, AuthorizationContext authContext = null) : base(authContext)
         {
             this.Query = predicate;
         }
@@ -146,7 +147,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// The expression tree representing the query parameters
         /// </summary>
-        public Func<TData, bool> Query { get; private set; }
+        public Expression<Func<TData, bool>> Query { get; private set; }
 
         /// <summary>
         /// True if the callee wishes the caller to cancel the operation
@@ -163,7 +164,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new post query event args
         /// </summary>
-        public PostQueryEventArgs(Func<TData, bool> query, IQueryable<TData> results, AuthorizationContext authContext = null) : base(authContext)
+        public PostQueryEventArgs(Expression<Func<TData, bool>> query, IQueryable<TData> results, AuthorizationContext authContext = null) : base(authContext)
         {
             this.Query = query;
             this.Results = results;
@@ -172,7 +173,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Gets the actual query used for the event
         /// </summary>
-        public Func<TData, bool> Query { get; private set; }
+        public Expression<Func<TData, bool>> Query { get; private set; }
 
         /// <summary>
         /// Gets the results of the query

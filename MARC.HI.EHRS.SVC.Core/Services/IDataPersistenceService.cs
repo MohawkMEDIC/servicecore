@@ -25,6 +25,7 @@ using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.Data;
 using MARC.HI.EHRS.SVC.Core.Event;
 using MARC.HI.EHRS.SVC.Core.Authorization;
+using System.Linq.Expressions;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -88,7 +89,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Query the data persistence store for data
         /// </summary>
-        IQueryable<TData> Query(Func<TData, bool> query, AuthorizationContext authContext);
+        IQueryable<TData> Query(Expression<Func<TData, bool>> query, AuthorizationContext authContext);
 
         /// <summary>
         /// Fired prior to an insertion into the database
