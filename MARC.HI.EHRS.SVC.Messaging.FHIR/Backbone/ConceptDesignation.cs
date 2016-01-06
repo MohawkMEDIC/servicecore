@@ -22,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("language")]
         [Description("Human language of the designation")]
-        [ElementProfile(RemoteBinding = "http://tools.ietf.org/html/bcp47")]
+        [FhirElement(RemoteBinding = "http://tools.ietf.org/html/bcp47")]
         public FhirCode<String> Language { get; set; }
 
         /// <summary>
@@ -30,13 +30,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("use")]
         [Description("Details how this designation would be used")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/ValueSet/designation-use")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/ValueSet/designation-use")]
         public FhirCoding Use { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the designation
         /// </summary>
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         [XmlElement("value")]
         [Description("The text value for the designation")]
         public FhirString Value { get; set; }

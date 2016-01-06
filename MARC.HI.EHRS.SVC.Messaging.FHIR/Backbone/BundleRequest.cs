@@ -40,7 +40,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("method")]
         [Description("The HTTP verb used")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<HttpVerb> Method { get; set; }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("url")]
         [Description("URL for HTTP equivalent of this entry")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirUri Url { get; set; }
 
         /// <summary>

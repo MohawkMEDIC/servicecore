@@ -51,7 +51,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("mode")]
         [Description("Describes the mode of REST implementation")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<String> Mode { get; set; }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("resource")]
         [Description("Resource served on the rest interface")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public List<ResourceDefinition> Resource { get; set; }
 
         /// <summary>

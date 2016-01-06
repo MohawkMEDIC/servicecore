@@ -18,7 +18,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the identifier for the accreditation
         /// </summary>
         [XmlElement("identifier")]
-        public Identifier Identifier { get; set; }
+        public FhirIdentifier Identifier { get; set; }
         /// <summary>
         /// Gets or sets the code (type) of the accreditation
         /// </summary>

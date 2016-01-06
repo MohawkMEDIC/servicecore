@@ -400,7 +400,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// </summary>
         public Conformance GetOptions()
         {
-            var retVal = ConformanceUtil.GetConformanceStatement();
+            var retVal = new Conformance(); // ConformanceUtil.GetConformanceStatement();
             WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/{1}/_history/{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;

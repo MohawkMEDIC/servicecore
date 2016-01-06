@@ -14,8 +14,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("RelatedPerson", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("RelatedPerson", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore", Name = "MARC-HI ServiceCore FHIR Profile")]
-    [ResourceProfile(Name = "ServiceCore Resource - RelatedPerson")]
     public class RelatedPerson : ResourceBase
     {
         /// <summary>
@@ -23,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         public RelatedPerson()
         {
-            this.Identifier = new List<Identifier>();
+            this.Identifier = new List<FhirIdentifier>();
             this.Telecom = new List<FhirTelecom>();
             this.Photo = new List<Attachment>();
         }
@@ -32,15 +30,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the identifier for the relationship
         /// </summary>
         [Description("An identifier for the person as a relationship")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         [XmlElement("identifier")]
-        public List<Identifier> Identifier { get; set; }
+        public List<FhirIdentifier> Identifier { get; set; }
 
         /// <summary>
         /// Gets or sets the patient to which this person is related
         /// </summary>
         [Description("The person to which this person is related")]
-        [ElementProfile(MaxOccurs = 1, MinOccurs = 1)]
+        [FhirElement(MaxOccurs = 1, MinOccurs = 1)]
         [XmlElement("patient")]
         public Reference<Patient> Patient { get; set; }
 
@@ -48,7 +46,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the relationship type
         /// </summary>
         [Description("The relationship this person has with the patient")]
-        [ElementProfile(MaxOccurs = 0, MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/vs/relatedperson-relationshiptype")]
+        [FhirElement(MaxOccurs = 0, MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/vs/relatedperson-relationshiptype")]
         [XmlElement("relationship")]
         public FhirCodeableConcept Relationship { get; set; }
 
@@ -56,7 +54,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the person's name
         /// </summary>
         [Description("The name of the related person")]
-        [ElementProfile(MaxOccurs = 1)]
+        [FhirElement(MaxOccurs = 1)]
         [XmlElement("name")]
         public FhirHumanName Name { get; set; }
 
@@ -64,7 +62,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the person's telecom addresses
         /// </summary>
         [Description("Telecommunications addresses")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         [XmlElement("telecom")]
         public List<FhirTelecom> Telecom { get; set; }
 
@@ -73,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("gender")]
         [Description("Gender for administrative purposes")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
         public FhirCodeableConcept Gender { get; set; }
 
         /// <summary>
@@ -81,7 +79,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("address")]
         [Description("Address of the related person")]
-        [ElementProfile(MaxOccurs = 1)]
+        [FhirElement(MaxOccurs = 1)]
         public FhirAddress Address { get; set; }
 
         /// <summary>
@@ -89,7 +87,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("photo")]
         [Description("Photograph of the related person")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         public List<Attachment> Photo { get; set; }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [XmlElement("valueCoding", typeof(FhirCoding))]
         [XmlElement("valueCodeableConcept", typeof(FhirCodeableConcept))]
         [XmlElement("valueAttachment", typeof(Attachment))]
-        [XmlElement("valueIdentifier", typeof(Identifier))]
+        [XmlElement("valueIdentifier", typeof(FhirIdentifier))]
         [XmlElement("valueQuantity", typeof(FhirQuantity))]
         [XmlElement("valueChoice", typeof(FhirChoice))]
         [XmlElement("valueRange", typeof(FhirRange))]

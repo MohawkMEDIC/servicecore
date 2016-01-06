@@ -42,7 +42,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("property")]
         [Description("A property defined by the code system")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<String> Property { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("op")]
         [Description("Filter operator applied to the property")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<FilterOperator> Op { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("value")]
         [Description("Code from the system or regex criteria")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<String> Value { get; set; }
 
     }

@@ -28,7 +28,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// Gets or sets the code
         /// </summary>
         [XmlElement("code")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<String> Code { get; set; }
         
         /// <summary>

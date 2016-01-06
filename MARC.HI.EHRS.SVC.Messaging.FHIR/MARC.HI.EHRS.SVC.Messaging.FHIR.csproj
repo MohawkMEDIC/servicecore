@@ -66,14 +66,9 @@
     <Compile Include="Backbone\ConformancePublisher.cs" />
     <Compile Include="Backbone\ExpansionContainsDefinition.cs" />
     <Compile Include="Backbone\ExpansionDefinition.cs" />
-    <Compile Include="Attributes\ExtensionDefinitionAttribute.cs" />
-    <Compile Include="Attributes\ExtensionProfileAttribute.cs" />
     <Compile Include="Attributes\FhirValueSetAttribute.cs" />
     <Compile Include="Attributes\ParticipantObjectMapAttribute.cs" />
-    <Compile Include="Attributes\ElementProfileAttribute.cs" />
-    <Compile Include="Attributes\ProfileAttribute.cs" />
-    <Compile Include="Attributes\ResourceProfileAttribute.cs" />
-    <Compile Include="Attributes\SearchParameterProfileAttribute.cs" />
+    <Compile Include="Attributes\FhirElementAttribute.cs" />
     <Compile Include="Backbone\BackboneElement.cs" />
     <Compile Include="Backbone\BundleEntry.cs" />
     <Compile Include="Backbone\BundleLink.cs" />
@@ -87,14 +82,6 @@
     <Compile Include="Backbone\SecurityDefinition.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Configuration\FhirServiceConfiguration.cs" />
-    <Compile Include="Configuration\UI\FhirServiceConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\HttpSslTool.cs" />
-    <Compile Include="Configuration\UI\pnlConfigureFhir.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\pnlConfigureFhir.Designer.cs">
-      <DependentUpon>pnlConfigureFhir.cs</DependentUpon>
-    </Compile>
     <Compile Include="DataTypes\FhirAddress.cs" />
     <Compile Include="DataTypes\Attachment.cs" />
     <Compile Include="DataTypes\FhirChoice.cs" />
@@ -105,7 +92,7 @@
     <Compile Include="DataTypes\Extension.cs" />
     <Compile Include="DataTypes\FhirSignature.cs" />
     <Compile Include="DataTypes\FhirHumanName.cs" />
-    <Compile Include="DataTypes\Identifier.cs" />
+    <Compile Include="DataTypes\FhirIdentifier.cs" />
     <Compile Include="DataTypes\IdRef.cs" />
     <Compile Include="DataTypes\FhirInstant.cs" />
     <Compile Include="DataTypes\FhirPeriod.cs" />
@@ -123,7 +110,6 @@
     <Compile Include="FhirQuery.cs" />
     <Compile Include="FhirQueryResult.cs" />
     <Compile Include="Handlers\IFhirResourceHandler.cs" />
-    <Compile Include="Handlers\ProfileResourceHandler.cs" />
     <Compile Include="PersistenceResultDetail.cs" />
     <Compile Include="Handlers\FhirResourceHandlerUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,7 +123,6 @@
     <Compile Include="Backbone\Animal.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
     <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
-    <Compile Include="Backbone\BindingDefinition.cs" />
     <Compile Include="Resources\Bundle.cs" />
     <Compile Include="Backbone\ComposeDefinition.cs" />
     <Compile Include="Backbone\ConceptDefinition.cs" />
@@ -145,9 +130,6 @@
     <Compile Include="Resources\Conformance.cs" />
     <Compile Include="Backbone\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
-    <Compile Include="Backbone\Element.cs" />
-    <Compile Include="Backbone\ElementDefinition.cs" />
-    <Compile Include="Backbone\ExtensionDefinition.cs" />
     <Compile Include="Backbone\ImplementationDefinition.cs" />
     <Compile Include="Resources\Issue.cs" />
     <Compile Include="Backbone\Communication.cs" />
@@ -158,7 +140,7 @@
     <Compile Include="Resources\Patient.cs" />
     <Compile Include="Resources\Picture.cs" />
     <Compile Include="Resources\Practictioner.cs" />
-    <Compile Include="Resources\Profile.cs" />
+    <Compile Include="Resources\StructureDefinition.cs" />
     <Compile Include="Resources\ProfileImport.cs" />
     <Compile Include="Resources\Qualification.cs" />
     <Compile Include="Resources\RawXmlWrapper.cs" />
@@ -169,16 +151,12 @@
     <Compile Include="Backbone\RestDefinition.cs" />
     <Compile Include="Backbone\SearchParamDefinition.cs" />
     <Compile Include="Backbone\SoftwareDefinition.cs" />
-    <Compile Include="Backbone\StructureDefinition.cs" />
     <Compile Include="Backbone\TypeRef.cs" />
     <Compile Include="Resources\ValueSet.cs" />
     <Compile Include="Backbone\CodeSystemDefinition.cs" />
     <Compile Include="ResultDetailClasses.cs" />
     <Compile Include="Util\AuditUtil.cs" />
-    <Compile Include="Handlers\ConformanceResourceHandler.cs" />
-    <Compile Include="Util\ConformanceUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
-    <Compile Include="Util\ProfileUtil.cs" />
     <Compile Include="WcfCore\FhirContentTypeHandler.cs" />
     <Compile Include="WcfCore\FhirMessageInspector.cs" />
     <Compile Include="WcfCore\FhirRestEndpointBehavior.cs" />
@@ -198,9 +176,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\pnlConfigureFhir.resx">
-      <DependentUpon>pnlConfigureFhir.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="index.htm" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

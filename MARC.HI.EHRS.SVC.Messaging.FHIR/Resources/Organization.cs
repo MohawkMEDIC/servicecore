@@ -15,8 +15,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlRoot("Organization",Namespace = "http://hl7.org/fhir")] 
     [XmlType("Organization", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore")]
-    [ResourceProfile(Name = "ServiceCore Resource - Organization")]
     public class Organization : ResourceBase
     {
 
@@ -25,7 +23,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("identifier")]
         [Description("Identifier for the organization")]
-        public List<Identifier> Identifier { get; set; }
+        public List<FhirIdentifier> Identifier { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the organization

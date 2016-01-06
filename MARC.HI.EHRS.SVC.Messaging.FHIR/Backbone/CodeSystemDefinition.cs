@@ -27,7 +27,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// The code system which is defined by this value set
         /// </summary>
         [XmlElement("system")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirUri System { get; set; }
 
         /// <summary>

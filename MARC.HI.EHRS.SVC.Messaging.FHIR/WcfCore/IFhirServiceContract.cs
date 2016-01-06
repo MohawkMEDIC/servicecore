@@ -23,7 +23,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
     [ServiceKnownType(typeof(Practictioner))]
     [ServiceKnownType(typeof(OperationOutcome))]
     [ServiceKnownType(typeof(ValueSet))]
-    [ServiceKnownType(typeof(Profile))]
+    [ServiceKnownType(typeof(StructureDefinition))]
     [ServiceKnownType(typeof(Conformance))]
     [ServiceKnownType(typeof(RelatedPerson))]
     [ServiceKnownType(typeof(System.ServiceModel.Syndication.Atom10FeedFormatter))]

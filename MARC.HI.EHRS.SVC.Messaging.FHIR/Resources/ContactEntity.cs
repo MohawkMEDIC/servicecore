@@ -45,7 +45,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("gender")]
         [Description("Gender for administrative purposes")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
         public FhirCodeableConcept Gender { get; set; }
     }
 }

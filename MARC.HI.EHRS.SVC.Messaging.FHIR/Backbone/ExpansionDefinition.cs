@@ -30,7 +30,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("identifier")]
         [Description("Uniquely identifies this expansion")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirUri Identifier { get; set; }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("timestamp")]
         [Description("Time ValueSet expansion happened")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirDateTime Timestamp { get; set; }
 
         /// <summary>

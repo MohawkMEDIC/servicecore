@@ -15,8 +15,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("ValueSet", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("ValueSet", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore")]
-    [ResourceProfile(Name = "valueset")]
     public class ValueSet : ResourceBase
     {
 
@@ -61,7 +59,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("status")]
         [Description("Status of the value set")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<ConformanceResourceStatus> Status { get; set; }
 
         /// <summary>

@@ -21,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// <summary>
         /// Gets or sets the relationship the link has to the bundle
         /// </summary>
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         [Description("http://www.iana.org/assignments/link-relations/link-relations.xhtml")]
         [XmlElement("relation")]
         public FhirString Relation { get; set; }
@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// <summary>
         /// Gets or sets the url of the link
         /// </summary>
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         [XmlElement("url")]
         [Description("Reference detailes for the link")]
         public FhirUri Url { get; set; }

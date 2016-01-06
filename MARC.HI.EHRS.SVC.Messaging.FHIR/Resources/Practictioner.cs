@@ -14,8 +14,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Practitioner", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Practitioner", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore")]
-    [ResourceProfile(Name = "Service Core Resource - Practictioner")]
     public class Practictioner : ResourceBase
     {
 
@@ -24,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         public Practictioner()
         {
-            this.Identifier = new List<Identifier>();
+            this.Identifier = new List<FhirIdentifier>();
             this.Name = new List<FhirHumanName>();
             this.Telecom = new List<FhirTelecom>();
             this.Address = new List<FhirAddress>();
@@ -38,7 +36,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets identifier
         /// </summary>
         [XmlElement("identifier")]
-        public List<Identifier> Identifier { get; set; }
+        public List<FhirIdentifier> Identifier { get; set; }
 
         /// <summary>
         /// The name of the individual
@@ -66,7 +64,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("gender")]
         [Description("Gender for administrative purposes")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
         public FhirCodeableConcept Gender { get; set; }
 
         /// <summary>
@@ -123,7 +121,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("communication")]
         [Description("A language the practitioner is able to use in patient communication")]
-        [ElementProfile(RemoteBinding = "http://tools.ietf.org/html/bcp47")]
+        [FhirElement(RemoteBinding = "http://tools.ietf.org/html/bcp47")]
         public List<FhirCodeableConcept> Communication { get; set; }
 
     }

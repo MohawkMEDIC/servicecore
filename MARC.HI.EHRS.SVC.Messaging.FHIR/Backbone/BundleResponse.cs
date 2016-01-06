@@ -22,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("status")]
         [Description("Status return code for entry")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirString Status { get; set; }
 
         /// <summary>

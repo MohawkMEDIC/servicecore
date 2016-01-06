@@ -14,8 +14,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("OperationOutcome", Namespace="http://hl7.org/fhir")]
     [XmlRoot("OperationOutcome", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore")]
-    [ResourceProfile(Name = "ServiceCore Resource - Operation Outcome")]
     public class OperationOutcome : ResourceBase
     {
 
@@ -38,7 +36,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("issue")]
         [Description("A list of issues related to the operation")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public List<Issue> Issue { get; set; }
 
     }

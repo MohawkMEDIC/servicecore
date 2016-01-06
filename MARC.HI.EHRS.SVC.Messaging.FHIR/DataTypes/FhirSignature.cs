@@ -22,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         [XmlElement("type")]
         [Description("Indication of the reason the entity signed the objects")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCoding Type { get; set; }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// </summary>
         [XmlElement("when")]
         [Description("When the signature was created")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirInstant CreationTime { get; set; }
 
         /// <summary>

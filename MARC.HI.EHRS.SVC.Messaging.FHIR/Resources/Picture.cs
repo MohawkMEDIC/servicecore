@@ -12,8 +12,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 
     [XmlRoot("Picture", Namespace = "http://hl7.org/fhir")]
     [XmlType("Picture", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore")]
-    [ResourceProfile(Name = "ServiceCore Resource - Picture")]
     public class Picture : ResourceBase
     {
         
@@ -43,28 +41,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("identifier")]
         [Description("Identifier for the image")]
-        public Identifier Identifier { get; set; }
+        public FhirIdentifier Identifier { get; set; }
 
         /// <summary>
         /// Used by the accessor to link back to image
         /// </summary>
         [XmlElement("accessionNo")]
         [Description("Used by the requestor to link back to the original context")]
-        public Identifier AccessionNo { get; set; }
+        public FhirIdentifier AccessionNo { get; set; }
 
         /// <summary>
         /// Identifies the study of which the image is a part
         /// </summary>
         [XmlElement("studyId")]
         [Description("The session in which the picture was taken")]
-        public Identifier StudyId { get; set; }
+        public FhirIdentifier StudyId { get; set; }
 
         /// <summary>
         /// Identiifes the series of which the image is a part
         /// </summary>
         [XmlElement("seriesId")]
         [Description("The series of images in whcih this picture was taken")]
-        public Identifier SeriesId { get; set; }
+        public FhirIdentifier SeriesId { get; set; }
 
         /// <summary>
         /// Identiifs the method how the image was taken
@@ -85,7 +83,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("modality")]
         [Description("The type of image machinery")]
-        [ElementProfile(MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/picture-type")]
+        [FhirElement(MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/picture-type")]
         public FhirCode<String> Modality { get; set; }
 
         /// <summary>
@@ -142,7 +140,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("content")]
         [Description("Actual picture or reference to data")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public Attachment Content { get; set; }
     }
 }

@@ -85,7 +85,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("name")]
         [Description("The name of the search parameter")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirString Name { get; set; }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("type")]
         [Description("The type of the search parameter")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<SearchParamType> Type { get; set; }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("documentation")]
         [Description("Contents and meaning of the parameter")]
-        [ElementProfile (MinOccurs = 1)]
+        [FhirElement (MinOccurs = 1)]
         public FhirString Documentation { get; set; }
 
         /// <summary>

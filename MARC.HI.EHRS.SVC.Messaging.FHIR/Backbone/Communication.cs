@@ -20,7 +20,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("language")]
         [Description("Language with optional region")]
-        [ElementProfile(MinOccurs = 1, RemoteBinding = "http://tools.ietf.org/html/bcp47")]
+        [FhirElement(MinOccurs = 1, RemoteBinding = "http://tools.ietf.org/html/bcp47")]
         public FhirCodeableConcept Value { get; set; }
         /// <summary>
         /// Gets or sets the preference indicator

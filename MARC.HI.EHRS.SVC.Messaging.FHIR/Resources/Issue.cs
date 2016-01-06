@@ -28,7 +28,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("severity")]
         [Description("Identifies the severity of operation")]
-        [ElementProfile(MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/issue-severity")]
+        [FhirElement(MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/issue-severity")]
         public FhirCode<String> Severity { get; set; }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("type")]
         [Description("Identifies the type of issue detected")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/issue-type")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/issue-type")]
         public FhirCoding Type { get; set; }
 
         /// <summary>

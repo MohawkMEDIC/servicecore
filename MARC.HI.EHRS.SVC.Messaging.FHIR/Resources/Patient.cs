@@ -19,8 +19,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("Patient", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Patient", Namespace = "http://hl7.org/fhir")] 
     [ParticipantObjectMap(IdType = AuditableObjectIdType.PatientNumber, Role = AuditableObjectRole.Patient, Type = AuditableObjectType.Person, OidName = "CR_CID")]
-    [Profile(ProfileId = "svccore", Name = "MARC-HI ServiceCore FHIR Profile")]
-    [ResourceProfile(Name = "ServiceCore Resource - Patient")]
     public class Patient : ResourceBase
     {
         /// <summary>
@@ -35,7 +33,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public Patient()
         {
             this.Link = new List<PatientLink>();
-            this.Identifier = new List<DataTypes.Identifier>();
+            this.Identifier = new List<DataTypes.FhirIdentifier>();
             this.Active = new FhirBoolean(true);
             this.Name = new List<FhirHumanName>();
             this.Telecom = new List<FhirTelecom>();
@@ -50,8 +48,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("identifier")]
         [Description("An identifier for the person as this patient")]
-        [ElementProfile(MaxOccurs = -1)]
-        public List<DataTypes.Identifier> Identifier { get; set; }
+        [FhirElement(MaxOccurs = -1)]
+        public List<DataTypes.FhirIdentifier> Identifier { get; set; }
 
         /// <summary>
         /// True when the patient is active
@@ -79,7 +77,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("gender")]
         [Description("Gender for administrative purposes")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/ValueSet/administrative-gender")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/ValueSet/administrative-gender")]
         public FhirCode<String> Gender { get; set; }
 
         /// <summary>
@@ -109,7 +107,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("maritalStatus")]
         [Description("Marital (civil) status of a person")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/marital-status")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/vs/marital-status")]
         public FhirCodeableConcept MaritalStatus { get; set; }
 
         /// <summary>
@@ -132,7 +130,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("A contact party (e.g. guardian, partner, friend) for the patient")]
         [XmlElement("contact")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         public List<PatientContact> Contact { get; set; }
 
         /// <summary>

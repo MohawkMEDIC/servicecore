@@ -56,7 +56,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
             this.Rest = new List<RestDefinition>();
             this.Format = new List<FhirCode<string>>();
             this.Contact = new List<ConformancePublisher>();
-            this.Profile = new List<Reference<Resources.Profile>>();
+            this.Profile = new List<Reference<Resources.StructureDefinition>>();
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("Date of publication")]
         [XmlElement("date")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirDateTime Date { get; set; }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("The FHIR version")]
         [XmlElement("fhirVersion")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirString FhirVersion { get; set; }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [Description("True if application accepts unknown elements")]
         [XmlElement("acceptUnknown")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirBoolean AcceptUnknown { get; set; }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("profile")]
         [Description("Profiles for use cases supported")]
-        public List<Reference<Profile>> Profile { get; set; }
+        public List<Reference<StructureDefinition>> Profile { get; set; }
 
         /// <summary>
         /// Endpoint if restful

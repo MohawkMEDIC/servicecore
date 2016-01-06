@@ -47,7 +47,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("name")]
         [Description("Name the software is known by")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirString Name { get; set; }
 
         /// <summary>

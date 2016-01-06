@@ -64,7 +64,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("type")]
         [Description("Resource type")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirCode<String> Type { get; set; }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("profile")]
         [Description("Resource profiles supported")]
-        public Reference<Profile> Profile { get; set; }
+        public Reference<Resources.StructureDefinition> Profile { get; set; }
 
         /// <summary>
         /// Gets or sets the operations supported

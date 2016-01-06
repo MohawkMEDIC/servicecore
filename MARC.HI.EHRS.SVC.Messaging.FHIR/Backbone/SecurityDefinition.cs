@@ -38,7 +38,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("service")]
         [Description("Identifies authentication services supported")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/ValueSet/restful-security-service")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/ValueSet/restful-security-service")]
         public List<FhirCodeableConcept> Service { get; set; }
 
         /// <summary>
