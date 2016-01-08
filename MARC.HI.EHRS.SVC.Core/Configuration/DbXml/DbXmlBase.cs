@@ -5,7 +5,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.DbXml
     /// <summary>
     /// Base type for DB-XML stuff
     /// </summary>
-    [XmlType("DbXmlBase", Namespace = "http://openiz.org/plugin/dbxml")]
+    [XmlType("DbXmlBase", Namespace = "http://marc-hi.ca/plugin/dbxml")]
     public abstract class DbXmlBase 
     {
         /// <summary>

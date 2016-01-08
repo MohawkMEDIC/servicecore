@@ -90,6 +90,7 @@ namespace MARC.HI.EHRS.SVC.Core
         private ApplicationContext()
         {
             ContextId = Guid.NewGuid();
+            this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
         }
 
         #region IServiceProvider Members
@@ -169,7 +170,7 @@ namespace MARC.HI.EHRS.SVC.Core
             lock(m_cachedServices)
                 if (!m_cachedServices.TryGetValue(serviceType, out candidateService))
                 {
-                    List<object> candidateServices = m_configuration.ServiceProviders.FindAll(o => o.GetType().GetInterface(serviceType.FullName) != null);
+                    List<object> candidateServices = m_configuration.ServiceProviders.FindAll(o => o.GetType() == serviceType || serviceType.IsAssignableFrom(o.GetType()));
                     if (candidateServices.Count > 1)
                         Trace.TraceWarning("More than one service implementation for {0} found, using {1} as default", serviceType.FullName, candidateServices[0].GetType().FullName);
 

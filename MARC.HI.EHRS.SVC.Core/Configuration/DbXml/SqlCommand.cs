@@ -5,7 +5,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.DbXml
     /// <summary>
     /// SQL Command 
     /// </summary>
-    [XmlType("SqlCommand", Namespace = "http://openiz.org/plugin/dbxml")]
+    [XmlType("SqlCommand", Namespace = "http://marc-hi.ca/plugin/dbxml")]
     public class SqlCommand : Command
     {
         /// <summary>

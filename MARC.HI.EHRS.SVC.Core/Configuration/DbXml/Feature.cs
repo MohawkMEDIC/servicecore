@@ -7,8 +7,8 @@ using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Core.Configuration.DbXml
 {
-    [XmlType(Namespace = "http://openiz.org/plugin/dbxml", TypeName = "Feature")]
-    [XmlRoot(Namespace = "http://openiz.org/plugin/dbxml", ElementName = "Feature")]
+    [XmlType(Namespace = "http://marc-hi.ca/plugin/dbxml", TypeName = "Feature")]
+    [XmlRoot(Namespace = "http://marc-hi.ca/plugin/dbxml", ElementName = "Feature")]
     public class Feature : DbXmlBase
     {
         /// <summary>

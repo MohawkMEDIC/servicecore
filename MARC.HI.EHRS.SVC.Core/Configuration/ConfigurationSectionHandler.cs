@@ -151,7 +151,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
 
             
           
-            return this;
+            return retVal;
         }
 
         #endregion

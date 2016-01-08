@@ -6,7 +6,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.DbXml
     /// <summary>
     /// Represents an abstract command to do something against the database
     /// </summary>
-    [XmlType("Command", Namespace = "http://openiz.org/plugin/dbxml")]
+    [XmlType("Command", Namespace = "http://marc-hi.ca/plugin/dbxml")]
     public abstract class Command : DbXmlBase
     {
         /// <summary>
