@@ -192,8 +192,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         ///// <summary>
         ///// Snapshot view of the structure 
         ///// </summary>
-        //[XmlElement("snapshot")]
-        //[Description("Snapshot view of the structure")]
-        //public StructureDefinitionSnapshot Snapshot { get; set; }
+        [XmlElement("snapshot")]
+        [Description("Snapshot view of the structure")]
+        public StructureDefinitionContent Snapshot { get; set; }
     }
 }

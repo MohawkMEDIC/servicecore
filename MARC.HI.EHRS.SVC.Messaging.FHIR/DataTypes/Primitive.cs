@@ -182,6 +182,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public static implicit operator FhirString(string v) { return v == null ? null : new FhirString(v); }
 
     }
+
+    /// <summary>
+    /// Fhir identifier
+    /// </summary>
+    [XmlType("id", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
+    public class FhirId : FhirString
+    {
+        public FhirId() : base() { }
+        public FhirId(String id) : base(id) { }
+        public static implicit operator FhirId(string v) { return v == null ? null : new FhirId(v); }
+
+    }
+
     /// <summary>
     /// Represents a string
     /// </summary>

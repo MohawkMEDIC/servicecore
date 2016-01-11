@@ -24,8 +24,8 @@ using System.Text;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.Data;
 using MARC.HI.EHRS.SVC.Core.Event;
-using MARC.HI.EHRS.SVC.Core.Authorization;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -46,11 +46,48 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     }
 
     /// <summary>
+    /// Data persistence context
+    /// </summary>
+    public interface IDataPersistenceContext : IDisposable
+    {
+        /// <summary>
+        /// Opens the data persistence service
+        /// </summary>
+        void Open();
+
+        /// <summary>
+        /// Closes the persistence service
+        /// </summary>
+        void Close();
+
+        /// <summary>
+        /// Commits any long running transaction
+        /// </summary>
+        void Commit();
+
+        /// <summary>
+        /// Rolls back any long running transaction
+        /// </summary>
+        void Rollback();
+
+        /// <summary>
+        /// Starts a transaction
+        /// </summary>
+        void BeginTransaction();
+
+    }
+
+    /// <summary>
     /// Interface that defines a data persistence service which is used to 
     /// store, query, update and list data
     /// </summary>
-    public interface IDataPersistenceService<TData>
+    public interface IDataPersistenceService<TData> : IDisposable
     {
+
+        /// <summary>
+        /// Instructs this data persistence service to copy context information from another 
+        /// </summary>
+        IDataPersistenceContext DataContext { get; set; }
 
         /// <summary>
         /// Store the specified <see cref="T:System.ComponentModel.IContainer"/> into
@@ -60,7 +97,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The identifiers representing the identifier of the stored container object</returns>
         /// <exception cref="System.ArgumentException">Thrown when the storage data container is of an unknown type</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when there is not sufficient data known to store the container</exception>
-        TData Insert(TData storageData, AuthorizationContext authContext, DataPersistenceMode mode);
+        TData Insert(TData storageData, ClaimsPrincipal principal, DataPersistenceMode mode);
 
         /// <summary>
         /// Update the specified <see cref="T:System.ComponentModel.IContainer"/> into the
@@ -71,12 +108,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The </returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
         /// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
-        TData Update(TData storageData, AuthorizationContext authContext, DataPersistenceMode mode);
+        TData Update(TData storageData, ClaimsPrincipal principal, DataPersistenceMode mode);
         
         /// <summary>
         /// Obsoletes a particular container object
         /// </summary>
-        TData Obsolete(TData storageData, AuthorizationContext authContext, DataPersistenceMode mode);
+        TData Obsolete(TData storageData, ClaimsPrincipal principal, DataPersistenceMode mode);
 
         /// <summary>
         /// Get the object represention of the specified container as specified by <paramref name="containerId"/>
@@ -84,12 +121,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="containerId">The versioned domain identifier of the container to retrieve</param>
         /// <returns>An IContainer object that represents the stored container</returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the <paramref name="containerId"/> is not present in the database</exception>
-        TData Get<TIdentifier>(Identifier<TIdentifier> containerId, AuthorizationContext authContext, bool loadFast);
+        TData Get<TIdentifier>(Identifier<TIdentifier> containerId, ClaimsPrincipal principal, bool loadFast);
 
         /// <summary>
         /// Query the data persistence store for data
         /// </summary>
-        IQueryable<TData> Query(Expression<Func<TData, bool>> query, AuthorizationContext authContext);
+        IEnumerable<TData> Query(Expression<Func<TData, bool>> query, ClaimsPrincipal authContext);
 
         /// <summary>
         /// Fired prior to an insertion into the database

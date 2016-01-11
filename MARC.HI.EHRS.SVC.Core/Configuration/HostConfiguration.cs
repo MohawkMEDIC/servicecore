@@ -21,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
         /// <summary>
         /// Get the service providers for this application
         /// </summary>
-        public List<object> ServiceProviders { get; internal set; }
+        public List<Type> ServiceProviders { get; internal set; }
 
         /// <summary>
         /// Gets the name of the section the configuration data was loaded

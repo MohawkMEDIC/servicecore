@@ -1,10 +1,10 @@
-﻿using MARC.HI.EHRS.SVC.Core.Authorization;
-using MARC.HI.EHRS.SVC.Core.Data;
+﻿using MARC.HI.EHRS.SVC.Core.Data;
 using MARC.HI.EHRS.SVC.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,15 +20,15 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new secured access event args
         /// </summary>
-        public SecureAccessEventArgs(AuthorizationContext authContext)
+        public SecureAccessEventArgs(ClaimsPrincipal claimsPrincipal)
         {
-            this.AuthorizationContext = authContext;
+            this.Principal = claimsPrincipal;
         }
 
         /// <summary>
         /// Gets the authorization context (claims, users, etc.) associated with the event
         /// </summary>
-        public AuthorizationContext AuthorizationContext { get; private set; }
+        public ClaimsPrincipal Principal { get; private set; }
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Creates a new persistence event args instance
         /// </summary>
         /// <param name="data"></param>
-        public PrePersistenceEventArgs(TData data, AuthorizationContext authContext = null) : base(authContext)
+        public PrePersistenceEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -71,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Creates a new persistence event args instance
         /// </summary>
         /// <param name="data"></param>
-        public PostPersistenceEventArgs(TData data, AuthorizationContext authContext = null) : base(authContext)
+        public PostPersistenceEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -97,7 +97,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new pre-retrieval event args object
         /// </summary>
-        public PreRetrievalEventArgs(TData data, AuthorizationContext authContext = null) : base(authContext)
+        public PreRetrievalEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -122,7 +122,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Post retrieval data
         /// </summary>
-        public PostRetrievalEventArgs(TData data, AuthorizationContext authContext = null) : base(authContext)
+        public PostRetrievalEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -139,7 +139,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
     public class PreQueryEventArgs<TData> : SecureAccessEventArgs
     {
 
-        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, AuthorizationContext authContext = null) : base(authContext)
+        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, ClaimsPrincipal authContext = null) : base(authContext)
         {
             this.Query = predicate;
         }
@@ -164,7 +164,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new post query event args
         /// </summary>
-        public PostQueryEventArgs(Expression<Func<TData, bool>> query, IQueryable<TData> results, AuthorizationContext authContext = null) : base(authContext)
+        public PostQueryEventArgs(Expression<Func<TData, bool>> query, IQueryable<TData> results, ClaimsPrincipal authContext = null) : base(authContext)
         {
             this.Query = query;
             this.Results = results;

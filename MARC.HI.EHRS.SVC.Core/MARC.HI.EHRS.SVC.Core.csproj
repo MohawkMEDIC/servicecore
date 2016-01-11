@@ -91,7 +91,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authorization\AuthorizationContext.cs" />
     <Compile Include="Configuration\DbXml\Command.cs" />
     <Compile Include="Configuration\DbXml\DbXmlBase.cs" />
     <Compile Include="Configuration\DbXml\Feature.cs" />
@@ -108,6 +107,7 @@
     <Compile Include="Data\User.cs" />
     <Compile Include="Data\OidData.cs" />
     <Compile Include="Event\PersistenceEventArgs.cs" />
+    <Compile Include="Exceptions\PolicyViolationException.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
     <Compile Include="Configuration\Jurisdiction.cs" />
     <Compile Include="Exceptions\InvalidStateTransitionException.cs" />
@@ -126,6 +126,11 @@
     <Compile Include="Services\IMessageHandlerService.cs" />
     <Compile Include="Services\ITerminologyService.cs" />
     <Compile Include="Services\ITimerService.cs" />
+    <Compile Include="Services\Policy\IPolicyInformationService.cs" />
+    <Compile Include="Services\Security\IIdentityProviderService.cs" />
+    <Compile Include="Services\Policy\IPolicyDecisionService.cs" />
+    <Compile Include="Services\Security\IRoleProviderService.cs" />
+    <Compile Include="Services\ServiceAttribute.cs" />
     <Compile Include="ServiceUtil.cs" />
     <Compile Include="Terminology\ConceptValidationResult.cs" />
     <Compile Include="Terminology\ValidationOutcome.cs" />

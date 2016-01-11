@@ -64,6 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backbone\ConformancePublisher.cs" />
+    <Compile Include="Backbone\ElementBase.cs" />
+    <Compile Include="Backbone\ElementBinding.cs" />
+    <Compile Include="Backbone\ElementConstraint.cs" />
+    <Compile Include="Backbone\ElementDefinition.cs" />
+    <Compile Include="Backbone\ElementSlicing.cs" />
+    <Compile Include="Backbone\ElementType.cs" />
     <Compile Include="Backbone\ExpansionContainsDefinition.cs" />
     <Compile Include="Backbone\ExpansionDefinition.cs" />
     <Compile Include="Attributes\FhirValueSetAttribute.cs" />
@@ -80,6 +86,7 @@
     <Compile Include="Backbone\PatientLink.cs" />
     <Compile Include="Backbone\SecurityCertificateDefinition.cs" />
     <Compile Include="Backbone\SecurityDefinition.cs" />
+    <Compile Include="Backbone\StructureDefinitionContent.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Configuration\FhirServiceConfiguration.cs" />
     <Compile Include="DataTypes\FhirAddress.cs" />

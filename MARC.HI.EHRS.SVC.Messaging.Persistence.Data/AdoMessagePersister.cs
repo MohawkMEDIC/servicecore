@@ -30,6 +30,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Threading;
 using MARC.HI.EHRS.SVC.Core.Event;
+using System.Security.Claims;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
 {

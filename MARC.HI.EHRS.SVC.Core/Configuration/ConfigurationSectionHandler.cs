@@ -66,7 +66,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
                 throw new InvalidOperationException("Can't find configuration section");
 
             HostConfiguration retVal = new HostConfiguration();
-            retVal.ServiceProviders = new List<object>() { this };
+            retVal.ServiceProviders = new List<Type>();
             retVal.ServiceAssemblies = new List<Assembly>();
 
             XmlNode serviceAssemblySection = section.SelectSingleNode("./*[local-name() = 'serviceAssemblies']"),
@@ -139,7 +139,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
                         ConstructorInfo ci = t.GetConstructor(Type.EmptyTypes);
                         if (ci != null)
                         {
-                            retVal.ServiceProviders.Add(ci.Invoke(null));
+                            retVal.ServiceProviders.Add(t);
                             Trace.TraceInformation("Added provider {0}", t.FullName);
                         }
                         else

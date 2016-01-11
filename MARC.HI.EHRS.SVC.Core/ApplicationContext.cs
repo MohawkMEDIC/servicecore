@@ -170,15 +170,32 @@ namespace MARC.HI.EHRS.SVC.Core
             lock(m_cachedServices)
                 if (!m_cachedServices.TryGetValue(serviceType, out candidateService))
                 {
-                    List<object> candidateServices = m_configuration.ServiceProviders.FindAll(o => o.GetType() == serviceType || serviceType.IsAssignableFrom(o.GetType()));
+                    List<Type> candidateServices = m_configuration.ServiceProviders.FindAll(o => o == serviceType || serviceType.IsAssignableFrom(o));
                     if (candidateServices.Count > 1)
                         Trace.TraceWarning("More than one service implementation for {0} found, using {1} as default", serviceType.FullName, candidateServices[0].GetType().FullName);
 
                     if (candidateServices.Count != 0) // found
                     {
-                        candidateService = candidateServices[0]; // take the first one
-                        lock(m_cachedServices)
-                            m_cachedServices.Add(serviceType, candidateService);
+                        var candidateServiceType = candidateServices[0]; // take the first one
+                        // The type of instantiation
+                        ServiceInstantiationType type = ServiceInstantiationType.Singleton;
+                        var serviceAttribute = candidateServiceType.GetCustomAttributes(typeof(ServiceAttribute), true);
+                        if (serviceAttribute.Length > 0)
+                            type = (serviceAttribute[0] as ServiceAttribute).Type;
+
+                        // Service is a singleton
+                        if (type == ServiceInstantiationType.Singleton)
+                        {
+                            lock (m_cachedServices)
+                            {
+                                candidateService = Activator.CreateInstance(candidateServiceType);
+                                m_cachedServices.Add(serviceType, candidateService);
+                            }
+                        }
+                        else
+                        {
+                            candidateService = Activator.CreateInstance(candidateServiceType);
+                        }
                     }
                     else
                         #if DEBUG
