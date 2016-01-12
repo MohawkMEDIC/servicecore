@@ -106,6 +106,7 @@
     <Compile Include="Data\IIdentified.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Data\OidData.cs" />
+    <Compile Include="Event\IdentityEventArgs.cs" />
     <Compile Include="Event\PersistenceEventArgs.cs" />
     <Compile Include="Exceptions\PolicyViolationException.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Services\Policy\IPolicyInformationService.cs" />
     <Compile Include="Services\Security\IIdentityProviderService.cs" />
     <Compile Include="Services\Policy\IPolicyDecisionService.cs" />
+    <Compile Include="Services\Security\IPasswordHashingService.cs" />
     <Compile Include="Services\Security\IRoleProviderService.cs" />
     <Compile Include="Services\ServiceAttribute.cs" />
     <Compile Include="ServiceUtil.cs" />

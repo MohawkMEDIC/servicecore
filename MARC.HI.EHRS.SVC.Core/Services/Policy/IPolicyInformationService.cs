@@ -32,12 +32,18 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// <summary>
         /// Gets a list of all policies
         /// </summary>
-        List<IPolicy> GetPolicies();
+        IEnumerable<IPolicy> GetPolicies();
 
         /// <summary>
         /// Get active policies for the specified securable
         /// </summary>
         /// <param name="securable">The object for which policies should be retrieved. Examples: A role, a user, a document, etc.</param>
-        List<IPolicy> GetActivePolicies(Object securable);
+        IEnumerable<IPolicy> GetActivePolicies(Object securable);
+
+        /// <summary>
+        /// Gets the policy by policy OID
+        /// </summary>
+        IPolicy GetPolicy(String policyOid);
+               
     }
 }
