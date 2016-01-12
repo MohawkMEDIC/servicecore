@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,17 +16,17 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Security
         /// <summary>
         /// Creates a role
         /// </summary>
-        void CreateRole(String roleName, ClaimsPrincipal authPrincipal);
+        void CreateRole(String roleName, IPrincipal authPrincipal);
 
         /// <summary>
         /// Add users to roles
         /// </summary>
-        void AddUsersToRoles(String[] users, String[] roles, ClaimsPrincipal authPrincipal);
+        void AddUsersToRoles(String[] users, String[] roles, IPrincipal authPrincipal);
 
         /// <summary>
         /// Remove users from specified roles
         /// </summary>
-        void RemoveUsersFromRoles(String[] users, String[] roles, ClaimsPrincipal authPrincipal);
+        void RemoveUsersFromRoles(String[] users, String[] roles, IPrincipal authPrincipal);
 
         /// <summary>
         /// Find all users in a specified role
@@ -45,6 +46,6 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Security
         /// <summary>
         /// Is user in the specified role
         /// </summary>
-        bool IsUserInRole(ClaimsPrincipal principal, String roleName);
+        bool IsUserInRole(IPrincipal principal, String roleName);
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new secured access event args
         /// </summary>
-        public SecureAccessEventArgs(ClaimsPrincipal claimsPrincipal)
+        public SecureAccessEventArgs(IPrincipal claimsPrincipal)
         {
             this.Principal = claimsPrincipal;
         }
@@ -28,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Gets the authorization context (claims, users, etc.) associated with the event
         /// </summary>
-        public ClaimsPrincipal Principal { get; private set; }
+        public IPrincipal Principal { get; private set; }
     }
 
     /// <summary>
@@ -42,7 +43,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Creates a new persistence event args instance
         /// </summary>
         /// <param name="data"></param>
-        public PrePersistenceEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
+        public PrePersistenceEventArgs(TData data, IPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -54,7 +55,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Sets the mode of deta persistence
         /// </summary>
-        public DataPersistenceMode Mode { get; set; }
+        public TransactionMode Mode { get; set; }
 
         /// <summary>
         /// The data being stored
@@ -71,7 +72,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Creates a new persistence event args instance
         /// </summary>
         /// <param name="data"></param>
-        public PostPersistenceEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
+        public PostPersistenceEventArgs(TData data, IPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -79,7 +80,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Sets the mode of deta persistence
         /// </summary>
-        public DataPersistenceMode Mode { get; set; }
+        public TransactionMode Mode { get; set; }
 
         /// <summary>
         /// The data being stored
@@ -97,7 +98,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new pre-retrieval event args object
         /// </summary>
-        public PreRetrievalEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
+        public PreRetrievalEventArgs(TData data, IPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -122,7 +123,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Post retrieval data
         /// </summary>
-        public PostRetrievalEventArgs(TData data, ClaimsPrincipal authContext = null) : base(authContext)
+        public PostRetrievalEventArgs(TData data, IPrincipal authContext = null) : base(authContext)
         {
             this.Data = data;
         }
@@ -139,7 +140,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
     public class PreQueryEventArgs<TData> : SecureAccessEventArgs
     {
 
-        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, ClaimsPrincipal authContext = null) : base(authContext)
+        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, IPrincipal authContext = null) : base(authContext)
         {
             this.Query = predicate;
         }
@@ -164,7 +165,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new post query event args
         /// </summary>
-        public PostQueryEventArgs(Expression<Func<TData, bool>> query, IQueryable<TData> results, ClaimsPrincipal authContext = null) : base(authContext)
+        public PostQueryEventArgs(Expression<Func<TData, bool>> query, IQueryable<TData> results, IPrincipal authContext = null) : base(authContext)
         {
             this.Query = query;
             this.Results = results;

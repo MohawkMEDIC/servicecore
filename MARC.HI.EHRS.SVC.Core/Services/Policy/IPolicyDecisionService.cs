@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,12 +85,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// <summary>
         /// Make a simple policy decision for a specific securable
         /// </summary>
-        PolicyDecision GetPolicyDecision(ClaimsPrincipal principal, Object securable);
+        PolicyDecision GetPolicyDecision(IPrincipal principal, Object securable);
 
         /// <summary>
         /// Get a policy decision for a specific policy
         /// </summary>
-        PolicyDecisionOutcomeType GetPolicyOutcome(ClaimsPrincipal principal, String policyId);
+        PolicyDecisionOutcomeType GetPolicyOutcome(IPrincipal principal, String policyId);
         
     }
 }

@@ -26,6 +26,7 @@ using MARC.HI.EHRS.SVC.Core.Data;
 using MARC.HI.EHRS.SVC.Core.Event;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Security.Principal;
 
 namespace MARC.HI.EHRS.SVC.Core.Services
 {
@@ -33,61 +34,28 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Data persistence modes
     /// </summary>
-    public enum DataPersistenceMode
+    public enum TransactionMode
     {
+        /// <summary>
+        /// Inherit the persistence mode from a parent context
+        /// </summary>
+        None,
         /// <summary>
         /// Debug mode, this means nothing is actually committed to the database
         /// </summary>
-        Debugging,
+        Rollback,
         /// <summary>
         /// Production, everything is for reals
         /// </summary>
-        Production
+        Commit
     }
-
-    /// <summary>
-    /// Data persistence context
-    /// </summary>
-    public interface IDataPersistenceContext : IDisposable
-    {
-        /// <summary>
-        /// Opens the data persistence service
-        /// </summary>
-        void Open();
-
-        /// <summary>
-        /// Closes the persistence service
-        /// </summary>
-        void Close();
-
-        /// <summary>
-        /// Commits any long running transaction
-        /// </summary>
-        void Commit();
-
-        /// <summary>
-        /// Rolls back any long running transaction
-        /// </summary>
-        void Rollback();
-
-        /// <summary>
-        /// Starts a transaction
-        /// </summary>
-        void BeginTransaction();
-
-    }
-
+    
     /// <summary>
     /// Interface that defines a data persistence service which is used to 
     /// store, query, update and list data
     /// </summary>
-    public interface IDataPersistenceService<TData> : IDisposable
+    public interface IDataPersistenceService<TData>
     {
-
-        /// <summary>
-        /// Instructs this data persistence service to copy context information from another 
-        /// </summary>
-        IDataPersistenceContext DataContext { get; set; }
 
         /// <summary>
         /// Store the specified <see cref="T:System.ComponentModel.IContainer"/> into
@@ -97,7 +65,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The identifiers representing the identifier of the stored container object</returns>
         /// <exception cref="System.ArgumentException">Thrown when the storage data container is of an unknown type</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when there is not sufficient data known to store the container</exception>
-        TData Insert(TData storageData, ClaimsPrincipal principal, DataPersistenceMode mode);
+        TData Insert(TData storageData, IPrincipal principal, TransactionMode mode);
 
         /// <summary>
         /// Update the specified <see cref="T:System.ComponentModel.IContainer"/> into the
@@ -108,12 +76,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <returns>The </returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
         /// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
-        TData Update(TData storageData, ClaimsPrincipal principal, DataPersistenceMode mode);
+        TData Update(TData storageData, IPrincipal principal, TransactionMode mode);
         
         /// <summary>
         /// Obsoletes a particular container object
         /// </summary>
-        TData Obsolete(TData storageData, ClaimsPrincipal principal, DataPersistenceMode mode);
+        TData Obsolete(TData storageData, IPrincipal principal, TransactionMode mode);
 
         /// <summary>
         /// Get the object represention of the specified container as specified by <paramref name="containerId"/>
@@ -121,12 +89,22 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="containerId">The versioned domain identifier of the container to retrieve</param>
         /// <returns>An IContainer object that represents the stored container</returns>
         /// <exception cref="System.KeyNotFoundException">Thrown when the <paramref name="containerId"/> is not present in the database</exception>
-        TData Get<TIdentifier>(Identifier<TIdentifier> containerId, ClaimsPrincipal principal, bool loadFast);
+        TData Get<TIdentifier>(Identifier<TIdentifier> containerId, IPrincipal principal, bool loadFast);
+
+        /// <summary>
+        /// Counts the number of records which would be returned by the specified query
+        /// </summary>
+        int Count(Expression<Func<TData, bool>> query, IPrincipal authContext);
 
         /// <summary>
         /// Query the data persistence store for data
         /// </summary>
-        IEnumerable<TData> Query(Expression<Func<TData, bool>> query, ClaimsPrincipal authContext);
+        IEnumerable<TData> Query(Expression<Func<TData, bool>> query, IPrincipal authContext);
+
+        /// <summary>
+        /// Query the data persistence store for data
+        /// </summary>
+        IEnumerable<TData> Query(Expression<Func<TData, bool>> query, int offset, int? count, IPrincipal authContext);
 
         /// <summary>
         /// Fired prior to an insertion into the database

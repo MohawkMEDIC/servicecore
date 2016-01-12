@@ -152,7 +152,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 if (handler == null)
                     throw new FileNotFoundException(); // endpoint not found!
 
-                result = handler.Update(id, target, DataPersistenceMode.Production);
+                result = handler.Update(id, target, TransactionMode.Commit);
                 if (result == null || result.Results.Count == 0) // Create
                     throw new NotSupportedException("Update is not supported on non-existant resource");
 
@@ -209,7 +209,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 if (handler == null)
                     throw new FileNotFoundException(); // endpoint not found!
 
-                result = handler.Delete(id, DataPersistenceMode.Production);
+                result = handler.Delete(id, TransactionMode.Commit);
 
                 if (result == null || result.Outcome == ResultCode.Rejected)
                     throw new NotSupportedException();
@@ -258,7 +258,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 if (handler == null)
                     throw new FileNotFoundException(); // endpoint not found!
 
-                result = handler.Create(target, DataPersistenceMode.Production);
+                result = handler.Create(target, TransactionMode.Commit);
                 WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Created;
 
                 if (result == null || result.Outcome == ResultCode.Rejected)
@@ -311,10 +311,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 if (handler == null)
                     throw new FileNotFoundException(); // endpoint not found!
                 
-                result = handler.Update(id, target, DataPersistenceMode.Debugging);
+                result = handler.Update(id, target, TransactionMode.Rollback);
                 if (result == null || result.Results.Count == 0) // Create
                 {
-                    result = handler.Create(target, DataPersistenceMode.Debugging);
+                    result = handler.Create(target, TransactionMode.Rollback);
                     WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Created;
                 }
 
