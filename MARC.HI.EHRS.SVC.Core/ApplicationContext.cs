@@ -225,6 +225,26 @@ namespace MARC.HI.EHRS.SVC.Core
                 throw new ObjectDisposedException(nameof(ApplicationContext));
         }
 
+
+        /// <summary>
+        /// Add service provider type
+        /// </summary>
+        public void AddServiceProvider(Type serviceType)
+        {
+            this.m_configuration.ServiceProviders.Add(serviceType);
+        }
+
+        /// <summary>
+        /// Remove service provider
+        /// </summary>
+        public void RemoveServiceProvider(Type serviceType)
+        {
+            this.m_configuration.ServiceProviders.Remove(serviceType);
+            if (this.m_cachedServices.ContainsKey(serviceType))
+                this.m_cachedServices.Remove(serviceType);
+
+        }
+
         #endregion
 
 

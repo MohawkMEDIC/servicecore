@@ -170,6 +170,14 @@ namespace MARC.HI.EHRS.SVC.Core.Event
             this.Query = query;
             this.Results = results;
         }
+        
+        /// <summary>
+        /// Except results
+        /// </summary>
+        public void Except(IEnumerable<TData> results)
+        {
+            this.Results = this.Results.Except(results);
+        }        
 
         /// <summary>
         /// Gets the actual query used for the event
@@ -179,6 +187,6 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Gets the results of the query
         /// </summary>
-        public IQueryable<TData> Results { get; private set; }
+        public IQueryable<TData> Results { get; set; }
     }
 }

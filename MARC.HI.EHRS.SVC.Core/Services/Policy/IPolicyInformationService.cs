@@ -21,6 +21,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// Gets the name of the policy
         /// </summary>
         String Name { get; }
+
+        /// <summary>
+        /// True whether the policy can be overridden
+        /// </summary>
+        bool CanOverride { get; }
     }
 
     /// <summary>

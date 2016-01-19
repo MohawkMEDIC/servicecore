@@ -91,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugins\AssemblyPluginAttribute.cs" />
     <Compile Include="Configuration\DbXml\Command.cs" />
     <Compile Include="Configuration\DbXml\DbXmlBase.cs" />
     <Compile Include="Configuration\DbXml\Feature.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Event\IdentityEventArgs.cs" />
     <Compile Include="Event\PersistenceEventArgs.cs" />
     <Compile Include="Exceptions\PolicyViolationException.cs" />
+    <Compile Include="Plugins\AssemblyPluginDependencyAttribute.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
     <Compile Include="Configuration\Jurisdiction.cs" />
     <Compile Include="Exceptions\InvalidStateTransitionException.cs" />

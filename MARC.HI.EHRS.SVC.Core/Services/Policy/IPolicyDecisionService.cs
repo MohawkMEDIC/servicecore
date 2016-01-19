@@ -28,15 +28,24 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// <summary>
         /// Creates a new policy decision
         /// </summary>
-        public PolicyDecision()
+        public PolicyDecision(Object securable)
         {
             this.Details = new List<PolicyDecisionDetail>();
+            this.Securable = securable;
+
         }
 
         /// <summary>
         /// Details of the policy decision
         /// </summary>
         public List<PolicyDecisionDetail> Details { get; private set; }
+
+
+        /// <summary>
+        /// The securable that this policy outcome is made against
+        /// </summary>
+        public Object Securable { get; private set; }
+
         /// <summary>
         /// Gets the outcome of the poilcy decision taking into account all triggered policies
         /// </summary>
