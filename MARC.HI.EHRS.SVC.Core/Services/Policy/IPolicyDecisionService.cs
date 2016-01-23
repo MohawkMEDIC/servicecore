@@ -22,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
     /// <summary>
     /// Policy decision
     /// </summary>
-    public class PolicyDecision
+    public class PolicyDecision 
     {
 
         /// <summary>
