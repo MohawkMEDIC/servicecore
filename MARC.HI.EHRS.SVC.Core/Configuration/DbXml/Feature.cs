@@ -22,6 +22,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.DbXml
         /// </summary>
         [XmlArray("install")]
         [XmlArrayItem("sqlCommand", Type = typeof(SqlCommand))]
+        [XmlArrayItem("sqlScript", Type = typeof(SqlScript))]
         public List<Command> Install { get; set; }
 
         /// <summary>
@@ -29,6 +30,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration.DbXml
         /// </summary>
         [XmlArray("uninstall")]
         [XmlArrayItem("sqlCommand", Type = typeof(SqlCommand))]
+        [XmlArrayItem("sqlScript", Type=typeof(SqlScript))]
         public List<Command> UnInstall { get; set; }
 
     }

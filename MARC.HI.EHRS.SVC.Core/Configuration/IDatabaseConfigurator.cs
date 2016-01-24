@@ -78,13 +78,23 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
         /// <summary>
         /// Deploy a specified feature on the database configuration
         /// </summary>
-        void DeployFeature(Feature featureName, string connectionStringName, XmlDocument configurationDom);
+        void Install(Feature feature, string connectionStringName, XmlDocument configurationDom);
+
+        /// <summary>
+        /// Deploy a specified feature on the database configuration
+        /// </summary>
+        void Install(Feature feature, string connectionString);
 
         /// <summary>
         /// Un-deploy a feature
         /// </summary>
-        void UnDeployFeature(Feature featureName, string connectionStringName, XmlDocument configurationDom);
-        
+        void Uninstall(Feature feature, string connectionStringName, XmlDocument configurationDom);
+
+        /// <summary>
+        /// Un-deploy a feature
+        /// </summary>
+        void Uninstall(Feature feature, string connectionString);
+
         /// <summary>
         /// Create a .config connection string entry
         /// </summary>

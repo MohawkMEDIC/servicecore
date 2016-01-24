@@ -91,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\DbXml\SqlScript.cs" />
     <Compile Include="Plugins\AssemblyPluginAttribute.cs" />
     <Compile Include="Configuration\DbXml\Command.cs" />
     <Compile Include="Configuration\DbXml\DbXmlBase.cs" />
