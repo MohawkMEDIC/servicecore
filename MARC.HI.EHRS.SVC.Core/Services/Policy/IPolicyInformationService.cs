@@ -26,8 +26,31 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// True whether the policy can be overridden
         /// </summary>
         bool CanOverride { get; }
+
+        /// <summary>
+        /// True if the policy is actively enforced
+        /// </summary>
+        bool IsActive { get; }
     }
 
+    /// <summary>
+    /// Represents a policy instance
+    /// </summary>
+    public interface IPolicyInstance
+    {
+        /// <summary>
+        /// The policy 
+        /// </summary>
+        IPolicy Policy { get; }
+        /// <summary>
+        /// The rule
+        /// </summary>
+        PolicyDecisionOutcomeType Rule { get; }
+        /// <summary>
+        /// The securable
+        /// </summary>
+        Object Securable { get; }
+    }
     /// <summary>
     /// Represents a policy information service
     /// </summary>
@@ -43,7 +66,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// Get active policies for the specified securable
         /// </summary>
         /// <param name="securable">The object for which policies should be retrieved. Examples: A role, a user, a document, etc.</param>
-        IEnumerable<IPolicy> GetActivePolicies(Object securable);
+        IEnumerable<IPolicyInstance> GetActivePolicies(Object securable);
 
         /// <summary>
         /// Gets the policy by policy OID

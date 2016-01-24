@@ -27,6 +27,7 @@ using System.Diagnostics;
 using MARC.HI.EHRS.SVC.Core.Services;
 using System.Runtime.InteropServices;
 using MARC.HI.EHRS.SVC.Core.Configuration;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Core
 {
@@ -67,6 +68,9 @@ namespace MARC.HI.EHRS.SVC.Core
         /// Gets the identifier for this context
         /// </summary>
         public Guid ContextId { get; private set; }
+
+        // Message handler service
+        private IMessageHandlerService m_messageHandler = null;
 
         /// <summary>
         /// Configuration
@@ -132,6 +136,15 @@ namespace MARC.HI.EHRS.SVC.Core
                     svc.Start();
                 }
 
+                this.m_messageHandler = this.GetService<IMessageHandlerService>();
+                if (this.m_messageHandler == null)
+                    return false;
+                else
+                {
+                    Trace.TraceInformation("Starting message handler {0}...", this.m_messageHandler.GetType().GetCustomAttribute<DescriptionAttribute>()?.Description ?? this.m_messageHandler.GetType().FullName);
+                    this.m_messageHandler.Start();
+                }
+
                 if (this.Started != null)
                     this.Started(this, null);
             }
@@ -147,6 +160,8 @@ namespace MARC.HI.EHRS.SVC.Core
 
             if (this.Stopping != null)
                 this.Stopping(this, null);
+
+            this.m_messageHandler?.Stop();
 
             this.m_running = false;
             foreach (var svc in this.m_configuration.ServiceProviders.OfType<IDaemonService>())
