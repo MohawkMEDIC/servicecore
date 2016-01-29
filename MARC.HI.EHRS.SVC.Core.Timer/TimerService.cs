@@ -69,7 +69,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         /// </summary>
         public TimerService()
         {
-            this.m_configuration = ConfigurationManager.GetSection("marc.hi.svc.core.timer") as TimerConfiguration;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.svc.core.timer") as TimerConfiguration;
             
         }
 

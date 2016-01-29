@@ -65,7 +65,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"index.html\"");
                 WebOperationContext.Current.OutgoingResponse.LastModified = DateTime.UtcNow;
-                FhirServiceConfiguration config = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+                FhirServiceConfiguration config = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
                 if (!String.IsNullOrEmpty(config.LandingPage))
                 {
                     using (var fs = File.OpenRead(config.LandingPage))

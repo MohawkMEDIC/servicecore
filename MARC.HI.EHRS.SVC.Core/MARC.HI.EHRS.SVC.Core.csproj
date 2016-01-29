@@ -91,6 +91,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\DbXml\SqlScript.cs" />
+    <Compile Include="Configuration\LocalConfigurationManager.cs" />
     <Compile Include="Plugins\AssemblyPluginAttribute.cs" />
     <Compile Include="Configuration\DbXml\Command.cs" />
     <Compile Include="Configuration\DbXml\DbXmlBase.cs" />
@@ -99,7 +101,6 @@
     <Compile Include="Configuration\HostConfiguration.cs" />
     <Compile Include="Configuration\IAlwaysDeployedConfigurationPanel.cs" />
     <Compile Include="Configuration\IConfigurationPanel.cs" />
-    <Compile Include="Configuration\IDatabaseConfigurator.cs" />
     <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
     <Compile Include="Configuration\CustodianshipData.cs" />
     <Compile Include="Data\CodeValue.cs" />
@@ -111,6 +112,8 @@
     <Compile Include="Event\PersistenceEventArgs.cs" />
     <Compile Include="Exceptions\PolicyViolationException.cs" />
     <Compile Include="Plugins\AssemblyPluginDependencyAttribute.cs" />
+    <Compile Include="Services\IConfigurationManager.cs" />
+    <Compile Include="Services\IDbFeatureService.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
     <Compile Include="Configuration\Jurisdiction.cs" />
     <Compile Include="Exceptions\InvalidStateTransitionException.cs" />

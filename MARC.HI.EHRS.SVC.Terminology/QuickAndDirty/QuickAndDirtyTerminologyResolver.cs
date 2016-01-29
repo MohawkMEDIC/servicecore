@@ -59,7 +59,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.QuickAndDirty
         /// </summary>
         static QuickAndDirtyTerminologyResolver()
         {
-            m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.terminology") as ConfigurationSectionHandler;
+            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.terminology") as ConfigurationSectionHandler;
         }
 
         #region ITerminologyService Members
