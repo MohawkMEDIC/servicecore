@@ -130,19 +130,11 @@ namespace MARC.HI.EHRS.SVC.Core
                 this.m_running = true;
                 m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
                 Trace.TraceInformation("Starting all daemon services");
-                foreach (var svc in this.m_configuration.ServiceProviders.OfType<IDaemonService>())
+                foreach (var svc in this.m_configuration.ServiceProviders.Where(t=>t.GetInterface(typeof(IDaemonService).FullName) != null).ToList())
                 {
-                    Trace.TraceInformation("Starting daemon service {0}...", svc.GetType().Name);
-                    svc.Start();
-                }
-
-                this.m_messageHandler = this.GetService<IMessageHandlerService>();
-                if (this.m_messageHandler == null)
-                    return false;
-                else
-                {
-                    Trace.TraceInformation("Starting message handler {0}...", this.m_messageHandler.GetType().GetCustomAttribute<DescriptionAttribute>()?.Description ?? this.m_messageHandler.GetType().FullName);
-                    this.m_messageHandler.Start();
+                    Trace.TraceInformation("Starting daemon service {0}...", svc.Name);
+                    IDaemonService instance = this.GetService(svc) as IDaemonService;
+                    instance.Start();
                 }
 
                 if (this.Started != null)
