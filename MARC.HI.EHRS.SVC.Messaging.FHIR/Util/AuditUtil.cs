@@ -25,7 +25,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
     {
 
         // Config
-        private static FhirServiceConfiguration s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+        private static FhirServiceConfiguration s_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
 
         /// <summary>
         /// Create audit data

@@ -12,6 +12,7 @@ using System.ServiceModel;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
 using System.Reflection;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
@@ -51,7 +52,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// </summary>
         public FhirMessageHandler()
         {
-            this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
         }
 
         /// <summary>

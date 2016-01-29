@@ -31,6 +31,7 @@ using System.ComponentModel;
 using System.Threading;
 using MARC.HI.EHRS.SVC.Core.Event;
 using System.Security.Claims;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
 {
@@ -90,7 +91,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// </summary>
         static AdoMessagePersister()
         {
-            m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.persistence") as ConfigurationSectionHandler;
+            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.persistence") as ConfigurationSectionHandler;
         }
 
         #region IMessagePersistenceService Members

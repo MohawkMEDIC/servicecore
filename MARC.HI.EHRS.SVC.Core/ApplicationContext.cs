@@ -129,6 +129,11 @@ namespace MARC.HI.EHRS.SVC.Core
 
                 this.m_running = true;
                 m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
+
+                // If there is no configuration manager then add the local
+                if (this.GetService(typeof(IConfigurationManager)) == null)
+                    this.m_configuration.ServiceProviders.Add(typeof(LocalConfigurationManager));
+
                 Trace.TraceInformation("Starting all daemon services");
                 foreach (var svc in this.m_configuration.ServiceProviders.OfType<IDaemonService>())
                 {
@@ -144,6 +149,7 @@ namespace MARC.HI.EHRS.SVC.Core
                     Trace.TraceInformation("Starting message handler {0}...", this.m_messageHandler.GetType().GetCustomAttribute<DescriptionAttribute>()?.Description ?? this.m_messageHandler.GetType().FullName);
                     this.m_messageHandler.Start();
                 }
+
 
                 if (this.Started != null)
                     this.Started(this, null);

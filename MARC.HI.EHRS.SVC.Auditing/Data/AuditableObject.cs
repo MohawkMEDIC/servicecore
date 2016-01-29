@@ -1,6 +1,5 @@
 ﻿
 
-using MARC.HI.EHRS.SVC.Core.Data;
 /**
 * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
 * 
@@ -23,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Data
 {

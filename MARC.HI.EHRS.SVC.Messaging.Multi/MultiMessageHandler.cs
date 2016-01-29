@@ -26,6 +26,7 @@ using MARC.HI.EHRS.SVC.Messaging.Multi.Configuration;
 using System.Configuration;
 using System.Diagnostics;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Multi
 {
@@ -61,7 +62,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi
         /// </summary>
         static MultiMessageHandler()
         {
-            s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.multi") as ConfigurationSectionHandler;
+            s_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.multi") as ConfigurationSectionHandler;
         }
 
         #region IMessageHandlerService Members

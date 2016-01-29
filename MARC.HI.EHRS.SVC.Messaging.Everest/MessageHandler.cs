@@ -86,7 +86,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
         /// </summary>
         public MessageHandler()
         {
-            m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.everest") as EverestConfigurationSectionHandler;
+            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.everest") as EverestConfigurationSectionHandler;
         }
 
         #region IMessageHandlerService Members

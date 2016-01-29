@@ -92,12 +92,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
-      <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
-      <Name>MARC.HI.EHRS.SVC.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\MARC.HI.EHRS.SVC.licenseheader">
       <Link>MARC.HI.EHRS.SVC.licenseheader</Link>
     </None>
@@ -112,6 +106,12 @@
     <None Include="SQL\PSQL9\MDB_CLEAN.SQL">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
+      <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>
+      <Name>MARC.HI.EHRS.SVC.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

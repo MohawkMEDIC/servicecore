@@ -60,7 +60,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         /// </summary>
         public AtnaAuditService()
         {
-            this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.auditing.atna") as AuditConfiguration;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.auditing.atna") as AuditConfiguration;
             ApplicationContext.Current.Started += ApplicationContext_Started;
             ApplicationContext.Current.Stopped += ApplicationContext_Stopped;
 

@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.QM.Persistence.Data
 {
@@ -53,7 +54,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// </summary>
         static AdoQueryPersistenceService()
         {
-            m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.qm.persistence.data") as ConfigurationHandler;
+            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.qm.persistence.data") as ConfigurationHandler;
         }
 
 

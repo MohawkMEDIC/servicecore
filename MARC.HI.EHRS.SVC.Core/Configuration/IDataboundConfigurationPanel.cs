@@ -31,10 +31,6 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
         /// Connection string for the databound configuration panel
         /// </summary>
         string ConnectionString { get; set; }
-
-        /// <summary>
-        /// Database configurator
-        /// </summary>
-        IDatabaseConfigurator DatabaseConfigurator { get; set; }
+        
     }
 }
