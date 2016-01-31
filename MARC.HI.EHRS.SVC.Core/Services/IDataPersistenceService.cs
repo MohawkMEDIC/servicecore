@@ -104,7 +104,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Query the data persistence store for data
         /// </summary>
-        IEnumerable<TData> Query(Expression<Func<TData, bool>> query, int offset, int? count, IPrincipal authContext);
+        IEnumerable<TData> Query(Expression<Func<TData, bool>> query, int offset, int? count, IPrincipal authContext, out int totalCount);
 
         /// <summary>
         /// Fired prior to an insertion into the database
