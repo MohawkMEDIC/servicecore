@@ -44,6 +44,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.Unauthorized;
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("WWW-Authenticate", "Bearer");
             }
+            else if (error is UnauthorizedRequestException)
+            {
+                WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.Unauthorized;
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("WWW-Authenticate", (error as UnauthorizedRequestException).AuthenticateChallenge);
+            }
             else if (error is WebFaultException)
                 WebOperationContext.Current.OutgoingResponse.StatusCode = (error as WebFaultException).StatusCode;
             else if (error is Newtonsoft.Json.JsonException ||
