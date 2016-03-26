@@ -29,5 +29,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         {
         }
 
+
+        /// <summary>
+        /// Create fhir code from prinitive
+        /// </summary>
+        /// <param name="v"></param>
+        public static implicit operator FhirCode<T>(T v)
+        {
+            return new FhirCode<T>(v);
+        }
     }
 }

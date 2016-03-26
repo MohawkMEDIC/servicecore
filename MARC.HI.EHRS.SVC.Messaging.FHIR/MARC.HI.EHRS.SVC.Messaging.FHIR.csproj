@@ -51,6 +51,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -63,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backbone\BundleResrouce.cs" />
     <Compile Include="Backbone\ConformancePublisher.cs" />
     <Compile Include="Backbone\ElementBase.cs" />
     <Compile Include="Backbone\ElementBinding.cs" />
@@ -125,7 +127,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ReflectionExtensionMethods.cs" />
     <Compile Include="Resources\Accreditation.cs" />
     <Compile Include="Backbone\Animal.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
@@ -164,13 +165,21 @@
     <Compile Include="ResultDetailClasses.cs" />
     <Compile Include="Util\AuditUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
-    <Compile Include="WcfCore\FhirContentTypeHandler.cs" />
-    <Compile Include="WcfCore\FhirMessageInspector.cs" />
-    <Compile Include="WcfCore\FhirRestEndpointBehavior.cs" />
-    <Compile Include="WcfCore\FhirServiceBehavior.cs" />
-    <Compile Include="WcfCore\FhirXmlObjectSerializer.cs" />
-    <Compile Include="WcfCore\GZipWriter.cs" />
-    <Compile Include="WcfCore\IFhirServiceContract.cs" />
+    <Compile Include="Wcf\Behaviors\FhirErrorEndpointBehavior.cs" />
+    <Compile Include="Wcf\Behaviors\FhirRestEndpointBehavior.cs" />
+    <Compile Include="Wcf\Behaviors\FhirSerializerOperationBehavior.cs" />
+    <Compile Include="Wcf\BodyWriters\CompressionBodyWriter.cs" />
+    <Compile Include="Wcf\BodyWriters\CompressionUtil.cs" />
+    <Compile Include="Wcf\BodyWriters\DeflateCompressionScheme.cs" />
+    <Compile Include="Wcf\BodyWriters\GzipCompressionScheme.cs" />
+    <Compile Include="Wcf\BodyWriters\ICompressionScheme.cs" />
+    <Compile Include="Wcf\BodyWriters\RawBodyWriter.cs" />
+    <Compile Include="Wcf\FhirServiceBehavior.cs" />
+    <Compile Include="Wcf\IFhirServiceContract.cs" />
+    <Compile Include="Wcf\Serialization\FhirErrorHandler.cs" />
+    <Compile Include="Wcf\Serialization\FhirMessageDispatchFormatter.cs" />
+    <Compile Include="Wcf\Serialization\FhirContentTypeHandler.cs" />
+    <Compile Include="Wcf\Serialization\FhirMessageInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj">

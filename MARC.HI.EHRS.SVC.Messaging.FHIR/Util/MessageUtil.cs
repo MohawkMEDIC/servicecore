@@ -8,10 +8,11 @@ using System.Xml.Serialization;
 using System.ServiceModel.Web;
 using MARC.Everest.Connectors;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
 using MARC.HI.EHRS.SVC.Core.Data;
 using MARC.HI.EHRS.SVC.Core;
 using MARC.HI.EHRS.SVC.Core.Services;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -133,21 +134,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Create a feed
         /// </summary>
-        internal static SyndicationFeed CreateFeed(FhirOperationResult result)
+        internal static Bundle CreateBundle(FhirOperationResult result)
         {
 
-            SyndicationFeed retVal = new SyndicationFeed();
+            Bundle retVal = new Bundle();
             FhirQueryResult queryResult = result as FhirQueryResult;
 
             int pageNo = queryResult == null || queryResult.Query.Quantity == 0 ? 0 : queryResult.Query.Start / queryResult.Query.Quantity,
                 nPages = queryResult == null || queryResult.Query.Quantity == 0 ? 1 : (queryResult.TotalResults / queryResult.Query.Quantity);
-            
-            if (result.Details.Exists(o => o.Type == ResultDetailType.Error))
-                retVal.Title = new TextSyndicationContent(String.Format("Error", pageNo));
-            else
-                retVal.Title = new TextSyndicationContent(String.Format("Results Page {0}", pageNo));
+
+            retVal.Type = BundleType.SearchResults;
+
             retVal.Id = String.Format("urn:uuid:{0}", Guid.NewGuid());
-            retVal.Authors.Add(new SyndicationPerson(null, Environment.MachineName, null));
+
             // Make the Self uri
             String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
             if (baseUri.Contains("?"))
@@ -191,54 +190,55 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             // Self URI
             if (queryResult != null && queryResult.TotalResults > queryResult.Results.Count)
             {
-                retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo)), "self", null, null, 0));
+                retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo)), "self"));
                 if (pageNo > 0)
                 {
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page=0", baseUri)), "first", localizationService.GetString("FHIR001"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo - 1)), "previous", localizationService.GetString("FHIR002"), null, 0));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}page=0", baseUri)), "first"));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo - 1)), "previous"));
                 }
                 if (pageNo <= nPages)
                 {
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo + 1)), "next", localizationService.GetString("FHIR003"), null, 0));
-                    retVal.Links.Add(new SyndicationLink(new Uri(String.Format("{0}page={1}", baseUri, nPages + 1)), "last", localizationService.GetString("FHIR004"), null, 0));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}page={1}", baseUri, pageNo + 1)), "next"));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}page={1}", baseUri, nPages + 1)), "last"));
                 }
             }
             else
-                retVal.Links.Add(new SyndicationLink(new Uri(baseUri), "self", null, null, 0));
+                retVal.Link.Add(new BundleLink(new Uri(baseUri), "self"));
 
             // Updated
-            retVal.LastUpdatedTime = DateTime.Now;
+            retVal.Timestamp = DateTime.Now;
             //retVal.Generator = "MARC-HI Service Core Framework";
 
             // HACK: Remove me
             if(queryResult != null)
-                retVal.ElementExtensions.Add("totalResults", "http://a9.com/-/spec/opensearch/1.1/", queryResult.TotalResults);
+                retVal.Total = queryResult.TotalResults;
 
             //retVal.
             // Results
             if (result.Results != null)
             {
-                var feedItems = new List<SyndicationItem>();
+                var feedItems = new List<BundleEntry>();
                 foreach (ResourceBase itm in result.Results)
                 {
                     Uri resourceUrl = new Uri(String.Format("{0}/{1}?_format={2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/{1}/_history/{2}", itm.GetType().Name, itm.Id, itm.VersionId), format));
-                    SyndicationItem feedResult = new SyndicationItem(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null ,resourceUrl);
-                    feedResult.Links.Add(new SyndicationLink(resourceUrl, "self", null, null, 0));
+                    BundleEntry feedResult = new BundleEntry(); //new Bundleentry(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null ,resourceUrl);
+
+                    feedResult.FullUrl = resourceUrl;
 
                     string summary = "<div xmlns=\"http://www.w3.org/1999/xhtml\">" + itm.Text.ToString() + "</div>";
-                    feedResult.Summary = new TextSyndicationContent(summary, TextSyndicationContentKind.XHtml);
-                    feedResult.Content = new XmlSyndicationContent("text/xml", new SyndicationElementExtension(itm, new FhirXmlObjectSerializer()));
-                    feedResult.LastUpdatedTime = itm.Timestamp;
-                    feedResult.PublishDate = DateTime.Now;
-                    feedResult.Authors.Add(new SyndicationPerson(null, Environment.MachineName, null));
 
                     // Add confidence if the attribute permits
                     ConfidenceAttribute confidence = itm.Attributes.Find(a => a is ConfidenceAttribute) as ConfidenceAttribute;
-                    if(confidence != null)
-                        feedResult.ElementExtensions.Add("score", "http://a9.com/-/opensearch/extensions/relevance/1.0/", confidence.Confidence);
+                    if (confidence != null)
+                        feedResult.Search = new BundleSearch()
+                        {
+                            Score = confidence.Confidence
+                        };
+
+                    feedResult.Resource = new BundleResrouce(itm);
                     feedItems.Add(feedResult);
                 }
-                retVal.Items = feedItems;
+                retVal.Entry = feedItems;
             }
 
             // Outcome
@@ -268,8 +268,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             {
                 Issue issue = new Issue()
                 {
-                    Details = new DataTypes.FhirString(dtl.Message),
-                    Severity = new DataTypes.FhirCode<string>(dtl.Type.ToString().ToLower())
+                    Diagnostics = new DataTypes.FhirString(dtl.Message),
+                    Severity = (IssueSeverity)Enum.Parse(typeof(IssueSeverity), dtl.Type.ToString())
                 };
 
                 if (!String.IsNullOrEmpty(dtl.Location))
@@ -277,13 +277,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
                 // Type
                 if (dtl.Exception is TimeoutException)
-                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "timeout");
+                    issue.Code = new DataTypes.FhirCoding(fhirIssue, "timeout");
                 else if (dtl is FixedValueMisMatchedResultDetail)
-                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "value");
+                    issue.Code = new DataTypes.FhirCoding(fhirIssue, "value");
                 else if (dtl is PersistenceResultDetail)
-                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "no-store");
+                    issue.Code = new DataTypes.FhirCoding(fhirIssue, "no-store");
                 else
-                    issue.Type = new DataTypes.FhirCoding(fhirIssue, "exception");
+                    issue.Code = new DataTypes.FhirCoding(fhirIssue, "exception");
 
                 retVal.Issue.Add(issue);
             }
@@ -293,9 +293,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 foreach (var iss in result.Issues)
                     retVal.Issue.Add(new Issue()
                     {
-                        Details = new DataTypes.FhirString(iss.Text),
-                        Severity = new DataTypes.FhirCode<string>(iss.Severity.ToString().ToLower()),
-                        Type = new DataTypes.FhirCoding(fhirIssue, "business-rule")
+                        Diagnostics = new DataTypes.FhirString(iss.Text),
+                        Severity = (IssueSeverity)Enum.Parse(typeof(IssueSeverity), iss.Severity.ToString()),
+                        Code = new DataTypes.FhirCoding(fhirIssue, "business-rule")
                     });
 
             return retVal;

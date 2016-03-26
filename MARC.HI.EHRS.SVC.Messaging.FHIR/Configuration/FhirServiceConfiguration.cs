@@ -21,6 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             this.LandingPage = landingPage;
             this.ResourceHandlers = new List<Type>();
             this.ActionMap = new Dictionary<string, CodeValue>();
+            this.CorsConfiguration = new Dictionary<string, FhirCorsConfiguration>();
         }
 
         /// <summary>
@@ -42,5 +43,32 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// Get or set
         /// </summary>
         public Dictionary<String, CodeValue> ActionMap { get; private set; }
+
+        /// <summary>
+        /// Gets the CORS configuration
+        /// </summary>
+        public Dictionary<String, FhirCorsConfiguration> CorsConfiguration { get;  private set; }
+    }
+
+    /// <summary>
+    /// FHIR CORS configuration
+    /// </summary>
+    public class FhirCorsConfiguration
+    {
+
+        /// <summary>
+        /// Gets or sets the domain from which CORS is allowed
+        /// </summary>
+        public String Domain { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed operations
+        /// </summary>
+        public String Actions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed headers
+        /// </summary>
+        public String Headers { get; set; }
     }
 }

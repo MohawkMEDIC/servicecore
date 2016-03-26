@@ -18,6 +18,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
     public class BundleLink : BackboneElement
     {
 
+        public BundleLink()
+        {
+
+        }
+        /// <summary>
+        /// Creates a new bundle link
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="relation"></param>
+        public BundleLink(Uri uri, String relation)
+        {
+            this.Url = uri;
+            this.Relation = relation;
+        }
         /// <summary>
         /// Gets or sets the relationship the link has to the bundle
         /// </summary>

@@ -5,6 +5,7 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
 {

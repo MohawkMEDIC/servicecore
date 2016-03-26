@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MARC.HI.EHRS.SVC.Core.Services;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.ServiceModel.Syndication;
-using System.Diagnostics;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
-using System.ComponentModel;
-using MARC.Everest.Connectors;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
-using System.Data;
-using System.IO;
-using System.Xml;
-using System.Net;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
-using System.Configuration;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using System.Reflection;
-using System.IO.Compression;
+﻿using MARC.Everest.Connectors;
 using MARC.HI.EHRS.SVC.Auditing.Data;
 using MARC.HI.EHRS.SVC.Auditing.Services;
 using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.ServiceModel.Web;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Reflection;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
+using MARC.HI.EHRS.SVC.Core.Services;
+using System.Diagnostics;
+using System.Net;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 
-namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
+namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 {
     /// <summary>
     /// FHIR service behavior
@@ -37,6 +32,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         private const string FHIR_TYPE = "application/fhir+xml; charset=utf-8";
         private const string ATOM_TYPE = "application/atom+xml; charset=utf-8";
 
+        private TraceSource m_tracer = new TraceSource("MARC.HI.EHRS.SVC.Messaging.FHIR");
+
         #region IFhirServiceContract Members
 
         /// <summary>
@@ -45,11 +42,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         public XmlSchema GetSchema(int schemaId)
         {
             XmlSchemas schemaCollection = new XmlSchemas();
-            
+
             XmlReflectionImporter importer = new XmlReflectionImporter("http://hl7.org/fhir");
             XmlSchemaExporter exporter = new XmlSchemaExporter(schemaCollection);
-            
-            foreach(var cls in typeof(FhirServiceBehavior).Assembly.GetTypes().Where(o=>o.GetCustomAttribute<XmlRootAttribute>() != null && !o.IsGenericTypeDefinition))
+
+            foreach (var cls in typeof(FhirServiceBehavior).Assembly.GetTypes().Where(o => o.GetCustomAttribute<XmlRootAttribute>() != null && !o.IsGenericTypeDefinition))
                 exporter.ExportTypeMapping(importer.ImportTypeMapping(cls, "http://hl7.org/fhir"));
 
             return schemaCollection[schemaId];
@@ -99,7 +96,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             FhirOperationResult result = null;
             try
             {
-               
+
                 // Setup outgoing content
                 WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 result = this.PerformRead(resourceType, id, null);
@@ -225,7 +222,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             }
             catch (Exception e)
             {
-               
+
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
                 return this.ErrorHelper(e, result, false) as ResourceBase;
@@ -310,7 +307,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
                 if (handler == null)
                     throw new FileNotFoundException(); // endpoint not found!
-                
+
                 result = handler.Update(id, target, TransactionMode.Rollback);
                 if (result == null || result.Results.Count == 0) // Create
                 {
@@ -326,7 +323,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                     throw new FileNotFoundException(String.Format("Resource {0} not found", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri));
                 else if (result.Outcome != ResultCode.Accepted)
                     throw new DataException("Validate failed");
-                                
+
                 // Return constraint
                 return MessageUtil.CreateOutcomeResource(result);
 
@@ -340,7 +337,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Searches a resource from the client registry datastore 
         /// </summary>
-        public Object SearchResource(string resourceType)
+        public Bundle SearchResource(string resourceType)
         {
             // Get the services from the service registry
             var auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
@@ -360,13 +357,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 // Setup outgoing content
                 WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 WebOperationContext.Current.OutgoingRequest.Headers.Add("Last-Modified", DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz"));
-                
+
                 if (resourceProcessor == null) // Unsupported resource
                 {
                     WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
                     return null;
                 }
-                
+
                 // TODO: Appropriately format response
                 // Process incoming request
                 result = resourceProcessor.Query(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters);
@@ -378,14 +375,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
 
                 audit = AuditUtil.CreateAuditData(result.Results);
                 // Create the Atom feed
-                return new Atom10FeedFormatter(MessageUtil.CreateFeed(result));
+                return MessageUtil.CreateBundle(result);
 
             }
             catch (Exception e)
             {
                 audit = AuditUtil.CreateAuditData(null);
-                audit.Outcome = OutcomeIndicator.EpicFail; 
-                return this.ErrorHelper(e, result, false) ;
+                audit.Outcome = OutcomeIndicator.EpicFail;
+                return this.ErrorHelper(e, result, true) as Bundle;
             }
             finally
             {
@@ -412,7 +409,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Posting transaction is not supported
         /// </summary>
-        public System.ServiceModel.Syndication.Atom10FeedFormatter PostTransaction(System.ServiceModel.Syndication.Atom10FeedFormatter feed)
+        public Bundle PostTransaction(Bundle feed)
         {
             throw new NotImplementedException();
         }
@@ -420,7 +417,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Get a resource's history
         /// </summary>
-        public System.ServiceModel.Syndication.Atom10FeedFormatter GetResourceInstanceHistory(string resourceType, string id, string mimeType)
+        public Bundle GetResourceInstanceHistory(string resourceType, string id, string mimeType)
         {
             FhirOperationResult readResult = null;
             try
@@ -429,44 +426,44 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 readResult = this.PerformRead(resourceType, id, String.Empty);
                 WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
-                return new Atom10FeedFormatter(MessageUtil.CreateFeed(readResult));
+                return MessageUtil.CreateBundle(readResult);
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, readResult, true) as Atom10FeedFormatter;
+                return this.ErrorHelper(e, readResult, true) as Bundle;
             }
         }
 
         /// <summary>
         /// Not implemented result
         /// </summary>
-        public System.ServiceModel.Syndication.Atom10FeedFormatter GetResourceHistory(string resourceType, string mimeType)
+        public Bundle GetResourceHistory(string resourceType, string mimeType)
         {
-            
+
             var result = new FhirOperationResult()
             {
                 Outcome = ResultCode.Rejected,
-                Details = new List<IResultDetail>() { 
+                Details = new List<IResultDetail>() {
                     new ResultDetail(ResultDetailType.Error, "For security reasons resource history is not supported", null, null)
                 }
             };
-            return this.ErrorHelper(new NotImplementedException(), result, true) as Atom10FeedFormatter;
-            
+            return this.ErrorHelper(new NotImplementedException(), result, true) as Bundle;
+
         }
 
         /// <summary>
         /// Not implemented
         /// </summary>
-        public System.ServiceModel.Syndication.Atom10FeedFormatter GetHistory(string mimeType)
+        public Bundle GetHistory(string mimeType)
         {
             var result = new FhirOperationResult()
             {
                 Outcome = ResultCode.Rejected,
-                Details = new List<IResultDetail>() { 
+                Details = new List<IResultDetail>() {
                     new ResultDetail(ResultDetailType.Error, "For security reasons system history is not supported", null, null)
                 }
             };
-            return this.ErrorHelper(new NotImplementedException(), result, true) as Atom10FeedFormatter;
+            return this.ErrorHelper(new NotImplementedException(), result, true) as Bundle;
         }
 
         /// <summary>
@@ -481,7 +478,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 result = new FhirOperationResult() { Details = new List<IResultDetail>() { new ResultDetail(ResultDetailType.Error, "No information available", e) } };
 
 
-            Trace.TraceError(e.ToString());
+            this.m_tracer.TraceEvent(TraceEventType.Error, 0, e.ToString());
             result.Details.Add(new ResultDetail(ResultDetailType.Error, e.Message, e));
 
             HttpStatusCode retCode = HttpStatusCode.OK;
@@ -507,7 +504,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
             if (returnBundle)
             {
                 WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
-                throw new WebFaultException<Atom10FeedFormatter>(new Atom10FeedFormatter(MessageUtil.CreateFeed(result)), retCode);
+                throw new WebFaultException<Bundle>(MessageUtil.CreateBundle(result), retCode);
             }
             else
             {
@@ -515,11 +512,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"error.xml\"");
                 throw new WebFaultException<OperationOutcome>(MessageUtil.CreateOutcomeResource(result), retCode);
             }
-                //return MessageUtil.CreateOutcomeResource(result);
+            //return MessageUtil.CreateOutcomeResource(result);
 
         }
 
-        
+
         /// <summary>
         /// Perform a read against the underlying IFhirResourceHandler
         /// </summary>
@@ -541,9 +538,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
                 var resourceProcessor = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
 
                 if (resourceProcessor == null) // Unsupported resource
-                
+
                     throw new FileNotFoundException("Specified resource type is not found");
-                
+
 
                 // TODO: Appropriately format response
                 // Process incoming request
@@ -616,9 +613,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore
         /// <summary>
         /// Alternate search
         /// </summary>
-        public Object SearchResourceAlt(string resourceType)
+        public Bundle SearchResourceAlt(string resourceType)
         {
             return this.SearchResource(resourceType);
         }
     }
+
 }

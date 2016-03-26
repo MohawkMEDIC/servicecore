@@ -20,11 +20,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// </summary>
         public object Create(object parent, object configContext, System.Xml.XmlNode section)
         {
-            
+
             // Section
             XmlElement serviceElement = section.SelectSingleNode("./*[local-name() = 'service']") as XmlElement;
             XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']"),
-                actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']");
+                actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']"),
+                corsConfig = section.SelectNodes("./*[local-name() = 'cors']/*[local-name() = 'add']");
 
             string wcfServiceName = String.Empty,
                 landingPage = String.Empty;
@@ -54,6 +55,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
                 if (tType == null)
                     throw new ConfigurationErrorsException(String.Format("Could not find type described by '{0}'", addInstruction.Attributes["type"].Value));
                 retVal.ResourceHandlers.Add(tType);
+            }
+
+            foreach(XmlElement cors in corsConfig)
+            {
+                FhirCorsConfiguration config = new FhirCorsConfiguration()
+                {
+                    Domain = cors.Attributes["domain"]?.Value,
+                    Actions = String.Join(",", cors.SelectNodes("./*[local-name() = 'action']/text()").OfType<XmlText>().Select(o=>o.Value).ToArray()),
+                    Headers = String.Join(",", cors.SelectNodes("./*[local-name() = 'header']/text()").OfType<XmlText>().Select(o => o.Value).ToArray())
+                };
+                retVal.CorsConfiguration.Add(cors.Attributes["resource"]?.Value ?? "*", config);
             }
 
             foreach (XmlElement mapInstruction in actionMap)

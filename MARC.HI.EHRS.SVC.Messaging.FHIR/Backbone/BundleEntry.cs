@@ -45,7 +45,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("resource")]
         [Description("The resource in the bundle")]
-        public Reference Resource { get; set; }
+        public BundleResrouce Resource { get; set; }
 
         /// <summary>
         /// Gets or sets the search related information
