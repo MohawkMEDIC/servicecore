@@ -41,6 +41,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         public bool IncludeHistory { get; set; }
 
         /// <summary>
+        /// True if the query should include contained resource
+        /// </summary>
+        public bool IncludeContained { get; set; }
+
+        /// <summary>
+        /// Include resources
+        /// </summary>
+        public List<String> IncludeResource { get; set; }
+
+        /// <summary>
         /// Gets or sets the target domains
         /// </summary>
         public List<String> TargetDomains { get; set; }

@@ -1,4 +1,5 @@
-﻿using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+﻿using System;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -135,7 +136,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("defaultValueInt", Type = typeof(FhirInt))]
         [XmlElement("defaultValueString", Type = typeof(FhirString))]
-        [XmlElement("defaultValueCode", Type = typeof(FhirCode<>))]
+        [XmlElement("defaultValueCode", Type = typeof(FhirCode<String>))]
         [XmlElement("defaultValueQuantity", Type = typeof(FhirQuantity))]
         [XmlElement("defaultValueInstant", Type = typeof(FhirInstant))]
         [XmlElement("defaultValueDateTime", Type = typeof(FhirDateTime))]
@@ -165,7 +166,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("fixedInt", Type = typeof(FhirInt))]
         [XmlElement("fixedString", Type = typeof(FhirString))]
-        [XmlElement("fixedCode", Type = typeof(FhirCode<>))]
+        [XmlElement("fixedCode", Type = typeof(FhirCode<String>))]
         [XmlElement("fixedQuantity", Type = typeof(FhirQuantity))]
         [XmlElement("fixedInstant", Type = typeof(FhirInstant))]
         [XmlElement("fixedDateTime", Type = typeof(FhirDateTime))]
@@ -189,7 +190,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("patternInt", Type = typeof(FhirInt))]
         [XmlElement("patternString", Type = typeof(FhirString))]
-        [XmlElement("patternCode", Type = typeof(FhirCode<>))]
+        [XmlElement("patternCode", Type = typeof(FhirCode<String>))]
         [XmlElement("patternQuantity", Type = typeof(FhirQuantity))]
         [XmlElement("patternInstant", Type = typeof(FhirInstant))]
         [XmlElement("patternDateTime", Type = typeof(FhirDateTime))]
@@ -213,7 +214,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("exampleInt", Type = typeof(FhirInt))]
         [XmlElement("exampleString", Type = typeof(FhirString))]
-        [XmlElement("exampleCode", Type = typeof(FhirCode<>))]
+        [XmlElement("exampleCode", Type = typeof(FhirCode<String>))]
         [XmlElement("exampleQuantity", Type = typeof(FhirQuantity))]
         [XmlElement("exampleInstant", Type = typeof(FhirInstant))]
         [XmlElement("exampleDateTime", Type = typeof(FhirDateTime))]
@@ -236,7 +237,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// Minimum allowed value
         /// </summary>
         [XmlElement("minValueInt", Type = typeof(FhirInt))]
-        [XmlElement("minValueCode", Type = typeof(FhirCode<>))]
+        [XmlElement("minValueCode", Type = typeof(FhirCode<String>))]
         [XmlElement("minValueQuantity", Type = typeof(FhirQuantity))]
         [XmlElement("minValueInstant", Type = typeof(FhirInstant))]
         [XmlElement("minValueDateTime", Type = typeof(FhirDateTime))]
@@ -251,7 +252,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// Maximum allowed value
         /// </summary>
         [XmlElement("maxValueInt", Type = typeof(FhirInt))]
-        [XmlElement("maxValueCode", Type = typeof(FhirCode<>))]
+        [XmlElement("maxValueCode", Type = typeof(FhirCode<String>))]
         [XmlElement("maxValueQuantity", Type = typeof(FhirQuantity))]
         [XmlElement("maxValueInstant", Type = typeof(FhirInstant))]
         [XmlElement("maxValueDateTime", Type = typeof(FhirDateTime))]
