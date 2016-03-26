@@ -39,6 +39,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Security
         String[] GetAllRoles();
 
         /// <summary>
+        /// Get all roles
+        /// </summary>
+        String[] GetAllRoles(string userName);
+
+        /// <summary>
         /// User user in the specified role
         /// </summary>
         bool IsUserInRole(String userName, String roleName);
