@@ -84,6 +84,16 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Security
         String GenerateTfaSecret(String userName);
 
         /// <summary>
+        /// Delete an identity
+        /// </summary>
+        void DeleteIdentity(String userName, IPrincipal authContext);
+
+        /// <summary>
+        /// Set lockout
+        /// </summary>
+        void SetLockout(String userName, bool lockout, IPrincipal authContext);
+
+        /// <summary>
         /// Gets or sets the ITwoFactorSecretGenerator attached to the role provider
         /// </summary>
         ITwoFactorSecretGenerator TwoFactorSecretGenerator { get; set; }
