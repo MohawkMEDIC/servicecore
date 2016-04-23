@@ -76,6 +76,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         void PersistMessage(string messageId, Stream message);
 
         /// <summary>
+        /// Persists the message 
+        /// </summary>
+        void PersistMessage(string messageId, Uri solicitorEp, Uri receiveEp, Stream message);
+
+        /// <summary>
         /// Persist message extension
         /// </summary>
         void PersistMessageInfo(MessageInfo message);

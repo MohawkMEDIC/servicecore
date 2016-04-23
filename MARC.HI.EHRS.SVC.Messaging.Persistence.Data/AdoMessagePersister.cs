@@ -468,6 +468,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             }
         }
 
+        /// <summary>
+        /// Persist message
+        /// </summary>
+        public void PersistMessage(string messageId, Uri solicitorEp, Uri receiveEp, Stream message)
+        {
+            this.PersistMessageInfo(
+                 new MessageInfo()
+                 {
+                     Body = GetMessageBody(message),
+                     Id = messageId,
+                     Source = solicitorEp,
+                     Destination = receiveEp
+                 }
+             );
+        }
+
         #endregion
     }
 }
