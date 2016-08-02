@@ -65,6 +65,11 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         public event EventHandler Stopped;
 
         /// <summary>
+        /// Log of timers
+        /// </summary>
+        private Dictionary<ITimerJob, DateTime> m_log = new Dictionary<ITimerJob, DateTime>();
+
+        /// <summary>
         /// Creates a new instance of the timer
         /// </summary>
         public TimerService()
@@ -100,7 +105,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                     AutoReset = true,
                     Enabled = true
                 };
-                timer.Elapsed += new System.Timers.ElapsedEventHandler(job.Job.Elapsed);
+                timer.Elapsed += this.CreateElapseHandler(job.Job);
                 timer.Start();
                 this.m_timers[i++] = timer;
 
@@ -112,6 +117,26 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
 
             Trace.TraceInformation("Timer service started successfully");
             return true;
+        }
+
+        /// <summary>
+        /// Create a time elapsed handler
+        /// </summary>
+        private ElapsedEventHandler CreateElapseHandler(ITimerJob job)
+        {
+            return new System.Timers.ElapsedEventHandler((o, e) =>
+            {
+
+                // Log that the timer fired
+                if (this.m_log.ContainsKey(job))
+                    this.m_log[job] = e.SignalTime;
+                else
+                    lock (this.m_log)
+                        this.m_log.Add(job, e.SignalTime);
+
+                job.Elapsed(o, e);
+
+            });
         }
 
         /// <summary>
@@ -135,6 +160,32 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
 
             Trace.TraceInformation("Timer service stopped successfully");
             return true;
+        }
+
+        /// <summary>
+        /// Add a job
+        /// </summary>
+        public void AddJob(object jobObject, TimeSpan elapseTime)
+        {
+            if (!(jobObject is ITimerJob))
+                throw new ArgumentOutOfRangeException(nameof(jobObject));
+
+            // Resize the timer array
+            Array.Resize(ref this.m_timers, this.m_timers.Length + 1);
+            var timer = new System.Timers.Timer(elapseTime.TotalMilliseconds)
+            {
+                AutoReset = true,
+                Enabled = true
+            };
+            timer.Elapsed += this.CreateElapseHandler(jobObject as ITimerJob);
+            timer.Start();
+            this.m_timers[this.m_timers.Length] = timer;
+            (jobObject as ITimerJob).Elapsed(this, null);
+        }
+
+        public List<KeyValuePair<object, DateTime>> GetState()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

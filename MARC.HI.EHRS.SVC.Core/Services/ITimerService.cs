@@ -30,6 +30,16 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     public interface ITimerService : IDaemonService
     {
 
-       
+        /// <summary>
+        /// Add a job to the timer
+        /// </summary>
+        void AddJob(object jobObject, TimeSpan elapseTime);
+
+        /// <summary>
+        /// Gets the execution state
+        /// </summary>
+        /// <returns></returns>
+        List<KeyValuePair<object, DateTime>> GetState();
+
     }
 }
