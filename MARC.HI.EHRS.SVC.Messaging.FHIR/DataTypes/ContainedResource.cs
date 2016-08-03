@@ -33,7 +33,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [XmlElement(ElementName = "Profile", Type = typeof(StructureDefinition))]
         [XmlElement(ElementName = "Conformance", Type = typeof(Conformance))]
         [XmlElement(ElementName = "RelatedPerson", Type = typeof(RelatedPerson))]
-        public ResourceBase Item { get; set; }
+        public DomainResourceBase Item { get; set; }
 
         /// <summary>
         /// Write the item text

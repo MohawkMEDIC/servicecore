@@ -23,7 +23,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// Creates a new instance of the resource bunlde
         /// </summary>
         /// <param name="r"></param>
-        public BundleResrouce(ResourceBase r)
+        public BundleResrouce(DomainResourceBase r)
         {
             this.Resource = r;
         }
@@ -34,8 +34,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("ValueSet", Type = typeof(ValueSet))]
         [XmlElement("Organization", Type = typeof(Organization))]
         [XmlElement("Practitioner", Type = typeof(Practictioner))]
+        [XmlElement("Immunization", Type = typeof(Immunization))]
         [XmlElement("RelatedPerson", Type = typeof(RelatedPerson))]
-        public ResourceBase Resource { get; set; }
+        public DomainResourceBase Resource { get; set; }
 
     }
 }

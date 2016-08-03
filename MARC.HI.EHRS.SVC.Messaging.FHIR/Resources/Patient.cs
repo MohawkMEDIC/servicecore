@@ -19,7 +19,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [XmlType("Patient", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Patient", Namespace = "http://hl7.org/fhir")] 
     [ParticipantObjectMap(IdType = AuditableObjectIdType.PatientNumber, Role = AuditableObjectRole.Patient, Type = AuditableObjectType.Person, OidName = "CR_CID")]
-    public class Patient : ResourceBase
+    public class Patient : DomainResourceBase
     {
         /// <summary>
         /// Namespace Declarations

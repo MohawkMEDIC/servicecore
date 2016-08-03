@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 
     [XmlRoot("Picture", Namespace = "http://hl7.org/fhir")]
     [XmlType("Picture", Namespace = "http://hl7.org/fhir")]
-    public class Picture : ResourceBase
+    public class Picture : DomainResourceBase
     {
         
         /// <summary>

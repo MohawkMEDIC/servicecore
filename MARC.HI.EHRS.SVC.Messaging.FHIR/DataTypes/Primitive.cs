@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using MARC.Everest.Connectors;
 using System.Xml;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
 {
@@ -44,7 +45,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public virtual String XmlValue
         {
             get {
-
+                if (typeof(T).IsEnum)
+                    return typeof(T).GetField(this.Value.ToString()).GetCustomAttribute<XmlEnumAttribute>().Name;
                 if (this.Value is byte[])
                     return Convert.ToBase64String(this.Value as Byte[]);
                 if (this.Value != null)

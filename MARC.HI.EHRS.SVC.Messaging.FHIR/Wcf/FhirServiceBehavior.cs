@@ -29,9 +29,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
     public class FhirServiceBehavior : IFhirServiceContract
     {
 
-        private const string FHIR_TYPE = "application/fhir+xml; charset=utf-8";
-        private const string ATOM_TYPE = "application/atom+xml; charset=utf-8";
-
+        
         private TraceSource m_tracer = new TraceSource("MARC.HI.EHRS.SVC.Messaging.FHIR");
 
         #region IFhirServiceContract Members
@@ -91,14 +89,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Read a reasource
         /// </summary>
-        public ResourceBase ReadResource(string resourceType, string id, string mimeType)
+        public DomainResourceBase ReadResource(string resourceType, string id, string mimeType)
         {
             FhirOperationResult result = null;
             try
             {
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 result = this.PerformRead(resourceType, id, null);
                 String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}/_history/{1}", baseUri, result.Results[0].VersionId));
@@ -106,33 +103,32 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, result, false) as ResourceBase;
+                return this.ErrorHelper(e, result, false) as DomainResourceBase;
             }
         }
 
         /// <summary>
         /// Read resource with version
         /// </summary>
-        public ResourceBase VReadResource(string resourceType, string id, string vid, string mimeType)
+        public DomainResourceBase VReadResource(string resourceType, string id, string vid, string mimeType)
         {
             FhirOperationResult result = null;
             try
             {
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 result = this.PerformRead(resourceType, id, vid);
                 return result.Results[0];
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, result, false) as ResourceBase;
+                return this.ErrorHelper(e, result, false) as DomainResourceBase;
             }
         }
 
         /// <summary>
         /// Update a resource
         /// </summary>
-        public ResourceBase UpdateResource(string resourceType, string id, string mimeType, ResourceBase target)
+        public DomainResourceBase UpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target)
         {
             FhirOperationResult result = null;
             AuditData audit = null;
@@ -142,7 +138,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
 
                 // Setup outgoing content/
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
 
                 // Create or update?
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
@@ -176,7 +171,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, false) as ResourceBase;
+                return this.ErrorHelper(e, result, false) as DomainResourceBase;
             }
             finally
             {
@@ -188,7 +183,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Delete a resource
         /// </summary>
-        public ResourceBase DeleteResource(string resourceType, string id, string mimeType)
+        public DomainResourceBase DeleteResource(string resourceType, string id, string mimeType)
         {
             FhirOperationResult result = null;
             AuditData audit = null;
@@ -198,7 +193,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
 
                 // Setup outgoing content/
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.NoContent;
 
                 // Create or update?
@@ -225,7 +219,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, false) as ResourceBase;
+                return this.ErrorHelper(e, result, false) as DomainResourceBase;
             }
             finally
             {
@@ -237,7 +231,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Create a resource
         /// </summary>
-        public ResourceBase CreateResource(string resourceType, string mimeType, ResourceBase target)
+        public DomainResourceBase CreateResource(string resourceType, string mimeType, DomainResourceBase target)
         {
             FhirOperationResult result = null;
 
@@ -248,7 +242,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
 
                 // Create or update?
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
@@ -282,7 +275,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, false) as ResourceBase;
+                return this.ErrorHelper(e, result, false) as DomainResourceBase;
             }
             finally
             {
@@ -294,14 +287,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Validate a resource (really an update with debugging / non comit)
         /// </summary>
-        public OperationOutcome ValidateResource(string resourceType, string id, ResourceBase target)
+        public OperationOutcome ValidateResource(string resourceType, string id, DomainResourceBase target)
         {
             FhirOperationResult result = null;
             try
             {
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
 
                 // Create or update?
                 var handler = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
@@ -355,7 +347,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
                 var resourceProcessor = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
 
                 // Setup outgoing content
-                WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 WebOperationContext.Current.OutgoingRequest.Headers.Add("Last-Modified", DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz"));
 
                 if (resourceProcessor == null) // Unsupported resource
@@ -398,7 +389,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         public Conformance GetOptions()
         {
             var retVal = new Conformance(); // ConformanceUtil.GetConformanceStatement();
-            WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/{1}/_history/{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
             WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
@@ -423,7 +413,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             try
             {
 
-                WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 readResult = this.PerformRead(resourceType, id, String.Empty);
                 WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
                 return MessageUtil.CreateBundle(readResult);
@@ -503,12 +492,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 
             if (returnBundle)
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = ATOM_TYPE;
                 throw new WebFaultException<Bundle>(MessageUtil.CreateBundle(result), retCode);
             }
             else
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = FHIR_TYPE;
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"error.xml\"");
                 throw new WebFaultException<OperationOutcome>(MessageUtil.CreateOutcomeResource(result), retCode);
             }
@@ -558,7 +545,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
                 audit = AuditUtil.CreateAuditData(result.Results);
 
                 // Create the result
-                if (result.Results != null && result.Results.Count > 0 && WebOperationContext.Current.OutgoingResponse.ContentType == FHIR_TYPE)
+                if (result.Results != null && result.Results.Count > 0 )
                 {
                     WebOperationContext.Current.OutgoingResponse.LastModified = result.Results[0].Timestamp;
                     WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", String.Format("filename=\"{0}-{1}-{2}.xml\"", resourceType, result.Results[0].Id, result.Results[0].VersionId));
@@ -605,7 +592,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Create or update
         /// </summary>
-        public ResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, ResourceBase target)
+        public DomainResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target)
         {
             return this.UpdateResource(resourceType, id, mimeType, target);
         }

@@ -45,7 +45,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Conformance", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Conformance", Namespace = "http://hl7.org/fhir")]
-    public class Conformance : ResourceBase
+    public class Conformance : DomainResourceBase
     {
 
         /// <summary>

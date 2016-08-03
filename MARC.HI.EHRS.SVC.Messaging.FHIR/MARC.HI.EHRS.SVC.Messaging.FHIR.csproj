@@ -34,11 +34,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hl7.Fhir.Api">
-      <HintPath>..\Solution Items\Hl7.Fhir.Api.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.Model">
-      <HintPath>..\Solution Items\Hl7.Fhir.Model.dll</HintPath>
+    <Reference Include="Hl7.Fhir.DSTU2.Core">
+      <HintPath>..\Solution Items\Hl7.Fhir.DSTU2.Core.dll</HintPath>
     </Reference>
     <Reference Include="MARC.Everest">
       <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
@@ -85,6 +82,7 @@
     <Compile Include="Backbone\BundleSearch.cs" />
     <Compile Include="Backbone\ComposeFilterDefinition.cs" />
     <Compile Include="Backbone\ConceptDesignation.cs" />
+    <Compile Include="Backbone\ImmunizationProtocol.cs" />
     <Compile Include="Backbone\PatientLink.cs" />
     <Compile Include="Backbone\SecurityCertificateDefinition.cs" />
     <Compile Include="Backbone\SecurityDefinition.cs" />
@@ -139,6 +137,7 @@
     <Compile Include="Backbone\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
     <Compile Include="Backbone\ImplementationDefinition.cs" />
+    <Compile Include="Resources\Immunization.cs" />
     <Compile Include="Resources\Issue.cs" />
     <Compile Include="Backbone\Communication.cs" />
     <Compile Include="Resources\Narrative.cs" />
@@ -148,13 +147,14 @@
     <Compile Include="Resources\Patient.cs" />
     <Compile Include="Resources\Picture.cs" />
     <Compile Include="Resources\Practictioner.cs" />
+    <Compile Include="Resources\ResourceBase.cs" />
     <Compile Include="Resources\StructureDefinition.cs" />
     <Compile Include="Resources\ProfileImport.cs" />
     <Compile Include="Resources\Qualification.cs" />
     <Compile Include="Resources\RawXmlWrapper.cs" />
     <Compile Include="Resources\RelatedPerson.cs" />
     <Compile Include="Resources\Reference.cs" />
-    <Compile Include="Resources\ResourceBase.cs" />
+    <Compile Include="Resources\DomainResourceBase.cs" />
     <Compile Include="Backbone\ResourceDefinition.cs" />
     <Compile Include="Backbone\RestDefinition.cs" />
     <Compile Include="Backbone\SearchParamDefinition.cs" />

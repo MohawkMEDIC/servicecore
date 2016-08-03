@@ -14,7 +14,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("RelatedPerson", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("RelatedPerson", Namespace = "http://hl7.org/fhir")]
-    public class RelatedPerson : ResourceBase
+    public class RelatedPerson : DomainResourceBase
     {
         /// <summary>
         /// Related person

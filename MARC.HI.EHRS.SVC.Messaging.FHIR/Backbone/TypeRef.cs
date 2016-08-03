@@ -41,7 +41,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
             retVal.m_type = realType;
             if (xta == null)
                 return null;
-            else if (typeof(ResourceBase).IsAssignableFrom(realType))
+            else if (typeof(DomainResourceBase).IsAssignableFrom(realType))
                 retVal.Code = new FhirCode<string>(String.Format("Resource({0})", xta.TypeName));
             else
                 retVal.Code = new FhirCode<string>(xta.TypeName);
@@ -72,7 +72,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
             {
 
                 // First a reasource?
-                if (typeof(ResourceBase).IsAssignableFrom(this.m_type))
+                if (typeof(DomainResourceBase).IsAssignableFrom(this.m_type))
                 {
                     w.WriteString("Resource(");
                     var tn = this.m_type.GetCustomAttribute<XmlTypeAttribute>().TypeName;

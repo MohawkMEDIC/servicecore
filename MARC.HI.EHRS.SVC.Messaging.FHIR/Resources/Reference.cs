@@ -34,7 +34,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Create resource refernece (friendly method)
         /// </summary>
-        public static Reference CreateResourceReference(ResourceBase instance, Uri baseUri)
+        public static Reference CreateResourceReference(DomainResourceBase instance, Uri baseUri)
         {
             return new Reference()
             {
@@ -49,7 +49,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Create resource refernece for local
         /// </summary>
-        public static Reference CreateLocalResourceReference(ResourceBase instance)
+        public static Reference CreateLocalResourceReference(DomainResourceBase instance)
         {
             IdRef idRef = instance.MakeIdRef();
             return new Reference() {
@@ -72,7 +72,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Fetch the resource described by this item
         /// </summary>
-        public ResourceBase FetchResource(Uri baseUri, Type resourceType)
+        public DomainResourceBase FetchResource(Uri baseUri, Type resourceType)
         {
             return this.FetchResource(baseUri, null, null, resourceType);
         }
@@ -80,7 +80,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Fetch a resource from the specified uri with the specified credentials
         /// </summary>
-        public ResourceBase FetchResource(Uri baseUri, ICredentials credentials, ResourceBase context, Type resourceType)
+        public DomainResourceBase FetchResource(Uri baseUri, ICredentials credentials, DomainResourceBase context, Type resourceType)
         {
             // Request uri
             Uri requestUri = null;
@@ -110,7 +110,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
                         throw new WebException(String.Format("Server responded with {0}", response.StatusCode));
 
                     XmlSerializer xsz = new XmlSerializer(resourceType);
-                    return xsz.Deserialize(response.GetResponseStream()) as ResourceBase;
+                    return xsz.Deserialize(response.GetResponseStream()) as DomainResourceBase;
                 }
             }
             catch (Exception e)
@@ -124,7 +124,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Create a reasource reference to the specified resource
         /// </summary>
-        public static Reference<TResource> CreateResourceReference<TResource>(TResource instance, Uri baseUri) where TResource : ResourceBase
+        public static Reference<TResource> CreateResourceReference<TResource>(TResource instance, Uri baseUri) where TResource : DomainResourceBase
         {
             return new Reference<TResource>()
             {
@@ -138,7 +138,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Create a reasource reference to the specified resource
         /// </summary>
-        public static Reference<TResource> CreateLocalResourceReference<TResource>(TResource instance) where TResource : ResourceBase
+        public static Reference<TResource> CreateLocalResourceReference<TResource>(TResource instance) where TResource : DomainResourceBase
         {
             IdRef idRef = instance.MakeIdRef();
             return new Reference<TResource>()
@@ -153,13 +153,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Identifies a resource link
     /// </summary>
     public class Reference<TResource> : Reference
-        where TResource : ResourceBase
+        where TResource : DomainResourceBase
     {
 
         /// <summary>
         /// Fetch the resource described by this item
         /// </summary>
-        public TResource FetchResource(Uri baseUri, ResourceBase context)
+        public TResource FetchResource(Uri baseUri, DomainResourceBase context)
         {
             return this.FetchResource(baseUri, null, context);
         }
@@ -167,7 +167,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Fetch a resource from the specified uri with the specified credentials
         /// </summary>
-        public TResource FetchResource(Uri baseUri, ICredentials credentials, ResourceBase context) 
+        public TResource FetchResource(Uri baseUri, ICredentials credentials, DomainResourceBase context) 
         {
             return (TResource)base.FetchResource(baseUri, credentials, context, typeof(TResource));
         }

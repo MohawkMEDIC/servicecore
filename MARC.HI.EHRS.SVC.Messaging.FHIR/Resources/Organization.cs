@@ -15,7 +15,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlRoot("Organization",Namespace = "http://hl7.org/fhir")] 
     [XmlType("Organization", Namespace = "http://hl7.org/fhir")]
-    public class Organization : ResourceBase
+    public class Organization : DomainResourceBase
     {
 
         /// <summary>

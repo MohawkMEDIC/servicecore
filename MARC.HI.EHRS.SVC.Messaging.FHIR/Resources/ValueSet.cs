@@ -15,7 +15,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("ValueSet", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("ValueSet", Namespace = "http://hl7.org/fhir")]
-    public class ValueSet : ResourceBase
+    public class ValueSet : DomainResourceBase
     {
 
         /// <summary>

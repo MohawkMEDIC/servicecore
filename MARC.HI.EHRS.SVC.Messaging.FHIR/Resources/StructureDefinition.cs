@@ -48,7 +48,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("StructureDefinition", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("StructureDefinition", Namespace = "http://hl7.org/fhir")]
-    public class StructureDefinition : ResourceBase
+    public class StructureDefinition : DomainResourceBase
     {
         /// <summary>
         /// Structure definition

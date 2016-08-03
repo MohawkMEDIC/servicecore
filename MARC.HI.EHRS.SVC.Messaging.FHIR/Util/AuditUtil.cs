@@ -30,7 +30,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
         /// <summary>
         /// Create audit data
         /// </summary>
-        public static AuditData CreateAuditData(IEnumerable<ResourceBase> records)
+        public static AuditData CreateAuditData(IEnumerable<DomainResourceBase> records)
         {
             // Audit data
             AuditData retVal = null;
@@ -209,7 +209,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
 
             if(records != null)
-                foreach (ResourceBase pat in records)
+                foreach (DomainResourceBase pat in records)
                 {
                     // TODO: Make this more generic
                     AuditableObject aud = null;

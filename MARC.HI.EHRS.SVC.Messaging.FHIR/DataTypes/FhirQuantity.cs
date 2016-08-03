@@ -16,7 +16,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// Gets or sets the primitive value of the quantity
         /// </summary>
         [XmlElement("value")]
-        public Primitive<Decimal> Value { get; set; }
+        public FhirDecimal Value { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship of the stated value and the real value

@@ -22,6 +22,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
     [ServiceKnownType(typeof(OperationOutcome))]
     [ServiceKnownType(typeof(ValueSet))]
     [ServiceKnownType(typeof(StructureDefinition))]
+    [ServiceKnownType(typeof(Bundle))]
+    [ServiceKnownType(typeof(Immunization))]
     [ServiceKnownType(typeof(Conformance))]
     [ServiceKnownType(typeof(RelatedPerson))]
     [ServiceKnownType(typeof(System.ServiceModel.Syndication.Atom10FeedFormatter))]
@@ -53,49 +55,49 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         [WebGet(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "read")]
-        ResourceBase ReadResource(string resourceType, string id, string mimeType);
+        DomainResourceBase ReadResource(string resourceType, string id, string mimeType);
 
         /// <summary>
         /// Version read a resource
         /// </summary>
         [WebGet(UriTemplate = "/{resourceType}/{id}/_history/{vid}?_format={mimeType}", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "vread")]
-        ResourceBase VReadResource(string resourceType, string id, string vid, string mimeType);
+        DomainResourceBase VReadResource(string resourceType, string id, string vid, string mimeType);
 
         /// <summary>
         /// Update a resource
         /// </summary>
         [WebInvoke(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", Method = "PUT", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "update")]
-        ResourceBase UpdateResource(string resourceType, string id, string mimeType, ResourceBase target);
+        DomainResourceBase UpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target);
 
         /// <summary>
         /// Delete a resource
         /// </summary>
         [WebInvoke(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", Method = "DELETE", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "delete")]
-        ResourceBase DeleteResource(string resourceType, string id, string mimeType);
+        DomainResourceBase DeleteResource(string resourceType, string id, string mimeType);
 
         /// <summary>
         /// Create a resource
         /// </summary>
         [WebInvoke(UriTemplate = "/{resourceType}?_format={mimeType}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "create")]
-        ResourceBase CreateResource(string resourceType, string mimeType, ResourceBase target);
+        DomainResourceBase CreateResource(string resourceType, string mimeType, DomainResourceBase target);
 
         /// <summary>
         /// Create a resource
         /// </summary>
         [WebInvoke(UriTemplate = "/{resourceType}/{id}?_format={mimeType}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract]
-        ResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, ResourceBase target);
+        DomainResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target);
 
         /// <summary>
         /// Validate a resource
         /// </summary>
         [WebInvoke(UriTemplate = "/{resourceType}/_validate/{id}", Method = "POST", ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Xml, BodyStyle = WebMessageBodyStyle.Bare)]
         [OperationContract(Name = "validate")]
-        OperationOutcome ValidateResource(string resourceType, string id, ResourceBase target);
+        OperationOutcome ValidateResource(string resourceType, string id, DomainResourceBase target);
 
         /// <summary>
         /// Version read a resource

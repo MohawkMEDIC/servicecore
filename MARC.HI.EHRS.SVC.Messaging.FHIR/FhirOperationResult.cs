@@ -21,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         {
             this.Details = new List<IResultDetail>();
             this.Issues = new List<DetectedIssue>();
-            this.Results = new List<ResourceBase>();
+            this.Results = new List<DomainResourceBase>();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// <summary>
         /// Represents the results of the operation
         /// </summary>
-        public List<ResourceBase> Results { get; set; }
+        public List<DomainResourceBase> Results { get; set; }
 
         /// <summary>
         /// Business violations

@@ -38,6 +38,7 @@ using System.Diagnostics;
 using Newtonsoft.Json.Converters;
 using Hl7.Fhir.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
+using System.Collections.Specialized;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
 {
@@ -107,14 +108,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                         parameters[pNumber] = Convert.ChangeType(rawData, parm.Type);
                     }
                     // Use XML Serializer
-                    else if (contentType?.StartsWith("application/fhir+xml") == true)
+                    else if (contentType?.StartsWith("application/xml+fhir") == true)
                     {
                         XmlSerializer xsz = s_serializers[parm.Type];
                         XmlDictionaryReader bodyReader = request.GetReaderAtBodyContents();
                         parameters[0] = xsz.Deserialize(bodyReader);
                     }
                     // Use JSON Serializer
-                    else if (contentType?.StartsWith("application/fhir+json") == true)
+                    else if (contentType?.StartsWith("application/json+fhir") == true)
                     {
                         // Read the binary contents form the WCF pipeline
                         XmlDictionaryReader bodyReader = request.GetReaderAtBodyContents();
@@ -127,18 +128,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                         using (StreamReader sr = new StreamReader(mstream))
                         {
                             string fhirContent = sr.ReadToEnd();
-                            if (fhirContent.Contains("resourceType\":\"Bundle"))
-                                fhirObject = FhirParser.ParseBundleEntryFromJson(fhirContent);
-                            else
-                                fhirObject = FhirParser.ParseResourceFromJson(fhirContent);
+                            fhirObject = FhirParser.ParseFromJson(fhirContent);
                         }
 
                         // Now we want to serialize the FHIR MODEL object and re-parse as our own API bundle object
-                        MemoryStream ms = null;
-                        if (fhirObject is Hl7.Fhir.Model.Bundle)
-                            ms = new MemoryStream(FhirSerializer.SerializeBundleToXmlBytes(fhirObject as Hl7.Fhir.Model.Bundle));
-                        else
-                            ms = new MemoryStream(FhirSerializer.SerializeResourceToXmlBytes(fhirObject as Hl7.Fhir.Model.Resource));
+                        MemoryStream ms = new MemoryStream(FhirSerializer.SerializeResourceToXmlBytes(fhirObject as Hl7.Fhir.Model.Resource));
 
                         XmlSerializer xsz = s_serializers[parm.Type];
                         parameters[0] = xsz.Deserialize(ms);
@@ -167,7 +161,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                 Message request = OperationContext.Current.RequestContext.RequestMessage;
                 HttpRequestMessageProperty httpRequest = (HttpRequestMessageProperty)request.Properties[HttpRequestMessageProperty.Name];
                 string accepts = httpRequest.Headers[HttpRequestHeader.Accept],
-                    contentType = httpRequest.Headers[HttpRequestHeader.ContentType];
+                    contentType = httpRequest.Headers[HttpRequestHeader.ContentType],
+                    formatParm = httpRequest.QueryString;
+
                 Message reply = null;
 
                 // Result is serializable
@@ -178,34 +174,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                     MemoryStream ms = new MemoryStream();
                     xsz.Serialize(ms, result);
                     format = WebContentFormat.Xml;
-                    contentType = "application/xml";
+                    contentType = "application/xml+fhir";
                     ms.Seek(0, SeekOrigin.Begin);
 
                     // The request was in JSON or the accept is JSON
-                    if (accepts?.StartsWith("application/fhir+json") == true ||
-                        contentType?.StartsWith("application/fhir+json") == true)
+                    if (accepts?.StartsWith("application/json+fhir") == true ||
+                        contentType?.StartsWith("application/json+fhir") == true ||
+                        formatParm.Contains("_format=json"))
                     {
                         // Parse XML object
                         Object fhirObject = null;
                         using (StreamReader sr = new StreamReader(ms))
                         {
                             String fhirContent = sr.ReadToEnd();
-                            if (result is Bundle)
-                                fhirObject = FhirParser.ParseBundleFromXml(fhirContent);
-                            else
-                                fhirObject = FhirParser.ParseResourceFromXml(fhirContent);
+                            fhirObject = FhirParser.ParseFromXml(fhirContent);
                         }
 
                         // Now we serialize to JSON
-                        byte[] body = null;
-                        if (result is Bundle)
-                            body = FhirSerializer.SerializeBundleToJsonBytes(fhirObject as Hl7.Fhir.Model.Bundle);
-                        else
-                            body = FhirSerializer.SerializeResourceToJsonBytes(fhirObject as Hl7.Fhir.Model.Resource);
+                        byte[] body = FhirSerializer.SerializeResourceToJsonBytes(fhirObject as Hl7.Fhir.Model.Resource);
                         
                         // Prepare reply for the WCF pipeline
                         format = WebContentFormat.Raw;
-                        contentType = "application/json";
+                        contentType = "application/json+fhir";
                         reply = Message.CreateMessage(messageVersion, this.m_operationDescription?.Messages[1]?.Action, new RawBodyWriter(body));
 
                     }
@@ -231,7 +221,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
 
                 reply.Properties.Add(WebBodyFormatMessageProperty.Name, new WebBodyFormatMessageProperty(format));
                 WebOperationContext.Current.OutgoingResponse.ContentType = contentType;
-                WebOperationContext.Current.OutgoingResponse.Headers.Add("X-PoweredBy", "OpenIZFHIR");
+                WebOperationContext.Current.OutgoingResponse.Headers.Add("X-PoweredBy", String.Format("{0} v{1} ({2})", Assembly.GetEntryAssembly().GetName().Name, Assembly.GetEntryAssembly().GetName().Version, Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion));
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("X-GeneratedOn", DateTime.Now.ToString("o"));
 
                 return reply;

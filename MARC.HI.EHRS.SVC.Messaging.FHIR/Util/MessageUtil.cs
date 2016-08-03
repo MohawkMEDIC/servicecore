@@ -218,7 +218,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             if (result.Results != null)
             {
                 var feedItems = new List<BundleEntry>();
-                foreach (ResourceBase itm in result.Results)
+                foreach (DomainResourceBase itm in result.Results)
                 {
                     Uri resourceUrl = new Uri(String.Format("{0}/{1}?_format={2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, String.Format("{0}/{1}/_history/{2}", itm.GetType().Name, itm.Id, itm.VersionId), format));
                     BundleEntry feedResult = new BundleEntry(); //new Bundleentry(String.Format("{0} id {1} version {2}", itm.GetType().Name, itm.Id, itm.VersionId), null ,resourceUrl);
