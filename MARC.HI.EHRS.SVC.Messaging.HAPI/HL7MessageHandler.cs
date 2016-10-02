@@ -48,7 +48,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI
         /// </summary>
         public HL7MessageHandler()
         {
-            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("MARC.HI.EHRS.SVC.Messaging.HAPI") as HL7ConfigurationSection;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.hapi") as HL7ConfigurationSection;
         }
 
         /// <summary>
