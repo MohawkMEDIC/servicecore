@@ -8,8 +8,8 @@
     <ProjectGuid>{257710CF-713E-4534-B562-DB25CDBADD79}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MARC.HI.EHRS.CR.Messaging.HAPI</RootNamespace>
-    <AssemblyName>MARC.HI.EHRS.CR.Messaging.HAPI</AssemblyName>
+    <RootNamespace>MARC.HI.EHRS.SVC.Messaging.HAPI</RootNamespace>
+    <AssemblyName>MARC.HI.EHRS.SVC.Messaging.HAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
