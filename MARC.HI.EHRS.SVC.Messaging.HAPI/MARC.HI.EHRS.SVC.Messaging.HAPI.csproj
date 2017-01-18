@@ -8,8 +8,8 @@
     <ProjectGuid>{257710CF-713E-4534-B562-DB25CDBADD79}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MARC.HI.EHRS.CR.Messaging.HAPI</RootNamespace>
-    <AssemblyName>MARC.HI.EHRS.CR.Messaging.HAPI</AssemblyName>
+    <RootNamespace>MARC.HI.EHRS.SVC.Messaging.HAPI</RootNamespace>
+    <AssemblyName>MARC.HI.EHRS.SVC.Messaging.HAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -69,8 +69,8 @@
     <Compile Include="TransportProtocol\X509CertificateEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\MARC.HI.EHRS.CR.licenseheader">
-      <Link>MARC.HI.EHRS.CR.licenseheader</Link>
+    <None Include="..\MARC.HI.EHRS.SVC.licenseheader">
+      <Link>MARC.HI.EHRS.SVC.licenseheader</Link>
     </None>
     <None Include="Configuration\marc.hi.ehrs.cr.messaging.hl7.xsd">
       <SubType>Designer</SubType>
