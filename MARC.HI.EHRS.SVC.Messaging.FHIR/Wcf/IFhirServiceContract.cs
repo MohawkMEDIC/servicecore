@@ -24,6 +24,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
     [ServiceKnownType(typeof(StructureDefinition))]
     [ServiceKnownType(typeof(Bundle))]
     [ServiceKnownType(typeof(Immunization))]
+    [ServiceKnownType(typeof(ImmunizationRecommendation))]
     [ServiceKnownType(typeof(Conformance))]
     [ServiceKnownType(typeof(RelatedPerson))]
     [ServiceKnownType(typeof(System.ServiceModel.Syndication.Atom10FeedFormatter))]

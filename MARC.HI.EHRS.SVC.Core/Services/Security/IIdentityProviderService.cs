@@ -94,8 +94,14 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Security
         void SetLockout(String userName, bool lockout, IPrincipal authContext);
 
         /// <summary>
-        /// Gets or sets the ITwoFactorSecretGenerator attached to the role provider
+        /// Adds a claim to the specified user account
         /// </summary>
-        ITwoFactorSecretGenerator TwoFactorSecretGenerator { get; set; }
+        void AddClaim(String userName, Claim claim);
+
+        /// <summary>
+        /// Removes a claim from the specified user account
+        /// </summary>
+        void RemoveClaim(String userName, String claimType);
+
     }
 }

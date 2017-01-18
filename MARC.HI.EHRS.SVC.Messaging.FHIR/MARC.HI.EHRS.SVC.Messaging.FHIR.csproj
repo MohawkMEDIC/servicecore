@@ -34,8 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hl7.Fhir.DSTU2.Core">
-      <HintPath>..\Solution Items\Hl7.Fhir.DSTU2.Core.dll</HintPath>
+    <Reference Include="Hl7.Fhir.DSTU21.Core, Version=0.90.4.21547, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Solution Items\Hl7.Fhir.DSTU21.Core.dll</HintPath>
     </Reference>
     <Reference Include="MARC.Everest">
       <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
@@ -83,6 +84,7 @@
     <Compile Include="Backbone\ComposeFilterDefinition.cs" />
     <Compile Include="Backbone\ConceptDesignation.cs" />
     <Compile Include="Backbone\ImmunizationProtocol.cs" />
+    <Compile Include="Backbone\ImmunizationRecommendationDateCriterion.cs" />
     <Compile Include="Backbone\PatientLink.cs" />
     <Compile Include="Backbone\SecurityCertificateDefinition.cs" />
     <Compile Include="Backbone\SecurityDefinition.cs" />
@@ -138,6 +140,8 @@
     <Compile Include="Resources\ContactEntity.cs" />
     <Compile Include="Backbone\ImplementationDefinition.cs" />
     <Compile Include="Resources\Immunization.cs" />
+    <Compile Include="Resources\ImmunizationRecommendation.cs" />
+    <Compile Include="Backbone\ImmunizationRecommendation.cs" />
     <Compile Include="Resources\Issue.cs" />
     <Compile Include="Backbone\Communication.cs" />
     <Compile Include="Resources\Narrative.cs" />

@@ -126,6 +126,37 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     public class FhirDate : FhirDateTime
     {
         /// <summary>
+        /// reate FHIR date
+        /// </summary>
+        public FhirDate()
+        {
+
+        }
+
+        /// <summary>
+        /// Create FHIR date
+        /// </summary>
+        public FhirDate(DateTime dt) : base(dt)
+        {
+
+        }
+        /// <summary>
+        /// Convert this date to a date
+        /// </summary>
+        public static implicit operator DateTime(FhirDate v)
+        {
+            return v.DateValue.Value;
+        }
+
+        /// <summary>
+        /// Convert this date to a date
+        /// </summary>
+        public static implicit operator FhirDate(DateTime v)
+        {
+            return new FhirDate(v);
+        }
+
+        /// <summary>
         /// Only date is permitted
         /// </summary>
         [XmlIgnore]

@@ -37,7 +37,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
         public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
             // Formulate appropriate response
-            if (error is PolicyViolationException || error is SecurityException || (error as FaultException)?.Code.SubCode?.Name == "FailedAuthentication")
+            if (error is DomainStateException)
+                WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.ServiceUnavailable;
+            else if (error is PolicyViolationException || error is SecurityException || (error as FaultException)?.Code.SubCode?.Name == "FailedAuthentication")
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.Forbidden;
             else if (error is SecurityTokenException)
             {

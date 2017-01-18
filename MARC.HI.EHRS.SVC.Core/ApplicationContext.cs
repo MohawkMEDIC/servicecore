@@ -69,6 +69,11 @@ namespace MARC.HI.EHRS.SVC.Core
         /// </summary>
         public Guid ContextId { get; private set; }
 
+        /// <summary>
+        /// Gets whether the domain is running
+        /// </summary>
+        public bool IsRunning { get { return this.m_running; } }
+
         // Message handler service
         private IMessageHandlerService m_messageHandler = null;
 
@@ -127,7 +132,6 @@ namespace MARC.HI.EHRS.SVC.Core
                 if (this.Starting != null)
                     this.Starting(this, null);
 
-                this.m_running = true;
                 m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
 
                 // If there is no configuration manager then add the local
@@ -145,6 +149,8 @@ namespace MARC.HI.EHRS.SVC.Core
 
                 if (this.Started != null)
                     this.Started(this, null);
+                this.m_running = true;
+
             }
 
             return true;

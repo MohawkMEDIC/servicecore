@@ -128,6 +128,13 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
                 if (idElement != null)
                     retVal.Custodianship.Id = new Identifier<String>() { Id = idElement.Attributes["value"].Value };
                 retVal.Custodianship.Name = custodianSection.SelectSingleNode("./*[local-name() = 'name']").InnerText;
+
+                retVal.Custodianship.Contact = new CustodianshipContact()
+                {
+                    Email = custodianSection.SelectSingleNode("./*[local-name() = 'contact']/@email")?.Value,
+                    Name = custodianSection.SelectSingleNode("./*[local-name() = 'contact']/@name")?.Value,
+                    Organization = custodianSection.SelectSingleNode("./*[local-name() = 'contact']/@organization")?.Value,
+                };
             }
 
             if (serviceProviderSection != null && !(configContext is IConfigurationPanel)) // Load providers data

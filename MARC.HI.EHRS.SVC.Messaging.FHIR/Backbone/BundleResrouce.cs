@@ -35,6 +35,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("Organization", Type = typeof(Organization))]
         [XmlElement("Practitioner", Type = typeof(Practictioner))]
         [XmlElement("Immunization", Type = typeof(Immunization))]
+        [XmlElement("ImmunizationRecommendation", Type = typeof(Resources.ImmunizationRecommendation))]
         [XmlElement("RelatedPerson", Type = typeof(RelatedPerson))]
         public DomainResourceBase Resource { get; set; }
 
