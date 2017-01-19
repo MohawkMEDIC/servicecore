@@ -92,15 +92,15 @@ namespace MARC.HI.EHRS.SVC.Core.Event
     /// <summary>
     /// Represents event data associated with a data retrieval operation
     /// </summary>
-    public class PreRetrievalEventArgs<TData> : SecureAccessEventArgs
+    public class PreRetrievalEventArgs : SecureAccessEventArgs
     {
 
         /// <summary>
         /// Creates a new pre-retrieval event args object
         /// </summary>
-        public PreRetrievalEventArgs(TData data, IPrincipal authContext = null) : base(authContext)
+        public PreRetrievalEventArgs(Identifier data, IPrincipal authContext = null) : base(authContext)
         {
-            this.Data = data;
+            this.Identifier = data;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Gets the identifier of the object to be retrieved
         /// </summary>
-        public TData Data { get; private set; }
+        public Identifier Identifier { get; private set; }
     }
 
     /// <summary>
