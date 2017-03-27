@@ -42,5 +42,32 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
         /// </summary>
         public Identifier<String> Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the contact information
+        /// </summary>
+        public CustodianshipContact Contact { get; set; }
+
+    }
+
+    /// <summary>
+    /// Custodianship contact 
+    /// </summary>
+    public class CustodianshipContact
+    {
+
+        /// <summary>
+        /// Represents the name of the contact
+        /// </summary>
+        public String Email { get; set; }
+
+        /// <summary>
+        /// Represents the contact name
+        /// </summary>
+        public String Name { get; set; }
+
+        /// <summary>
+        /// Represents the contact organization
+        /// </summary>
+        public String Organization { get; set; }
     }
 }

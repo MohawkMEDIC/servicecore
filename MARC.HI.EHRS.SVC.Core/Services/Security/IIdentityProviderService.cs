@@ -94,15 +94,14 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Security
         void SetLockout(String userName, bool lockout, IPrincipal authContext);
 
         /// <summary>
-        /// Add a claim
+        /// Adds a claim to the specified user account
         /// </summary>
-        /// <param name="userName"></param>
-        void AddClaim(string userName, Claim claim);
+        void AddClaim(String userName, Claim claim);
 
         /// <summary>
-        /// Remove a claim
+        /// Removes a claim from the specified user account
         /// </summary>
-        void RemoveClaim(string userName, string claimType);
+        void RemoveClaim(String userName, String claimType);
 
     }
 }

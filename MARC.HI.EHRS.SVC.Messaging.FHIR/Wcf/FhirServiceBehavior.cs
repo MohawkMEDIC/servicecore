@@ -20,6 +20,7 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using System.Diagnostics;
 using System.Net;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
+using MARC.HI.EHRS.SVC.Core.Exceptions;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 {
@@ -39,6 +40,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public XmlSchema GetSchema(int schemaId)
         {
+            this.ThrowIfNotReady();
+
             XmlSchemas schemaCollection = new XmlSchemas();
 
             XmlReflectionImporter importer = new XmlReflectionImporter("http://hl7.org/fhir");
@@ -55,6 +58,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public Stream Index()
         {
+            this.ThrowIfNotReady();
+
             try
             {
                 WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
@@ -91,6 +96,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public DomainResourceBase ReadResource(string resourceType, string id, string mimeType)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult result = null;
             try
             {
@@ -112,6 +119,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public DomainResourceBase VReadResource(string resourceType, string id, string vid, string mimeType)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult result = null;
             try
             {
@@ -130,6 +139,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public DomainResourceBase UpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult result = null;
             AuditData audit = null;
             IAuditorService auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
@@ -185,6 +196,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public DomainResourceBase DeleteResource(string resourceType, string id, string mimeType)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult result = null;
             AuditData audit = null;
             IAuditorService auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
@@ -233,6 +246,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public DomainResourceBase CreateResource(string resourceType, string mimeType, DomainResourceBase target)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult result = null;
 
             AuditData audit = null;
@@ -289,6 +304,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public OperationOutcome ValidateResource(string resourceType, string id, DomainResourceBase target)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult result = null;
             try
             {
@@ -331,6 +348,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public Bundle SearchResource(string resourceType)
         {
+            this.ThrowIfNotReady();
+
             // Get the services from the service registry
             var auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
@@ -388,6 +407,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public Conformance GetOptions()
         {
+            this.ThrowIfNotReady();
+
             var retVal = new Conformance(); // ConformanceUtil.GetConformanceStatement();
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/{1}/_history/{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
@@ -409,6 +430,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public Bundle GetResourceInstanceHistory(string resourceType, string id, string mimeType)
         {
+            this.ThrowIfNotReady();
+
             FhirOperationResult readResult = null;
             try
             {
@@ -428,6 +451,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public Bundle GetResourceHistory(string resourceType, string mimeType)
         {
+            this.ThrowIfNotReady();
 
             var result = new FhirOperationResult()
             {
@@ -445,6 +469,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         public Bundle GetHistory(string mimeType)
         {
+            this.ThrowIfNotReady();
+
             var result = new FhirOperationResult()
             {
                 Outcome = ResultCode.Rejected,
@@ -509,6 +535,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// </summary>
         private FhirOperationResult PerformRead(string resourceType, string id, string vid)
         {
+            this.ThrowIfNotReady();
             // Get the services from the service registry
             var auditService = ApplicationContext.Current.GetService(typeof(IAuditorService)) as IAuditorService;
 
@@ -603,6 +630,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         public Bundle SearchResourceAlt(string resourceType)
         {
             return this.SearchResource(resourceType);
+        }
+
+        /// <summary>
+        /// Throws an exception if the service is not yet ready
+        /// </summary>
+        private void ThrowIfNotReady()
+        {
+            if (!ApplicationContext.Current.IsRunning)
+                throw new DomainStateException();
+
         }
     }
 

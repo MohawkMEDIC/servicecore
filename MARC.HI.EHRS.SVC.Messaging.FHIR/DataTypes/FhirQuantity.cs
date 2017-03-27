@@ -27,7 +27,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Gets or sets the units of measure
         /// </summary>
-        [XmlElement("units")]
+        [XmlElement("unit")]
         public FhirString Units { get; set; }
 
         /// <summary>
