@@ -39,6 +39,9 @@ namespace MARC.HI.EHRS.SVC.Core
     public class ApplicationContext : IServiceProvider, IDisposable
     {
 
+        // Service core
+        private TraceSource m_traceSource = new TraceSource("MARC.HI.EHRS.SVC.Core");
+
         // Lock object
         private static Object s_lockObject = new object();
         // Context
@@ -138,10 +141,10 @@ namespace MARC.HI.EHRS.SVC.Core
                 if (this.GetService(typeof(IConfigurationManager)) == null)
                     this.m_configuration.ServiceProviders.Add(typeof(LocalConfigurationManager));
 
-                Trace.TraceInformation("Starting all daemon services");
+                this.m_traceSource.TraceInformation("Starting all daemon services");
                 foreach (var svc in this.m_configuration.ServiceProviders.Where(t=>t.GetInterface(typeof(IDaemonService).FullName) != null).ToList())
                 {
-                    Trace.TraceInformation("Starting daemon service {0}...", svc.Name);
+                    this.m_traceSource.TraceInformation("Starting daemon service {0}...", svc.Name);
                     IDaemonService instance = this.GetService(svc) as IDaemonService;
                     instance.Start();
                 }
@@ -170,7 +173,7 @@ namespace MARC.HI.EHRS.SVC.Core
             this.m_running = false;
             foreach (var svc in this.m_configuration.ServiceProviders.OfType<IDaemonService>())
             {
-                Trace.TraceInformation("Stopping daemon service {0}...", svc.GetType().Name);
+                this.m_traceSource.TraceInformation("Stopping daemon service {0}...", svc.GetType().Name);
                 svc.Stop();
             }
 
@@ -191,38 +194,43 @@ namespace MARC.HI.EHRS.SVC.Core
                 {
                     List<Type> candidateServices = m_configuration.ServiceProviders.FindAll(o => o == serviceType || serviceType.IsAssignableFrom(o));
                     if (candidateServices.Count > 1)
-                        Trace.TraceWarning("More than one service implementation for {0} found, using {1} as default", serviceType.FullName, candidateServices[0].GetType().FullName);
+                        this.m_traceSource.TraceEvent(TraceEventType.Warning, 0, "More than one service implementation for {0} found, using {1} as default", serviceType.FullName, candidateServices[0].GetType().FullName);
 
                     if (candidateServices.Count != 0) // found
                     {
-                        var candidateServiceType = candidateServices[0]; // take the first one
-                        // The type of instantiation
-                        ServiceInstantiationType type = ServiceInstantiationType.Singleton;
-                        var serviceAttribute = candidateServiceType.GetCustomAttributes(typeof(ServiceAttribute), true);
-                        if (serviceAttribute.Length > 0)
-                            type = (serviceAttribute[0] as ServiceAttribute).Type;
+                        if (m_cachedServices.TryGetValue(candidateServices.First(), out candidateService))
+                            m_cachedServices.Add(serviceType, candidateService);
+                        else {
+                            var candidateServiceType = candidateServices[0]; // take the first one
+                                                                             // The type of instantiation
+                            ServiceInstantiationType type = ServiceInstantiationType.Singleton;
+                            var serviceAttribute = candidateServiceType.GetCustomAttributes(typeof(ServiceAttribute), true);
+                            if (serviceAttribute.Length > 0)
+                                type = (serviceAttribute[0] as ServiceAttribute).Type;
 
-                        // Service is a singleton
-                        if (type == ServiceInstantiationType.Singleton)
-                        {
-                            lock (m_cachedServices)
+                            // Service is a singleton
+                            if (type == ServiceInstantiationType.Singleton)
+                            {
+                                lock (m_cachedServices)
+                                {
+                                    candidateService = Activator.CreateInstance(candidateServiceType);
+                                    m_cachedServices.Add(serviceType, candidateService);
+                                }
+                            }
+                            else
                             {
                                 candidateService = Activator.CreateInstance(candidateServiceType);
-                                m_cachedServices.Add(serviceType, candidateService);
                             }
-                        }
-                        else
-                        {
-                            candidateService = Activator.CreateInstance(candidateServiceType);
                         }
                     }
                     else
-                        #if DEBUG
-                        Trace.TraceWarning("Could not locate service implementation for {0}", serviceType.FullName);
-                        #else
+#if DEBUG
+                        this.m_traceSource.TraceEvent(TraceEventType.Warning, 0, "Could not locate service implementation for {0}", serviceType.FullName);
+#else
                         ;
                         #endif
                 }
+
 
             return candidateService;
         }
