@@ -52,9 +52,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration
         /// </summary>
         public IDbConnection CreateConnection()
         {
-#if DEBUG
-            Trace.TraceInformation("Creating a connection {0}", m_connectionString);
-#endif
+
             IDbConnection retVal = m_providerFactory.CreateConnection();
             retVal.ConnectionString = m_connectionString;
             return retVal;

@@ -39,5 +39,10 @@ namespace MARC.HI.EHRS.QM.Core.Exception
         /// Creates a new instance of the query persistence exception
         /// </summary>
         public QueryPersistenceException(string message) : base(message) { }
+
+        /// <summary>
+        /// Creates a new instance of the query persistence exception
+        /// </summary>
+        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
     }
 }
