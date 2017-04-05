@@ -102,7 +102,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                     var parm = this.m_operationDescription.Messages[0].Body.Parts[pNumber];
 
                     // Simple parameter
-                    if (templateMatch.BoundVariables[parm.Name] != null)
+                    if (templateMatch.BoundVariables.AllKeys.Any(o=>o.ToString().ToLower() == parm.Name.ToLower()))
                     {
                         var rawData = templateMatch.BoundVariables[parm.Name];
                         parameters[pNumber] = Convert.ChangeType(rawData, parm.Type);
@@ -138,9 +138,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                                 break;
                             case WebContentFormat.Xml:
                                 {
-                                    
                                     using (rawReader)
                                     {
+                                        rawReader.MoveToStartElement();
                                         Type eType = s_knownTypes.FirstOrDefault(o => o.GetCustomAttribute<XmlRootAttribute>()?.ElementName == rawReader.LocalName && o.GetCustomAttribute<XmlRootAttribute>()?.Namespace == rawReader.NamespaceURI);
 
                                         this.m_traceSource.TraceEvent(TraceEventType.Information, 0, "Contract: {0}", typeof(IFhirServiceContract).Name);
