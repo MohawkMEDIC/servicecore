@@ -80,7 +80,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// Fired when a message is being retrieved
         /// </summary>
-        public event EventHandler<PreRetrievalEventArgs<MessageInfo>> Retrieving;
+        public event EventHandler<PreRetrievalEventArgs> Retrieving;
         /// <summary>
         /// Fired after a message has been retrieved
         /// </summary>
@@ -92,6 +92,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         static AdoMessagePersister()
         {
             m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.persistence") as ConfigurationSectionHandler;
+        }
+
+        event EventHandler<PreRetrievalEventArgs> IMessagePersistenceService.Retrieving
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #region IMessagePersistenceService Members
@@ -448,7 +461,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             try
             {
 
-                var mpe = new PreRetrievalEventArgs<MessageInfo>(new MessageInfo() { Id = messageId });
+                var mpe = new PreRetrievalEventArgs(new MessageInfo() { Id = messageId });
                 this.Retrieving?.Invoke(this, mpe);
                 if(mpe.Cancel)
                 {
