@@ -227,7 +227,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Everest
                     DateTime.Now, ActionType.Execute,
                     OutcomeIndicator.Success,
                     EventIdentifierType.ApplicationActivity,
-                    new CodeValue("GEN", null)
+                    new AuditCode("GEN", null)
                 );
             audit.Actors.Add(new AuditActorData()
             {

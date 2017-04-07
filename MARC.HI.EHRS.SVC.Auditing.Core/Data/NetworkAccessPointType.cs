@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2013-2013 Mohawk College of Applied Arts and Technology
+ * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,37 +14,37 @@
  * the License.
  * 
  * User: fyfej
- * Date: 12-3-2013
+ * Date: 7-5-2012
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service which executes timer jobs
+    /// Represents the type of network access point
     /// </summary>
-    public interface ITimerService : IDaemonService
+    [XmlType(nameof(NetworkAccessPointType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum NetworkAccessPointType
     {
-
         /// <summary>
-        /// Add a job to the timer
+        /// The identifier is a machine name
         /// </summary>
-        void AddJob(object jobObject, TimeSpan elapseTime);
-
+        [XmlEnum("name")]
+        MachineName = 0x1,
         /// <summary>
-        /// Returns true if the job object is registered
+        /// Identifier is an IP address
         /// </summary>
-        bool IsJobRegistered(Type jobObject);
-
+        [XmlEnum("ip")]
+        IPAddress = 0x2,
         /// <summary>
-        /// Gets the execution state
+        /// Identifier is a telephone number
         /// </summary>
-        /// <returns></returns>
-        List<KeyValuePair<object, DateTime>> GetState();
-
+        [XmlEnum("tel")]
+        TelephoneNumber = 0x3
     }
 }

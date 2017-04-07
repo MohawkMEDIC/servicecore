@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2013-2013 Mohawk College of Applied Arts and Technology
+ * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,37 +14,42 @@
  * the License.
  * 
  * User: fyfej
- * Date: 12-3-2013
+ * Date: 7-5-2012
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service which executes timer jobs
+    /// Represents potential outcomes
     /// </summary>
-    public interface ITimerService : IDaemonService
+    [XmlType(nameof(OutcomeIndicator), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum OutcomeIndicator
     {
-
         /// <summary>
-        /// Add a job to the timer
+        /// Successful operation
         /// </summary>
-        void AddJob(object jobObject, TimeSpan elapseTime);
-
+        [XmlEnum("ok")]
+        Success = 0x00,
         /// <summary>
-        /// Returns true if the job object is registered
+        /// Minor failure, action should be restarted
         /// </summary>
-        bool IsJobRegistered(Type jobObject);
-
+        [XmlEnum("fail.minor")]
+        MinorFail = 0x04,
         /// <summary>
-        /// Gets the execution state
+        /// Action was terminated
         /// </summary>
-        /// <returns></returns>
-        List<KeyValuePair<object, DateTime>> GetState();
-
+        [XmlEnum("fail.major")]
+        SeriousFail = 0x08,
+        /// <summary>
+        /// Major failure, action is made unavailable
+        /// </summary>
+        [XmlEnum("fail.epic")]
+        EpicFail = 0x0C
     }
 }

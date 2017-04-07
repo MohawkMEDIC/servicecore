@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2013-2013 Mohawk College of Applied Arts and Technology
+ * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,37 +14,30 @@
  * the License.
  * 
  * User: fyfej
- * Date: 12-3-2013
+ * Date: 7-5-2012
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service which executes timer jobs
+    /// Identifies the type of auditable objects in the system
     /// </summary>
-    public interface ITimerService : IDaemonService
+    [XmlType(nameof(AuditableObjectType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum AuditableObjectType
     {
-
-        /// <summary>
-        /// Add a job to the timer
-        /// </summary>
-        void AddJob(object jobObject, TimeSpan elapseTime);
-
-        /// <summary>
-        /// Returns true if the job object is registered
-        /// </summary>
-        bool IsJobRegistered(Type jobObject);
-
-        /// <summary>
-        /// Gets the execution state
-        /// </summary>
-        /// <returns></returns>
-        List<KeyValuePair<object, DateTime>> GetState();
-
+        [XmlEnum("p")]
+        Person = 1,
+        [XmlEnum("s")]
+        SystemObject = 2,
+        [XmlEnum("o")]
+        Organization = 3, 
+        [XmlEnum("x")]
+        Other = 4
     }
 }

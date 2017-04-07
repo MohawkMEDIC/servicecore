@@ -98,18 +98,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ActionType.cs" />
-    <Compile Include="Data\AuditableObejctType.cs" />
-    <Compile Include="Data\AuditableObject.cs" />
-    <Compile Include="Data\AuditableObjectIdType.cs" />
-    <Compile Include="Data\AuditableObjectLifecycle.cs" />
-    <Compile Include="Data\AuditableObjectRole.cs" />
-    <Compile Include="Data\AuditActorData.cs" />
-    <Compile Include="Data\AuditData.cs" />
-    <Compile Include="Data\AuditSourceType.cs" />
-    <Compile Include="Services\IAuditorService.cs" />
-    <Compile Include="Data\NetworkAccessPointType.cs" />
-    <Compile Include="Data\OutcomeIndicator.cs" />
     <Compile Include="DummyAuditService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -136,6 +124,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing.Core\MARC.HI.EHRS.SVC.Auditing.Core.csproj">
+      <Project>{4d448bfd-b967-4f75-ad30-37327153149c}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
       <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>

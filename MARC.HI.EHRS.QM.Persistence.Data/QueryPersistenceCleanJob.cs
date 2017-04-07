@@ -33,13 +33,18 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
     /// <summary>
     /// Timer job
     /// </summary>
-    public class QueryPersistenceCleanJob : ITimerJob
+    public class QueryPersistenceCleanJob : ITimerJob, IDaemonService
     {
 
          /// <summary>
         /// Configuration handler
         /// </summary>
         private static ConfigurationHandler m_configuration;
+
+        public event EventHandler Starting;
+        public event EventHandler Stopping;
+        public event EventHandler Started;
+        public event EventHandler Stopped;
 
         /// <summary>
         /// Ado Query Persistence Service
@@ -51,6 +56,9 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
 
         #region ITimerJob Members
 
+        /// <summary>
+        /// When the timer elapses
+        /// </summary>
         public void Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             #if DEBUG
@@ -86,17 +94,47 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
 
         }
 
+        /// <summary>
+        /// Startup and add thyself to the timer job if we don't exist already in the timer job
+        /// </summary>
+        public bool Start()
+        {
+            this.Starting?.Invoke(this, EventArgs.Empty);
+
+            ApplicationContext.Current.Started += (o, e) =>
+            {
+                var timerService = ApplicationContext.Current.GetService<ITimerService>();
+                if(!timerService.IsJobRegistered(typeof(QueryPersistenceCleanJob)))
+                    timerService.AddJob(this, new TimeSpan(4, 0, 0));
+            };
+
+            this.Started?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        /// <summary>
+        /// Stop the service
+        /// </summary>
+        public bool Stop()
+        {
+            this.Stopping?.Invoke(this, EventArgs.Empty);
+            this.Stopped?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
         #endregion
 
         #region IUsesHostContext Members
 
         /// <summary>
-        /// Gets or sets the context
+        /// True if the job is running
         /// </summary>
-        public IServiceProvider Context
+        public bool IsRunning
         {
-            get;
-            set;
+            get
+            {
+                return ApplicationContext.Current.GetService<ITimerService>()?.IsJobRegistered(typeof(QueryPersistenceCleanJob)) == true;
+            }
         }
 
         #endregion

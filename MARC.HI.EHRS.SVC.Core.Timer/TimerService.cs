@@ -99,6 +99,9 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
             int i = 0;
             foreach (var job in this.m_configuration.Jobs)
             {
+                lock (this.m_log)
+                    this.m_log.Add(job.Job as ITimerJob, DateTime.MinValue);
+
                 // Timer setup
                 var timer = new System.Timers.Timer(job.Timeout.TotalMilliseconds)
                 {
@@ -170,6 +173,9 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
             if (!(jobObject is ITimerJob))
                 throw new ArgumentOutOfRangeException(nameof(jobObject));
 
+            lock (this.m_log)
+                this.m_log.Add(jobObject as ITimerJob, DateTime.MinValue);
+
             // Resize the timer array
             Array.Resize(ref this.m_timers, this.m_timers.Length + 1);
             var timer = new System.Timers.Timer(elapseTime.TotalMilliseconds)
@@ -183,9 +189,20 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
             (jobObject as ITimerJob).Elapsed(this, null);
         }
 
+        /// <summary>
+        /// Get the state
+        /// </summary>
         public List<KeyValuePair<object, DateTime>> GetState()
         {
-            throw new NotImplementedException();
+            return this.m_log.Select(o => new KeyValuePair<Object, DateTime>(o.Key, o.Value)).ToList();
+        }
+
+        /// <summary>
+        /// Return true if job object is registered
+        /// </summary>
+        public bool IsJobRegistered(Type jobObject)
+        {
+            return this.m_log.Keys.Any(o => o.GetType() == jobObject);
         }
 
         /// <summary>

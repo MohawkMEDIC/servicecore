@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2013-2013 Mohawk College of Applied Arts and Technology
+ * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,37 +14,47 @@
  * the License.
  * 
  * User: fyfej
- * Date: 12-3-2013
+ * Date: 7-5-2012
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.SVC.Core.Services
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a service which executes timer jobs
+    /// Represents types of actions
     /// </summary>
-    public interface ITimerService : IDaemonService
+    [XmlType(nameof(ActionType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum ActionType
     {
-
         /// <summary>
-        /// Add a job to the timer
+        /// Data was created in the system
         /// </summary>
-        void AddJob(object jobObject, TimeSpan elapseTime);
-
+        [XmlEnum("c")]
+        Create,
         /// <summary>
-        /// Returns true if the job object is registered
+        /// Data was viewed, printed, displayed, etc...
         /// </summary>
-        bool IsJobRegistered(Type jobObject);
-
+        [XmlEnum("r")]
+        Read,
         /// <summary>
-        /// Gets the execution state
+        /// Data was revised in the system
         /// </summary>
-        /// <returns></returns>
-        List<KeyValuePair<object, DateTime>> GetState();
-
+        [XmlEnum("u")]
+        Update,
+        /// <summary>
+        /// Data was removed from the system
+        /// </summary>
+        [XmlEnum("d")]
+        Delete,
+        /// <summary>
+        /// A system, or application function was performed
+        /// </summary>
+        [XmlEnum("x")]
+        Execute
     }
 }
