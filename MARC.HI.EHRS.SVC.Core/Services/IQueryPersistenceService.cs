@@ -39,7 +39,12 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <param name="results">The results to be stored in the query</param>
         /// <param name="tag">A user tag for the query result set. Can be used to determine
         /// the type of data being returned</param>
-        bool RegisterQuerySet<TIdentifier>(string queryId, Identifier<TIdentifier>[] results, object tag);
+        bool RegisterQuerySet<TIdentifier>(string queryId, int count, Identifier<TIdentifier>[] results, object tag);
+
+        /// <summary>
+        /// Add results to the specified query set
+        /// </summary>
+        bool AddResults<TIdentifier>(string queryId, Identifier<TIdentifier>[] results);
 
         /// <summary>
         /// Returns true if the query identifier is already registered

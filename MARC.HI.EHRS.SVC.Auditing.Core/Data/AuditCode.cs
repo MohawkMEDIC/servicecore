@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,18 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
     /// Represents an audit 
     /// </summary>
     [XmlType(nameof(AuditCode), Namespace = "http://marc-hi.ca/svc/audit")]
+    [JsonObject(nameof(AuditCode))]
     public class AuditCode
     {
+
+        /// <summary>
+        /// Serialization ctor
+        /// </summary>
+        public AuditCode()
+        {
+
+        }
+
         /// <summary>
         /// Construct a new code
         /// </summary>
@@ -25,30 +36,30 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
         /// <summary>
         /// Gets or sets the code of the code value
         /// </summary>
-        [XmlAttribute("code")]
+        [XmlElement("code"), JsonProperty("code")]
         public String Code { get; set; }
         /// <summary>
         /// Gets or sets the system in which the code value is drawn
         /// </summary>
-        [XmlAttribute("system")]
+        [XmlElement("system"), JsonProperty("system")]
         public String CodeSystem { get; set; }
 
         /// <summary>
         /// Gets or sets the human readable name of the code sytsem
         /// </summary>
-        [XmlAttribute("systemName")]
+        [XmlElement("systemName"), JsonProperty("systemName")]
         public string CodeSystemName { get; set; }
 
         /// <summary>
         /// Gets or sets the version of the code system
         /// </summary>
-        [XmlAttribute("systemVersion")]
+        [XmlElement("systemVersion"), JsonProperty("systemVersion")]
         public string CodeSystemVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the display name
         /// </summary>
-        [XmlAttribute("display")]
+        [XmlElement("display"), JsonProperty("display")]
         public String DisplayName { get; set; }
 
     }

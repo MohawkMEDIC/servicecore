@@ -1,4 +1,6 @@
 ﻿
+
+using Newtonsoft.Json;
 /**
 * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
 * 
@@ -29,37 +31,45 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
     /// Data related to actors that participate in the event
     /// </summary>
     [XmlType(nameof(AuditActorData), Namespace = "http://marc-hi.ca/svc/audit")]
+    [JsonObject(nameof(AuditActorData))]
     public class AuditActorData
     {
         /// <summary>
         /// The unique identifier for the user in the system
         /// </summary>
-        [XmlAttribute("uid")]
+        [XmlElement("uid"), JsonProperty("uid")]
         public string UserIdentifier { get; set; }
         /// <summary>
         /// The name of the user in the system
         /// </summary>
-        [XmlAttribute("uname")]
+        [XmlElement("uname"), JsonProperty("uname")]
         public string UserName { get; set; }
         /// <summary>
         /// True if the user is the primary requestor
         /// </summary>
-        [XmlAttribute("isReq")]
+        [XmlElement("isReq"), JsonProperty("isReq")]
         public bool UserIsRequestor { get; set; }
         /// <summary>
         /// Identifies the network access point from which the user accessed the system
         /// </summary>
-        [XmlAttribute("apId")]
+        [XmlElement("apId"), JsonProperty("apId")]
         public string NetworkAccessPointId { get; set; }
         /// <summary>
         /// Identifies the type of network access point
         /// </summary>
-        [XmlAttribute("apType")]
+        [XmlElement("apType"), JsonProperty("apType")]
         public NetworkAccessPointType NetworkAccessPointType { get; set; }
+
+        /// <summary>
+        /// Network access point type
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public bool NetworkAccessPointTypeSpecified {  get { return (int)this.NetworkAccessPointType != 0; } }
+
         /// <summary>
         /// Identifies the role(s) that the actor has played
         /// </summary>
-        [XmlElement("role")]
+        [XmlElement("role"), JsonProperty("role")]
         public List<AuditCode> ActorRoleCode { get; set; }
         /// <summary>
         /// Default ctor
@@ -69,7 +79,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
         /// <summary>
         /// Alternative user identifier
         /// </summary>
-        [XmlAttribute("altUid")]
+        [XmlAttribute("altUid"), JsonProperty("altUid")]
         public string AlternativeUserId { get; set; }
     }
 }

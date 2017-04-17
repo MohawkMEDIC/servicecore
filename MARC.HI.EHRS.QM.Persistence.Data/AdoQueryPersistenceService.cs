@@ -63,7 +63,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Register a query set 
         /// </summary>
-        public bool RegisterQuerySet<TIdentifier>(string queryId, Identifier<TIdentifier>[] results, object tag)
+        public bool RegisterQuerySet<TIdentifier>(string queryId, int count, Identifier<TIdentifier>[] results, object tag)
         {
             IDbConnection dbc = m_configuration.CreateConnection();
             IDbTransaction tx = null;
@@ -76,19 +76,25 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     throw new Exception(String.Format("Query '{0}' has already been registered with the QueryManager", queryId));
 
                 // Register the query
-                RegisterQuery(dbc, tx, queryId, results.Length, tag);
+                RegisterQuery(dbc, tx, queryId, count, tag);
 
                 // Push each result into 
-                try
-                {
-                    PushResults(dbc, tx, queryId, results);
-                }
-                catch (Exception e)
-                {
-                    Trace.TraceError("Error pushing bulk: {0}", e);
-                    foreach(var id in results)
-                        this.PushResult(dbc, tx, queryId, id);
-                }
+                if(results.Length > 0)
+                    try
+                    {
+                        int ofs = 0;
+                        while (ofs < results.Length)
+                        {
+                            PushResults(dbc, tx, queryId, results.Skip(ofs).Take(100).ToArray());
+                            ofs += 100;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError("Error pushing bulk: {0}", e);
+                        foreach(var id in results)
+                            this.PushResult(dbc, tx, queryId, id);
+                    }
 
                 tx.Commit();
 
@@ -278,7 +284,6 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 IDbCommand cmd = dbc.CreateCommand();
                 try
                 {
-
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "is_qry_reg";
 
@@ -289,6 +294,8 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     qryIdParam.Value = queryId;
                     qryIdParam.DbType = DbType.String;
                     cmd.Parameters.Add(qryIdParam);
+
+                    cmd.Prepare();
 
                     // Execute
                     return Convert.ToBoolean(cmd.ExecuteScalar());
@@ -331,6 +338,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                         qryStartParam = cmd.CreateParameter(),
                         qryQtyParam = cmd.CreateParameter();
                     qryStartParam.DbType = qryQtyParam.DbType = DbType.Decimal;
+                    qryIdParam.DbType = DbType.String;
                     qryIdParam.Direction = qryQtyParam.Direction = qryStartParam.Direction = ParameterDirection.Input;
                     qryIdParam.ParameterName = "qry_id_in";
                     qryStartParam.ParameterName = "str_in";
@@ -343,6 +351,8 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     cmd.Parameters.Add(qryIdParam);
                     cmd.Parameters.Add(qryStartParam);
                     cmd.Parameters.Add(qryQtyParam);
+
+                    cmd.Prepare();
 
                     // Execute reader
                     List<Identifier<TIdentifier>> domainId = new List<Identifier<TIdentifier>>(nRecords);
@@ -424,6 +434,8 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     qryIdParam.Value = queryId;
                     cmd.Parameters.Add(qryIdParam);
 
+                    cmd.Prepare();
+
                     // Execute and return
                     return Convert.ToInt64(cmd.ExecuteScalar());
                 }
@@ -472,6 +484,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 idParam.ParameterName = "qry_id_in";
                 idParam.Value = queryId;
                 cmd.Parameters.Add(idParam);
+                cmd.Prepare();
 
                 var serData = cmd.ExecuteScalar();
 
@@ -500,6 +513,53 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
             {
                 conn.Close();
                 conn.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Add the specified results to the query set
+        /// </summary>
+        public bool AddResults<TIdentifier>(string queryId, Identifier<TIdentifier>[] results)
+        {
+            IDbConnection dbc = m_configuration.CreateConnection();
+            IDbTransaction tx = null;
+            try
+            {
+                dbc.Open();
+                tx = dbc.BeginTransaction();
+
+                // Push each result into 
+                if (results.Length > 0)
+                    try
+                    {
+                        int ofs = 0;
+                        while (ofs < results.Length)
+                        {
+                            PushResults(dbc, tx, queryId, results.Skip(ofs).Take(100).ToArray());
+                            ofs += 100;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError("Error pushing bulk: {0}", e);
+                        foreach (var id in results)
+                            this.PushResult(dbc, tx, queryId, id);
+                    }
+
+                tx.Commit();
+
+                // Return true
+                return true;
+            }
+            catch (Exception e)
+            {
+                tx.Rollback();
+                throw new QueryPersistenceException(e.Message, e);
+            }
+            finally
+            {
+                dbc.Close();
+                dbc.Dispose();
             }
         }
 

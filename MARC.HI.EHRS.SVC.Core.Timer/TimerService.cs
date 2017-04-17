@@ -177,16 +177,20 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                 this.m_log.Add(jobObject as ITimerJob, DateTime.MinValue);
 
             // Resize the timer array
-            Array.Resize(ref this.m_timers, this.m_timers.Length + 1);
-            var timer = new System.Timers.Timer(elapseTime.TotalMilliseconds)
+            lock (this.m_timers)
             {
-                AutoReset = true,
-                Enabled = true
-            };
-            timer.Elapsed += this.CreateElapseHandler(jobObject as ITimerJob);
-            timer.Start();
-            this.m_timers[this.m_timers.Length] = timer;
+                Array.Resize(ref this.m_timers, this.m_timers.Length + 1);
+                var timer = new System.Timers.Timer(elapseTime.TotalMilliseconds)
+                {
+                    AutoReset = true,
+                    Enabled = true
+                };
+                timer.Elapsed += this.CreateElapseHandler(jobObject as ITimerJob);
+                timer.Start();
+                this.m_timers[this.m_timers.Length - 1] = timer;
+            }
             (jobObject as ITimerJob).Elapsed(this, null);
+
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security;
@@ -58,6 +59,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
             else if (error is Newtonsoft.Json.JsonException ||
                 error is System.Xml.XmlException)
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+            else if (error is FileNotFoundException)
+                WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
             else
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
 
