@@ -1,4 +1,6 @@
 ﻿
+
+using Newtonsoft.Json;
 /**
 * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
 * 
@@ -76,48 +78,56 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
     /// </summary>
     [XmlType(nameof(AuditData), Namespace = "http://marc-hi.ca/svc/audit")]
     [XmlRoot("audit", Namespace = "http://marc-hi.ca/audit")]
+    [JsonObject(nameof(AuditData))]
     public class AuditData
     {
+
+        /// <summary>
+        /// Gets or sets a correlation token to be used when shipping this audit
+        /// </summary>
+        [JsonProperty("correlationId"), XmlElement("correlationId")]
+        public Guid CorrelationToken { get; set; }
+
         /// <summary>
         /// Event timestamp
         /// </summary>
-        [XmlAttribute("timestamp")]
+        [XmlElement("timestamp"), JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Identifies the action code
         /// </summary>
-        [XmlAttribute("action")]
-        public ActionType? ActionCode { get; set; }
+        [XmlElement("action"), JsonProperty("action")]
+        public ActionType ActionCode { get; set; }
 
         /// <summary>
         /// Identifies the outcome of the event
         /// </summary>
-        [XmlAttribute("outcome")]
-        public OutcomeIndicator? Outcome { get; set; }
+        [XmlElement("outcome"), JsonProperty("outcome")]
+        public OutcomeIndicator Outcome { get; set; }
 
         /// <summary>
         /// Identifies the event
         /// </summary>
-        [XmlAttribute("event")]
+        [XmlElement("event"), JsonProperty("event")]
         public EventIdentifierType EventIdentifier { get; set; }
 
         /// <summary>
         /// Identifies the type of event
         /// </summary>
-        [XmlElement("type")]
+        [XmlElement("type"), JsonProperty("type")]
         public AuditCode EventTypeCode { get; set; }
 
         /// <summary>
         /// Represents the actors within the audit event
         /// </summary>
-        [XmlElement("actor")]
+        [XmlElement("actor"), JsonProperty("actor")]
         public List<AuditActorData> Actors { get; set; }
 
         /// <summary>
         /// Represents other objects of interest
         /// </summary>
-        [XmlElement("object")]
+        [XmlElement("object"), JsonProperty("object")]
         public List<AuditableObject> AuditableObjects { get; set; }
 
         /// <summary>

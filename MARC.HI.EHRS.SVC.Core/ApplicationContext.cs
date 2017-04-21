@@ -96,6 +96,9 @@ namespace MARC.HI.EHRS.SVC.Core
         /// </summary>
         private Dictionary<Type, object> m_cachedServices = new Dictionary<Type, object>();
 
+        // Service instances
+        private List<Object> m_serviceInstances = new List<object>();
+
         /// <summary>
         /// Creates a new instance of the host context
         /// </summary>
@@ -139,7 +142,7 @@ namespace MARC.HI.EHRS.SVC.Core
 
                 // If there is no configuration manager then add the local
                 if (this.GetService(typeof(IConfigurationManager)) == null)
-                    this.m_configuration.ServiceProviders.Add(typeof(LocalConfigurationManager));
+                    this.m_serviceInstances.Add(new LocalConfigurationManager());
 
                 this.m_traceSource.TraceInformation("Starting all daemon services");
                 foreach (var svc in this.m_configuration.ServiceProviders.Where(t=>t.GetInterface(typeof(IDaemonService).FullName) != null).ToList())
@@ -149,6 +152,8 @@ namespace MARC.HI.EHRS.SVC.Core
                     instance.Start();
                 }
 
+                foreach(var dc in this.m_serviceInstances.OfType<IDaemonService>().ToArray())
+                        dc.Start();
 
                 if (this.Started != null)
                     this.Started(this, null);
@@ -183,55 +188,32 @@ namespace MARC.HI.EHRS.SVC.Core
         }
 
         /// <summary>
+        /// Get all registered services
+        /// </summary>
+        public IEnumerable<Object> GetServices()
+        {
+            return this.m_serviceInstances;
+        }
+
+        /// <summary>
         /// Get a service from this host context
         /// </summary>
         public object GetService(Type serviceType)
         {
             ThrowIfDisposed();
-            object candidateService = null;
-            lock(m_cachedServices)
-                if (!m_cachedServices.TryGetValue(serviceType, out candidateService))
-                {
-                    List<Type> candidateServices = m_configuration.ServiceProviders.FindAll(o => o == serviceType || serviceType.IsAssignableFrom(o));
-                    if (candidateServices.Count > 1)
-                        this.m_traceSource.TraceEvent(TraceEventType.Warning, 0, "More than one service implementation for {0} found, using {1} as default", serviceType.FullName, candidateServices[0].GetType().FullName);
 
-                    if (candidateServices.Count != 0) // found
-                    {
-                        if (m_cachedServices.TryGetValue(candidateServices.First(), out candidateService))
-                            m_cachedServices.Add(serviceType, candidateService);
-                        else {
-                            var candidateServiceType = candidateServices[0]; // take the first one
-                                                                             // The type of instantiation
-                            ServiceInstantiationType type = ServiceInstantiationType.Singleton;
-                            var serviceAttribute = candidateServiceType.GetCustomAttributes(typeof(ServiceAttribute), true);
-                            if (serviceAttribute.Length > 0)
-                                type = (serviceAttribute[0] as ServiceAttribute).Type;
-
-                            // Service is a singleton
-                            if (type == ServiceInstantiationType.Singleton)
-                            {
-                                lock (m_cachedServices)
-                                {
-                                    candidateService = Activator.CreateInstance(candidateServiceType);
-                                    m_cachedServices.Add(serviceType, candidateService);
-                                }
-                            }
-                            else
-                            {
-                                candidateService = Activator.CreateInstance(candidateServiceType);
-                            }
+            Object candidateService = null;
+            if (!this.m_cachedServices.TryGetValue(serviceType, out candidateService))
+            {
+                candidateService = this.m_serviceInstances.Find(o => serviceType.GetTypeInfo().IsAssignableFrom(o.GetType().GetTypeInfo()));
+                if (candidateService != null)
+                    lock (this.m_cachedServices)
+                        if (!this.m_cachedServices.ContainsKey(serviceType))
+                        {
+                            this.m_cachedServices.Add(serviceType, candidateService);
                         }
-                    }
-                    else
-#if DEBUG
-                        this.m_traceSource.TraceEvent(TraceEventType.Warning, 0, "Could not locate service implementation for {0}", serviceType.FullName);
-#else
-                        ;
-                        #endif
-                }
-
-
+                        else candidateService = this.m_cachedServices[serviceType];
+            }
             return candidateService;
         }
 
@@ -258,7 +240,10 @@ namespace MARC.HI.EHRS.SVC.Core
         /// </summary>
         public void AddServiceProvider(Type serviceType)
         {
+
             this.m_configuration.ServiceProviders.Add(serviceType);
+            lock(this.m_serviceInstances)
+                this.m_serviceInstances.Add(Activator.CreateInstance(serviceType));
         }
 
         /// <summary>

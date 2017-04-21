@@ -78,7 +78,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 ageParm.DbType = DbType.String;
                 ageParm.Direction = ParameterDirection.Input;
                 ageParm.ParameterName = "max_age_in";
-                ageParm.Value = String.Format("{0} days", m_configuration.MaxQueryAge);
+                ageParm.Value = String.Format("{0} minutes", m_configuration.MaxQueryAge);
                 cmd.Parameters.Add(ageParm);
                 cmd.ExecuteNonQuery();
             }
