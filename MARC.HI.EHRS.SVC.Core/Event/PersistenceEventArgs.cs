@@ -112,11 +112,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Allows the handler to cancel the operation
         /// </summary>
         public bool Cancel { get; set; }
-
-        /// <summary>
-        /// Gets the identifier of the object to be retrieved
-        /// </summary>
-        public Identifier Identifier { get; private set; }
+        
     }
 
     /// <summary>
