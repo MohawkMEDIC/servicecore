@@ -66,32 +66,39 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         public bool RegisterQuerySet<TIdentifier>(string queryId, Identifier<TIdentifier>[] results, object tag)
         {
             IDbConnection dbc = m_configuration.CreateConnection();
+            IDbTransaction tx = null;
             try
             {
                 dbc.Open();
+                tx = dbc.BeginTransaction();
 
                 if (IsRegistered(queryId))
                     throw new Exception(String.Format("Query '{0}' has already been registered with the QueryManager", queryId));
 
                 // Register the query
-                RegisterQuery(dbc, queryId, results.Length, tag);
+                RegisterQuery(dbc, tx, queryId, results.Length, tag);
 
                 // Push each result into 
                 try
                 {
-                    PushResults(dbc, queryId, results);
+                    PushResults(dbc, tx, queryId, results);
                 }
-                catch
+                catch (Exception e)
                 {
+                    Trace.TraceError("Error pushing bulk: {0}", e);
                     foreach(var id in results)
-                        this.PushResult(dbc, queryId, id);
+                        this.PushResult(dbc, tx, queryId, id);
                 }
+
+                tx.Commit();
+
                 // Return true
                 return true;
             }
             catch (Exception e)
             {
-                throw new QueryPersistenceException(e.Message);
+                tx.Rollback();
+                throw new QueryPersistenceException(e.Message, e);
             }
             finally
             {
@@ -103,7 +110,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Push a result into the data store
         /// </summary>
-        private void PushResults<TIdentifier>(IDbConnection conn, string queryId, Identifier<TIdentifier>[] resultId)
+        private void PushResults<TIdentifier>(IDbConnection conn, IDbTransaction tx, string queryId, Identifier<TIdentifier>[] resultId)
         {
             IDbCommand cmd = conn.CreateCommand();
             try
@@ -111,11 +118,12 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "push_qry_rslts";
+                cmd.Transaction = tx;
 
                 StringBuilder resultIds = new StringBuilder("{");
                 foreach (var id in resultId)
                 {
-                    resultIds.AppendFormat("{{{0},{1}}},", id.Id, id.VersionId);
+                    resultIds.AppendFormat("{{{0},{1}}},", id.Id, id.VersionId?.Equals(default(TIdentifier)) == false ? id.VersionId.ToString() : "null");
                 }
                 resultIds.Remove(resultIds.Length - 1, 1);
                 resultIds.Append("}");
@@ -148,26 +156,27 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Push a result into the data store
         /// </summary>
-        private void PushResult<TIdentifier>(IDbConnection conn, string queryId, Identifier<TIdentifier> resultId)
+        private void PushResult<TIdentifier>(IDbConnection conn, IDbTransaction tx, string queryId, Identifier<TIdentifier> resultId)
         {
             IDbCommand cmd = conn.CreateCommand();
             try
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "push_qry_rslt";
+                cmd.Transaction = tx;
 
                 // Setup parameters
                 IDataParameter qryIdParam = cmd.CreateParameter(),
                     qryRsltParam = cmd.CreateParameter(),
                     qryVrsnParam = cmd.CreateParameter();
                 qryIdParam.DbType = DbType.String;
-                qryVrsnParam.DbType = qryRsltParam.DbType = DbType.Decimal;
+                qryVrsnParam.DbType = qryRsltParam.DbType = DbType.String;
                 qryVrsnParam.Direction = qryIdParam.Direction = qryRsltParam.Direction = ParameterDirection.Input;
                 qryIdParam.ParameterName = "qry_id_in";
                 qryRsltParam.ParameterName = "rslt_ent_id_in";
                 qryVrsnParam.ParameterName = "rslt_vrsn_id_in";
-                qryRsltParam.Value = resultId.Id;
-                qryVrsnParam.Value = resultId.VersionId == null ? DBNull.Value : (Object)resultId.VersionId;
+                qryRsltParam.Value = resultId.Id.ToString();
+                qryVrsnParam.Value = resultId.VersionId?.Equals(default(TIdentifier)) == false ? (Object)resultId.VersionId.ToString() : DBNull.Value;
                 qryIdParam.Value = queryId;
 
                 // Add parameters
@@ -187,7 +196,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// <summary>
         /// Register the query 
         /// </summary>
-        private void RegisterQuery(IDbConnection conn, string queryId, int nRecords, object tag)
+        private void RegisterQuery(IDbConnection conn, IDbTransaction tx, string queryId, int nRecords, object tag)
         {
             // Create command
             IDbCommand cmd = conn.CreateCommand();
@@ -195,7 +204,8 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "reg_qry";
-                
+                cmd.Transaction = tx;
+
                 // Setup Parameters
                 IDataParameter qryIdParam = cmd.CreateParameter(),
                     qryCntParam = cmd.CreateParameter(),
@@ -217,6 +227,10 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                         bf.Serialize(ms, tag);
                         ms.Flush();
                         qryDmnParam.Value = ms.GetBuffer();
+                    }
+                    catch(Exception e)
+                    {
+                        qryDmnParam.Value = Encoding.UTF8.GetBytes(tag.ToString());
                     }
                     finally
                     {
@@ -286,7 +300,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
             }
             catch (Exception e)
             {
-                throw new QueryPersistenceException(e.Message);
+                throw new QueryPersistenceException(e.Message, e);
             }
             finally
             {
@@ -323,7 +337,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     qryQtyParam.ParameterName = "qty_in";
                     qryIdParam.Value = queryId;
                     qryQtyParam.Value = nRecords;
-                    qryStartParam.Value = startRecord == -1 ? DBNull.Value : (object)startRecord;
+                    qryStartParam.Value = startRecord;
 
                     // Add parameters
                     cmd.Parameters.Add(qryIdParam);
@@ -336,11 +350,32 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                     try
                     {
                         while (rdr.Read())
+                        {
+                            object rValue = rdr["ent_id"],
+                                vValue = rdr["vrsn_id"];
+
+                            if(typeof(TIdentifier) == typeof(Guid))
+                            {
+                                rValue = Guid.Parse(rValue.ToString());
+                                vValue = vValue == DBNull.Value ? default(Guid) : Guid.Parse(vValue.ToString());
+                            }
+                            else if(typeof(TIdentifier) == typeof(String))
+                            {
+                                rValue = rValue.ToString();
+                                vValue = vValue == DBNull.Value ? null: vValue.ToString();
+                            }
+                            else if (typeof(TIdentifier) == typeof(Decimal))
+                            {
+                                rValue = Decimal.Parse(rValue.ToString());
+                                vValue = vValue == DBNull.Value ? default(Decimal) : Decimal.Parse(vValue.ToString());
+                            }
+
                             domainId.Add(new Identifier<TIdentifier>()
                             {
-                                Id = (TIdentifier)rdr["ent_id"],
-                                VersionId = (TIdentifier)rdr["vrsn_id"]
+                                Id = (TIdentifier)rValue,
+                                VersionId = (TIdentifier)vValue
                             });
+                        }
                     }
                     finally
                     {
@@ -357,7 +392,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
             }
             catch (Exception e)
             {
-                throw new QueryPersistenceException(e.Message);
+                throw new QueryPersistenceException(e.Message, e);
             }
             finally
             {
@@ -399,7 +434,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
             }
             catch (Exception e)
             {
-                throw new QueryPersistenceException(e.Message);
+                throw new QueryPersistenceException(e.Message, e);
             }
             finally
             {
@@ -459,7 +494,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
             }
             catch (Exception e)
             {
-                throw new QueryPersistenceException(e.Message);
+                throw new QueryPersistenceException(e.Message, e);
             }
             finally
             {

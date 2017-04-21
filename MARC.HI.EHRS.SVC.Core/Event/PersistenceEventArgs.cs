@@ -98,10 +98,15 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Creates a new pre-retrieval event args object
         /// </summary>
-        public PreRetrievalEventArgs(Identifier data, IPrincipal authContext = null) : base(authContext)
+        public PreRetrievalEventArgs(Object identifier, IPrincipal authContext = null) : base(authContext)
         {
-            this.Identifier = data;
+            this.Identifier = identifier;
         }
+
+        /// <summary>
+        /// The identifier
+        /// </summary>
+        public Object Identifier { get; set; }
 
         /// <summary>
         /// Allows the handler to cancel the operation

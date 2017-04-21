@@ -21,28 +21,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.QM.Core.Exception
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a query persistence exception
+    /// Represents potential outcomes
     /// </summary>
-    public class QueryPersistenceException : DataException
+    [XmlType(nameof(OutcomeIndicator), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum OutcomeIndicator
     {
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Successful operation
         /// </summary>
-        public QueryPersistenceException() : base() { }
-
+        [XmlEnum("ok")]
+        Success = 0x00,
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Minor failure, action should be restarted
         /// </summary>
-        public QueryPersistenceException(string message) : base(message) { }
-
+        [XmlEnum("fail.minor")]
+        MinorFail = 0x04,
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Action was terminated
         /// </summary>
-        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
+        [XmlEnum("fail.major")]
+        SeriousFail = 0x08,
+        /// <summary>
+        /// Major failure, action is made unavailable
+        /// </summary>
+        [XmlEnum("fail.epic")]
+        EpicFail = 0x0C
     }
 }

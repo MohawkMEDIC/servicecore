@@ -21,28 +21,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
+using MARC.HI.EHRS.SVC.Auditing.Data;
 
-namespace MARC.HI.EHRS.QM.Core.Exception
+namespace MARC.HI.EHRS.SVC.Auditing.Services
 {
     /// <summary>
-    /// Represents a query persistence exception
+    /// This interface defines a framework for implementing a auditing service
     /// </summary>
-    public class QueryPersistenceException : DataException
+    public interface IAuditorService 
     {
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Send an audit
         /// </summary>
-        public QueryPersistenceException() : base() { }
+        bool SendAudit(AuditData ad);
 
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException(string message) : base(message) { }
-
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
     }
 }

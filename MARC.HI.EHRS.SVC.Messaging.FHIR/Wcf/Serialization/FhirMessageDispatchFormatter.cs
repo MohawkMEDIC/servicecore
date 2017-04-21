@@ -102,7 +102,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                     var parm = this.m_operationDescription.Messages[0].Body.Parts[pNumber];
 
                     // Simple parameter
-                    if (templateMatch.BoundVariables[parm.Name] != null)
+                    if (templateMatch.BoundVariables.AllKeys.Any(o=>o.ToString().ToLower() == parm.Name.ToLower()))
                     {
                         var rawData = templateMatch.BoundVariables[parm.Name];
                         parameters[pNumber] = Convert.ChangeType(rawData, parm.Type);
@@ -110,9 +110,49 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                     // Use XML Serializer
                     else if (contentType?.StartsWith("application/xml+fhir") == true)
                     {
-                        XmlSerializer xsz = s_serializers[parm.Type];
-                        XmlDictionaryReader bodyReader = request.GetReaderAtBodyContents();
-                        parameters[0] = xsz.Deserialize(bodyReader);
+                        var messageFormatProperty = (WebBodyFormatMessageProperty)request.Properties[WebBodyFormatMessageProperty.Name];
+                        XmlDictionaryReader rawReader = request.GetReaderAtBodyContents();
+
+                        switch (messageFormatProperty.Format)
+                        {
+                            case WebContentFormat.Raw:
+                                {
+                                    rawReader.ReadStartElement("Binary");
+                                    byte[] rawBody = rawReader.ReadContentAsBase64();
+
+                                    using (MemoryStream ms = new MemoryStream(rawBody))
+                                    {
+                                        using (XmlReader bodyReader = XmlReader.Create(ms))
+                                        {
+                                            while (bodyReader.NodeType != XmlNodeType.Element)
+                                                bodyReader.Read();
+
+                                            Type eType = s_knownTypes.FirstOrDefault(o => o.GetCustomAttribute<XmlRootAttribute>()?.ElementName == bodyReader.LocalName &&
+                                            o.GetCustomAttribute<XmlRootAttribute>()?.Namespace == bodyReader.NamespaceURI);
+                                            XmlSerializer xsz = s_serializers[eType];
+                                            parameters[pNumber] = xsz.Deserialize(bodyReader);
+                                        }
+                                    }
+                                }
+
+                                break;
+                            case WebContentFormat.Xml:
+                                {
+                                    using (rawReader)
+                                    {
+                                        rawReader.MoveToStartElement();
+                                        Type eType = s_knownTypes.FirstOrDefault(o => o.GetCustomAttribute<XmlRootAttribute>()?.ElementName == rawReader.LocalName && o.GetCustomAttribute<XmlRootAttribute>()?.Namespace == rawReader.NamespaceURI);
+
+                                        this.m_traceSource.TraceEvent(TraceEventType.Information, 0, "Contract: {0}", typeof(IFhirServiceContract).Name);
+                                        this.m_traceSource.TraceEvent(TraceEventType.Information, 0, "Attempting to deserialize type: {0}", eType?.Name);
+
+                                        XmlSerializer xsz = s_serializers[eType];
+                                        parameters[pNumber] = xsz.Deserialize(rawReader);
+                                    }
+                                }
+                                break;
+                        }
+
                     }
                     // Use JSON Serializer
                     else if (contentType?.StartsWith("application/json+fhir") == true)
@@ -134,7 +174,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                         // Now we want to serialize the FHIR MODEL object and re-parse as our own API bundle object
                         MemoryStream ms = new MemoryStream(FhirSerializer.SerializeResourceToXmlBytes(fhirObject as Hl7.Fhir.Model.Resource));
 
-                        XmlSerializer xsz = s_serializers[parm.Type];
+                        XmlSerializer xsz = s_serializers[fhirObject?.GetType()];
                         parameters[0] = xsz.Deserialize(ms);
                     }
                     else if (contentType != null)// TODO: Binaries

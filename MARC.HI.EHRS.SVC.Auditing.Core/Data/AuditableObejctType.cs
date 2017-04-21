@@ -21,28 +21,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.QM.Core.Exception
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a query persistence exception
+    /// Identifies the type of auditable objects in the system
     /// </summary>
-    public class QueryPersistenceException : DataException
+    [XmlType(nameof(AuditableObjectType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum AuditableObjectType
     {
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException() : base() { }
-
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException(string message) : base(message) { }
-
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
+        [XmlEnum("p")]
+        Person = 1,
+        [XmlEnum("s")]
+        SystemObject = 2,
+        [XmlEnum("o")]
+        Organization = 3, 
+        [XmlEnum("x")]
+        Other = 4
     }
 }

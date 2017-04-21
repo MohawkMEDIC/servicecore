@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Auditing", "MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj", "{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}"
 EndProject
@@ -48,6 +48,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Messaging.FHIR", "MARC.HI.EHRS.SVC.Messaging.FHIR\MARC.HI.EHRS.SVC.Messaging.FHIR.csproj", "{E1B4A425-AC8C-4C8D-8BCF-E99494DF1EB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Messaging.HAPI", "MARC.HI.EHRS.SVC.Messaging.HAPI\MARC.HI.EHRS.SVC.Messaging.HAPI.csproj", "{257710CF-713E-4534-B562-DB25CDBADD79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Auditing.Core", "MARC.HI.EHRS.SVC.Auditing.Core\MARC.HI.EHRS.SVC.Auditing.Core.csproj", "{4D448BFD-B967-4F75-AD30-37327153149C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +203,18 @@ Global
 		{257710CF-713E-4534-B562-DB25CDBADD79}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{257710CF-713E-4534-B562-DB25CDBADD79}.Release|x86.ActiveCfg = Release|Any CPU
 		{257710CF-713E-4534-B562-DB25CDBADD79}.Release|x86.Build.0 = Release|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D448BFD-B967-4F75-AD30-37327153149C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -217,6 +231,7 @@ Global
 		{D3881DA7-0F20-4E3B-8103-5424C970E376} = {06A63863-2967-417F-9694-D689198FB35D}
 		{E1B4A425-AC8C-4C8D-8BCF-E99494DF1EB7} = {C9ABBFAD-6BEA-4BAC-ADA5-02F105CA5C94}
 		{257710CF-713E-4534-B562-DB25CDBADD79} = {C9ABBFAD-6BEA-4BAC-ADA5-02F105CA5C94}
+		{4D448BFD-B967-4F75-AD30-37327153149C} = {95E8EFB6-C6B9-441D-9F5E-A8598DE9EE72}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

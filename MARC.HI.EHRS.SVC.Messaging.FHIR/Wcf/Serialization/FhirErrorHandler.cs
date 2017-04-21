@@ -53,6 +53,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
             }
             else if (error is WebFaultException)
                 WebOperationContext.Current.OutgoingResponse.StatusCode = (error as WebFaultException).StatusCode;
+            else if (error is FaultException) // Other fault exception do nothing
+                ;
             else if (error is Newtonsoft.Json.JsonException ||
                 error is System.Xml.XmlException)
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
@@ -61,11 +63,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
 
             // Construct an error result
             var errorResult = new OperationOutcome()
-            { 
+            {
                 Issue = new List<Issue>()
-                {
-                    new Issue() { Diagnostics  = error.Message, Severity = IssueSeverity.Error }
-                }
+            {
+                new Issue() { Diagnostics  = error.Message, Severity = IssueSeverity.Error }
+            }
             };
 
             // Cascade inner exceptions
@@ -75,7 +77,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
 
             // Return error in XML only at this point
             fault = new FhirMessageDispatchFormatter().SerializeReply(version, null, errorResult);
-
             
         }
     }

@@ -18,18 +18,27 @@ namespace MARC.HI.EHRS.SVC.Core.Data
             this.Attributes = new List<KeyValuePair<string, string>>();
 
         }
+
         /// <summary>
         /// The name of the OID
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// The OID Value
         /// </summary>
         public string Oid { get; set; }
+
         /// <summary>
         /// The description for the oid
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// The local mnemonic for the oid
+        /// </summary>
+        public string Mnemonic { get; set; }
+
         /// <summary>
         /// Extended attributes
         /// </summary>

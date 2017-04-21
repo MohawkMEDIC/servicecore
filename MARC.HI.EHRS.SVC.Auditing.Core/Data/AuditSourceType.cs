@@ -21,28 +21,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.QM.Core.Exception
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a query persistence exception
+    /// Audit source type
     /// </summary>
-    public class QueryPersistenceException : DataException
+    [XmlType(nameof(AuditSourceType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum AuditSourceType
     {
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException() : base() { }
-
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException(string message) : base(message) { }
-
-        /// <summary>
-        /// Creates a new instance of the query persistence exception
-        /// </summary>
-        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
+        [XmlEnum("ui")]
+        EndUserInterface = 1,
+        [XmlEnum("dev")]
+        DeviceOrInstrument = 2,
+        [XmlEnum("web")]
+        WebServerProcess = 3,
+        [XmlEnum("app")]
+        ApplicationServerProcess = 4,
+        [XmlEnum("db")]
+        DatabaseServerProcess = 5,
+        [XmlEnum("sec")]
+        SecurityServerProcess = 6,
+        [XmlEnum("isol1")]
+        ISOLevel1or3Component = 7,
+        [XmlEnum("isol4")]
+        ISOLevel4or6Software = 8,
+        [XmlEnum("other")]
+        Other = 9
     }
 }

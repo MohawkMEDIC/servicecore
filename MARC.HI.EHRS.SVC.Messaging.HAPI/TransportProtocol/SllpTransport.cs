@@ -447,7 +447,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI.TransportProtocol
 					ActionType.Execute,
 					OutcomeIndicator.MinorFail,
 					EventIdentifierType.ApplicationActivity,
-					new CodeValue("110113", "DCM") { DisplayName = "Security Alert" }
+					new AuditCode("110113", "DCM") { DisplayName = "Security Alert" }
 				);
 				ad.Actors = new List<AuditActorData>() {
 					new AuditActorData()

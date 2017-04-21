@@ -21,28 +21,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.QM.Core.Exception
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a query persistence exception
+    /// Represents the type of network access point
     /// </summary>
-    public class QueryPersistenceException : DataException
+    [XmlType(nameof(NetworkAccessPointType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum NetworkAccessPointType
     {
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// The identifier is a machine name
         /// </summary>
-        public QueryPersistenceException() : base() { }
-
+        [XmlEnum("name")]
+        MachineName = 0x1,
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Identifier is an IP address
         /// </summary>
-        public QueryPersistenceException(string message) : base(message) { }
-
+        [XmlEnum("ip")]
+        IPAddress = 0x2,
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Identifier is a telephone number
         /// </summary>
-        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
+        [XmlEnum("tel")]
+        TelephoneNumber = 0x3
     }
 }

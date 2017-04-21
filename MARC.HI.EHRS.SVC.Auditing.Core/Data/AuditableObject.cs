@@ -1,5 +1,6 @@
 ﻿
 
+
 /**
 * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
 * 
@@ -22,13 +23,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.Data;
+using System.Xml.Serialization;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
     /// Identifies an object that adds context to the audit
     /// </summary>
+    [XmlType(nameof(AuditableObject), Namespace = "http://marc-hi.ca/svc/audit")]
     public class AuditableObject
     {
 
@@ -42,38 +44,47 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
         /// <summary>
         /// Identifies the object in the event
         /// </summary>
+        [XmlAttribute("id")]
         public string ObjectId { get; set; }
         /// <summary>
         /// Identifies the type of object being expressed
         /// </summary>
+        [XmlAttribute("type")]
         public AuditableObjectType? Type { get; set; }
         /// <summary>
         /// Identifies the role type of the object
         /// </summary>
+        [XmlAttribute("role")]
         public AuditableObjectRole? Role { get; set; }
         /// <summary>
         /// Identifies where in the lifecycle of the object this object is currently within
         /// </summary>
+        [XmlAttribute("lifecycle")]
         public AuditableObjectLifecycle? LifecycleType { get; set; }
         /// <summary>
         /// Identifies the type of identifier supplied
         /// </summary>
+        [XmlAttribute("idType")]
         public AuditableObjectIdType? IDTypeCode { get; set; }
         /// <summary>
         /// Custom id type code
         /// </summary>
-        public CodeValue CustomIdTypeCode { get; set; }
+        [XmlElement("customCode")]
+        public AuditCode CustomIdTypeCode { get; set; }
         /// <summary>
         /// Data associated with the object
         /// </summary>
+        [XmlElement("queryData")]
         public string QueryData { get; set; }
         /// <summary>
         /// Data associated with the object
         /// </summary>
+        [XmlElement("name")]
         public string NameData { get; set; }
         /// <summary>
         /// Additional object data
         /// </summary>
+        [XmlElement("dictionary")]
         public Dictionary<String, byte[]> ObjectData { get; set; }
     }
 }

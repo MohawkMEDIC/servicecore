@@ -189,15 +189,15 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                                 Data.ActionType.Execute,
                                 Data.OutcomeIndicator.Success,
                                 Data.EventIdentifierType.ApplicationActivity,
-                                new CodeValue("110120", "DCM") { DisplayName = "Application Start" }
+                                new Data.AuditCode("110120", "DCM") { DisplayName = "Application Start" }
                             )
             {
                 Actors = new List<Data.AuditActorData>() {
                                     new Data.AuditActorData() {
                                         UserIdentifier = Environment.UserName,
                                         UserIsRequestor = false,
-                                        ActorRoleCode = new List<CodeValue>() {
-                                            new CodeValue("110150","DCM") { DisplayName = "Application" }
+                                        ActorRoleCode = new List<Data.AuditCode>() {
+                                            new Data.AuditCode("110150","DCM") { DisplayName = "Application" }
                                         }
                                     }
                                 }
@@ -215,15 +215,15 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                                 Data.ActionType.Execute,
                                 Data.OutcomeIndicator.Success,
                                 Data.EventIdentifierType.ApplicationActivity,
-                                new CodeValue("110121", "DCM") { DisplayName = "Application Stop" }
+                                new Data.AuditCode("110121", "DCM") { DisplayName = "Application Stop" }
                             )
             {
                 Actors = new List<Data.AuditActorData>() {
                                     new Data.AuditActorData() {
                                         UserIdentifier = Environment.UserName,
                                         UserIsRequestor = false,
-                                        ActorRoleCode = new List<CodeValue>() {
-                                            new CodeValue("110150","DCM") { DisplayName = "Application" }
+                                        ActorRoleCode = new List<Data.AuditCode>() {
+                                            new Data.AuditCode("110150","DCM") { DisplayName = "Application" }
                                         }
                                     }
                                 }
@@ -234,7 +234,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
         /// <summary>
         /// Send an audit to the endpoint
         /// </summary>
-        public bool SendAudit(MARC.HI.EHRS.SVC.Auditing.Data.AuditData ad)
+        public bool SendAudit(Data.AuditData ad)
         {
 
             this.m_waitThreadPool.QueueUserWorkItem(SendAuditAsync, ad);

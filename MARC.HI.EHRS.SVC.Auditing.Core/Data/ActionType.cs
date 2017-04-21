@@ -21,28 +21,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
+using System.Xml.Serialization;
 
-namespace MARC.HI.EHRS.QM.Core.Exception
+namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
     /// <summary>
-    /// Represents a query persistence exception
+    /// Represents types of actions
     /// </summary>
-    public class QueryPersistenceException : DataException
+    [XmlType(nameof(ActionType), Namespace = "http://marc-hi.ca/svc/audit")]
+    public enum ActionType
     {
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Data was created in the system
         /// </summary>
-        public QueryPersistenceException() : base() { }
-
+        [XmlEnum("c")]
+        Create,
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Data was viewed, printed, displayed, etc...
         /// </summary>
-        public QueryPersistenceException(string message) : base(message) { }
-
+        [XmlEnum("r")]
+        Read,
         /// <summary>
-        /// Creates a new instance of the query persistence exception
+        /// Data was revised in the system
         /// </summary>
-        public QueryPersistenceException(string message, System.Exception causedBy) : base(message, causedBy) { }
+        [XmlEnum("u")]
+        Update,
+        /// <summary>
+        /// Data was removed from the system
+        /// </summary>
+        [XmlEnum("d")]
+        Delete,
+        /// <summary>
+        /// A system, or application function was performed
+        /// </summary>
+        [XmlEnum("x")]
+        Execute
     }
 }

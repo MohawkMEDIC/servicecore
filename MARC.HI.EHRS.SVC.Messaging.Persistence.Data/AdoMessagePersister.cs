@@ -95,6 +95,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.persistence") as ConfigurationSectionHandler;
         }
 
+        event EventHandler<PreRetrievalEventArgs> IMessagePersistenceService.Retrieving
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #region IMessagePersistenceService Members
 
         /// <summary>

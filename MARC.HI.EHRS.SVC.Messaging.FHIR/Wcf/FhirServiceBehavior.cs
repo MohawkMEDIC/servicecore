@@ -369,10 +369,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
                 WebOperationContext.Current.OutgoingRequest.Headers.Add("Last-Modified", DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz"));
 
                 if (resourceProcessor == null) // Unsupported resource
-                {
-                    WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
-                    return null;
-                }
+                    throw new FileNotFoundException();
 
                 // TODO: Appropriately format response
                 // Process incoming request
@@ -552,9 +549,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
                 var resourceProcessor = FhirResourceHandlerUtil.GetResourceHandler(resourceType);
 
                 if (resourceProcessor == null) // Unsupported resource
-
                     throw new FileNotFoundException("Specified resource type is not found");
-
 
                 // TODO: Appropriately format response
                 // Process incoming request

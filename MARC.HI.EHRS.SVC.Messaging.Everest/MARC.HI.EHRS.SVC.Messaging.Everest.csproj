@@ -128,6 +128,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing.Core\MARC.HI.EHRS.SVC.Auditing.Core.csproj">
+      <Project>{4D448BFD-B967-4F75-AD30-37327153149C}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj">
       <Project>{27ba9e20-3952-4a9a-92c4-01c86ba2ba50}</Project>
       <Name>MARC.HI.EHRS.SVC.Auditing</Name>

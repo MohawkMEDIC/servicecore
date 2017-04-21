@@ -36,6 +36,11 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         void AddJob(object jobObject, TimeSpan elapseTime);
 
         /// <summary>
+        /// Returns true if the job object is registered
+        /// </summary>
+        bool IsJobRegistered(Type jobObject);
+
+        /// <summary>
         /// Gets the execution state
         /// </summary>
         /// <returns></returns>
