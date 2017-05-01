@@ -48,7 +48,7 @@ namespace MARC.HI.EHRS.SVC.Auditing
         {
 
             StringBuilder auditSb = new StringBuilder();
-            auditSb.AppendFormat("AUDIT {0} : {1} {2}\r\n", ad.ActionCode.Value, ad.Outcome.Value, ad.EventTypeCode == null ? "" : ad.EventTypeCode.Code);
+            auditSb.AppendFormat("AUDIT {0} : {1} {2}\r\n", ad.ActionCode, ad.Outcome, ad.EventTypeCode == null ? "" : ad.EventTypeCode.Code);
             auditSb.AppendFormat("SITE: {0}\r\n", ApplicationContext.Current.Configuration.DeviceIdentifier);
             foreach (AuditableObject ao in ad.AuditableObjects ?? new List<AuditableObject>())
                 auditSb.AppendFormat("AO-> ID({0}:{1}) (LC-{2}, ROL-{3})\r\n", ao.IDTypeCode, ao.ObjectId, ao.LifecycleType, ao.Role);

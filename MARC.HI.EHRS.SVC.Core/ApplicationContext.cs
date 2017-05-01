@@ -39,9 +39,6 @@ namespace MARC.HI.EHRS.SVC.Core
     public class ApplicationContext : IServiceProvider, IDisposable
     {
 
-        // Service core
-        private TraceSource m_traceSource = new TraceSource("MARC.HI.EHRS.SVC.Core");
-
         // Lock object
         private static Object s_lockObject = new object();
         // Context
@@ -54,9 +51,9 @@ namespace MARC.HI.EHRS.SVC.Core
         {
             get
             {
-                if(s_context == null)
-                    lock(s_lockObject)
-                        if(s_context == null)
+                if (s_context == null)
+                    lock (s_lockObject)
+                        if (s_context == null)
                             s_context = new ApplicationContext();
                 return s_context;
             }
@@ -144,16 +141,18 @@ namespace MARC.HI.EHRS.SVC.Core
                 if (this.GetService(typeof(IConfigurationManager)) == null)
                     this.m_serviceInstances.Add(new LocalConfigurationManager());
 
-                this.m_traceSource.TraceInformation("Starting all daemon services");
-                foreach (var svc in this.m_configuration.ServiceProviders.Where(t=>t.GetInterface(typeof(IDaemonService).FullName) != null).ToList())
+                Trace.TraceInformation("Loading services");
+                foreach (var svc in this.m_configuration.ServiceProviders)
                 {
-                    this.m_traceSource.TraceInformation("Starting daemon service {0}...", svc.Name);
-                    IDaemonService instance = this.GetService(svc) as IDaemonService;
-                    instance.Start();
+                    Trace.TraceInformation("Loaded service {0}...", svc.Name);
+                    var instance = Activator.CreateInstance(svc);
+                    this.m_serviceInstances.Add(instance);
                 }
 
-                foreach(var dc in this.m_serviceInstances.OfType<IDaemonService>().ToArray())
-                        dc.Start();
+               
+
+                foreach (var dc in this.m_serviceInstances.OfType<IDaemonService>().ToArray())
+                    dc.Start();
 
                 if (this.Started != null)
                     this.Started(this, null);
@@ -178,7 +177,7 @@ namespace MARC.HI.EHRS.SVC.Core
             this.m_running = false;
             foreach (var svc in this.m_configuration.ServiceProviders.OfType<IDaemonService>())
             {
-                this.m_traceSource.TraceInformation("Stopping daemon service {0}...", svc.GetType().Name);
+                Trace.TraceInformation("Stopping daemon service {0}...", svc.GetType().Name);
                 svc.Stop();
             }
 
@@ -242,7 +241,7 @@ namespace MARC.HI.EHRS.SVC.Core
         {
 
             this.m_configuration.ServiceProviders.Add(serviceType);
-            lock(this.m_serviceInstances)
+            lock (this.m_serviceInstances)
                 this.m_serviceInstances.Add(Activator.CreateInstance(serviceType));
         }
 
