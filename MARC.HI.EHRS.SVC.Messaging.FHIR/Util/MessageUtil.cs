@@ -169,8 +169,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                                 break;
                         }
 
-                if(!baseUri.Contains("stateid=") && queryResult.Query.QueryId != Guid.Empty)
-                    baseUri += String.Format("stateid={0}&", queryResult.Query.QueryId);
+                if(!baseUri.Contains("_stateid=") && queryResult.Query.QueryId != Guid.Empty)
+                    baseUri += String.Format("_stateid={0}&", queryResult.Query.QueryId);
             }
 
             // Format
