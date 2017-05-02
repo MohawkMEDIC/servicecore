@@ -520,7 +520,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             else
             {
                 WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"error.xml\"");
-                throw new WebFaultException<OperationOutcome>(MessageUtil.CreateOutcomeResource(result), retCode);
+                throw e;
             }
             //return MessageUtil.CreateOutcomeResource(result);
 

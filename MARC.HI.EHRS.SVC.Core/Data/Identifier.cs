@@ -6,9 +6,17 @@ using System.Text;
 namespace MARC.HI.EHRS.SVC.Core.Data
 {
     /// <summary>
+    /// Identifier
+    /// </summary>
+    public class Identifier
+    {
+
+    }
+
+    /// <summary>
     /// Represents an identifier used for storing / retrieving data
     /// </summary>
-    public class Identifier<TIdentifier>
+    public class Identifier<TIdentifier> : Identifier
     {
 
         /// <summary>

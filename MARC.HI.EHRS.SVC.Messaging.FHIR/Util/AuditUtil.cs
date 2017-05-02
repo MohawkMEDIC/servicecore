@@ -103,9 +103,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             CustomIdTypeCode = AuditUtil.CopyCode(itiNameMap),
                             ObjectId = itiNameMap.DisplayName.Replace(" ", ""),
                             QueryData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.Query)),
-                            ObjectData = new Dictionary<string, byte[]>()
+                            ObjectData =  new List<ObjectDataExtension>()
                             {
-                                { String.Empty, WebOperationContext.Current.IncomingRequest.Headers.ToByteArray() }
+                                new ObjectDataExtension(String.Empty, WebOperationContext.Current.IncomingRequest.Headers.ToByteArray() )
                             }
                         });
 
@@ -230,7 +230,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         continue;
 
                     // Lifecycle
-                    switch (retVal.ActionCode.Value)
+                    switch (retVal.ActionCode)
                     {
                         case ActionType.Create:
                             aud.LifecycleType = AuditableObjectLifecycle.Creation;

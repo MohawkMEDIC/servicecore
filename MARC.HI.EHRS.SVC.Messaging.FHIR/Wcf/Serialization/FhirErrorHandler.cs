@@ -75,9 +75,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
 
             // Cascade inner exceptions
             var ie = error.InnerException;
-            while (ie != null)
+            while (ie != null) {
                 errorResult.Issue.Add(new Issue() { Diagnostics = String.Format("Caused by {0}", error.Message), Severity = IssueSeverity.Error });
-
+                ie = ie.InnerException;
+            }
             // Return error in XML only at this point
             fault = new FhirMessageDispatchFormatter().SerializeReply(version, null, errorResult);
             

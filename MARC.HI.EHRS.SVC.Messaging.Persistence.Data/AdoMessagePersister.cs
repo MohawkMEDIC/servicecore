@@ -32,6 +32,7 @@ using System.Threading;
 using MARC.HI.EHRS.SVC.Core.Event;
 using System.Security.Claims;
 using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
 {
@@ -461,7 +462,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             try
             {
 
-                var mpe = new PreRetrievalEventArgs(new MessageInfo() { Id = messageId });
+                var mpe = new PreRetrievalEventArgs(new Identifier<String>(messageId));
                 this.Retrieving?.Invoke(this, mpe);
                 if(mpe.Cancel)
                 {

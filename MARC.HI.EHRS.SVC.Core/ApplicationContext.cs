@@ -51,9 +51,9 @@ namespace MARC.HI.EHRS.SVC.Core
         {
             get
             {
-                if(s_context == null)
-                    lock(s_lockObject)
-                        if(s_context == null)
+                if (s_context == null)
+                    lock (s_lockObject)
+                        if (s_context == null)
                             s_context = new ApplicationContext();
                 return s_context;
             }
@@ -149,8 +149,10 @@ namespace MARC.HI.EHRS.SVC.Core
                     this.m_serviceInstances.Add(instance);
                 }
 
-                foreach(var dc in this.m_serviceInstances.OfType<IDaemonService>().ToArray())
-                        dc.Start();
+               
+
+                foreach (var dc in this.m_serviceInstances.OfType<IDaemonService>().ToArray())
+                    dc.Start();
 
                 if (this.Started != null)
                     this.Started(this, null);
@@ -240,7 +242,7 @@ namespace MARC.HI.EHRS.SVC.Core
         {
 
             this.m_configuration.ServiceProviders.Add(serviceType);
-            lock(this.m_serviceInstances)
+            lock (this.m_serviceInstances)
                 this.m_serviceInstances.Add(Activator.CreateInstance(serviceType));
         }
 

@@ -112,7 +112,6 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Allows the handler to cancel the operation
         /// </summary>
         public bool Cancel { get; set; }
-
         
     }
 
