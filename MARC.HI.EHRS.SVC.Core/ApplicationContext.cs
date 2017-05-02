@@ -154,6 +154,7 @@ namespace MARC.HI.EHRS.SVC.Core
 
                 if (this.Started != null)
                     this.Started(this, null);
+
                 this.m_running = true;
 
             }
