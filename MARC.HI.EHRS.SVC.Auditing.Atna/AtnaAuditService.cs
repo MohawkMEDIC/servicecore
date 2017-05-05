@@ -82,8 +82,8 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
                 // Create the audit basic
                 AuditMessage am = new AuditMessage(
-                    ad.Timestamp, (ActionType)Enum.Parse(typeof(ActionType), ad.ActionCode.Value.ToString()),
-                    (OutcomeIndicator)Enum.Parse(typeof(OutcomeIndicator), ad.Outcome.Value.ToString()),
+                    ad.Timestamp, (ActionType)Enum.Parse(typeof(ActionType), ad.ActionCode.ToString()),
+                    (OutcomeIndicator)Enum.Parse(typeof(OutcomeIndicator), ad.Outcome.ToString()),
                     (EventIdentifierType)Enum.Parse(typeof(EventIdentifierType), ad.EventIdentifier.ToString()),
                     null
                 );
