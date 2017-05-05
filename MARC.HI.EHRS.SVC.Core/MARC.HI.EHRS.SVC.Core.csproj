@@ -94,9 +94,18 @@
   <ItemGroup>
     <Compile Include="Configuration\DbXml\SqlScript.cs" />
     <Compile Include="Configuration\LocalConfigurationManager.cs" />
+    <Compile Include="Configuration\UI\HL7IdentifierType.cs" />
+    <Compile Include="Configuration\UI\LogConfigurationFeature.cs" />
+    <Compile Include="Configuration\UI\TraceSourceAttribute.cs" />
+    <Compile Include="Configuration\UI\ucLogging.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Configuration\UI\ucLogging.Designer.cs">
+      <DependentUpon>ucLogging.cs</DependentUpon>
+    </Compile>
     <Compile Include="Exceptions\DomainStateException.cs" />
     <Compile Include="Exceptions\UnauthorizedRequestException.cs" />
-    <Compile Include="Plugins\AssemblyPluginAttribute.cs" />
+    <Compile Include="Attributes\AssemblyPluginAttribute.cs" />
     <Compile Include="Configuration\DbXml\Command.cs" />
     <Compile Include="Configuration\DbXml\DbXmlBase.cs" />
     <Compile Include="Configuration\DbXml\Feature.cs" />
@@ -114,7 +123,7 @@
     <Compile Include="Event\IdentityEventArgs.cs" />
     <Compile Include="Event\PersistenceEventArgs.cs" />
     <Compile Include="Exceptions\PolicyViolationException.cs" />
-    <Compile Include="Plugins\AssemblyPluginDependencyAttribute.cs" />
+    <Compile Include="Attributes\AssemblyPluginDependencyAttribute.cs" />
     <Compile Include="Services\IConfigurationManager.cs" />
     <Compile Include="Services\IDbFeatureService.cs" />
     <Compile Include="Services\IOidRegistrarService.cs" />
@@ -155,6 +164,11 @@
     <None Include="marc.hi.ehrs.svc.core.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\UI\ucLogging.resx">
+      <DependentUpon>ucLogging.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

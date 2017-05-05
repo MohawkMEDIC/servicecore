@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MARC.HI.EHRS.SVC.Core.Plugins
+namespace MARC.HI.EHRS.SVC.Core.Attributes
 {
     /// <summary>
     /// Indicates a GUID identified dependency on another assembly

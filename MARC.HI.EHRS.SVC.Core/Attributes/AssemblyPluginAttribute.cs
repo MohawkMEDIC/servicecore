@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MARC.HI.EHRS.SVC.Core.Plugins
+namespace MARC.HI.EHRS.SVC.Core.Attributes
 {
     /// <summary>
     /// This interface is insert into an assembly manifest via [assembly:PluginAssembly()] 
