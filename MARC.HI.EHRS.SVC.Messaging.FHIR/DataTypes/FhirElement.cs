@@ -19,20 +19,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     public class FhirElement 
     {
 
-        // XHTML
-        public const string NS_XHTML = "http://www.w3.org/1999/xhtml";
-
+        // Extensions
         [NonSerialized]
         private List<Extension> m_extensions;
 
+        // XHTML
+        public const string NS_XHTML = "http://www.w3.org/1999/xhtml";
+       
         /// <summary>
         /// Represents a referencable class
         /// </summary>
         public FhirElement()
         {
-            this.Extension = new List<Extension>();
+            this.m_extensions = new List<DataTypes.Extension>();
         }
 
+
+        /// <summary>
+        /// Extension
+        /// </summary>
+        [XmlElement("extension")]
+        public List<Extension> Extension { get { return this.m_extensions; } set { this.m_extensions = value; } }
 
         /// <summary>
         /// Represents the ID of the object via XS:ID
@@ -47,14 +54,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [XmlAttribute("idref")]
         [DataMember(Name = "idref")]
         public string IdRef { get; set; }
-
-        /// <summary>
-        /// Extension
-        /// </summary>
-        [XmlElement("extension")]
-        [DataMember(Name = "extension")]
-        public List<Extension> Extension { get { return this.m_extensions; } set { this.m_extensions = value; } }
-
 
         /// <summary>
         /// Make this a reference type

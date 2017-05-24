@@ -20,12 +20,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public String Url { get; set; }
 
         /// <summary>
-        /// True if is modifier
-        /// </summary>
-        [XmlElement("isModifier")]
-        public FhirBoolean IsModifier { get; set; }
-
-        /// <summary>
         /// Value choice
         /// </summary>
         [XmlElement("valueInteger", typeof(FhirInt))]
