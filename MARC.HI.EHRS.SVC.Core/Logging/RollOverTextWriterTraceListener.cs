@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Core.Logging
 {

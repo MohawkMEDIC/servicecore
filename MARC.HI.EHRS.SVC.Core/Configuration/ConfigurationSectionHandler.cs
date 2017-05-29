@@ -30,6 +30,7 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Core.Configuration;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Core.Configuration
 {
@@ -76,7 +77,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
                 custodianSection = section.SelectSingleNode("./*[local-name() = 'custodianship']");
 
 
-            if (serviceAssemblySection != null && !(configContext is IConfigurationPanel)) // Load assembly data
+            if (serviceAssemblySection != null && !(configContext is IConfigurableFeature)) // Load assembly data
                 foreach (XmlNode nd in serviceAssemblySection.SelectNodes("./*[local-name() = 'add']/@assembly"))
                 {
                     string asmFile = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), nd.Value);
@@ -137,7 +138,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
                 };
             }
 
-            if (serviceProviderSection != null && !(configContext is IConfigurationPanel)) // Load providers data
+            if (serviceProviderSection != null && !(configContext is IConfigurableFeature)) // Load providers data
                 foreach (XmlNode nd in serviceProviderSection.SelectNodes("./*[local-name() = 'add']/@type"))
                 {
                     Type t = Type.GetType(nd.Value);

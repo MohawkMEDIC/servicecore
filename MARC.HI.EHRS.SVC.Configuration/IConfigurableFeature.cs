@@ -14,6 +14,10 @@ namespace MARC.HI.EHRS.SVC.Configuration
     public interface IConfigurableFeature
     {
 
+        /// <summary>
+        /// Gets or sets whether the feature is or should be enabled
+        /// </summary>
+        bool EnableConfiguration { get; set; }
 
         /// <summary>
         /// Gets the name of the panel
@@ -29,11 +33,6 @@ namespace MARC.HI.EHRS.SVC.Configuration
         /// Panel which controls the object
         /// </summary>
         Control Panel { get; }
-        
-        /// <summary>
-        /// True if the configuration panel has changed data
-        /// </summary>
-        bool HasChanged { get; }
 
         /// <summary>
         /// Configure the object

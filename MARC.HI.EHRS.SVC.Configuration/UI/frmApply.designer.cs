@@ -37,18 +37,20 @@
             // lblDescription
             // 
             this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(12, 9);
+            this.lblDescription.Location = new System.Drawing.Point(18, 14);
+            this.lblDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(35, 13);
+            this.lblDescription.Size = new System.Drawing.Size(51, 20);
             this.lblDescription.TabIndex = 0;
             this.lblDescription.Text = "label1";
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(419, 185);
+            this.btnCancel.Location = new System.Drawing.Point(628, 285);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -56,9 +58,10 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(338, 185);
+            this.btnOk.Location = new System.Drawing.Point(507, 285);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.Size = new System.Drawing.Size(112, 35);
             this.btnOk.TabIndex = 2;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -67,29 +70,32 @@
             // chkActions
             // 
             this.chkActions.FormattingEnabled = true;
-            this.chkActions.Location = new System.Drawing.Point(12, 25);
+            this.chkActions.Location = new System.Drawing.Point(18, 38);
+            this.chkActions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkActions.Name = "chkActions";
-            this.chkActions.Size = new System.Drawing.Size(482, 154);
+            this.chkActions.Size = new System.Drawing.Size(721, 235);
             this.chkActions.TabIndex = 3;
             // 
             // frmApply
             // 
             this.AcceptButton = this.btnOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(506, 216);
+            this.ClientSize = new System.Drawing.Size(759, 332);
             this.ControlBox = false;
             this.Controls.Add(this.chkActions);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblDescription);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmApply";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Apply Configuration";
+            this.Load += new System.EventHandler(this.frmApply_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

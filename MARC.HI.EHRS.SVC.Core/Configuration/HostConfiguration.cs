@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,7 +11,7 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
     /// <summary>
     /// Represents the host configuration
     /// </summary>
-    public class HostConfiguration
+    public class HostConfiguration : ConfigurationSection
     {
 
         /// <summary>

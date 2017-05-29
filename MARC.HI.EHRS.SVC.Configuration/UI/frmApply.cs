@@ -47,7 +47,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
             XmlDocument configDocument = new XmlDocument();
                     configDocument.Load(ConfigurationApplicationContext.s_configFile);
             foreach (var itm in ConfigurationApplicationContext.s_configurationPanels)
-                if (itm.HasChanged)
+                if (itm.EnableConfiguration)
                 {
                     if(itm.IsConfigured(configDocument) ^ config &&
                         !itm.AlwaysConfigure)
@@ -195,6 +195,11 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void frmApply_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

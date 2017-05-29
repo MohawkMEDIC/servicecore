@@ -83,12 +83,9 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                 }
             }
 
-            public bool HasChanged
+            public bool EnableConfiguration
             {
-                get
-                {
-                    return false;
-                }
+                get; set;
             }
 
             public void Configure(XmlDocument configurationDom)
@@ -234,6 +231,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
 
             lblConfigured.Visible = ((e.Node.Tag as IConfigurableFeature).AlwaysConfigure || (e.Node.Tag as IConfigurableFeature).IsConfigured(m_xmlConfiguration));
             pnlConfigure.Enabled = true;
+            chkEnable.Visible = !lblConfigured.Visible;
         }
     }
 }

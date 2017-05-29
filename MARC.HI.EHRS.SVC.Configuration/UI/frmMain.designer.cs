@@ -37,6 +37,7 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.pnlConfigure = new System.Windows.Forms.Panel();
             this.lblConfigured = new System.Windows.Forms.Label();
+            this.chkEnable = new System.Windows.Forms.CheckBox();
             this.tsMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,10 +98,10 @@
             // 
             this.pnlConfigure.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlConfigure.Enabled = false;
-            this.pnlConfigure.Location = new System.Drawing.Point(292, 62);
+            this.pnlConfigure.Location = new System.Drawing.Point(292, 86);
             this.pnlConfigure.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlConfigure.Name = "pnlConfigure";
-            this.pnlConfigure.Size = new System.Drawing.Size(586, 660);
+            this.pnlConfigure.Size = new System.Drawing.Size(586, 636);
             this.pnlConfigure.TabIndex = 3;
             // 
             // lblConfigured
@@ -117,19 +118,32 @@
             this.lblConfigured.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblConfigured.Visible = false;
             // 
+            // chkEnable
+            // 
+            this.chkEnable.AutoSize = true;
+            this.chkEnable.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkEnable.Location = new System.Drawing.Point(292, 62);
+            this.chkEnable.Name = "chkEnable";
+            this.chkEnable.Size = new System.Drawing.Size(586, 24);
+            this.chkEnable.TabIndex = 4;
+            this.chkEnable.Text = "Enable Feature";
+            this.chkEnable.UseVisualStyleBackColor = true;
+            this.chkEnable.Visible = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(878, 722);
             this.Controls.Add(this.pnlConfigure);
+            this.Controls.Add(this.chkEnable);
             this.Controls.Add(this.lblConfigured);
             this.Controls.Add(this.trvOptions);
             this.Controls.Add(this.tsMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmMain";
-            this.Text = "MARC-HI Service Configuration";
+            this.Text = "Service Configuration";
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.ResumeLayout(false);
@@ -146,6 +160,7 @@
         private System.Windows.Forms.ImageList imlMain;
         private System.Windows.Forms.Panel pnlConfigure;
         private System.Windows.Forms.Label lblConfigured;
+        private System.Windows.Forms.CheckBox chkEnable;
     }
 }
 

@@ -13,10 +13,21 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
     /// </summary>
     public static class DatabaseConfiguratorRegistrar
     {
+        
         /// <summary>
         /// Gets the list of configurators that are present
         /// </summary>
         public static List<IDatabaseProvider> Configurators { get; private set; }
+
+        /// <summary>
+        /// Features to be configured
+        /// </summary>
+        public static List<IDataFeature> Features { get; private set; }
+
+        /// <summary>
+        /// Updates to be configured
+        /// </summary>
+        public static List<IDataUpdate> Updates { get; private set; }
 
         /// <summary>
         /// Static constructor for the database configurator registrar
@@ -24,6 +35,8 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         static DatabaseConfiguratorRegistrar()
         {
             Configurators = new List<IDatabaseProvider>(10);
+            Updates = new List<IDataUpdate>(10);
+            Features = new List<IDataFeature>(10);
         }
     }
 
@@ -58,12 +71,12 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         /// <summary>
         /// Deploy a specified feature on the database configuration
         /// </summary>
-        void DeployFeature(string featureName, string connectionStringName, XmlDocument configurationDom);
+        void DeployFeature(IDataFeature feature, string connectionStringName, XmlDocument configurationDom);
 
         /// <summary>
         /// Un-deploy a feature
         /// </summary>
-        void UnDeployFeature(string featureName, string connectionStringName, XmlDocument configurationDom);
+        void UnDeployFeature(IDataFeature feature, string connectionStringName, XmlDocument configurationDom);
 
         /// <summary>
         /// Create a .config connection string entry
@@ -85,7 +98,19 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         /// Create a database
         /// </summary>
         void CreateDatabase(string serverName, string superUser, string password, string databaseName, string owner);
-        
+
+        /// <summary>
+        /// Get a list of available updates
+        /// </summary>
+        List<IDataUpdate> GetUpdates(string connectionStringName, XmlDocument configurationDom);
+
+        /// <summary>
+        /// Deploy an update
+        /// </summary>
+        /// <param name="update">The update to be deployed</param>
+        /// <param name="connectionStringName">The connection string to deploy the update</param>
+        /// <param name="configurationDom">The configuration file to look for the update</param>
+        void DeployUpdate(IDataUpdate update, string connectionStringName, XmlDocument configurationDom);
 
     }
 }

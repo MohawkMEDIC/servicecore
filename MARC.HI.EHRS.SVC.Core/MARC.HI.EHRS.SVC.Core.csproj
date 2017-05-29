@@ -94,15 +94,6 @@
   <ItemGroup>
     <Compile Include="Configuration\DbXml\SqlScript.cs" />
     <Compile Include="Configuration\LocalConfigurationManager.cs" />
-    <Compile Include="Configuration\UI\HL7IdentifierType.cs" />
-    <Compile Include="Configuration\UI\LogConfigurationFeature.cs" />
-    <Compile Include="Configuration\UI\TraceSourceAttribute.cs" />
-    <Compile Include="Configuration\UI\ucLogging.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\ucLogging.Designer.cs">
-      <DependentUpon>ucLogging.cs</DependentUpon>
-    </Compile>
     <Compile Include="Exceptions\DomainStateException.cs" />
     <Compile Include="Exceptions\UnauthorizedRequestException.cs" />
     <Compile Include="Attributes\AssemblyPluginAttribute.cs" />
@@ -111,9 +102,6 @@
     <Compile Include="Configuration\DbXml\Feature.cs" />
     <Compile Include="Configuration\DbXml\SqlCommand.cs" />
     <Compile Include="Configuration\HostConfiguration.cs" />
-    <Compile Include="Configuration\IAlwaysDeployedConfigurationPanel.cs" />
-    <Compile Include="Configuration\IConfigurationPanel.cs" />
-    <Compile Include="Configuration\IDataboundConfigurationPanel.cs" />
     <Compile Include="Configuration\CustodianshipData.cs" />
     <Compile Include="Data\CodeValue.cs" />
     <Compile Include="Data\Identifier.cs" />
@@ -132,7 +120,6 @@
     <Compile Include="Exceptions\IssueException.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="ApplicationContext.cs" />
-    <Compile Include="Configuration\IAutoDeployConfigurationPanel.cs" />
     <Compile Include="Issues\DetectedIssue.cs" />
     <Compile Include="Logging\RollOverTextWriterTraceListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -166,9 +153,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\ucLogging.resx">
-      <DependentUpon>ucLogging.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Configuration\MARC.HI.EHRS.SVC.Configuration.csproj">
+      <Project>{0487F504-9C3C-44EF-BF50-3EDCC2054A15}</Project>
+      <Name>MARC.HI.EHRS.SVC.Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
