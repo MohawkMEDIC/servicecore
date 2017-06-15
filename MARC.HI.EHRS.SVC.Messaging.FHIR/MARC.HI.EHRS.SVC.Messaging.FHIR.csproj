@@ -153,6 +153,7 @@
     <Compile Include="Resources\Picture.cs" />
     <Compile Include="Resources\Practictioner.cs" />
     <Compile Include="Resources\ResourceBase.cs" />
+    <Compile Include="Resources\ResourceMetadata.cs" />
     <Compile Include="Resources\StructureDefinition.cs" />
     <Compile Include="Resources\ProfileImport.cs" />
     <Compile Include="Resources\Qualification.cs" />

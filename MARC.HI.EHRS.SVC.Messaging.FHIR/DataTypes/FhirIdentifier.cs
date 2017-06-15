@@ -18,13 +18,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// Identifies the intended use of the item
         /// </summary>
         [XmlElement("use")]
-        public FhirString Use { get; set; }
+        public FhirCoding Use { get; set; }
 
         /// <summary>
         /// Represents a label for the identifier
         /// </summary>
-        [XmlElement("label")]
-        public FhirString Label { get; set; }
+        [XmlElement("type")]
+        public FhirCodeableConcept Type { get; set; }
 
         /// <summary>
         /// Identifies the system which assigned the ID
@@ -57,10 +57,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         {
 
                 w.WriteStartElement("strong", NS_XHTML);
-                if (this.Label == null)
+                if (this.Type == null)
                     w.WriteString("UNKNOWN");
                 else
-                    this.Label.WriteText(w);
+                    this.Type.WriteText(w);
                 w.WriteString(":");
                 w.WriteEndElement();//strong
 
