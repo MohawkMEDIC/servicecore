@@ -146,6 +146,7 @@
     <Compile Include="Backbone\Communication.cs" />
     <Compile Include="Resources\Narrative.cs" />
     <Compile Include="Backbone\InteractionDefinition.cs" />
+    <Compile Include="Resources\Observation.cs" />
     <Compile Include="Resources\OperationOutcome.cs" />
     <Compile Include="Resources\Organization.cs" />
     <Compile Include="Resources\Patient.cs" />
