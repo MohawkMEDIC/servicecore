@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
@@ -21,7 +20,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
             this.QueryId = Guid.Empty;
             this.IncludeHistory = false;
             this.MinimumDegreeMatch = 1.0f;
-            this.TargetDomains = new List<DomainIdentifier>();
+            this.TargetDomains = new List<String>();
             this.Start = 0;
             this.Quantity = 25;
         }
@@ -42,9 +41,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         public bool IncludeHistory { get; set; }
 
         /// <summary>
+        /// True if the query should include contained resource
+        /// </summary>
+        public bool IncludeContained { get; set; }
+
+        /// <summary>
+        /// Include resources
+        /// </summary>
+        public List<String> IncludeResource { get; set; }
+
+        /// <summary>
         /// Gets or sets the target domains
         /// </summary>
-        public List<DomainIdentifier> TargetDomains { get; set; }
+        public List<String> TargetDomains { get; set; }
 
         /// <summary>
         /// Minimum degree natcg

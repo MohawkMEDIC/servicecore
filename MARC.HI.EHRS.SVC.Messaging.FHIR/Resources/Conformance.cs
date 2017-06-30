@@ -6,109 +6,188 @@ using System.Xml.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
+    /// <summary>
+    /// Conformance resource status
+    /// </summary>
+    [XmlType("ConformanceResourceStatus", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/conformance-resource-status")]
+    public enum ConformanceResourceStatus
+    {
+        [XmlEnum("draft")]
+        Draft,
+        [XmlEnum("active")]
+        Active,
+        [XmlEnum("retired")]
+        Retired
+    }
+
+    /// <summary>
+    /// Conformance statement kind
+    /// </summary>
+    [XmlType("ConformanceStatementKind", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/conformance-statement-kind")]
+    public enum ConformanceStatementKind
+    {
+        [XmlEnum("instance")]
+        Instance,
+        [XmlEnum("capability")]
+        Capability,
+        [XmlEnum("requirements")]
+        Requirements
+    }
+
     /// <summary>
     /// Conformance resource
     /// </summary>
     [XmlType("Conformance", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Conformance", Namespace = "http://hl7.org/fhir")]
-    public class Conformance : ResourceBase
+    public class Conformance : DomainResourceBase
     {
 
+        /// <summary>
+        /// Creates a new instance of the conformance class
+        /// </summary>
         public Conformance()
         {
-            this.Telecom = new List<Telecom>();
             this.Rest = new List<RestDefinition>();
-            this.Format = new List<PrimitiveCode<string>>();
+            this.Format = new List<FhirCode<string>>();
+            this.Contact = new List<ConformancePublisher>();
+            this.Profile = new List<Reference<Resources.StructureDefinition>>();
         }
+
         /// <summary>
         /// Logical identifier to this resource
         /// </summary>
-        [Description("Logical id to refernece this statement")]
-        [XmlElement("identifier")]
-        public FhirString Identifier { get; set; }
+        [Description("Logical uri to refernece this statement")]
+        [XmlElement("url")]
+        public FhirUri Url { get; set; }
+
         /// <summary>
         /// Logical id for this version of the statement
         /// </summary>
         [Description("Logical id for the version of this statement")]
         [XmlElement("version")]
         public FhirString Version { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the statement
         /// </summary>
         [XmlElement("name")]
         [Description("Informal name for this statement")]
         public FhirString Name { get; set; }
-        /// <summary>
-        /// The publishing organization
-        /// </summary>
-        [Description("Publishing organization")]
-        [XmlElement("publisher")]
-        public FhirString Publisher { get; set; }
-        /// <summary>
-        /// Contacts for the organization
-        /// </summary>
-        [Description("Contacts for the organization")]
-        [XmlElement("telecom")]
-        public List<Telecom> Telecom { get; set; }
-        /// <summary>
-        /// Description of the conformance statement
-        /// </summary>
-        [Description("Human description of the conformance statement")]
-        [XmlElement("description")]
-        public FhirString Description { get; set; }
+
         /// <summary>
         /// The status of the conformance statement
         /// </summary>
         [Description("Status of the conformance statement")]
         [XmlElement("status")]
-        public PrimitiveCode<String> Status { get; set; }
+        public FhirCode<ConformanceResourceStatus> Status { get; set; }
+        
         /// <summary>
         /// True if the conformance statement is experimental
         /// </summary>
         [Description("If for testing purposes, not real useage")]
         [XmlElement("experimental")]
         public FhirBoolean Experimental { get; set; }
+
+        /// <summary>
+        /// The publishing organization
+        /// </summary>
+        [Description("Publishing organization")]
+        [XmlElement("publisher")]
+        public FhirString Publisher { get; set; }
+
+        /// <summary>
+        /// Gets or sets contact information for the publisher
+        /// </summary>
+        [XmlElement("contact")]
+        [Description("Contact details of the publisher")]
+        public List<ConformancePublisher> Contact { get; set; }
+
         /// <summary>
         /// Date the spec was published
         /// </summary>
         [Description("Date of publication")]
         [XmlElement("date")]
-        public Date Date { get; set; }
+        [FhirElement(MinOccurs = 1)]
+        public FhirDateTime Date { get; set; }
+
+        /// <summary>
+        /// Description of the conformance statement
+        /// </summary>
+        [Description("Human description of the conformance statement")]
+        [XmlElement("description")]
+        public FhirString Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets why the conformance statement is needed
+        /// </summary>
+        [XmlElement("requirements")]
+        [Description("Why is this needed?")]
+        public FhirString Requirements { get; set; }
+
+        /// <summary>
+        /// Gets or sets copyright information related to the conformance statement
+        /// </summary>
+        [XmlElement("copyright")]
+        [Description("Use and/or publishing restrictions")]
+        public FhirString Copyright { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kind of conformance statement
+        /// </summary>
+        [XmlElement("kind")]
+        [Description("Kind of conformance statement represented")]
+        public FhirCode<ConformanceStatementKind> Kind { get; set; }
+
         /// <summary>
         /// Describes the software that is covered by this conformance statement
         /// </summary>
         [XmlElement("software")]
         [Description("Describes the software that is covered by this conformance statement")]
         public SoftwareDefinition Software { get; set; }
+
         /// <summary>
         /// Describes the specified instance
         /// </summary>
         [Description("Describes the specific instnace")]
         [XmlElement("implementation")]
         public ImplementationDefinition Implementation { get; set; }
+
         /// <summary>
         /// Gets or sets the FHIR version
         /// </summary>
         [Description("The FHIR version")]
         [XmlElement("fhirVersion")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirString FhirVersion { get; set; }
+
         /// <summary>
         /// True if application accepts unknown elements
         /// </summary>
         [Description("True if application accepts unknown elements")]
         [XmlElement("acceptUnknown")]
-        [ElementProfile(MinOccurs = 1)]
+        [FhirElement(MinOccurs = 1)]
         public FhirBoolean AcceptUnknown { get; set; }
+
         /// <summary>
         /// Formats supported
         /// </summary>
         [Description("Formats supported")]
         [XmlElement("format")]
-        public List<PrimitiveCode<String>> Format { get; set; }
+        public List<FhirCode<String>> Format { get; set; }
+
+        /// <summary>
+        /// Profiles supported
+        /// </summary>
+        [XmlElement("profile")]
+        [Description("Profiles for use cases supported")]
+        public List<Reference<StructureDefinition>> Profile { get; set; }
+
         /// <summary>
         /// Endpoint if restful
         /// </summary>

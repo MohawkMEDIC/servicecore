@@ -28,7 +28,7 @@ namespace MARC.HI.EHRS.SVC.Core.Timer.Configuration
     /// <summary>
     /// Data class for timer configuration
     /// </summary>
-    public class TimerConfiguration : IUsesHostContext
+    public class TimerConfiguration 
     {
 
         // Host context
@@ -46,27 +46,6 @@ namespace MARC.HI.EHRS.SVC.Core.Timer.Configuration
         /// Gets a list of job configurations
         /// </summary>
         public List<TimerJobConfiguration> Jobs { get; private set; }
-
-        #region IUsesHostContext Members
-
-        /// <summary>
-        /// Gets or sets the host context that owns this configuration
-        /// </summary>
-        public IServiceProvider Context
-        {
-            get
-            {
-                return this.m_hostContext;
-            }
-            set
-            {
-                this.m_hostContext = value;
-                // Cascade the host context
-                foreach (var job in this.Jobs)
-                    job.Job.Context = this.m_hostContext;
-            }
-        }
-
-        #endregion
+        
     }
 }

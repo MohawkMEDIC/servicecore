@@ -26,6 +26,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Localization
 {
@@ -47,8 +48,8 @@ namespace MARC.HI.EHRS.SVC.Localization
         /// </summary>
         public string GetString(string identifier)
         {
-            ISystemConfigurationService sysConfigSvc = this.Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
-            return GetStringEx(identifier, sysConfigSvc.JurisdictionData.DefaultLanguageCode);
+            
+            return GetStringEx(identifier, ApplicationContext.Current.Configuration.JurisdictionData.DefaultLanguageCode);
         }
 
         /// <summary>

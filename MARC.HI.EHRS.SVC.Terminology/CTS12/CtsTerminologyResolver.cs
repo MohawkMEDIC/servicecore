@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.Services;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using MARC.HI.EHRS.SVC.Terminology.Configuration;
 using System.Configuration;
 using System.Diagnostics;
@@ -31,6 +30,8 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.ComponentModel;
 using MARC.HI.EHRS.SVC.Terminology.CTSService;
+using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Terminology.CTS12
 {
@@ -62,7 +63,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
         /// </summary>
         static CtsTerminologyResolver()
         {
-            m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.terminology") as ConfigurationSectionHandler;
+            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.terminology") as ConfigurationSectionHandler;
         }
 
         #region ITerminologyService Members
@@ -70,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
         /// <summary>
         /// Validate a Code
         /// </summary>
-        public ConceptValidationResult Validate(MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue code)
+        public ConceptValidationResult Validate(CodeValue code)
         {
             if (code == null)
                 return new ConceptValidationResult() { Outcome = ValidationOutcome.Valid };
@@ -93,7 +94,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
                     mrt.Proxy = new WebProxy(m_configuration.ProxyAddress);
 
                 // CTS Doesn't need to be used to validate ISO639 Language Codes, so we can regex match this
-                if (code.CodeSystem.Equals(GetCodeSystemDomain(CodeSystemName.ISO639)))
+                if (code.CodeSystem == "2.16.840.1.113883.6.99")
                 {
                     if(new Regex("\\w{2}\\-?\\w{0,2}").IsMatch(code.Code))
                         return new ConceptValidationResult() { Outcome = ValidationOutcome.Valid };
@@ -145,18 +146,9 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
             {
                 code = code.Code,
                 codeSystem = code.CodeSystem,
-                codeSystemVersion = code.CodeSystemVersion,
-                displayName = code.DisplayName,
-                originalText = code.OriginalText == null ? null : new ED() { _this = new binary_or_text() { textualValue = code.OriginalText }}
+                displayName = code.DisplayName
             };
 
-            if (code.Qualifies != null)
-            {
-                List<CD> qualifiers = new List<CD>(10);
-                foreach (var qual in code.Qualifies)
-                    qualifiers.Add(CreateCTSConceptDescriptor(qual.Value));
-                retVal.qualifiers = qualifiers.ToArray();
-            }
             return retVal;
         }
 
@@ -169,33 +161,34 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
             {
                 code = codeValue.Code,
                 codeSystem = codeValue.CodeSystem,
-                codeSystemVersion = codeValue.CodeSystemVersion,
-                displayName = codeValue.DisplayName,
-                originalText = codeValue.OriginalText == null ? null : new ED() { _this = new binary_or_text() { textualValue = codeValue.OriginalText } }
+                displayName = codeValue.DisplayName
             };
         }
 
         /// <summary>
         /// Validate a code using a named code system
         /// </summary>
-        public ConceptValidationResult ValidateEx(string code, string displayName, CodeSystemName codeSystem)
+        public ConceptValidationResult ValidateEx(string code, string displayName, String codeSystem)
         {
-            return Validate(new CodeValue(code, GetCodeSystemDomain(codeSystem)) { DisplayName = displayName });
+            return Validate(new CodeValue(code, codeSystem) { DisplayName = displayName });
         }
 
         /// <summary>
         /// Get the domain OID from a code system name
         /// </summary>
-        public string GetCodeSystemDomain(CodeSystemName codeSystemName)
+        public string GetCodeSystemDomain(String codeSystemName)
         {
-            ISystemConfigurationService configService = Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
-            return configService.OidRegistrar.GetOid(codeSystemName.ToString()).Oid;
+            var oidService = ApplicationContext.Current.GetService<IOidRegistrarService>();
+            if (oidService == null)
+                throw new InvalidOperationException("OID Registrar service not registered");
+
+            return oidService.GetOid(codeSystemName.ToString())?.Oid;
         }
 
         /// <summary>
         /// Translate a code from one code system to another
         /// </summary>
-        public MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue Translate(MARC.HI.EHRS.SVC.Core.DataTypes.CodeValue code, string targetDomain)
+        public CodeValue Translate(CodeValue code, string targetDomain)
         {
             throw new NotImplementedException();
         }
@@ -224,7 +217,6 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
 
             if (!m_cachedCodeLookups.TryGetValue(codeKey, out retVal))
             {
-                ISystemConfigurationService config = Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
                 // Does this code need details filled in?
                 // CTS should only be used for valid
                 if (!m_configuration.FillInCodeSets.Contains(codeValue.CodeSystem))
@@ -238,7 +230,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
                 if (!String.IsNullOrEmpty(m_configuration.ProxyAddress))
                     mrt.Proxy = new WebProxy(m_configuration.ProxyAddress);
 
-                CD ret = mrt.fillInDetails(CreateCTSConceptDescriptor(codeValue), new ST() { v = config.JurisdictionData.DefaultLanguageCode });
+                CD ret = mrt.fillInDetails(CreateCTSConceptDescriptor(codeValue), new ST() { v = ApplicationContext.Current.Configuration.JurisdictionData.DefaultLanguageCode });
 
                 // Create the CodeValue from the CD
                 retVal = CreateCodeValue(ret);
@@ -275,22 +267,13 @@ namespace MARC.HI.EHRS.SVC.Terminology.CTS12
         /// </summary>
         private CodeValue CreateCodeValue(CD code)
         {
-            CodeValue retVal = new CodeValue()
+            CodeValue retVal = new CodeValue(code.code, code.codeSystem)
             {
-                Code = code.code,
-                CodeSystem = code.codeSystem,
                 CodeSystemVersion = code.codeSystemVersion,
                 CodeSystemName = code.codeSystemName,
-                DisplayName = code.displayName,
-                OriginalText = code.originalText == null ? null : code.originalText._this.textualValue
+                DisplayName = code.displayName
             };
 
-            if (code.qualifiers != null)
-            {
-                retVal.Qualifies = new Dictionary<CodeValue,CodeValue>();
-                foreach (var qual in code.qualifiers)
-                    retVal.Qualifies.Add(new CodeValue(), CreateCodeValue(qual));
-            }
             return retVal;
         }
 

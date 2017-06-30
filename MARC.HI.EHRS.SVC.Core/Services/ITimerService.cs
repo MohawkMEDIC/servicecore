@@ -27,17 +27,24 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// <summary>
     /// Represents a service which executes timer jobs
     /// </summary>
-    public interface ITimerService : IUsesHostContext
+    public interface ITimerService : IDaemonService
     {
 
         /// <summary>
-        /// Start the timer
+        /// Add a job to the timer
         /// </summary>
-        void Start();
+        void AddJob(object jobObject, TimeSpan elapseTime);
 
         /// <summary>
-        /// Stop the timer
+        /// Returns true if the job object is registered
         /// </summary>
-        void Stop();
+        bool IsJobRegistered(Type jobObject);
+
+        /// <summary>
+        /// Gets the execution state
+        /// </summary>
+        /// <returns></returns>
+        List<KeyValuePair<object, DateTime>> GetState();
+
     }
 }

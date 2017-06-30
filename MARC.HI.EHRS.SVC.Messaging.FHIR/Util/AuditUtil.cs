@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
@@ -12,6 +11,10 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
 using System.Configuration;
+using MARC.HI.EHRS.SVC.Auditing.Data;
+using MARC.HI.EHRS.SVC.Core.Data;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -22,12 +25,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
     {
 
         // Config
-        private static FhirServiceConfiguration s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+        private static FhirServiceConfiguration s_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
 
         /// <summary>
         /// Create audit data
         /// </summary>
-        public static AuditData CreateAuditData(IEnumerable<ResourceBase> records)
+        public static AuditData CreateAuditData(IEnumerable<DomainResourceBase> records)
         {
             // Audit data
             AuditData retVal = null;
@@ -65,16 +68,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             {
                 case "GET":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Execute, OutcomeIndicator.Success, EventIdentifierType.Query, 
-                            itiNameMap);
+                        retVal = new AuditData(DateTime.Now, ActionType.Execute, OutcomeIndicator.Success, EventIdentifierType.Query,
+                            AuditUtil.CopyCode(itiNameMap));
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
                         {
                             UserIsRequestor = true,
                             UserIdentifier = userId,
-                            ActorRoleCode = new List<CodeValue>() {
-                            new  CodeValue("110153", "DCM") { DisplayName = "Source" }
+                            ActorRoleCode = new List<AuditCode>() {
+                            new  AuditCode("110153", "DCM") { DisplayName = "Source" }
                         },
                             NetworkAccessPointId = remoteEndpoint,
                             NetworkAccessPointType = NetworkAccessPointType.IPAddress,
@@ -85,7 +88,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         {
                             UserIdentifier = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
                             UserIsRequestor = false,
-                            ActorRoleCode = new List<CodeValue>() { new CodeValue("110152", "DCM") { DisplayName = "Destination" } },
+                            ActorRoleCode = new List<AuditCode>() { new AuditCode("110152", "DCM") { DisplayName = "Destination" } },
                             NetworkAccessPointType = NetworkAccessPointType.MachineName,
                             NetworkAccessPointId = Dns.GetHostName(),
                             UserName = Environment.UserName
@@ -97,12 +100,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                             Type = AuditableObjectType.SystemObject,
                             Role = AuditableObjectRole.Query,
                             IDTypeCode = AuditableObjectIdType.Custom,
-                            CustomIdTypeCode = itiNameMap,
+                            CustomIdTypeCode = AuditUtil.CopyCode(itiNameMap),
                             ObjectId = itiNameMap.DisplayName.Replace(" ", ""),
                             QueryData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.Query)),
-                            ObjectData = new Dictionary<string, byte[]>()
+                            ObjectData =  new List<ObjectDataExtension>()
                             {
-                                { String.Empty, WebOperationContext.Current.IncomingRequest.Headers.ToByteArray() }
+                                new ObjectDataExtension(String.Empty, WebOperationContext.Current.IncomingRequest.Headers.ToByteArray() )
                             }
                         });
 
@@ -110,15 +113,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     }
                 case "POST":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Create, OutcomeIndicator.Success, EventIdentifierType.Import, itiNameMap);
+                        retVal = new AuditData(DateTime.Now, ActionType.Create, OutcomeIndicator.Success, EventIdentifierType.Import, AuditUtil.CopyCode(itiNameMap));
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
                         {
                             UserIsRequestor = true,
                             UserIdentifier = userId,
-                            ActorRoleCode = new List<CodeValue>() {
-                            new  CodeValue("110153", "DCM") { DisplayName = "Source" }
+                            ActorRoleCode = new List<AuditCode>() {
+                            new  AuditCode("110153", "DCM") { DisplayName = "Source" }
                         },
                             NetworkAccessPointId = remoteEndpoint,
                             NetworkAccessPointType = NetworkAccessPointType.IPAddress,
@@ -129,7 +132,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         {
                             UserIdentifier = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
                             UserIsRequestor = false,
-                            ActorRoleCode = new List<CodeValue>() { new CodeValue("110152", "DCM") { DisplayName = "Destination" } },
+                            ActorRoleCode = new List<AuditCode>() { new AuditCode("110152", "DCM") { DisplayName = "Destination" } },
                             NetworkAccessPointType = NetworkAccessPointType.MachineName,
                             NetworkAccessPointId = Dns.GetHostName(),
                             UserName = Environment.UserName
@@ -139,15 +142,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     }
                 case "PUT":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Update, OutcomeIndicator.Success, EventIdentifierType.Import, itiNameMap);
+                        retVal = new AuditData(DateTime.Now, ActionType.Update, OutcomeIndicator.Success, EventIdentifierType.Import, AuditUtil.CopyCode(itiNameMap));
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
                         {
                             UserIsRequestor = true,
                             UserIdentifier = userId,
-                            ActorRoleCode = new List<CodeValue>() {
-                            new  CodeValue("110153", "DCM") { DisplayName = "Source" }
+                            ActorRoleCode = new List<AuditCode>() {
+                            new  AuditCode("110153", "DCM") { DisplayName = "Source" }
                         },
                             NetworkAccessPointId = remoteEndpoint,
                             NetworkAccessPointType = NetworkAccessPointType.IPAddress,
@@ -158,7 +161,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         {
                             UserIdentifier = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
                             UserIsRequestor = false,
-                            ActorRoleCode = new List<CodeValue>() { new CodeValue("110152", "DCM") { DisplayName = "Destination" } },
+                            ActorRoleCode = new List<AuditCode>() { new AuditCode("110152", "DCM") { DisplayName = "Destination" } },
                             NetworkAccessPointType = NetworkAccessPointType.MachineName,
                             NetworkAccessPointId = Dns.GetHostName(),
                             UserName = Environment.UserName
@@ -168,15 +171,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     }
                 case "DELETE":
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Delete, OutcomeIndicator.Success, EventIdentifierType.Import, itiNameMap);
+                        retVal = new AuditData(DateTime.Now, ActionType.Delete, OutcomeIndicator.Success, EventIdentifierType.Import, AuditUtil.CopyCode(itiNameMap));
 
                         // Audit actor for Patient Identity Source
                         retVal.Actors.Add(new AuditActorData()
                         {
                             UserIsRequestor = true,
                             UserIdentifier = userId,
-                            ActorRoleCode = new List<CodeValue>() {
-                            new  CodeValue("110153", "DCM") { DisplayName = "Source" }
+                            ActorRoleCode = new List<AuditCode>() {
+                            new  AuditCode("110153", "DCM") { DisplayName = "Source" }
                         },
                             NetworkAccessPointId = remoteEndpoint,
                             NetworkAccessPointType = NetworkAccessPointType.IPAddress,
@@ -187,7 +190,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         {
                             UserIdentifier = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri.ToString(),
                             UserIsRequestor = false,
-                            ActorRoleCode = new List<CodeValue>() { new CodeValue("110152", "DCM") { DisplayName = "Destination" } },
+                            ActorRoleCode = new List<AuditCode>() { new AuditCode("110152", "DCM") { DisplayName = "Destination" } },
                             NetworkAccessPointType = NetworkAccessPointType.MachineName,
                             NetworkAccessPointId = Dns.GetHostName(),
                             UserName = Environment.UserName
@@ -197,7 +200,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     }
                 default:
                     {
-                        retVal = new AuditData(DateTime.Now, ActionType.Execute, OutcomeIndicator.Success, EventIdentifierType.ApplicationActivity, new CodeValue(
+                        retVal = new AuditData(DateTime.Now, ActionType.Execute, OutcomeIndicator.Success, EventIdentifierType.ApplicationActivity, new AuditCode(
                             String.Format("GET {0}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.OriginalString), "http://marc-hi.ca/fhir/actions"));
 
                         break;
@@ -206,7 +209,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 
 
             if(records != null)
-                foreach (ResourceBase pat in records)
+                foreach (DomainResourceBase pat in records)
                 {
                     // TODO: Make this more generic
                     AuditableObject aud = null;
@@ -216,7 +219,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                     if(ptcptObjMap.Length > 0)
                     {
                         var mapAttribute = ptcptObjMap[0] as ParticipantObjectMapAttribute;
-                        domain = ApplicationContext.ConfigurationService.OidRegistrar.GetOid(mapAttribute.OidName).Oid;
+                        domain = ApplicationContext.Current.GetService<IOidRegistrarService>()?.GetOid(mapAttribute.OidName)?.Oid;
                         aud = new AuditableObject() {
                             IDTypeCode = mapAttribute.IdType,
                             Role = mapAttribute.Role,
@@ -227,7 +230,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         continue;
 
                     // Lifecycle
-                    switch (retVal.ActionCode.Value)
+                    switch (retVal.ActionCode)
                     {
                         case ActionType.Create:
                             aud.LifecycleType = AuditableObjectLifecycle.Creation;
@@ -253,5 +256,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             return retVal;
         }
 
+        /// <summary>
+        /// Copy audit code
+        /// </summary>
+        private static AuditCode CopyCode(CodeValue cv)
+        {
+            return new AuditCode(cv.Code, cv.CodeSystem)
+            {
+                DisplayName = cv.DisplayName,
+                CodeSystemName = cv.CodeSystemName,
+                CodeSystemVersion = cv.CodeSystemVersion
+            };
+        }
     }
 }

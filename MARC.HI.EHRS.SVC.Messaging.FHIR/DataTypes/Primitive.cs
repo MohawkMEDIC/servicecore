@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using MARC.Everest.Connectors;
 using System.Xml;
+using System.Reflection;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
 {
@@ -13,7 +14,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType(Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public abstract class Primitive<T> : Shareable
+    public abstract class Primitive<T> : FhirElement
     {
 
         /// <summary>
@@ -44,7 +45,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public virtual String XmlValue
         {
             get {
-
+                if (typeof(T).IsEnum)
+                    return typeof(T).GetField(this.Value.ToString()).GetCustomAttribute<XmlEnumAttribute>().Name;
                 if (this.Value is byte[])
                     return Convert.ToBase64String(this.Value as Byte[]);
                 if (this.Value != null)
@@ -182,16 +184,30 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         public static implicit operator FhirString(string v) { return v == null ? null : new FhirString(v); }
 
     }
+
+    /// <summary>
+    /// Fhir identifier
+    /// </summary>
+    [XmlType("id", Namespace = "http://hl7.org/fhir")]
+    [Serializable]
+    public class FhirId : FhirString
+    {
+        public FhirId() : base() { }
+        public FhirId(String id) : base(id) { }
+        public static implicit operator FhirId(string v) { return v == null ? null : new FhirId(v); }
+
+    }
+
     /// <summary>
     /// Represents a string
     /// </summary>
     [XmlType("base64Binary", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public class FhirBinary : Primitive<byte[]>
+    public class FhirBase64Binary : Primitive<byte[]>
     {
-        public FhirBinary() : base() { }
-        public FhirBinary(byte[] value) : base(value) { }
-        public static implicit operator FhirBinary(byte[] v) { return new FhirBinary(v); }
+        public FhirBase64Binary() : base() { }
+        public FhirBase64Binary(byte[] value) : base(value) { }
+        public static implicit operator FhirBase64Binary(byte[] v) { return new FhirBase64Binary(v); }
         [XmlAttribute("value")]
         public override string XmlValue
         {

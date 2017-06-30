@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MARC.HI.EHRS.SVC.Messaging.Everest</RootNamespace>
     <AssemblyName>MARC.HI.EHRS.SVC.Messaging.Everest</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -35,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,6 +55,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -63,6 +66,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MARC.Everest, Version=1.3.0.0, Culture=neutral, PublicKeyToken=ba5b2480018546af, processorArchitecture=MSIL">
@@ -101,21 +105,6 @@
     <Compile Include="Configuration\RevisionConfiguration.cs" />
     <Compile Include="Configuration\ListenConfiguration.cs" />
     <Compile Include="Configuration\MessageHandlerConfiguration.cs" />
-    <Compile Include="Configuration\UI\HttpSslTool.cs" />
-    <Compile Include="Configuration\UI\RevisionTemplate.cs" />
-    <Compile Include="Configuration\UI\EverestConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\pnlEverestConfiguration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\pnlEverestConfiguration.Designer.cs">
-      <DependentUpon>pnlEverestConfiguration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\UI\pnlTemplateConfigure.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\pnlTemplateConfigure.Designer.cs">
-      <DependentUpon>pnlTemplateConfigure.cs</DependentUpon>
-    </Compile>
     <Compile Include="ErrorDescriptions.cs" />
     <Compile Include="Exception\UninterpretableMessageException.cs" />
     <Compile Include="IEverestMessageReceiver.cs" />
@@ -124,8 +113,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing.Core\MARC.HI.EHRS.SVC.Auditing.Core.csproj">
+      <Project>{4D448BFD-B967-4F75-AD30-37327153149C}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj">
+      <Project>{27ba9e20-3952-4a9a-92c4-01c86ba2ba50}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
-      <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
+      <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>
     </ProjectReference>
   </ItemGroup>
@@ -136,14 +133,6 @@
     <None Include="Configuration\marc.hi.ehrs.svc.messaging.everest.xsd">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\pnlEverestConfiguration.resx">
-      <DependentUpon>pnlEverestConfiguration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\UI\pnlTemplateConfigure.resx">
-      <DependentUpon>pnlTemplateConfigure.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

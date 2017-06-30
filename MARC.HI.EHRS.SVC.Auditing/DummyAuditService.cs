@@ -23,9 +23,11 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Core.Services;
 using System.Diagnostics;
-using MARC.HI.EHRS.SVC.Core.DataTypes;
+using MARC.HI.EHRS.SVC.Auditing.Data;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Auditing.Services;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Auditing
 {
@@ -35,18 +37,19 @@ namespace MARC.HI.EHRS.SVC.Auditing
     [Description("Dummy Auditor Service")]
     public class DummyAuditService : IAuditorService
     {
+
+
         #region IAuditorService Members
 
         /// <summary>
         /// Send an audit
         /// </summary>
-        public bool SendAudit(MARC.HI.EHRS.SVC.Core.DataTypes.AuditData ad)
+        public bool SendAudit(AuditData ad)
         {
-            ISystemConfigurationService configService = Context.GetService(typeof(ISystemConfigurationService)) as ISystemConfigurationService;
 
             StringBuilder auditSb = new StringBuilder();
-            auditSb.AppendFormat("AUDIT {0} : {1} {2}\r\n", ad.ActionCode.Value, ad.Outcome.Value, ad.EventTypeCode == null ? "" : ad.EventTypeCode.Code);
-            auditSb.AppendFormat("SITE: {0}\r\n", configService.DeviceIdentifier);
+            auditSb.AppendFormat("AUDIT {0} : {1} {2}\r\n", ad.ActionCode, ad.Outcome, ad.EventTypeCode == null ? "" : ad.EventTypeCode.Code);
+            auditSb.AppendFormat("SITE: {0}\r\n", ApplicationContext.Current.Configuration.DeviceIdentifier);
             foreach (AuditableObject ao in ad.AuditableObjects ?? new List<AuditableObject>())
                 auditSb.AppendFormat("AO-> ID({0}:{1}) (LC-{2}, ROL-{3})\r\n", ao.IDTypeCode, ao.ObjectId, ao.LifecycleType, ao.Role);
             foreach (AuditActorData aad in ad.Actors ?? new List<AuditActorData>())
@@ -59,17 +62,5 @@ namespace MARC.HI.EHRS.SVC.Auditing
 
         #endregion
 
-        #region IUsesHostContext Members
-
-        /// <summary>
-        /// Gets or sets the context under which this auditor service runs
-        /// </summary>
-        public IServiceProvider Context
-        {
-            get;
-            set; 
-        }
-
-        #endregion
     }
 }

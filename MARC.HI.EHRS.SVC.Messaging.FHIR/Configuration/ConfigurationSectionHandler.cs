@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Xml;
+using MARC.HI.EHRS.SVC.Core.Data;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
 {
@@ -19,11 +20,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// </summary>
         public object Create(object parent, object configContext, System.Xml.XmlNode section)
         {
-            
+
             // Section
             XmlElement serviceElement = section.SelectSingleNode("./*[local-name() = 'service']") as XmlElement;
             XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']"),
-                actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']");
+                actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']"),
+                corsConfig = section.SelectNodes("./*[local-name() = 'cors']/*[local-name() = 'add']");
 
             string wcfServiceName = String.Empty,
                 landingPage = String.Empty;
@@ -55,6 +57,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
                 retVal.ResourceHandlers.Add(tType);
             }
 
+            foreach(XmlElement cors in corsConfig)
+            {
+                FhirCorsConfiguration config = new FhirCorsConfiguration()
+                {
+                    Domain = cors.Attributes["domain"]?.Value,
+                    Actions = String.Join(",", cors.SelectNodes("./*[local-name() = 'action']/text()").OfType<XmlText>().Select(o=>o.Value).ToArray()),
+                    Headers = String.Join(",", cors.SelectNodes("./*[local-name() = 'header']/text()").OfType<XmlText>().Select(o => o.Value).ToArray())
+                };
+                retVal.CorsConfiguration.Add(cors.Attributes["resource"]?.Value ?? "*", config);
+            }
+
             foreach (XmlElement mapInstruction in actionMap)
             {
                 String resourceName = String.Empty,
@@ -74,7 +87,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
                 if (mapInstruction.Attributes["displayName"] != null)
                     eventTypeCodeName = mapInstruction.Attributes["displayName"].Value;
 
-                retVal.ActionMap.Add(String.Format("{0} {1}", resourceAction, resourceName), new Core.DataTypes.CodeValue(
+                retVal.ActionMap.Add(String.Format("{0} {1}", resourceAction, resourceName), new CodeValue(
                     eventTypeCode, eventTypeCodeSystem) { DisplayName = eventTypeCodeName });
             }
             return retVal;

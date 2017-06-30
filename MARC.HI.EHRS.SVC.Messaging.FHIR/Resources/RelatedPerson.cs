@@ -14,17 +14,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("RelatedPerson", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("RelatedPerson", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore", Name = "MARC-HI ServiceCore FHIR Profile")]
-    [ResourceProfile(Name = "ServiceCore Resource - RelatedPerson")]
-    public class RelatedPerson : ResourceBase
+    public class RelatedPerson : DomainResourceBase
     {
         /// <summary>
         /// Related person
         /// </summary>
         public RelatedPerson()
         {
-            this.Identifier = new List<Identifier>();
-            this.Telecom = new List<Telecom>();
+            this.Identifier = new List<FhirIdentifier>();
+            this.Telecom = new List<FhirTelecom>();
             this.Photo = new List<Attachment>();
         }
 
@@ -32,64 +30,64 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the identifier for the relationship
         /// </summary>
         [Description("An identifier for the person as a relationship")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         [XmlElement("identifier")]
-        public List<Identifier> Identifier { get; set; }
+        public List<FhirIdentifier> Identifier { get; set; }
 
         /// <summary>
         /// Gets or sets the patient to which this person is related
         /// </summary>
         [Description("The person to which this person is related")]
-        [ElementProfile(MaxOccurs = 1, MinOccurs = 1)]
+        [FhirElement(MaxOccurs = 1, MinOccurs = 1)]
         [XmlElement("patient")]
-        public Resource<Patient> Patient { get; set; }
+        public Reference<Patient> Patient { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship type
         /// </summary>
         [Description("The relationship this person has with the patient")]
-        [ElementProfile(MaxOccurs = 0, MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/vs/relatedperson-relationshiptype")]
+        [FhirElement(MaxOccurs = 0, MinOccurs = 1, RemoteBinding = "http://hl7.org/fhir/vs/relatedperson-relationshiptype")]
         [XmlElement("relationship")]
-        public CodeableConcept Relationship { get; set; }
+        public FhirCodeableConcept Relationship { get; set; }
 
         /// <summary>
         /// Gets or sets the person's name
         /// </summary>
         [Description("The name of the related person")]
-        [ElementProfile(MaxOccurs = 1)]
+        [FhirElement(MaxOccurs = 1)]
         [XmlElement("name")]
-        public HumanName Name { get; set; }
+        public FhirHumanName Name { get; set; }
 
         /// <summary>
         /// Gets or sets the person's telecom addresses
         /// </summary>
         [Description("Telecommunications addresses")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         [XmlElement("telecom")]
-        public List<Telecom> Telecom { get; set; }
+        public List<FhirTelecom> Telecom { get; set; }
 
         /// <summary>
         /// Gets or sets the gender of the patient
         /// </summary>
         [XmlElement("gender")]
         [Description("Gender for administrative purposes")]
-        [ElementProfile(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
-        public CodeableConcept Gender { get; set; }
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
+        public FhirCodeableConcept Gender { get; set; }
 
         /// <summary>
         /// Gets or sets the address of the related person
         /// </summary>
         [XmlElement("address")]
         [Description("Address of the related person")]
-        [ElementProfile(MaxOccurs = 1)]
-        public Address Address { get; set; }
+        [FhirElement(MaxOccurs = 1)]
+        public FhirAddress Address { get; set; }
 
         /// <summary>
         /// Gets or sets the photograph of the person
         /// </summary>
         [XmlElement("photo")]
         [Description("Photograph of the related person")]
-        [ElementProfile(MaxOccurs = -1)]
+        [FhirElement(MaxOccurs = -1)]
         public List<Attachment> Photo { get; set; }
 
         /// <summary>

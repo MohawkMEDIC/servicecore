@@ -15,9 +15,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlRoot("Organization",Namespace = "http://hl7.org/fhir")] 
     [XmlType("Organization", Namespace = "http://hl7.org/fhir")]
-    [Profile(ProfileId = "svccore")]
-    [ResourceProfile(Name = "ServiceCore Resource - Organization")]
-    public class Organization : ResourceBase
+    public class Organization : DomainResourceBase
     {
 
         /// <summary>
@@ -25,7 +23,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("identifier")]
         [Description("Identifier for the organization")]
-        public List<Identifier> Identifier { get; set; }
+        public List<FhirIdentifier> Identifier { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the organization
@@ -39,28 +37,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("type")]
         [Description("Kind of organization")]
-        public CodeableConcept Type { get; set; }
+        public FhirCodeableConcept Type { get; set; }
 
         /// <summary>
         /// Gets or sets the telecommunications addresses
         /// </summary>
         [XmlElement("telecom")]
         [Description("A contact detail for the organization")]
-        public List<Telecom> Telecom { get; set; }
+        public List<FhirTelecom> Telecom { get; set; }
 
         /// <summary>
         /// Gets or sets the addresses of the 
         /// </summary>
         [XmlElement("address")]
         [Description("An address for the organization")]
-        public List<Address> Address { get; set; }
+        public List<FhirAddress> Address { get; set; }
 
         /// <summary>
         /// Part of
         /// </summary>
         [XmlElement("partOf")]
         [Description("The organization of which this organization forms a part")]
-        public Resource<Organization> PartOf { get; set; }
+        public Reference<Organization> PartOf { get; set; }
 
         /// <summary>
         /// Gets or sets the contact entities

@@ -21,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// The event occurance duration 
         /// </summary>
         [XmlElement("when")]
-        public PrimitiveCode<String> When { get; set; }
+        public FhirCode<String> When { get; set; }
         /// <summary>
         /// Repeating or event-related duration
         /// </summary>
@@ -41,6 +41,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// The stop date
         /// </summary>
         [XmlElement("stop")]
-        public Date Stop { get; set; }
+        public FhirDateTime Stop { get; set; }
     }
 }

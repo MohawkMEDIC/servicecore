@@ -1,47 +1,29 @@
-﻿using System;
+﻿using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
-using System.Xml;
-using System.IO;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
     /// <summary>
-    /// Base for all resources
+    /// Resource base
     /// </summary>
     [XmlType("ResourceBase", Namespace = "http://hl7.org/fhir")]
-    public abstract class ResourceBase : Shareable
+    public class ResourceBase : FhirElement
     {
-        protected XmlSerializerNamespaces m_namespaces = new XmlSerializerNamespaces();
-
+        
         /// <summary>
-        /// Resource tags
+        /// ctor
         /// </summary>
         public ResourceBase()
         {
-            this.m_namespaces.Add("", "http://hl7.org/fhir");
             this.Attributes = new List<ResourceAttributeBase>();
-            this.Contained = new List<ContainedResource>();
         }
-
-        // The narrative
-        private Narrative m_narrative;
-
-        /// <summary>
-        /// A list of contained resources
-        /// </summary>
-        [XmlElement("contained")]
-        public List<ContainedResource> Contained { get; set; }
-
-        /// <summary>
-        /// Extended observations about the resource that can be used to tag the resource
-        /// </summary>
-        [XmlIgnore]
-        public List<ResourceAttributeBase> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the internal identifier for the resource
@@ -53,84 +35,40 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Version identifier
         /// </summary>
         [XmlIgnore]
-        public string VersionId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the narrative text
-        /// </summary>
-        [XmlElement("text")]
-        public Narrative Text
+        public string VersionId
         {
-            get
-            {
-                if (this.m_narrative == null && !this.SuppressText)
-                    this.m_narrative = this.GenerateNarrative();
-                return this.m_narrative;
-            }
+            get { return this.Meta?.VersionId; }
             set
             {
-                this.m_narrative = value;
+                if (this.Meta == null) this.Meta = new ResourceMetadata();
+                this.Meta.VersionId = value;
             }
         }
 
-
         /// <summary>
-        /// Suppress generation of text
+        /// Extended observations about the resource that can be used to tag the resource
         /// </summary>
         [XmlIgnore]
-        public bool SuppressText { get; set; }
-
-        /// <summary>
-        /// Generate a narrative
-        /// </summary>
-        protected Narrative GenerateNarrative()
-        {
-            // Create a new narrative
-            Narrative retVal = new Narrative();
-
-            XmlDocument narrativeContext = new XmlDocument();
-            retVal.Status = new PrimitiveCode<string>("generated");
-            StringWriter writer = new StringWriter();
-
-            using (XmlWriter xw = XmlWriter.Create(writer, new XmlWriterSettings() { ConformanceLevel = ConformanceLevel.Fragment }))
-            {
-                xw.WriteStartElement("body", NS_XHTML);
-                this.WriteText(xw);
-
-                xw.WriteEndElement();
-            }
-
-            narrativeContext.LoadXml(writer.ToString());
-
-            retVal.Div = new XmlElement[narrativeContext.DocumentElement.ChildNodes.Count];
-            for (int i = 0; i < retVal.Div.Elements.Length; i++)
-                retVal.Div.Elements[i] = narrativeContext.DocumentElement.ChildNodes[i] as XmlElement;
-            return retVal;
-        }
-
-        /// <summary>
-        /// Write text fragement
-        /// </summary>
-        internal override void WriteText(XmlWriter w)
-        {
-            w.WriteStartElement("p", NS_XHTML);
-            w.WriteString(this.GetType().Name + " - No text defined for resource");
-            w.WriteEndElement();
-        }
+        public List<ResourceAttributeBase> Attributes { get; set; }
 
         /// <summary>
         /// Last updated timestamp
         /// </summary>
         [XmlIgnore]
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp
+        {
+            get { return this.Meta?.LastUpdated; }
+            set
+            {
+                if (this.Meta == null) this.Meta = new ResourceMetadata();
+                this.Meta.LastUpdated = value;
+            }
+        }
 
         /// <summary>
-        /// Add a contained resource
+        /// Gets or sets the metadata
         /// </summary>
-        public void AddContainedResource(ResourceBase resource)
-        {
-            resource.MakeIdRef();
-            this.Contained.Add(new ContainedResource() { Item = resource });
-        }
+        [XmlElement("meta")]
+        public ResourceMetadata Meta { get; set; }
     }
 }

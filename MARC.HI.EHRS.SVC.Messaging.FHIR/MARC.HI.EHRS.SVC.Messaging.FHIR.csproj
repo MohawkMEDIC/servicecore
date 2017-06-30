@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MARC.HI.EHRS.SVC.Messaging.FHIR</RootNamespace>
     <AssemblyName>MARC.HI.EHRS.SVC.Messaging.FHIR</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,13 +31,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hl7.Fhir.Api">
-      <HintPath>..\Solution Items\Hl7.Fhir.Api.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.Model">
-      <HintPath>..\Solution Items\Hl7.Fhir.Model.dll</HintPath>
+    <Reference Include="Hl7.Fhir.DSTU21.Core, Version=0.90.4.21547, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Solution Items\Hl7.Fhir.DSTU21.Core.dll</HintPath>
     </Reference>
     <Reference Include="MARC.Everest">
       <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
@@ -48,6 +49,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -60,52 +62,63 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationContext.cs" />
-    <Compile Include="Attributes\ExtensionDefinitionAttribute.cs" />
-    <Compile Include="Attributes\ExtensionProfileAttribute.cs" />
+    <Compile Include="Backbone\BundleResrouce.cs" />
+    <Compile Include="Backbone\ConformancePublisher.cs" />
+    <Compile Include="Backbone\ElementBase.cs" />
+    <Compile Include="Backbone\ElementBinding.cs" />
+    <Compile Include="Backbone\ElementConstraint.cs" />
+    <Compile Include="Backbone\ElementDefinition.cs" />
+    <Compile Include="Backbone\ElementSlicing.cs" />
+    <Compile Include="Backbone\ElementType.cs" />
+    <Compile Include="Backbone\ExpansionContainsDefinition.cs" />
+    <Compile Include="Backbone\ExpansionDefinition.cs" />
+    <Compile Include="Attributes\FhirValueSetAttribute.cs" />
     <Compile Include="Attributes\ParticipantObjectMapAttribute.cs" />
-    <Compile Include="Attributes\ElementProfileAttribute.cs" />
-    <Compile Include="Attributes\ProfileAttribute.cs" />
-    <Compile Include="Attributes\ResourceProfileAttribute.cs" />
-    <Compile Include="Attributes\SearchParameterProfileAttribute.cs" />
+    <Compile Include="Attributes\FhirElementAttribute.cs" />
+    <Compile Include="Backbone\BackboneElement.cs" />
+    <Compile Include="Backbone\BundleEntry.cs" />
+    <Compile Include="Backbone\BundleLink.cs" />
+    <Compile Include="Backbone\BundleRequest.cs" />
+    <Compile Include="Backbone\BundleResponse.cs" />
+    <Compile Include="Backbone\BundleSearch.cs" />
+    <Compile Include="Backbone\ComposeFilterDefinition.cs" />
+    <Compile Include="Backbone\ConceptDesignation.cs" />
+    <Compile Include="Backbone\ImmunizationProtocol.cs" />
+    <Compile Include="Backbone\ImmunizationRecommendationDateCriterion.cs" />
+    <Compile Include="Backbone\PatientLink.cs" />
+    <Compile Include="Backbone\SecurityCertificateDefinition.cs" />
+    <Compile Include="Backbone\SecurityDefinition.cs" />
+    <Compile Include="Backbone\StructureDefinitionContent.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Configuration\FhirServiceConfiguration.cs" />
-    <Compile Include="Configuration\UI\FhirServiceConfigurationPanel.cs" />
-    <Compile Include="Configuration\UI\HttpSslTool.cs" />
-    <Compile Include="Configuration\UI\pnlConfigureFhir.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\UI\pnlConfigureFhir.Designer.cs">
-      <DependentUpon>pnlConfigureFhir.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DataTypes\Address.cs" />
+    <Compile Include="DataTypes\FhirAddress.cs" />
     <Compile Include="DataTypes\Attachment.cs" />
-    <Compile Include="DataTypes\Choice.cs" />
-    <Compile Include="DataTypes\CodeableConcept.cs" />
-    <Compile Include="DataTypes\Coding.cs" />
+    <Compile Include="DataTypes\FhirChoice.cs" />
+    <Compile Include="DataTypes\FhirCodeableConcept.cs" />
+    <Compile Include="DataTypes\FhirCoding.cs" />
     <Compile Include="DataTypes\ContainedResource.cs" />
-    <Compile Include="DataTypes\Date.cs" />
+    <Compile Include="DataTypes\FhirDate.cs" />
     <Compile Include="DataTypes\Extension.cs" />
-    <Compile Include="DataTypes\HumanName.cs" />
-    <Compile Include="DataTypes\Identifier.cs" />
+    <Compile Include="DataTypes\FhirSignature.cs" />
+    <Compile Include="DataTypes\FhirHumanName.cs" />
+    <Compile Include="DataTypes\FhirIdentifier.cs" />
     <Compile Include="DataTypes\IdRef.cs" />
-    <Compile Include="DataTypes\Instant.cs" />
-    <Compile Include="DataTypes\Period.cs" />
+    <Compile Include="DataTypes\FhirInstant.cs" />
+    <Compile Include="DataTypes\FhirPeriod.cs" />
     <Compile Include="DataTypes\Primitive.cs" />
-    <Compile Include="DataTypes\PrimitiveCode.cs" />
-    <Compile Include="DataTypes\Quantity.cs" />
-    <Compile Include="DataTypes\Range.cs" />
-    <Compile Include="DataTypes\Ratio.cs" />
-    <Compile Include="DataTypes\Schedule.cs" />
+    <Compile Include="DataTypes\FhirCode.cs" />
+    <Compile Include="DataTypes\FhirQuantity.cs" />
+    <Compile Include="DataTypes\FhirRange.cs" />
+    <Compile Include="DataTypes\FhirRatio.cs" />
+    <Compile Include="DataTypes\FhirSchedule.cs" />
     <Compile Include="DataTypes\ScheduleRepeat.cs" />
-    <Compile Include="DataTypes\Shareable.cs" />
-    <Compile Include="DataTypes\Telecom.cs" />
+    <Compile Include="DataTypes\FhirElement.cs" />
+    <Compile Include="DataTypes\FhirTelecom.cs" />
     <Compile Include="FhirMessageHandler.cs" />
     <Compile Include="FhirOperationResult.cs" />
     <Compile Include="FhirQuery.cs" />
     <Compile Include="FhirQueryResult.cs" />
     <Compile Include="Handlers\IFhirResourceHandler.cs" />
-    <Compile Include="Handlers\ProfileResourceHandler.cs" />
     <Compile Include="PersistenceResultDetail.cs" />
     <Compile Include="Handlers\FhirResourceHandlerUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,74 +127,81 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ReflectionExtensionMethods.cs" />
     <Compile Include="Resources\Accreditation.cs" />
-    <Compile Include="Resources\Animal.cs" />
+    <Compile Include="Backbone\Animal.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
     <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
-    <Compile Include="Resources\BindingDefinition.cs" />
-    <Compile Include="Resources\ComposeDefinition.cs" />
-    <Compile Include="Resources\ConceptDefinition.cs" />
-    <Compile Include="Resources\ConceptSet.cs" />
+    <Compile Include="Resources\Bundle.cs" />
+    <Compile Include="Backbone\ComposeDefinition.cs" />
+    <Compile Include="Backbone\ConceptDefinition.cs" />
+    <Compile Include="Backbone\ComposeIncludeDefinition.cs" />
     <Compile Include="Resources\Conformance.cs" />
-    <Compile Include="Resources\Contact.cs" />
+    <Compile Include="Backbone\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
-    <Compile Include="Resources\Element.cs" />
-    <Compile Include="Resources\ElementDefinition.cs" />
-    <Compile Include="Resources\ExtensionDefinition.cs" />
-    <Compile Include="Resources\ImplementationDefinition.cs" />
+    <Compile Include="Backbone\ImplementationDefinition.cs" />
+    <Compile Include="Resources\Immunization.cs" />
+    <Compile Include="Resources\ImmunizationRecommendation.cs" />
+    <Compile Include="Backbone\ImmunizationRecommendation.cs" />
     <Compile Include="Resources\Issue.cs" />
-    <Compile Include="Resources\Communication.cs" />
+    <Compile Include="Backbone\Communication.cs" />
     <Compile Include="Resources\Narrative.cs" />
-    <Compile Include="Resources\OperationDefinition.cs" />
+    <Compile Include="Backbone\InteractionDefinition.cs" />
+    <Compile Include="Resources\Observation.cs" />
     <Compile Include="Resources\OperationOutcome.cs" />
     <Compile Include="Resources\Organization.cs" />
     <Compile Include="Resources\Patient.cs" />
     <Compile Include="Resources\Picture.cs" />
     <Compile Include="Resources\Practictioner.cs" />
-    <Compile Include="Resources\Profile.cs" />
+    <Compile Include="Resources\ResourceBase.cs" />
+    <Compile Include="Resources\ResourceMetadata.cs" />
+    <Compile Include="Resources\StructureDefinition.cs" />
     <Compile Include="Resources\ProfileImport.cs" />
     <Compile Include="Resources\Qualification.cs" />
     <Compile Include="Resources\RawXmlWrapper.cs" />
     <Compile Include="Resources\RelatedPerson.cs" />
-    <Compile Include="Resources\Resource.cs" />
-    <Compile Include="Resources\ResourceBase.cs" />
-    <Compile Include="Resources\ResourceDefinition.cs" />
-    <Compile Include="Resources\RestDefinition.cs" />
-    <Compile Include="Resources\SearchParam.cs" />
-    <Compile Include="Resources\SoftwareDefinition.cs" />
-    <Compile Include="Resources\Structure.cs" />
-    <Compile Include="Resources\TypeRef.cs" />
+    <Compile Include="Resources\Reference.cs" />
+    <Compile Include="Resources\DomainResourceBase.cs" />
+    <Compile Include="Backbone\ResourceDefinition.cs" />
+    <Compile Include="Backbone\RestDefinition.cs" />
+    <Compile Include="Backbone\SearchParamDefinition.cs" />
+    <Compile Include="Backbone\SoftwareDefinition.cs" />
+    <Compile Include="Backbone\TypeRef.cs" />
     <Compile Include="Resources\ValueSet.cs" />
-    <Compile Include="Resources\ValueSetDefinition.cs" />
+    <Compile Include="Backbone\CodeSystemDefinition.cs" />
     <Compile Include="ResultDetailClasses.cs" />
     <Compile Include="Util\AuditUtil.cs" />
-    <Compile Include="Handlers\ConformanceResourceHandler.cs" />
-    <Compile Include="Util\ConformanceUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
-    <Compile Include="Util\ProfileUtil.cs" />
-    <Compile Include="WcfCore\FhirContentTypeHandler.cs" />
-    <Compile Include="WcfCore\FhirMessageInspector.cs" />
-    <Compile Include="WcfCore\FhirRestEndpointBehavior.cs" />
-    <Compile Include="WcfCore\FhirServiceBehavior.cs" />
-    <Compile Include="WcfCore\FhirXmlObjectSerializer.cs" />
-    <Compile Include="WcfCore\GZipWriter.cs" />
-    <Compile Include="WcfCore\IFhirServiceContract.cs" />
+    <Compile Include="Wcf\Behaviors\FhirErrorEndpointBehavior.cs" />
+    <Compile Include="Wcf\Behaviors\FhirRestEndpointBehavior.cs" />
+    <Compile Include="Wcf\Behaviors\FhirSerializerOperationBehavior.cs" />
+    <Compile Include="Wcf\BodyWriters\CompressionBodyWriter.cs" />
+    <Compile Include="Wcf\BodyWriters\CompressionUtil.cs" />
+    <Compile Include="Wcf\BodyWriters\DeflateCompressionScheme.cs" />
+    <Compile Include="Wcf\BodyWriters\GzipCompressionScheme.cs" />
+    <Compile Include="Wcf\BodyWriters\ICompressionScheme.cs" />
+    <Compile Include="Wcf\BodyWriters\RawBodyWriter.cs" />
+    <Compile Include="Wcf\FhirServiceBehavior.cs" />
+    <Compile Include="Wcf\IFhirServiceContract.cs" />
+    <Compile Include="Wcf\Serialization\FhirErrorHandler.cs" />
+    <Compile Include="Wcf\Serialization\FhirMessageDispatchFormatter.cs" />
+    <Compile Include="Wcf\Serialization\FhirContentTypeHandler.cs" />
+    <Compile Include="Wcf\Serialization\FhirMessageInspector.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing.Core\MARC.HI.EHRS.SVC.Auditing.Core.csproj">
+      <Project>{4D448BFD-B967-4F75-AD30-37327153149C}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj">
+      <Project>{27ba9e20-3952-4a9a-92c4-01c86ba2ba50}</Project>
+      <Name>MARC.HI.EHRS.SVC.Auditing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
-      <Project>{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}</Project>
+      <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.DecisionSupport\MARC.HI.EHRS.SVC.DecisionSupport.csproj">
-      <Project>{9408A628-EEC4-4F21-8408-4E1CB3AB0815}</Project>
-      <Name>MARC.HI.EHRS.SVC.DecisionSupport</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\UI\pnlConfigureFhir.resx">
-      <DependentUpon>pnlConfigureFhir.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="index.htm" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

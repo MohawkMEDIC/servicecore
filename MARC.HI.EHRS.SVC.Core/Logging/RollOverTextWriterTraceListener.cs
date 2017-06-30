@@ -24,6 +24,8 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Core.Logging
 {
@@ -61,16 +63,16 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
         public override void Write(string value)
         {
             //checkRollover();
-            lock(s_lockObject)
+            lock (s_lockObject)
                 using (FileStream fs = File.Open(generateFilename(), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
                 {
                     fs.Seek(0, SeekOrigin.End);
 
                     using (StreamWriter sw = new StreamWriter(fs))
-                        sw.Write("{0} : {1}", DateTime.Now, value);
+                        sw.Write("{0} [@{1}] : {2}", DateTime.Now, Thread.CurrentThread.ManagedThreadId, value);
                 }
-//            _traceWriter.Flush();
-//            _stream.Flush();
+            //            _traceWriter.Flush();
+            //            _stream.Flush();
         }
 
         public override void WriteLine(string value)
@@ -81,7 +83,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
                 {
                     fs.Seek(0, SeekOrigin.End);
                     using (StreamWriter sw = new StreamWriter(fs))
-                        sw.WriteLine("{0} : {1}", DateTime.Now, value);
+                        sw.WriteLine(value);
                 }
 
             //checkRollover();
@@ -93,7 +95,7 @@ namespace MARC.HI.EHRS.SVC.Core.Logging
         private string generateFilename()
         {
             _currentDate = System.DateTime.Today;
-            return Path.Combine(Path.GetDirectoryName(_fileName),  Path.GetFileNameWithoutExtension(_fileName) + "_" +
+            return Path.Combine(Path.GetDirectoryName(_fileName), Path.GetFileNameWithoutExtension(_fileName) + "_" +
                _currentDate.ToString("yyyyMMdd") + Path.GetExtension(_fileName));
         }
 

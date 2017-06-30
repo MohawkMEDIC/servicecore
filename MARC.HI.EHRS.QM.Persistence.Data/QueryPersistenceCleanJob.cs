@@ -25,13 +25,15 @@ using System.Diagnostics;
 using System.Data;
 using MARC.HI.EHRS.QM.Persistence.Data.Configuration;
 using System.Configuration;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.QM.Persistence.Data
 {
     /// <summary>
     /// Timer job
     /// </summary>
-    public class QueryPersistenceCleanJob : ITimerJob
+    public class QueryPersistenceCleanJob : ITimerJob, IDaemonService
     {
 
          /// <summary>
@@ -39,16 +41,24 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
         /// </summary>
         private static ConfigurationHandler m_configuration;
 
+        public event EventHandler Starting;
+        public event EventHandler Stopping;
+        public event EventHandler Started;
+        public event EventHandler Stopped;
+
         /// <summary>
         /// Ado Query Persistence Service
         /// </summary>
         static QueryPersistenceCleanJob()
         {
-            m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.qm.persistence.data") as ConfigurationHandler;
+            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.qm.persistence.data") as ConfigurationHandler;
         }
 
         #region ITimerJob Members
 
+        /// <summary>
+        /// When the timer elapses
+        /// </summary>
         public void Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             #if DEBUG
@@ -68,7 +78,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
                 ageParm.DbType = DbType.String;
                 ageParm.Direction = ParameterDirection.Input;
                 ageParm.ParameterName = "max_age_in";
-                ageParm.Value = String.Format("{0} days", m_configuration.MaxQueryAge);
+                ageParm.Value = String.Format("{0} minutes", m_configuration.MaxQueryAge);
                 cmd.Parameters.Add(ageParm);
                 cmd.ExecuteNonQuery();
             }
@@ -84,17 +94,47 @@ namespace MARC.HI.EHRS.QM.Persistence.Data
 
         }
 
+        /// <summary>
+        /// Startup and add thyself to the timer job if we don't exist already in the timer job
+        /// </summary>
+        public bool Start()
+        {
+            this.Starting?.Invoke(this, EventArgs.Empty);
+
+            ApplicationContext.Current.Started += (o, e) =>
+            {
+                var timerService = ApplicationContext.Current.GetService<ITimerService>();
+                if(!timerService.IsJobRegistered(typeof(QueryPersistenceCleanJob)))
+                    timerService.AddJob(this, new TimeSpan(4, 0, 0));
+            };
+
+            this.Started?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        /// <summary>
+        /// Stop the service
+        /// </summary>
+        public bool Stop()
+        {
+            this.Stopping?.Invoke(this, EventArgs.Empty);
+            this.Stopped?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
         #endregion
 
         #region IUsesHostContext Members
 
         /// <summary>
-        /// Gets or sets the context
+        /// True if the job is running
         /// </summary>
-        public IServiceProvider Context
+        public bool IsRunning
         {
-            get;
-            set;
+            get
+            {
+                return ApplicationContext.Current.GetService<ITimerService>()?.IsJobRegistered(typeof(QueryPersistenceCleanJob)) == true;
+            }
         }
 
         #endregion

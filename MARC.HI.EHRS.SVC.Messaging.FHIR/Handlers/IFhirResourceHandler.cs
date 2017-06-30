@@ -28,17 +28,17 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         /// <summary>
         /// Update a resource
         /// </summary>
-        FhirOperationResult Update(string id, ResourceBase target, DataPersistenceMode mode);
+        FhirOperationResult Update(string id, DomainResourceBase target, TransactionMode mode);
 
         /// <summary>
         /// Delete a resource
         /// </summary>
-        FhirOperationResult Delete(string id, DataPersistenceMode mode);
+        FhirOperationResult Delete(string id, TransactionMode mode);
 
         /// <summary>
         /// Create a resource
         /// </summary>
-        FhirOperationResult Create(ResourceBase target, DataPersistenceMode mode);
+        FhirOperationResult Create(DomainResourceBase target, TransactionMode mode);
 
         /// <summary>
         /// Query a FHIR resource

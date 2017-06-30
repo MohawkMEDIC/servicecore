@@ -37,9 +37,6 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
     [Description("Default Timer Service")]
     public class TimerService : ITimerService
     {
-        // Host context
-        private IServiceProvider m_hostContext;
-
         /// <summary>
         /// Timer configuration
         /// </summary>
@@ -51,11 +48,33 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         private System.Timers.Timer[] m_timers;
 
         /// <summary>
+        /// Timer service is starting
+        /// </summary>
+        public event EventHandler Starting;
+        /// <summary>
+        /// Timer service is stopping
+        /// </summary>
+        public event EventHandler Stopping;
+        /// <summary>
+        /// Timer service is started
+        /// </summary>
+        public event EventHandler Started;
+        /// <summary>
+        /// Timer service is stopped
+        /// </summary>
+        public event EventHandler Stopped;
+
+        /// <summary>
+        /// Log of timers
+        /// </summary>
+        private Dictionary<ITimerJob, DateTime> m_log = new Dictionary<ITimerJob, DateTime>();
+
+        /// <summary>
         /// Creates a new instance of the timer
         /// </summary>
         public TimerService()
         {
-            this.m_configuration = ConfigurationManager.GetSection("marc.hi.svc.core.timer") as TimerConfiguration;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.svc.core.timer") as TimerConfiguration;
             
         }
 
@@ -64,25 +83,32 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
         /// <summary>
         /// Start the timer
         /// </summary>
-        public void Start()
+        public bool Start()
         {
+
             if (this.m_timers != null)
                 this.Stop();
 
             Trace.TraceInformation("Starting timer service...");
+
+            // Invoke the starting event handler
+            this.Starting?.Invoke(this, EventArgs.Empty);
 
             // Setup timers based on the jobs
             this.m_timers = new System.Timers.Timer[this.m_configuration.Jobs.Count];
             int i = 0;
             foreach (var job in this.m_configuration.Jobs)
             {
+                lock (this.m_log)
+                    this.m_log.Add(job.Job as ITimerJob, DateTime.MinValue);
+
                 // Timer setup
                 var timer = new System.Timers.Timer(job.Timeout.TotalMilliseconds)
                 {
                     AutoReset = true,
                     Enabled = true
                 };
-                timer.Elapsed += new System.Timers.ElapsedEventHandler(job.Job.Elapsed);
+                timer.Elapsed += this.CreateElapseHandler(job.Job);
                 timer.Start();
                 this.m_timers[i++] = timer;
 
@@ -90,16 +116,40 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                 job.Job.Elapsed(timer, null);
             }
 
+            this.Started?.Invoke(this, EventArgs.Empty);
+
             Trace.TraceInformation("Timer service started successfully");
+            return true;
+        }
+
+        /// <summary>
+        /// Create a time elapsed handler
+        /// </summary>
+        private ElapsedEventHandler CreateElapseHandler(ITimerJob job)
+        {
+            return new System.Timers.ElapsedEventHandler((o, e) =>
+            {
+
+                // Log that the timer fired
+                if (this.m_log.ContainsKey(job))
+                    this.m_log[job] = e.SignalTime;
+                else
+                    lock (this.m_log)
+                        this.m_log.Add(job, e.SignalTime);
+
+                job.Elapsed(o, e);
+
+            });
         }
 
         /// <summary>
         /// Stops the timer
         /// </summary>
-        public void Stop()
+        public bool Stop()
         {
             // Stop all timers
             Trace.TraceInformation("Stopping timer service...");
+            this.Stopping?.Invoke(this, EventArgs.Empty);
 
             if(this.m_timers != null)
                 foreach (var timer in this.m_timers)
@@ -108,26 +158,61 @@ namespace MARC.HI.EHRS.SVC.Core.Timer
                     timer.Dispose();
                 }
             this.m_timers = null;
+
+            this.Stopped?.Invoke(this, EventArgs.Empty);
+
             Trace.TraceInformation("Timer service stopped successfully");
+            return true;
         }
-
-        #endregion
-
-        #region IUsesHostContext Members
 
         /// <summary>
-        /// Gets or sets the host context
+        /// Add a job
         /// </summary>
-        public IServiceProvider Context
+        public void AddJob(object jobObject, TimeSpan elapseTime)
         {
-            get { return this.m_hostContext; }
-            set
+            if (!(jobObject is ITimerJob))
+                throw new ArgumentOutOfRangeException(nameof(jobObject));
+
+            lock (this.m_log)
+                this.m_log.Add(jobObject as ITimerJob, DateTime.MinValue);
+
+            // Resize the timer array
+            lock (this.m_timers)
             {
-                this.m_hostContext = value;
-                this.m_configuration.Context = value;
+                Array.Resize(ref this.m_timers, this.m_timers.Length + 1);
+                var timer = new System.Timers.Timer(elapseTime.TotalMilliseconds)
+                {
+                    AutoReset = true,
+                    Enabled = true
+                };
+                timer.Elapsed += this.CreateElapseHandler(jobObject as ITimerJob);
+                timer.Start();
+                this.m_timers[this.m_timers.Length - 1] = timer;
             }
+            (jobObject as ITimerJob).Elapsed(this, null);
+
         }
 
+        /// <summary>
+        /// Get the state
+        /// </summary>
+        public List<KeyValuePair<object, DateTime>> GetState()
+        {
+            return this.m_log.Select(o => new KeyValuePair<Object, DateTime>(o.Key, o.Value)).ToList();
+        }
+
+        /// <summary>
+        /// Return true if job object is registered
+        /// </summary>
+        public bool IsJobRegistered(Type jobObject)
+        {
+            return this.m_log.Keys.Any(o => o.GetType() == jobObject);
+        }
+
+        /// <summary>
+        /// Returns true when the service is running
+        /// </summary>
+        public bool IsRunning { get { return this.m_timers != null; } }
         #endregion
     }
 }

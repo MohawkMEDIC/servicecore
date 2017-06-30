@@ -29,7 +29,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     /// Represents a localization service
     /// </summary>
     [ExternalDataExchange]
-    public interface ILocalizationService : IUsesHostContext
+    public interface ILocalizationService
     {
 
         /// <summary>

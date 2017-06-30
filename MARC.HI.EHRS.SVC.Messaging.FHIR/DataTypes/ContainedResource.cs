@@ -12,7 +12,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType("ContainedResource", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public class ContainedResource : Shareable
+    public class ContainedResource : FhirElement
     {
         /// <summary>
         /// The contained resource collection
@@ -30,10 +30,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [XmlElement(ElementName = "Practictioner", Type = typeof(Practictioner))]
         [XmlElement(ElementName = "OperationOutcome", Type = typeof(OperationOutcome))]
         [XmlElement(ElementName = "ValueSet", Type = typeof(ValueSet))]
-        [XmlElement(ElementName = "Profile", Type = typeof(Profile))]
+        [XmlElement(ElementName = "Profile", Type = typeof(StructureDefinition))]
         [XmlElement(ElementName = "Conformance", Type = typeof(Conformance))]
         [XmlElement(ElementName = "RelatedPerson", Type = typeof(RelatedPerson))]
-        public ResourceBase Item { get; set; }
+        public DomainResourceBase Item { get; set; }
 
         /// <summary>
         /// Write the item text

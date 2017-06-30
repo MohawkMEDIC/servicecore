@@ -26,6 +26,7 @@ using MARC.HI.EHRS.SVC.Messaging.Multi.Configuration;
 using System.Configuration;
 using System.Diagnostics;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Multi
 {
@@ -40,11 +41,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi
         private static ConfigurationSectionHandler s_configuration;
 
         /// <summary>
+        /// Fired when the multi-service is starting
+        /// </summary>
+        public event EventHandler Starting;
+        /// <summary>
+        /// Fired when the multi-service is stopping
+        /// </summary>
+        public event EventHandler Stopping;
+        /// <summary>
+        /// Fired when the multi-service is starting
+        /// </summary>
+        public event EventHandler Started;
+        /// <summary>
+        /// Fired when the multi-service is stopping
+        /// </summary>
+        public event EventHandler Stopped;
+
+        /// <summary>
         /// Static constructor for the multi-message handler
         /// </summary>
         static MultiMessageHandler()
         {
-            s_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.multi") as ConfigurationSectionHandler;
+            s_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.multi") as ConfigurationSectionHandler;
         }
 
         #region IMessageHandlerService Members
@@ -55,14 +73,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi
         public bool Start()
         {
             bool success = true;
+            this.Starting?.Invoke(this, EventArgs.Empty);
 
             // Start each of the dependent services
             foreach (var svc in s_configuration.MessageHandlers)
             {
-                svc.Context = this.Context;
                 Trace.TraceInformation("MMH: Starting message handler service {0}", svc);
                 success &= svc.Start();
             }
+
+
+            if(success)
+                this.Started?.Invoke(this, EventArgs.Empty);
+            this.IsRunning = success;
+
             return success;
         }
 
@@ -72,26 +96,30 @@ namespace MARC.HI.EHRS.SVC.Messaging.Multi
         public bool Stop()
         {
             bool success = true;
+            this.Stopping?.Invoke(this, EventArgs.Empty);
 
             // Stop each of the dependent services
             foreach (var svc in s_configuration.MessageHandlers)
                 success &= svc.Stop();
+
+            // Success?
+            if (success)
+            {
+                this.Stopped?.Invoke(this, EventArgs.Empty);
+                this.IsRunning = false;
+            }
+
             return success;
         }
 
         #endregion
 
-        #region IUsesHostContext Members
-
         /// <summary>
-        /// Gets or sets the context
+        /// Running?
         /// </summary>
-        public IServiceProvider Context
+        public bool IsRunning
         {
-            get;
-            set;
+            get;private set;
         }
-
-        #endregion
     }
 }

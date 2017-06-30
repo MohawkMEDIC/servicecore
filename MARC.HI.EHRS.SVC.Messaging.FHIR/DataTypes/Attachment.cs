@@ -11,26 +11,26 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
     /// </summary>
     [XmlType("Attachment", Namespace = "http://hl7.org/fhir")]
     [Serializable]
-    public class Attachment : Shareable
+    public class Attachment : FhirElement
     {
 
         /// <summary>
         /// Gets or sets the content-type
         /// </summary>
         [XmlElement("contentType")]
-        public PrimitiveCode<String> ContentType { get; set; }
+        public FhirCode<String> ContentType { get; set; }
 
         /// <summary>
         /// Gets or sets the language
         /// </summary>
         [XmlElement("language")]
-        public PrimitiveCode<String> Language { get; set; }
+        public FhirCode<String> Language { get; set; }
 
         /// <summary>
         /// Gets or sets the data for the attachment
         /// </summary>
         [XmlElement("data")]
-        public FhirBinary Data { get; set; }
+        public FhirBase64Binary Data { get; set; }
 
         /// <summary>
         /// Gets or sets a url reference

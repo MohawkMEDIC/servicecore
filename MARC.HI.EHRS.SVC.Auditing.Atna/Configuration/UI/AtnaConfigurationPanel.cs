@@ -5,13 +5,14 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Core.Configuration;
 using System.Xml;
 using System.Net;
+using MARC.HI.EHRS.SVC.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
 {
     /// <summary>
     /// Atna configuration panel
     /// </summary>
-    public class AtnaConfigurationPanel : IConfigurationPanel
+    public class AtnaConfigurationPanel : IConfigurableFeature
     {
         #region IConfigurationPanel Members
 
@@ -45,6 +46,18 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
         {
             get { return this.m_panel; }
         }
+
+        /// <summary>
+        /// Always configure / update?
+        /// </summary>
+        public bool AlwaysConfigure
+        {
+            get
+            {
+                return this.EnableConfiguration;
+            }
+        }
+        
 
         /// <summary>
         /// Configuration
@@ -220,6 +233,14 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna.Configuration.UI
         public override string ToString()
         {
             return "ATNA Auditing";
+        }
+
+        /// <summary>
+        /// ATNA auditing is not easy configure compatible
+        /// </summary>
+        public void EasyConfigure(XmlDocument configFile)
+        {
+            return;
         }
 
         #endregion

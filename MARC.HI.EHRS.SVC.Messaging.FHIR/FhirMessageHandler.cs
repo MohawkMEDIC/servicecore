@@ -6,12 +6,15 @@ using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
 using System.Configuration;
 using System.ServiceModel.Web;
-using MARC.HI.EHRS.SVC.Messaging.FHIR.WcfCore;
 using System.Diagnostics;
 using System.ServiceModel;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Util;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers;
 using System.Reflection;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Behavior;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 {
@@ -23,6 +26,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 
         #region IMessageHandlerService Members
 
+        private TraceSource m_traceSource = new TraceSource("MARC.HI.EHRS.SVC.Messaging.FHIR");
+
         // Configuration
         private FhirServiceConfiguration m_configuration;
 
@@ -30,11 +35,28 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         private WebServiceHost m_webHost;
 
         /// <summary>
+        /// Fired when the FHIR message handler is starting
+        /// </summary>
+        public event EventHandler Starting;
+        /// <summary>
+        /// Fired when the FHIR message handler is stopping
+        /// </summary>
+        public event EventHandler Stopping;
+        /// <summary>
+        /// Fired when the FHIR message handler has started 
+        /// </summary>
+        public event EventHandler Started;
+        /// <summary>
+        /// Fired when the FHIR message handler has stopped
+        /// </summary>
+        public event EventHandler Stopped;
+
+        /// <summary>
         /// Constructor, load configuration
         /// </summary>
         public FhirMessageHandler()
         {
-            this.m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
         }
 
         /// <summary>
@@ -44,16 +66,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         {
             try
             {
-                // Set the context
-                ApplicationContext.CurrentContext = this.Context;
+
+                this.Starting?.Invoke(this, EventArgs.Empty);
 
                 this.m_webHost = new WebServiceHost(typeof(FhirServiceBehavior));
                 this.m_webHost.Description.ConfigurationName = this.m_configuration.WcfEndpoint;
 
                 foreach (var endpoint in this.m_webHost.Description.Endpoints)
                 {
+                    this.m_traceSource.TraceInformation("Starting FHIR on {0}...", endpoint.Address);
+
                     (endpoint.Binding as WebHttpBinding).ContentTypeMapper = new FhirContentTypeHandler();
-                    endpoint.Behaviors.Add(new FhirRestEndpointBehavior());
+                    endpoint.EndpointBehaviors.Add(new FhirRestEndpointBehavior());
+                    endpoint.EndpointBehaviors.Add(new FhirErrorEndpointBehavior());
+
                 }
 
                 // Configuration 
@@ -62,7 +88,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
                     ConstructorInfo ci = t.GetConstructor(Type.EmptyTypes);
                     if (ci == null)
                     {
-                        Trace.TraceWarning("Type {0} has no default constructor", t.FullName);
+                        this.m_traceSource.TraceEvent(TraceEventType.Warning, 0, "Type {0} has no default constructor", t.FullName);
                         continue;
                     }
                     FhirResourceHandlerUtil.RegisterResourceHandler(ci.Invoke(null) as IFhirResourceHandler);
@@ -70,11 +96,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 
                 // Start the web host
                 this.m_webHost.Open();
+
+                this.Started?.Invoke(this, EventArgs.Empty);
+
                 return true;
             }
             catch (Exception e)
             {
-                Trace.TraceError(e.ToString());
+                this.m_traceSource.TraceEvent(TraceEventType.Error, e.HResult, e.ToString());
                 return false;
             }
             
@@ -86,24 +115,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// <returns></returns>
         public bool Stop()
         {
-            if(this.m_webHost != null)
+            this.Stopping?.Invoke(this, EventArgs.Empty);
+
+            if (this.m_webHost != null)
+            {
                 this.m_webHost.Close();
+                this.m_webHost = null;
+            }
+
+            this.Stopped?.Invoke(this, EventArgs.Empty);
+
             return true;
         }
 
         #endregion
 
-        #region IUsesHostContext Members
-
-        /// <summary>
-        /// Gets or sets the hosting context
-        /// </summary>
-        public IServiceProvider Context
+        public bool IsRunning
         {
-            get;
-            set;
+            get
+            {
+                return this.m_webHost != null;
+            }
         }
-
-        #endregion
     }
 }
