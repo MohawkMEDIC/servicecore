@@ -38,7 +38,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Observation", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Observation", Namespace = "http://hl7.org/fhir")]
-    public class Observation : ResourceBase
+    public class Observation : DomainResourceBase
     {
 
         /// <summary>
