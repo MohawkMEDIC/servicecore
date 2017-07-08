@@ -21,7 +21,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("instance")]
         [Description("The specific entity that cused the adverse event")]
-        public Reference<DomainResourceBase> Instance { get; set; }
+        public Reference Instance { get; set; }
 
     }
 }

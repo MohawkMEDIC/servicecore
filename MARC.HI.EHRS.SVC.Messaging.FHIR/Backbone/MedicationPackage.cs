@@ -22,7 +22,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("container")]
         [Description("Type of container")]
-        [FhirElement(RemoteBinding = = "http://hl7.org/fhir/ValueSet/medication-package-form")]
+        [FhirElement(RemoteBinding = "http://hl7.org/fhir/ValueSet/medication-package-form")]
         public FhirCodeableConcept Container { get; set; }
 
         /// <summary>

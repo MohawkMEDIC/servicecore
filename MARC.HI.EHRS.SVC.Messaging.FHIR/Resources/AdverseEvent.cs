@@ -1,4 +1,5 @@
 ﻿using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     public class AdverseEvent : DomainResourceBase
     {
 
+        public AdverseEvent()
+        {
+            this.Reaction = new List<Reference<Condition>>();
+
+        }
         /// <summary>
         /// Gets or sets the business identifier for the AE
         /// </summary>
@@ -94,7 +100,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("recorder")]
         [Description("Who recorded the event")]
-        public Reference<Practitioner> Recorder { get; set; }
+        public Reference Recorder { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the event
