@@ -1,4 +1,4 @@
-﻿/**
+﻿/*
  * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
@@ -176,7 +176,20 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             PersistResultMessage(messageId, String.Empty, message);
         }
 
-        /// <summary>
+		/// <summary>
+		/// Persists the message
+		/// </summary>
+		/// <param name="messageId">The message identifier.</param>
+		/// <param name="solicitorEp">The solicitor ep.</param>
+		/// <param name="receiveEp">The receive ep.</param>
+		/// <param name="message">The message.</param>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public void PersistMessage(string messageId, Uri solicitorEp, Uri receiveEp, Stream message)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    /// <summary>
         /// Get the message that responds to the specified message identifier
         /// </summary>
         public System.IO.Stream GetMessageResponseMessage(String messageId)
