@@ -34,7 +34,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("operator")]
         [Description("The person who generated the image")]
-        public Reference<Practictioner> Operator { get; set; }
+        public Reference<Practitioner> Operator { get; set; }
 
         /// <summary>
         /// Identifies the image
@@ -76,7 +76,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("requester")]
         [Description("Who asked that this image be taken")]
-        public Reference<Practictioner> Requester { get; set; }
+        public Reference<Practitioner> Requester { get; set; }
 
         /// <summary>
         /// Identifies the modality of the image

@@ -14,13 +14,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Practitioner", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Practitioner", Namespace = "http://hl7.org/fhir")]
-    public class Practictioner : DomainResourceBase
+    public class Practitioner : DomainResourceBase
     {
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Practictioner()
+        public Practitioner()
         {
             this.Identifier = new List<FhirIdentifier>();
             this.Name = new List<FhirHumanName>();
