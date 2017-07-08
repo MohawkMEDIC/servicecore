@@ -4,7 +4,7 @@ using MARC.HI.EHRS.SVC.Messaging.HAPI.Configuration;
 using MARC.HI.EHRS.SVC.Messaging.HAPI.TransportProtocol;
 using NHapi.Base.Util;
 
-/**
+/*
  * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
@@ -75,7 +75,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI
 			{
 				this.m_transport.Start(new IPEndPoint(address, port), this);
 			}
-			catch (ThreadAbortException ta)
+			catch (ThreadAbortException)
 			{
 				this.m_transport.Stop();
 			}
