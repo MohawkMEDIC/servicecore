@@ -27,7 +27,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         [XmlElement(ElementName = "Patient", Type = typeof(Patient))]
         [XmlElement(ElementName = "Organization", Type = typeof(Organization))]
         [XmlElement(ElementName = "Picture", Type = typeof(Picture))]
-        [XmlElement(ElementName = "Practictioner", Type = typeof(Practictioner))]
+        [XmlElement(ElementName = "Practictioner", Type = typeof(Practitioner))]
         [XmlElement(ElementName = "OperationOutcome", Type = typeof(OperationOutcome))]
         [XmlElement(ElementName = "ValueSet", Type = typeof(ValueSet))]
         [XmlElement(ElementName = "Profile", Type = typeof(StructureDefinition))]

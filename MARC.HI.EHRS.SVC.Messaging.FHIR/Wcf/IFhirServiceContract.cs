@@ -18,7 +18,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
     [ServiceKnownType(typeof(Patient))]
     [ServiceKnownType(typeof(Organization))]
     [ServiceKnownType(typeof(Picture))]
-    [ServiceKnownType(typeof(Practictioner))]
+    [ServiceKnownType(typeof(Practitioner))]
     [ServiceKnownType(typeof(OperationOutcome))]
     [ServiceKnownType(typeof(ValueSet))]
     [ServiceKnownType(typeof(StructureDefinition))]

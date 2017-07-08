@@ -98,7 +98,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// Gets or sets the performer of the observation
         /// </summary>
         [XmlElement("performer")]
-        public Reference<Practictioner> Performer { get; set; }
+        public Reference<Practitioner> Performer { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the observation

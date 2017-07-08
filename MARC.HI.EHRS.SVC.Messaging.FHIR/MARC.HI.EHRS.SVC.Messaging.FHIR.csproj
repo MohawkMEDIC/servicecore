@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backbone\AdverseEventSuspectEntity.cs" />
     <Compile Include="Backbone\BundleResrouce.cs" />
     <Compile Include="Backbone\ConformancePublisher.cs" />
     <Compile Include="Backbone\ElementBase.cs" />
@@ -85,10 +86,16 @@
     <Compile Include="Backbone\ConceptDesignation.cs" />
     <Compile Include="Backbone\ImmunizationProtocol.cs" />
     <Compile Include="Backbone\ImmunizationRecommendationDateCriterion.cs" />
+    <Compile Include="Backbone\MedicationBatch.cs" />
+    <Compile Include="Backbone\MedicationDosage.cs" />
+    <Compile Include="Backbone\MedicationPackage.cs" />
+    <Compile Include="Backbone\MedicationPerformer.cs" />
     <Compile Include="Backbone\PatientLink.cs" />
+    <Compile Include="Backbone\Position.cs" />
     <Compile Include="Backbone\SecurityCertificateDefinition.cs" />
     <Compile Include="Backbone\SecurityDefinition.cs" />
     <Compile Include="Backbone\StructureDefinitionContent.cs" />
+    <Compile Include="Backbone\SubstanceInstance.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Configuration\FhirServiceConfiguration.cs" />
     <Compile Include="DataTypes\FhirAddress.cs" />
@@ -129,12 +136,14 @@
     </Compile>
     <Compile Include="Resources\Accreditation.cs" />
     <Compile Include="Backbone\Animal.cs" />
+    <Compile Include="Resources\AdverseEvent.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
     <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
     <Compile Include="Resources\Bundle.cs" />
     <Compile Include="Backbone\ComposeDefinition.cs" />
     <Compile Include="Backbone\ConceptDefinition.cs" />
     <Compile Include="Backbone\ComposeIncludeDefinition.cs" />
+    <Compile Include="Resources\Condition.cs" />
     <Compile Include="Resources\Conformance.cs" />
     <Compile Include="Backbone\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
@@ -144,6 +153,9 @@
     <Compile Include="Backbone\ImmunizationRecommendation.cs" />
     <Compile Include="Resources\Issue.cs" />
     <Compile Include="Backbone\Communication.cs" />
+    <Compile Include="Resources\Location.cs" />
+    <Compile Include="Resources\Medication.cs" />
+    <Compile Include="Resources\MedicationAdministration.cs" />
     <Compile Include="Resources\Narrative.cs" />
     <Compile Include="Backbone\InteractionDefinition.cs" />
     <Compile Include="Resources\Observation.cs" />
@@ -151,7 +163,7 @@
     <Compile Include="Resources\Organization.cs" />
     <Compile Include="Resources\Patient.cs" />
     <Compile Include="Resources\Picture.cs" />
-    <Compile Include="Resources\Practictioner.cs" />
+    <Compile Include="Resources\Practitioner.cs" />
     <Compile Include="Resources\ResourceBase.cs" />
     <Compile Include="Resources\ResourceMetadata.cs" />
     <Compile Include="Resources\StructureDefinition.cs" />
@@ -166,6 +178,7 @@
     <Compile Include="Backbone\SearchParamDefinition.cs" />
     <Compile Include="Backbone\SoftwareDefinition.cs" />
     <Compile Include="Backbone\TypeRef.cs" />
+    <Compile Include="Resources\Substance.cs" />
     <Compile Include="Resources\ValueSet.cs" />
     <Compile Include="Backbone\CodeSystemDefinition.cs" />
     <Compile Include="ResultDetailClasses.cs" />
