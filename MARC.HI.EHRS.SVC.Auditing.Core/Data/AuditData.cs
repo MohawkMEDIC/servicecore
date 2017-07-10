@@ -26,65 +26,122 @@ using System.Xml.Serialization;
 namespace MARC.HI.EHRS.SVC.Auditing.Data
 {
 	/// <summary>
-	/// Event Identifier
+	/// Represents an event identifier type.
 	/// </summary>
 	[XmlType(nameof(EventIdentifierType), Namespace = "http://marc-hi.ca/svc/audit")]
 	public enum EventIdentifierType
 	{
+		/// <summary>
+		/// Represents a provisioning event.
+		/// </summary>
 		[XmlEnum("provision")]
 		ProvisioningEvent,
 
+		/// <summary>
+		/// Represents a medication event.
+		/// </summary>
 		[XmlEnum("medication")]
 		MedicationEvent,
 
+		/// <summary>
+		/// Represents a resource assignment.
+		/// </summary>
 		[XmlEnum("resource")]
 		ResourceAssignment,
 
+		/// <summary>
+		/// Represents a care episode.
+		/// </summary>
 		[XmlEnum("careep")]
 		CareEpisode,
 
+		/// <summary>
+		/// Represents a care protocol.
+		/// </summary>
 		[XmlEnum("careprotocol")]
 		CareProtocol,
 
+		/// <summary>
+		/// Represents a procedure record.
+		/// </summary>
 		[XmlEnum("procedure")]
 		ProcedureRecord,
 
+		/// <summary>
+		/// Represents a query.
+		/// </summary>
 		[XmlEnum("query")]
 		Query,
 
+		/// <summary>
+		/// Represents a patient record.
+		/// </summary>
 		[XmlEnum("patient")]
 		PatientRecord,
 
+		/// <summary>
+		/// Represents an order record.
+		/// </summary>
 		[XmlEnum("order")]
 		OrderRecord,
 
+		/// <summary>
+		/// Represents a network entry.
+		/// </summary>
 		[XmlEnum("network")]
 		NetowrkEntry,
 
+		/// <summary>
+		/// Represents an import.
+		/// </summary>
 		[XmlEnum("import")]
 		Import,
 
+		/// <summary>
+		/// Represents an export.
+		/// </summary>
 		[XmlEnum("export")]
 		Export,
 
+		/// <summary>
+		/// Represents application activity.
+		/// </summary>
 		[XmlEnum("application")]
 		ApplicationActivity,
 
+		/// <summary>
+		/// Represents a security alert.
+		/// </summary>
 		[XmlEnum("security")]
 		SecurityAlert,
 
+		/// <summary>
+		/// Represents user authentication.
+		/// </summary>
 		[XmlEnum("auth")]
 		UserAuthentication,
 
+		/// <summary>
+		/// Represents that an emergency override started.
+		/// </summary>
 		[XmlEnum("btg")]
 		EmergencyOverrideStarted,
 
+		/// <summary>
+		/// Represents the use of a restricted function.
+		/// </summary>
 		[XmlEnum("restrictedFn")]
 		UseOfRestrictedFunction,
 
+		/// <summary>
+		/// Represents a login.
+		/// </summary>
 		[XmlEnum("login")]
 		Login,
 
+		/// <summary>
+		/// Represents a logout.
+		/// </summary>
 		[XmlEnum("logout")]
 		Logout
 	}
@@ -98,7 +155,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
 	public class AuditData
 	{
 		/// <summary>
-		/// Default CTOR
+		/// Initializes a new instance of the <see cref="AuditData"/> class.
 		/// </summary>
 		public AuditData()
 		{
@@ -108,8 +165,13 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
 		}
 
 		/// <summary>
-		/// Create a new instance of the AuditData class
+		/// Initializes a new instance of the <see cref="AuditData"/> class.
 		/// </summary>
+		/// <param name="timeStamp">The time stamp.</param>
+		/// <param name="actionCode">The action code.</param>
+		/// <param name="outcome">The outcome.</param>
+		/// <param name="eventIdentifier">The event identifier.</param>
+		/// <param name="eventTypeCode">The event type code.</param>
 		public AuditData(DateTime timeStamp, ActionType actionCode, OutcomeIndicator outcome,
 			EventIdentifierType eventIdentifier, AuditCode eventTypeCode)
 			: this()
