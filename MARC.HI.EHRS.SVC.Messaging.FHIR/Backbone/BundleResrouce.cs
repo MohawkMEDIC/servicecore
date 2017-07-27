@@ -37,6 +37,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("Immunization", Type = typeof(Immunization))]
         [XmlElement("ImmunizationRecommendation", Type = typeof(Resources.ImmunizationRecommendation))]
         [XmlElement("RelatedPerson", Type = typeof(RelatedPerson))]
+        [XmlElement("Location", Type = typeof(Location))]
+        [XmlElement("Observation", Type = typeof(Observation))]
+        [XmlElement("Medication", Type = typeof(Medication))]
+        [XmlElement("Substance", Type = typeof(Substance))]
+        [XmlElement("AllergyIntolerance", Type = typeof(AllergyIntolerance))]
+        [XmlElement("AdverseEvent", Type = typeof(AdverseEvent))]
+        [XmlElement("Condition", Type = typeof(Condition))]
+        [XmlElement("MedicationAdministration", Type = typeof(MedicationAdministration))]
         public DomainResourceBase Resource { get; set; }
 
     }

@@ -96,5 +96,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public List<SubstanceInstance> Instance { get; set; }
 
 
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Substance] {0}", this.Code?.GetPrimaryCode()?.Display);
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using Hl7.Fhir.Model;
+﻿using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -24,6 +24,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [XmlElement("expirationDate")]
         [Description("When the batch will expire")]
-        public FhirString FhirDateTime { get; set; }
+        public FhirDateTime Expiration { get; set; }
     }
 }

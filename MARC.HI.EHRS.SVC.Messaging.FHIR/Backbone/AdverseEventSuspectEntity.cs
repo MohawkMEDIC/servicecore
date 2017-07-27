@@ -15,13 +15,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
     [XmlType("AdverseEventSuspectEntity", Namespace = "http://hl7.org/fhir")]
     public class AdverseEventSuspectEntity : BackboneElement
     {
-
+        
         /// <summary>
         /// Gets or sets the instance of the substance which caused the event
         /// </summary>
         [XmlElement("instance")]
         [Description("The specific entity that cused the adverse event")]
         public Reference Instance { get; set; }
-
+        
     }
 }

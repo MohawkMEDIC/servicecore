@@ -48,6 +48,7 @@
     <Compile Include="Data\IDataFeature.cs" />
     <Compile Include="IConfigurableFeature.cs" />
     <Compile Include="IDataboundFeature.cs" />
+    <Compile Include="IScriptableConfigurableFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ConfigurationApplicationContext.cs" />
     <Compile Include="UI\DatabaseSelector.cs">

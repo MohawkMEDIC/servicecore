@@ -74,5 +74,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Whether the organization's record is still in active use")]
         public FhirBoolean Active { get; set; }
 
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Organization] {0}", this.Name);
+        }
     }
 }

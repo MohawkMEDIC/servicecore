@@ -27,6 +27,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Data;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Terminology.Configuration
 {
@@ -122,7 +124,7 @@ namespace MARC.HI.EHRS.SVC.Terminology.Configuration
             }
             if (dbSectionConfig != null)
             {
-                ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[dbSectionConfig.Attributes["connection"].Value];
+                ConnectionStringSettings settings = ApplicationContext.Current.GetService<IConfigurationManager>().ConnectionStrings[dbSectionConfig.Attributes["connection"].Value];
                 if (settings == null)
                     throw new ConfigurationErrorsException(String.Format("Cannot find the connection string '{0}'", dbSectionConfig.Attributes["connection"].Value), dbSectionConfig);
 

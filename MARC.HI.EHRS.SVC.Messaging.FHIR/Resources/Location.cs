@@ -146,6 +146,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("partOf")]
         [Description("Another location that this one is physically part of")]
         public Reference<Location> PartOf { get; set; }
-
+        
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Location] {0}", this.Name);
+        }
     }
 }

@@ -27,6 +27,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Data;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration
 {
@@ -79,7 +81,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data.Configuration
             // Connection manager configuration
             if (connectionManagerConfig.Attributes["connection"] != null)
             {
-                ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[connectionManagerConfig.Attributes["connection"].Value];
+                ConnectionStringSettings settings = ApplicationContext.Current.GetService<IConfigurationManager>().ConnectionStrings[connectionManagerConfig.Attributes["connection"].Value];
                 if (settings == null)
                     throw new ConfigurationErrorsException(String.Format("Cannot find the connection string '{0}'", connectionManagerConfig.Attributes["connection"].Value), connectionManagerConfig);
 

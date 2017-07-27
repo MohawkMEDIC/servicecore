@@ -82,6 +82,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public List<Reference<Condition>> Reaction { get; set; }
 
         /// <summary>
+        /// Gets or sets the location where the adverse event occurred
+        /// </summary>
+        [Description("Locaton where the adverse event occurred")]
+        [XmlElement("location")]
+        public Reference<Location> Location { get; set; }
+
+        /// <summary>
         /// Gets or sets the seriousness of reaction
         /// </summary>
         [Description("The seriousness of the reaction")]

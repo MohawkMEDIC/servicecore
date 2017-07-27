@@ -77,5 +77,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("A picture of the medication")]
         public Attachment Image { get; set; }
 
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Medication] {0}", this.Code?.GetPrimaryCode()?.Display);
+        }
     }
 }

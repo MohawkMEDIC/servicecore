@@ -1,4 +1,4 @@
-﻿namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
+﻿namespace MARC.HI.EHRS.SVC.Configuration.UI
 {
     partial class DatabaseSelector
     {
@@ -48,7 +48,7 @@
             this.txtPassword.Location = new System.Drawing.Point(107, 82);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(273, 20);
+            this.txtPassword.Size = new System.Drawing.Size(177, 20);
             this.txtPassword.TabIndex = 4;
             this.txtPassword.Validated += new System.EventHandler(this.connectionParameter_Validated);
             // 
@@ -58,7 +58,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserName.Location = new System.Drawing.Point(107, 56);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(273, 20);
+            this.txtUserName.Size = new System.Drawing.Size(177, 20);
             this.txtUserName.TabIndex = 3;
             this.txtUserName.Validated += new System.EventHandler(this.connectionParameter_Validated);
             // 
@@ -68,7 +68,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDatabaseAddress.Location = new System.Drawing.Point(107, 30);
             this.txtDatabaseAddress.Name = "txtDatabaseAddress";
-            this.txtDatabaseAddress.Size = new System.Drawing.Size(273, 20);
+            this.txtDatabaseAddress.Size = new System.Drawing.Size(177, 20);
             this.txtDatabaseAddress.TabIndex = 2;
             this.txtDatabaseAddress.Validated += new System.EventHandler(this.connectionParameter_Validated);
             // 
@@ -89,7 +89,7 @@
             this.cbxDatabase.FormattingEnabled = true;
             this.cbxDatabase.Location = new System.Drawing.Point(107, 108);
             this.cbxDatabase.Name = "cbxDatabase";
-            this.cbxDatabase.Size = new System.Drawing.Size(207, 21);
+            this.cbxDatabase.Size = new System.Drawing.Size(111, 21);
             this.cbxDatabase.TabIndex = 6;
             this.cbxDatabase.DropDown += new System.EventHandler(this.cbxDatabase_DropDown);
             // 
@@ -137,14 +137,14 @@
             this.cbxProviderType.FormattingEnabled = true;
             this.cbxProviderType.Location = new System.Drawing.Point(107, 3);
             this.cbxProviderType.Name = "cbxProviderType";
-            this.cbxProviderType.Size = new System.Drawing.Size(273, 21);
+            this.cbxProviderType.Size = new System.Drawing.Size(177, 21);
             this.cbxProviderType.TabIndex = 1;
             this.cbxProviderType.Validated += new System.EventHandler(this.connectionParameter_Validated);
             // 
             // btnNew
             // 
             this.btnNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnNew.Location = new System.Drawing.Point(319, 106);
+            this.btnNew.Location = new System.Drawing.Point(223, 106);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(61, 23);
             this.btnNew.TabIndex = 7;
@@ -169,7 +169,7 @@
             this.Controls.Add(this.cbxProviderType);
             this.MinimumSize = new System.Drawing.Size(0, 137);
             this.Name = "DatabaseSelector";
-            this.Size = new System.Drawing.Size(397, 137);
+            this.Size = new System.Drawing.Size(301, 137);
             this.ResumeLayout(false);
             this.PerformLayout();
 
