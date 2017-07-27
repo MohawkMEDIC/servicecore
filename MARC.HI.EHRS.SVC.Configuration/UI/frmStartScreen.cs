@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using MARC.HI.EHRS.SVC.ConfigurationApplciation;
+using MARC.HI.EHRS.SVC.Configuration.UI;
 using MARC.HI.EHRS.SVC.Configuration.Data;
 
 namespace MARC.HI.EHRS.SVC.Configuration.UI
@@ -36,43 +36,6 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
         public frmStartScreen()
         {
             InitializeComponent();
-            PopulateConfigurators();
-        }
-
-        /// <summary>
-        /// Populate configurators
-        /// </summary>
-        private void PopulateConfigurators()
-        {
-            foreach (var config in DatabaseConfiguratorRegistrar.Configurators)
-                cbxProviderType.Items.Add(config);
-        }
-
-        /// <summary>
-        /// Validated connection parameter
-        /// </summary>
-        private void connectionParameter_Validated(object sender, EventArgs e)
-        {
-            cbxDatabase.Enabled = cbxProviderType.SelectedItem != null &&
-                !String.IsNullOrEmpty(txtDatabaseAddress.Text) &&
-                !String.IsNullOrEmpty(txtPassword.Text) &&
-                !String.IsNullOrEmpty(txtUserName.Text);
-            btnContinue.Enabled = cbxDatabase.Enabled && cbxDatabase.SelectedItem != null;
-        }
-
-        private void cbxDatabase_DropDown(object sender, EventArgs e)
-        {
-            cbxDatabase.Items.Clear();
-            IDatabaseProvider conf = cbxProviderType.SelectedItem as IDatabaseProvider;
-            try
-            {
-                cbxDatabase.Items.AddRange(conf.GetDatabases(txtDatabaseAddress.Text, txtUserName.Text, txtPassword.Text));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                cbxDatabase.Enabled = false;
-            }
         }
 
         /// <summary>
@@ -87,13 +50,13 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                 // Start by creating the configuration file
                 XmlDocument configFile = new XmlDocument();
                 configFile.LoadXml(Resources.Empty);
-                IDatabaseProvider conf = cbxProviderType.SelectedItem as IDatabaseProvider;
+                IDatabaseProvider conf = dbSelector.DatabaseConfigurator;
 
                 // Do an easy config ... first with the connection strings
                 foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
                     if (pnl is IDataboundFeature)
                     {
-                        (pnl as IDataboundFeature).ConnectionString = conf.CreateConnectionStringElement(configFile, txtDatabaseAddress.Text, txtUserName.Text, txtPassword.Text, cbxDatabase.SelectedItem.ToString());
+                        (pnl as IDataboundFeature).ConnectionString = dbSelector.CreateConnectionString(configFile);
                         (pnl as IDataboundFeature).DataProvider = conf;
                     }
 
@@ -155,29 +118,12 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
             }
         }
 
-        private void btnNew_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Object was validated
+        /// </summary>
+        private void dbSelector_Validated(object sender, EventArgs e)
         {
-
-            frmNewDatabase newDatabase = new frmNewDatabase(cbxProviderType.SelectedItem as IDatabaseProvider, this.txtDatabaseAddress.Text);
-            if (newDatabase.ShowDialog() == DialogResult.OK)
-            {
-
-                if (newDatabase.DatabaseConfigurator != cbxProviderType.SelectedItem)
-                {
-                    cbxProviderType.SelectedItem = newDatabase.DatabaseConfigurator;
-                    txtDatabaseAddress.Text = "";
-                    txtUserName.Text = "";
-                    cbxDatabase.Text = "";
-                }
-
-                if (txtDatabaseAddress.Text == "")
-                    txtDatabaseAddress.Text = newDatabase.Server;
-                if (txtUserName.Text == "")
-                    txtUserName.Text = newDatabase.Server;
-                if (cbxDatabase.Text == "")
-                    cbxDatabase.Text = newDatabase.DatabaseName;
-            }
+            btnContinue.Enabled = true;
         }
-
     }
 }

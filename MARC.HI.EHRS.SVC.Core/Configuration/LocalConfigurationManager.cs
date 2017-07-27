@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace MARC.HI.EHRS.SVC.Core.Configuration
 {
@@ -13,6 +14,28 @@ namespace MARC.HI.EHRS.SVC.Core.Configuration
     /// </summary>
     public class LocalConfigurationManager : IConfigurationManager
     {
+        /// <summary>
+        /// Application settings
+        /// </summary>
+        public NameValueCollection AppSettings
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings;
+            }
+        }
+
+        /// <summary>
+        /// Get connection strings
+        /// </summary>
+        public ConnectionStringSettingsCollection ConnectionStrings
+        {
+            get
+            {
+                return ConfigurationManager.ConnectionStrings;
+            }
+        }
+
         /// <summary>
         /// Get the specified section
         /// </summary>

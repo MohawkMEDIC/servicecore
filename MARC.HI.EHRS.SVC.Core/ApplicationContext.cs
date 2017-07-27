@@ -135,7 +135,14 @@ namespace MARC.HI.EHRS.SVC.Core
                 if (this.Starting != null)
                     this.Starting(this, null);
 
-                m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
+                // If there is no configuration manager then add the local
+                if (this.GetService(typeof(IConfigurationManager)) == null)
+                {
+                    m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
+                    this.m_serviceInstances.Add(new LocalConfigurationManager());
+                }
+                else
+                    m_configuration = this.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
 
                 // If there is no configuration manager then add the local
                 if (this.GetService(typeof(IConfigurationManager)) == null)

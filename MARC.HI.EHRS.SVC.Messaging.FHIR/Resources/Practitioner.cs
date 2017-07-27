@@ -124,5 +124,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [FhirElement(RemoteBinding = "http://tools.ietf.org/html/bcp47")]
         public List<FhirCodeableConcept> Communication { get; set; }
 
+
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Practitioner] {0}", this.Name.FirstOrDefault());
+        }
+
     }
 }

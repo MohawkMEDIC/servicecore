@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Xml;
 using MARC.HI.EHRS.SVC.Configuration.Data;
 
-namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
+namespace MARC.HI.EHRS.SVC.Configuration.UI
 {
     public partial class DatabaseSelector : UserControl
     {
@@ -64,6 +64,15 @@ namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
         }
 
         /// <summary>
+        /// Gets the connection string
+        /// </summary>
+        /// <returns></returns>
+        public string CreateConnectionString(XmlDocument config)
+        {
+            return this.DatabaseConfigurator.CreateConnectionStringElement(config, txtDatabaseAddress.Text, txtUserName.Text, txtPassword.Text, cbxDatabase.SelectedItem.ToString());
+        }
+
+        /// <summary>
         /// Validated connection parameter
         /// </summary>
         private void connectionParameter_Validated(object sender, EventArgs e)
@@ -72,6 +81,8 @@ namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
                 !String.IsNullOrEmpty(txtDatabaseAddress.Text) &&
                 !String.IsNullOrEmpty(txtPassword.Text) &&
                 !String.IsNullOrEmpty(txtUserName.Text);
+            if (cbxDatabase.Enabled && cbxDatabase.SelectedItem != null)
+                this.OnValidated(EventArgs.Empty);
         }
 
         /// <summary>

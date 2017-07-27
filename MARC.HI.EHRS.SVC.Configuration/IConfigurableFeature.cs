@@ -25,7 +25,7 @@ namespace MARC.HI.EHRS.SVC.Configuration
         String Name { get; }
 
         /// <summary>
-        /// True if configuration should be enabled
+        /// True if configuration should always be installed
         /// </summary>
         bool AlwaysConfigure { get; }
 

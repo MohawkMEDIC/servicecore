@@ -27,6 +27,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// <summary>
     /// Condition verification status
     /// </summary>
+    [XmlType("ConditionVerificationStatus", Namespace = "http://hl7.org/fhir")]
     public enum ConditionVerificationStatus
     {
         [XmlEnum("provisional")]

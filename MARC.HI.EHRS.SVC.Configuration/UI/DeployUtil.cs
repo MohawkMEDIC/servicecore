@@ -24,7 +24,7 @@ using System.Collections.Specialized;
 using System.Xml;
 using System.Windows.Forms;
 using System.IO;
-using MARC.HI.EHRS.SVC.ConfigurationApplciation;
+using MARC.HI.EHRS.SVC.Configuration.UI;
 
 namespace MARC.HI.EHRS.SVC.Configuration.UI
 {

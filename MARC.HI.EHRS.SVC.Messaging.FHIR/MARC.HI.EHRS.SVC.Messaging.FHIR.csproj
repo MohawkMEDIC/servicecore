@@ -34,9 +34,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hl7.Fhir.DSTU21.Core, Version=0.90.4.21547, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Solution Items\Hl7.Fhir.DSTU21.Core.dll</HintPath>
+    <Reference Include="Hl7.Fhir.STU3.Core">
+      <HintPath>..\Solution Items\Hl7.Fhir.STU3.Core.dll</HintPath>
     </Reference>
     <Reference Include="MARC.Everest">
       <HintPath>..\Solution Items\MARC.Everest.dll</HintPath>
@@ -63,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backbone\AdverseEventSuspectEntity.cs" />
+    <Compile Include="Backbone\AllergyIntoleranceReaction.cs" />
     <Compile Include="Backbone\BundleResrouce.cs" />
     <Compile Include="Backbone\ConformancePublisher.cs" />
     <Compile Include="Backbone\ElementBase.cs" />
@@ -137,6 +137,7 @@
     <Compile Include="Resources\Accreditation.cs" />
     <Compile Include="Backbone\Animal.cs" />
     <Compile Include="Resources\AdverseEvent.cs" />
+    <Compile Include="Resources\AllergyIntolerance.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
     <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
     <Compile Include="Resources\Bundle.cs" />
