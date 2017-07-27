@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using MARC.HI.EHRS.SVC.Configuration.Data;
 
-namespace MARC.HI.EHRS.SVC.Configuration.UI
+namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
 {
     public partial class frmNewDatabase : Form
     {
