@@ -33,7 +33,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("Patient", Type = typeof(Patient))]
         [XmlElement("ValueSet", Type = typeof(ValueSet))]
         [XmlElement("Organization", Type = typeof(Organization))]
-        [XmlElement("Practitioner", Type = typeof(Practictioner))]
+        [XmlElement("Practitioner", Type = typeof(Practitioner))]
         [XmlElement("Immunization", Type = typeof(Immunization))]
         [XmlElement("ImmunizationRecommendation", Type = typeof(Resources.ImmunizationRecommendation))]
         [XmlElement("RelatedPerson", Type = typeof(RelatedPerson))]

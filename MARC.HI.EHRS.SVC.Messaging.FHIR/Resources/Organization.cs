@@ -63,7 +63,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Gets or sets the contact entities
         /// </summary>
-        [XmlElement("contactEntity")]
+        [XmlElement("contact")]
         [Description("Contact information for the organization")]
         public List<ContactEntity> ContactEntity { get; set; }
 
