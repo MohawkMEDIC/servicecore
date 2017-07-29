@@ -84,8 +84,18 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
 
                     progress.Show();
                     configDocument.Load(ConfigurationApplicationContext.s_configFile);
+
+                    EventHandler<ProgressChangedEventArgs> progHandler = (o, e) =>
+                    {
+                        progress.ActionStatus = e.ProgressPercentage;
+                        progress.ActionStatusText = e.UserState.ToString();
+                    };
+
                     foreach (IConfigurableFeature itm in apply.chkActions.CheckedItems)
                     {
+                        if (itm is IReportProgressChanged)
+                            (itm as IReportProgressChanged).ProgressChanged += progHandler;
+
                         try
                         {
                             if (!itm.Validate(configDocument))
@@ -99,10 +109,14 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                             MessageBox.Show(String.Format("Configuration of item '{0}' failed, validation failed with reason {1}", itm, e.Message), "Validation Failure");
                             continue;
                         }
-                        progress.Status = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);
-                        progress.StatusText = String.Format("Configuring {0}...", itm.ToString());
+                        progress.OverallStatus = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);
+                        progress.OverallStatusText = String.Format("Configuring {0}...", itm.ToString());
                         Application.DoEvents();
                         itm.Configure(configDocument);
+
+                        if (itm is IReportProgressChanged)
+                            (itm as IReportProgressChanged).ProgressChanged -= progHandler;
+
                     }
 
                     // Always applied stuff changes
@@ -116,7 +130,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                         itm.Configure(configDocument);
                     }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
-                    progress.StatusText = "Executing post configuration tasks...";
+                    progress.OverallStatusText = "Executing post configuration tasks...";
                     ConfigurationApplicationContext.OnConfigurationApplied();
                 }
                 catch (Exception ex)
@@ -129,8 +143,8 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                     foreach (IConfigurableFeature itm in apply.chkActions.CheckedItems)
                     {
 
-                        progress.Status = (int)((i-- / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
-                        progress.StatusText = String.Format("Removing Configuration for {0}...", itm.ToString());
+                        progress.OverallStatus = (int)((i-- / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
+                        progress.OverallStatusText = String.Format("Removing Configuration for {0}...", itm.ToString());
                         Application.DoEvents();
 
                         itm.UnConfigure(configDocument);
@@ -163,17 +177,30 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                     XmlDocument configDocument = new XmlDocument();
                     configDocument.Load(ConfigurationApplicationContext.s_configFile);
                     int i = 0;
+
+                    EventHandler<ProgressChangedEventArgs> progHandler = (o, e) =>
+                    {
+                        progress.ActionStatus = e.ProgressPercentage;
+                        progress.ActionStatusText = e.UserState.ToString();
+                    };
+
                     foreach (IConfigurableFeature itm in apply.chkActions.CheckedItems)
                     {
-                        progress.Status = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);
-                        progress.StatusText = String.Format("Removing Configuration for {0}...", itm.ToString());
+
+                        if (itm is IReportProgressChanged)
+                            (itm as IReportProgressChanged).ProgressChanged += progHandler;
+
+                        progress.OverallStatus = (int)((++i / (float)apply.chkActions.CheckedItems.Count) * 100);
+                        progress.OverallStatusText = String.Format("Removing Configuration for {0}...", itm.ToString());
                         Application.DoEvents();
 
                         itm.UnConfigure(configDocument);
 
+                        if (itm is IReportProgressChanged)
+                            (itm as IReportProgressChanged).ProgressChanged -= progHandler;
                     }
                     configDocument.Save(ConfigurationApplicationContext.s_configFile);
-                    progress.StatusText = "Executing post configuration tasks...";
+                    progress.OverallStatusText = "Executing post configuration tasks...";
                     Application.DoEvents();
                     ConfigurationApplicationContext.OnConfigurationApplied();
 

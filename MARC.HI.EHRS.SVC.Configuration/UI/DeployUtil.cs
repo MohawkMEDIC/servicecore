@@ -56,8 +56,8 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                 {
                     if (pnl.IsConfigured(configurationDom))
                         pnl.UnConfigure(configurationDom);
-                    progress.StatusText = String.Format("Configuring {0}...", pnl.ToString()); 
-                    progress.Status = (int)((++i / (float)deploymentList.Count) * 100);
+                    progress.OverallStatusText = String.Format("Configuring {0}...", pnl.ToString()); 
+                    progress.OverallStatus = (int)((++i / (float)deploymentList.Count) * 100);
                     Application.DoEvents();
                     pnl.Configure(configurationDom);
                 }
@@ -67,7 +67,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                      pnl.Configure(configurationDom);
 
                 configurationDom.Save(ConfigurationApplicationContext.s_configFile);
-                progress.StatusText = "Executing post configuration tasks...";
+                progress.OverallStatusText = "Executing post configuration tasks...";
                 ConfigurationApplicationContext.OnConfigurationApplied();
             }
             finally

@@ -50,14 +50,15 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                 // Start by creating the configuration file
                 XmlDocument configFile = new XmlDocument();
                 configFile.LoadXml(Resources.Empty);
-                IDatabaseProvider conf = dbSelector.DatabaseConfigurator;
+
+                var connectionString = dbSelector.ConnectionString;
+                connectionString.Name = configFile.CreateConnectionString(connectionString);
 
                 // Do an easy config ... first with the connection strings
                 foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
                     if (pnl is IDataboundFeature)
                     {
-                        (pnl as IDataboundFeature).ConnectionString = dbSelector.CreateConnectionString(configFile);
-                        (pnl as IDataboundFeature).DataProvider = conf;
+                        (pnl as IDataboundFeature).ConnectionString = connectionString;
                     }
 
                 // Easy or complex?
@@ -69,13 +70,25 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                     try
                     {
                         progress.Show();
-                        
+
+                        EventHandler<ProgressChangedEventArgs> progHandler = (o, ev) =>
+                        {
+                            progress.ActionStatus = ev.ProgressPercentage;
+                            progress.ActionStatusText = ev.UserState.ToString();
+                        };
+
                         foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
                         {
-                            progress.Status = (int)((++i / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
-                            progress.StatusText = String.Format("Applying Configuration for {0}...", pnl.ToString());
+                            if (pnl is IReportProgressChanged)
+                                (pnl as IReportProgressChanged).ProgressChanged += progHandler;
+
+                            progress.OverallStatus = (int)((++i / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
+                            progress.OverallStatusText = String.Format("Applying Configuration for {0}...", pnl.ToString());
                             //pnl.EnableConfiguration = true;
                             pnl.EasyConfigure(configFile);
+
+                            if (pnl is IReportProgressChanged)
+                                (pnl as IReportProgressChanged).ProgressChanged -= progHandler;
                         }
                     }
                     catch (Exception ex)
@@ -86,12 +99,24 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
 #else
                         MessageBox.Show(ex.Message, "Error Configuring Service");
 #endif
+
+                        EventHandler<ProgressChangedEventArgs> progHandler = (o, ev) =>
+                        {
+                            progress.ActionStatus = ev.ProgressPercentage;
+                            progress.ActionStatusText = ev.UserState.ToString();
+                        };
+
                         foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
                         {
+                            if (pnl is IReportProgressChanged)
+                                (pnl as IReportProgressChanged).ProgressChanged += progHandler;
 
-                            progress.Status = (int)((i-- / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
-                            progress.StatusText = String.Format("Removing Configuration for {0}...", pnl.ToString());
+                            progress.OverallStatus = (int)((i-- / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
+                            progress.OverallStatusText = String.Format("Removing Configuration for {0}...", pnl.ToString());
                             pnl.UnConfigure(configFile);
+
+                            if (pnl is IReportProgressChanged)
+                                (pnl as IReportProgressChanged).ProgressChanged -= progHandler;
                         }
 
                         return;

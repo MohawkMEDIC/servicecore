@@ -52,6 +52,44 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
     }
     
     /// <summary>
+    /// Connection string
+    /// </summary>
+    public class DbConnectionString
+    {
+
+        /// <summary>
+        /// Gets the provider of the connection string
+        /// </summary>
+        public IDatabaseProvider Provider { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the configuration string
+        /// </summary>
+        public String Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database of the configuration string
+        /// </summary>
+        public String Database { get; set; }
+
+        /// <summary>
+        /// Gets or sets the host of the configuration string
+        /// </summary>
+        public String Host { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username of the configuration string
+        /// </summary>
+        public String UserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password of the configuration string
+        /// </summary>
+        public String Password { get; set; }
+
+    }
+
+    /// <summary>
     /// Database provider which provides a link from a data feature to 
     /// a database software
     /// </summary>
@@ -69,6 +107,11 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         string InvariantName { get; }
 
         /// <summary>
+        /// Gets the db provider type
+        /// </summary>
+        Type DbProviderType { get; }
+
+        /// <summary>
         /// Deploy a specified feature on the database configuration
         /// </summary>
         void DeployFeature(IDataFeature feature, string connectionStringName, XmlDocument configurationDom);
@@ -79,25 +122,24 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         void UnDeployFeature(IDataFeature feature, string connectionStringName, XmlDocument configurationDom);
 
         /// <summary>
-        /// Create a .config connection string entry
+        /// Create connection string
         /// </summary>
-        /// <returns>The name of the created connection string</returns>
-        string CreateConnectionStringElement(XmlDocument configurationDom, string serverName, string userName, string password, string databaseName);
+        string CreateConnectionString(DbConnectionString connectionString);
 
         /// <summary>
-        /// Get a connection string part
+        /// Parse a connection string
         /// </summary>
-        string GetConnectionStringElement(XmlDocument configurationDom, ConnectionStringPartType partType, string connectionString);
+        DbConnectionString ParseConnectionString(String connectionString);
 
         /// <summary>
         /// Get all databases
         /// </summary>
-        string[] GetDatabases(string serverName, string userName, string password);
+        string[] GetDatabases(DbConnectionString connection);
 
         /// <summary>
         /// Create a database
         /// </summary>
-        void CreateDatabase(string serverName, string superUser, string password, string databaseName, string owner);
+        void CreateDatabase(DbConnectionString connectionString, string databaseName, string owner);
 
         /// <summary>
         /// Get a list of available updates

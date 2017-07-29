@@ -16,12 +16,7 @@ namespace MARC.HI.EHRS.SVC.Configuration
         /// <summary>
         /// Gets or sets the name of the system wide connection string
         /// </summary>
-        String ConnectionString { get; set; }
-
-        /// <summary>
-        /// Database provider
-        /// </summary>
-        IDatabaseProvider DataProvider { get; set; }
+        DbConnectionString ConnectionString { get; set; }
 
         /// <summary>
         /// Gets a list of data features this panel can/will deploy

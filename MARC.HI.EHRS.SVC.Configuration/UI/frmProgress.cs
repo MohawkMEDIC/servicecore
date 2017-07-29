@@ -38,11 +38,23 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
         /// <summary>
         /// Gets or sets the status text
         /// </summary>
-        public int Status { get { return progressBar1.Value; } set { progressBar1.Value = value; Application.DoEvents(); } }
+        public int ActionStatus { get { return pgAction.Value; } set { pgAction.Value = value; Application.DoEvents(); } }
 
         /// <summary>
         /// Gets or sets the status text
         /// </summary>
-        public string StatusText { get { return label1.Text; } set { label1.Text = value; Application.DoEvents(); } }
+        public string ActionStatusText { get { return label2.Text; } set { label2.Text = value; Application.DoEvents(); } }
+
+
+        /// <summary>
+        /// Gets or sets the status text
+        /// </summary>
+        internal int OverallStatus { get { return pgMain.Value; } set { pgMain.Value = value; Application.DoEvents(); } }
+
+        /// <summary>
+        /// Gets or sets the status text
+        /// </summary>
+        internal string OverallStatusText { get { return label1.Text; } set { label1.Text = value; Application.DoEvents(); } }
+
     }
 }

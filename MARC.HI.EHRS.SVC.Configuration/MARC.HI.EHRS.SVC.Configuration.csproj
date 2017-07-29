@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -43,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Data\IDatabaseProvider.cs" />
     <Compile Include="Data\IDataUpdate.cs" />
     <Compile Include="Data\IDataFeature.cs" />
+    <Compile Include="Data\SqlSourceUpdate.cs" />
     <Compile Include="IConfigurableFeature.cs" />
     <Compile Include="IDataboundFeature.cs" />
     <Compile Include="IScriptableConfigurableFeature.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="UI\frmStartScreen.designer.cs">
       <DependentUpon>frmStartScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\IReportProgressChanged.cs" />
     <Compile Include="UI\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -117,6 +121,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
