@@ -40,7 +40,6 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
         /// </summary>
         private class DummyConfigPanel : IConfigurableFeature
         {
-
             #region IConfigurationPanel Members
 
             public string Name
@@ -230,8 +229,13 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
             pnl.Dock = DockStyle.Fill;
 
             lblConfigured.Visible = ((e.Node.Tag as IConfigurableFeature).AlwaysConfigure || (e.Node.Tag as IConfigurableFeature).IsConfigured(m_xmlConfiguration));
-            pnlConfigure.Enabled = true;
-            chkEnable.Visible = !lblConfigured.Visible;
+            pnlConfigure.Enabled = chkEnable.Visible && chkEnable.Checked || (e.Node.Tag as IConfigurableFeature).AlwaysConfigure;
+            chkEnable.Visible = !lblConfigured.Visible && !(e.Node.Tag as IConfigurableFeature).AlwaysConfigure;
+        }
+
+        private void chkEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlConfigure.Enabled = chkEnable.Visible && chkEnable.Checked || (trvOptions.SelectedNode.Tag as IConfigurableFeature).AlwaysConfigure;
         }
     }
 }

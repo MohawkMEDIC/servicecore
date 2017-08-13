@@ -18,25 +18,34 @@ namespace MARC.HI.EHRS.SVC.Configuration
         /// <summary>
         /// Gets or creates the specified element
         /// </summary>
-        public static XmlNode GetOrCreateElement(this XmlNode parent, string path)
+        public static XmlElement GetOrCreateElement(this XmlNode parent, string path)
         {
 
             var elementMatch = parent.SelectSingleNode(path);
             if (elementMatch == null) // Create
             {
-                var ppath = path.Contains("/") ? path.Substring(0, path.LastIndexOf("/")) : path;
-                if (ppath == "/") // Root, makes no sense
-                    return parent.OwnerDocument.CreateElement(path.Substring(1));
+                if (parent is XmlElement && !path.Contains("/"))
+                {
+                    elementMatch = parent.OwnerDocument.CreateElement(path);
+                    parent.AppendChild(elementMatch);
+                    return elementMatch as XmlElement;
+                }
                 else
                 {
-                    elementMatch = (parent as XmlDocument ?? parent.OwnerDocument).CreateElement(path.Substring(ppath.Length + 1));
-                    var directParent = parent.GetOrCreateElement(ppath);
-                    directParent.AppendChild(elementMatch);
-                    return elementMatch;
+                    var ppath = path.Contains("/") ? path.Substring(0, path.LastIndexOf("/")) : path;
+                    if (ppath == "/") // Root, makes no sense
+                        return parent.OwnerDocument.CreateElement(path.Substring(1));
+                    else
+                    {
+                        elementMatch = (parent as XmlDocument ?? parent.OwnerDocument).CreateElement(path.Substring(ppath.Length + 1));
+                        var directParent = parent.GetOrCreateElement(ppath);
+                        directParent.AppendChild(elementMatch);
+                        return elementMatch as XmlElement;
+                    }
                 }
             }
             else
-                return elementMatch;
+                return elementMatch as XmlElement;
 
         }
 
@@ -113,6 +122,16 @@ namespace MARC.HI.EHRS.SVC.Configuration
         }
 
         /// <summary>
+        /// Create attribute value
+        /// </summary>
+        public static XmlElement CreateElementValue(this XmlDocument config, String name, String value)
+        {
+            var retVal = config.CreateElement(name);
+            retVal.Value = value;
+            return retVal;
+        }
+
+        /// <summary>
         /// Add data provider
         /// </summary>
         public static void RegisterDataProvider(this XmlDocument config, IDatabaseProvider dbProvider)
@@ -157,7 +176,7 @@ namespace MARC.HI.EHRS.SVC.Configuration
             // Anonymous scope
             {
                 if (String.IsNullOrEmpty(connectionString.Name))
-                    connectionString.Name = new string(Guid.NewGuid().ToByteArray().Select(o => (char)('A' + (char)(o % 20))).ToArray());
+                    connectionString.Name = Guid.NewGuid().ToConfigName();
                 var connectionStrings = config.GetOrCreateElement("/configuration/connectionStrings");
                 var connectionStringXml = config.CreateElement("add");
                 connectionStringXml.Attributes.Append(config.CreateAttributeValue("name", connectionString.Name));
@@ -193,12 +212,12 @@ namespace MARC.HI.EHRS.SVC.Configuration
         public static DbConnectionString GetConnectionString(this XmlDocument config, String connectionStringName)
         {
             var connectionStrings= config.GetOrCreateElement("/configuration/connectionStrings");
-            var connectionString = config.SelectSingleNode($"./add[@name='{connectionStringName}']");
+            var connectionString = connectionStrings.SelectSingleNode($"./add[@name='{connectionStringName}']");
             if (connectionString == null)
                 return null;
             else
             {
-                var dbp = DatabaseConfiguratorRegistrar.Configurators.Find(o => o.InvariantName == config.Attributes["providerName"]?.Value);
+                var dbp = DatabaseConfiguratorRegistrar.Configurators.Find(o => o.InvariantName == connectionString.Attributes["providerName"]?.Value);
                 if (dbp != null)
                 {
                     var retval = dbp.ParseConnectionString(connectionString.Attributes["connectionString"]?.Value);
@@ -210,5 +229,28 @@ namespace MARC.HI.EHRS.SVC.Configuration
             }
         }
 
+        /// <summary>
+        /// Update or create a child element
+        /// </summary>
+        public static XmlElement UpdateOrCreateChildElement(this XmlElement ele, String elementName, dynamic attributes)
+        {
+            var child = ele.GetOrCreateElement(elementName) as XmlElement;
+
+            IDictionary<String, Object> dictObj = attributes as IDictionary<String, Object>;
+            foreach(var kv in dictObj)
+            {
+                if (kv.Value == null) continue;
+                child.SetAttribute(kv.Key, kv.Value.ToString());
+            }
+            return child;
+        }
+
+        /// <summary>
+        /// ToConfigName
+        /// </summary>
+        public static String ToConfigName(this Guid me)
+        {
+            return new string(me.ToByteArray().Select(o => (char)('A' + (char)(o % 20))).ToArray());
+        }
     }
 }

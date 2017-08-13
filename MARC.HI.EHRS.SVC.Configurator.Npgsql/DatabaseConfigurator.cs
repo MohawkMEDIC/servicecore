@@ -37,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
     /// <summary>
     /// Database configurator for PostgreSQL 9.0
     /// </summary>
-    public class DatabaseConfigurator : IDatabaseProvider
+    public class DatabaseConfigurator : IDatabaseProvider, IReportProgressChanged
     {
         #region IDatabaseConfigurator Members
 
@@ -70,16 +70,18 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         }
 
         /// <summary>
+        /// Reports progress changed
+        /// </summary>
+        public event EventHandler<ProgressChangedEventArgs> ProgressChanged;
+
+        /// <summary>
         /// Deploy a feature
         /// </summary>
-        public void DeployFeature(IDataFeature feature, string connectionStringName, System.Xml.XmlDocument configurationDom)
+        public void Deploy(IDataboundFeature feature, string connectionStringName, System.Xml.XmlDocument configurationDom)
         {
             // Get the embedded resource
             try
             {
-
-                String installSql = feature.GetDeploySql(this.InvariantName),
-                    checkSql = feature.GetCheckSql(this.InvariantName);
 
                 // Deploy the feature
                 string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
@@ -92,15 +94,25 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 {
                     conn.Open();
 
-                    // Check for existing deployment
-                    if (!String.IsNullOrEmpty(checkSql))
-                        using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
-                            if ((bool)cmd.ExecuteScalar())
-                                return;
-                    
-                    if (!String.IsNullOrEmpty(installSql))
-                        using (NpgsqlCommand cmd = new NpgsqlCommand(installSql, conn))
-                            cmd.ExecuteNonQuery();
+
+                    for (int i = 0; i < feature.DataFeatures.Count; i++)
+                    {
+                        this.ProgressChanged?.Invoke(this, new ProgressChangedEventArgs((int)((float)(i+1) / feature.DataFeatures.Count * 100), feature.DataFeatures[i].Name));
+                        String installSql = feature.DataFeatures[i].GetDeploySql(this.InvariantName),
+                            checkSql = feature.DataFeatures[i].GetCheckSql(this.InvariantName);
+
+                        // Check for existing deployment
+                        if (!String.IsNullOrEmpty(checkSql))
+                            using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
+                                if ((bool)cmd.ExecuteScalar())
+                                    return;
+
+                        if (!String.IsNullOrEmpty(installSql))
+                            using (NpgsqlCommand cmd = new NpgsqlCommand(installSql, conn))
+                                cmd.ExecuteNonQuery();
+                    }
+                    feature.AfterUnDeploy();
+
                 }
                 finally
                 {
@@ -117,14 +129,12 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         /// <summary>
         /// Un-deploy feature
         /// </summary>
-        public void UnDeployFeature(IDataFeature feature, string connectionStringName, System.Xml.XmlDocument configurationDom)
+        public void UnDeploy(IDataboundFeature feature, string connectionStringName, System.Xml.XmlDocument configurationDom)
         {
             // Get the embedded resource
             try
             {
 
-                String uninstallSql = feature.GetUnDeploySql(this.InvariantName),
-                    checkSql = feature.GetCheckSql(this.InvariantName);
 
                 // Deploy the feature
                 string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
@@ -136,17 +146,25 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                 try
                 {
                     conn.Open();
+                    for (int i = 0; i < feature.DataFeatures.Count; i++)
+                    {
+                        this.ProgressChanged?.Invoke(this, new ProgressChangedEventArgs((int)((float)(i+1) / feature.DataFeatures.Count * 100), feature.DataFeatures[i].Name));
+                        String uninstallSql = feature.DataFeatures[i].GetUnDeploySql(this.InvariantName),
+                            checkSql = feature.DataFeatures[i].GetCheckSql(this.InvariantName);
 
-                    // Check for existing deployment
-                    if (!String.IsNullOrEmpty(checkSql))
-                        using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
-                            if (!(bool)cmd.ExecuteScalar())
-                                return;
+                        // Check for existing deployment
+                        if (!String.IsNullOrEmpty(checkSql))
+                            using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
+                                if (!(bool)cmd.ExecuteScalar())
+                                    return;
 
-                    // Uninstall
-                    if (!String.IsNullOrEmpty(uninstallSql))
-                        using (NpgsqlCommand cmd = new NpgsqlCommand(uninstallSql, conn))
-                            cmd.ExecuteNonQuery();
+                        // Uninstall
+                        if (!String.IsNullOrEmpty(uninstallSql))
+                            using (NpgsqlCommand cmd = new NpgsqlCommand(uninstallSql, conn))
+                                cmd.ExecuteNonQuery();
+                    }
+
+                    feature.AfterUnDeploy();
                 }
                 finally
                 {
@@ -303,63 +321,71 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
         }
 
         #endregion
-
+        
         /// <summary>
-        /// Get the updates 
+        /// Plan the update
         /// </summary>
-        public List<IDataUpdate> GetUpdates(string connectionStringName, XmlDocument configurationDom)
+        public IEnumerable<IDataUpdate> PlanUpdate(IEnumerable<IDataUpdate> updates, DbConnectionString connectionString)
         {
-            string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            var retVal = new List<IDataUpdate>();
+
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.CreateConnectionString(connectionString)))
             {
-                try
+                conn.Open();
+
+                foreach (var update in updates)
                 {
-                    conn.Open();
-                    // Now switch db
-                    try
-                    {
-                        return DatabaseConfiguratorRegistrar.Updates.FindAll(o =>
-                        {
-                            var checkSql = o.GetCheckSql(this.InvariantName);
-                            if (String.IsNullOrEmpty(checkSql)) return false;
+                    var checkSql = update.GetCheckSql(this.InvariantName);
+                    if (!String.IsNullOrEmpty(checkSql))
+                        using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
+                            if ((bool)cmd.ExecuteScalar()) continue;
 
-                            using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
-                                return !(bool)cmd.ExecuteScalar();
-                        });
-
-                    }
-                    catch
+                    var deplSql = update.GetDeploySql(this.InvariantName);
+                    if (!String.IsNullOrEmpty(deplSql))
                     {
-                        throw;
+                        retVal.Add(update);
                     }
                 }
-                catch
-                {
-                    throw;
-                }
+
             }
 
+            return retVal;
         }
 
         /// <summary>
         /// Deploy the update
         /// </summary>
-        public void DeployUpdate(IDataUpdate update, string connectionStringName, XmlDocument configurationDom)
+        public IEnumerable<IDataUpdate> DeployUpdate(IEnumerable<IDataUpdate> updates, DbConnectionString connectionString)
         {
-            string connectionString = configurationDom.SelectSingleNode(String.Format("//connectionStrings/add[@name='{0}']/@connectionString", connectionStringName)).Value;
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            var retVal = new List<IDataUpdate>();
+
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.CreateConnectionString(connectionString)))
             {
                 conn.Open();
-                var checkSql = update.GetCheckSql(this.InvariantName);
-                if (!String.IsNullOrEmpty(checkSql))
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
-                        if (!(bool)cmd.ExecuteScalar()) return;
 
-                var deplSql = update.GetDeploySql(this.InvariantName);
-                if (!String.IsNullOrEmpty(deplSql))
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(deplSql, conn))
-                        cmd.ExecuteNonQuery();
+                int i = 0;
+
+                foreach (var update in updates)
+                {
+                    this.ProgressChanged?.Invoke(this, new ProgressChangedEventArgs((int)((float)++i / updates.Count() * 100), update.Name));
+
+                    var checkSql = update.GetCheckSql(this.InvariantName);
+                    if (!String.IsNullOrEmpty(checkSql))
+                        using (NpgsqlCommand cmd = new NpgsqlCommand(checkSql, conn))
+                            if ((bool)cmd.ExecuteScalar()) continue;
+
+                    var deplSql = update.GetDeploySql(this.InvariantName);
+                    if (!String.IsNullOrEmpty(deplSql))
+                    {
+                        using (NpgsqlCommand cmd = new NpgsqlCommand(deplSql, conn))
+                            cmd.ExecuteNonQuery();
+                        retVal.Add(update);
+                    }
+                }
+                
             }
+
+            return retVal;
         }
 
 

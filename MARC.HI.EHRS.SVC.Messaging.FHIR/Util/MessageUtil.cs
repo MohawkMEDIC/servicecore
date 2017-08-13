@@ -163,6 +163,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                         {
                             case "_stateid":
                             case "_page":
+                            case "_count":
                                 break;
                             default:
                                 baseUri += string.Format("{0}={1}&", queryResult.Query.ActualParameters.GetKey(i), itm);
@@ -190,16 +191,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             // Self URI
             if (queryResult != null && queryResult.TotalResults > queryResult.Results.Count)
             {
-                retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo)), "self"));
+                retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}&_count={2}", baseUri, pageNo, queryResult?.Query.Quantity ?? 100)), "self"));
                 if (pageNo > 0)
                 {
-                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page=0", baseUri)), "first"));
-                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo - 1)), "previous"));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page=0&_count={1}", baseUri, queryResult?.Query.Quantity ?? 100)), "first"));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}&_count={2}", baseUri, pageNo - 1, queryResult?.Query.Quantity ?? 100)), "previous"));
                 }
                 if (pageNo <= nPages)
                 {
-                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}", baseUri, pageNo + 1)), "next"));
-                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}", baseUri, nPages + 1)), "last"));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}&_count={2}", baseUri, pageNo + 1, queryResult?.Query.Quantity ?? 100)), "next"));
+                    retVal.Link.Add(new BundleLink(new Uri(String.Format("{0}_page={1}&_count={2}", baseUri, nPages + 1, queryResult?.Query.Quantity ?? 100)), "last"));
                 }
             }
             else

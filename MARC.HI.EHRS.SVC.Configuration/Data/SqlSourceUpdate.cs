@@ -49,7 +49,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
                 retVal.Description = xd.SelectSingleNode("/update/summary/text()")?.Value ?? "other update";
 
                 retVal.m_checkRange = xd.SelectSingleNode("/update/@applyRange")?.Value;
-                retVal.m_invariant = xd.SelectSingleNode("/update/@invariant")?.Value;
+                retVal.m_invariant = xd.SelectSingleNode("/update/@invariantName")?.Value;
 
             }
             else
@@ -84,7 +84,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
             {
                 case "npgsql":
                     var updateRange = this.m_checkRange.Split('-');
-                    return $"select string_to_array(get_sch_vrsn(), '.')::int[] between string_to_array('{updateRange[0]}','.')::int[] and string_to_array('{updateRange[1]}', '.')::int[]";
+                    return $"select not(string_to_array(get_sch_vrsn(), '.')::int[] between string_to_array('{updateRange[0]}','.')::int[] and string_to_array('{updateRange[1]}', '.')::int[])";
                 default:
                     throw new InvalidOperationException($"This update provider does not support {invariantName}");
             }
@@ -95,7 +95,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         /// </summary>
         public string GetDeploySql(string invariantName)
         {
-            if (this.m_invariant == invariantName)
+            if (this.m_invariant.ToLower() == invariantName.ToLower())
                 return this.m_deploySql;
             else
                 return null;

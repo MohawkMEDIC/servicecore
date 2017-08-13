@@ -123,13 +123,14 @@
             this.chkEnable.AutoSize = true;
             this.chkEnable.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkEnable.Location = new System.Drawing.Point(196, 50);
-            this.chkEnable.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chkEnable.Margin = new System.Windows.Forms.Padding(2);
             this.chkEnable.Name = "chkEnable";
             this.chkEnable.Size = new System.Drawing.Size(546, 17);
             this.chkEnable.TabIndex = 4;
             this.chkEnable.Text = "Enable Feature";
             this.chkEnable.UseVisualStyleBackColor = true;
             this.chkEnable.Visible = false;
+            this.chkEnable.CheckedChanged += new System.EventHandler(this.chkEnable_CheckedChanged);
             // 
             // frmMain
             // 

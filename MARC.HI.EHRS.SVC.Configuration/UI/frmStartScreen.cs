@@ -51,31 +51,29 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                 XmlDocument configFile = new XmlDocument();
                 configFile.LoadXml(Resources.Empty);
 
-                var connectionString = dbSelector.ConnectionString;
-                connectionString.Name = configFile.CreateConnectionString(connectionString);
-
-                // Do an easy config ... first with the connection strings
-                foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
-                    if (pnl is IDataboundFeature)
-                    {
-                        (pnl as IDataboundFeature).ConnectionString = connectionString;
-                    }
-
+                
                 // Easy or complex?
                 if (rdoEasy.Checked)
                 {
+                    var connectionString = dbSelector.ConnectionString;
+                    connectionString.Name = configFile.CreateConnectionString(connectionString);
+
                     // Save the configuration
                     var progress = new frmProgress();
                     int i = 0;
+
+                    EventHandler<ProgressChangedEventArgs> progHandler = (o, ev) =>
+                    {
+                        progress.ActionStatus = ev.ProgressPercentage;
+                        progress.ActionStatusText = ev.UserState.ToString();
+                        Application.DoEvents();
+                    };
+
                     try
                     {
                         progress.Show();
 
-                        EventHandler<ProgressChangedEventArgs> progHandler = (o, ev) =>
-                        {
-                            progress.ActionStatus = ev.ProgressPercentage;
-                            progress.ActionStatusText = ev.UserState.ToString();
-                        };
+                        connectionString.Provider.ProgressChanged += progHandler;
 
                         foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
                         {
@@ -85,11 +83,26 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                             progress.OverallStatus = (int)((++i / (float)ConfigurationApplicationContext.s_configurationPanels.Count) * 100);
                             progress.OverallStatusText = String.Format("Applying Configuration for {0}...", pnl.ToString());
                             //pnl.EnableConfiguration = true;
-                            pnl.EasyConfigure(configFile);
+
+                            if (pnl is IDataboundFeature)
+                            {
+                                (pnl as IDataboundFeature).ConnectionString = connectionString;
+                                pnl.EasyConfigure(configFile);
+                                if (pnl.EnableConfiguration)
+                                {
+                                    connectionString.Provider.Deploy(pnl as IDataboundFeature, connectionString.Name, configFile);
+                                    (pnl as IDataboundFeature).AfterDeploy();
+                                }
+                            }
+                            else
+                                pnl.EasyConfigure(configFile);
+
 
                             if (pnl is IReportProgressChanged)
                                 (pnl as IReportProgressChanged).ProgressChanged -= progHandler;
                         }
+
+
                     }
                     catch (Exception ex)
                     {
@@ -100,12 +113,6 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                         MessageBox.Show(ex.Message, "Error Configuring Service");
 #endif
 
-                        EventHandler<ProgressChangedEventArgs> progHandler = (o, ev) =>
-                        {
-                            progress.ActionStatus = ev.ProgressPercentage;
-                            progress.ActionStatusText = ev.UserState.ToString();
-                        };
-
                         foreach (IConfigurableFeature pnl in ConfigurationApplicationContext.s_configurationPanels)
                         {
                             if (pnl is IReportProgressChanged)
@@ -115,6 +122,16 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                             progress.OverallStatusText = String.Format("Removing Configuration for {0}...", pnl.ToString());
                             pnl.UnConfigure(configFile);
 
+                            if (pnl is IDataboundFeature && MessageBox.Show($"Attempt to remove database for {pnl.Name}?", "Confirm Un-Deploy", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            {
+                                (pnl as IDataboundFeature).ConnectionString = connectionString;
+                                if (pnl.EnableConfiguration)
+                                {
+                                    connectionString.Provider.UnDeploy(pnl as IDataboundFeature, connectionString.Name, configFile);
+                                    (pnl as IDataboundFeature).AfterUnDeploy();
+                                }
+                            }
+
                             if (pnl is IReportProgressChanged)
                                 (pnl as IReportProgressChanged).ProgressChanged -= progHandler;
                         }
@@ -123,6 +140,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                     }
                     finally
                     {
+                        connectionString.Provider.ProgressChanged -= progHandler;
                         progress.Close();
                     }
                     configFile.Save(ConfigurationApplicationContext.s_configFile);
@@ -133,6 +151,9 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                     configFile.Save(ConfigurationApplicationContext.s_configFile);
                     this.DialogResult = DialogResult.OK;
                 }
+
+
+                new frmUpdate().ShowDialog();
 
                 this.Close();
             }
@@ -149,6 +170,12 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
         private void dbSelector_Validated(object sender, EventArgs e)
         {
             btnContinue.Enabled = true;
+        }
+
+        private void rdoAdvanced_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox1.Enabled = !rdoAdvanced.Checked;
+            btnContinue.Enabled = rdoAdvanced.Checked;
         }
     }
 }

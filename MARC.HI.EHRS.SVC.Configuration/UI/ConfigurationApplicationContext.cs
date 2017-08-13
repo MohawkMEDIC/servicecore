@@ -75,10 +75,6 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                         {
                             if (typeof(IDatabaseProvider).IsAssignableFrom(typ))
                                 DatabaseConfiguratorRegistrar.Configurators.Add(ci.Invoke(null) as IDatabaseProvider);
-                            else if(typeof(IDataFeature).IsAssignableFrom(typ))
-                                DatabaseConfiguratorRegistrar.Features.Add(ci.Invoke(null) as IDataFeature);
-                            else if (typeof(IDataUpdate).IsAssignableFrom(typ))
-                                DatabaseConfiguratorRegistrar.Updates.Add(ci.Invoke(null) as IDataUpdate);
 
                         }
                     }
@@ -108,6 +104,8 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                                 var config = ci.Invoke(null);
                                 Console.WriteLine("Adding panel {0}...", config.ToString());
                                 ConfigurationApplicationContext.s_configurationPanels.Add(config as IConfigurableFeature);
+                                if (config is IDataboundFeature)
+                                    DatabaseConfiguratorRegistrar.Features.Add(config as IDataboundFeature);
                             }
                             catch (Exception e)
                             {

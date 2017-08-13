@@ -23,5 +23,25 @@ namespace MARC.HI.EHRS.SVC.Configuration
         /// </summary>
         List<IDataFeature> DataFeatures { get; }
 
+        /// <summary>
+        /// Get all updates
+        /// </summary>
+        List<IDataUpdate> Updates { get; }
+
+        /// <summary>
+        /// Call after a deploy is completed
+        /// </summary>
+        void AfterDeploy();
+
+
+        /// <summary>
+        /// Call after a update is completed
+        /// </summary>
+        void AfterUpdate();
+
+        /// <summary>
+        /// Called after undeploy is complete
+        /// </summary>
+        void AfterUnDeploy();
     }
 }
