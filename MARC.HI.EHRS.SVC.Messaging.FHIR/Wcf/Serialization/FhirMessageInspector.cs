@@ -110,7 +110,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                 }
 
 
-                var httpResponse = (HttpResponseMessageProperty)reply.Properties[HttpResponseMessageProperty.Name];
                 // TODO: Add a configuration option to disable this
                 FhirCorsConfiguration config = null;
                 String resourcePath = "*";
