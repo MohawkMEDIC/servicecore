@@ -16,6 +16,7 @@
  * User: fyfej
  * Date: 2016-1-24
  */
+using MARC.HI.EHRS.SVC.Core.Wcf;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Behavior
 
             // Add the inspector for the messaging
             endpointDispatcher.DispatchRuntime.MessageInspectors.Add(new FhirMessageInspector());
+            endpointDispatcher.DispatchRuntime.MessageInspectors.Add(new LogMessageInspector());
 
             // Apply to each operation the FHIR formatter
             foreach (var op in endpoint.Contract.Operations)
