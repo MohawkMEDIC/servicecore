@@ -12,14 +12,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
     /// <summary>
     /// Represents a publisher of a conformance resource
     /// </summary>
-    [XmlType("ConformancePublisher", Namespace = "http://hl7.org/fhir")]
-    public class ConformancePublisher : BackboneElement
+    [XmlType("ContactDetail", Namespace = "http://hl7.org/fhir")]
+    public class ContactDetail : BackboneElement
     {
 
         /// <summary>
         /// Creates a new conformance publisher
         /// </summary>
-        public ConformancePublisher()
+        public ContactDetail()
         {
             this.Telecom = new List<FhirTelecom>();
         }

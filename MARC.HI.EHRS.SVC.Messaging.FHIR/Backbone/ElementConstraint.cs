@@ -31,12 +31,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [Description("Target condition reference")]
         [FhirElement(MinOccurs = 1)]
         public FhirId Key { get; set; }
+
         /// <summary>
         /// Why this constraint is necessary or appropriate
         /// </summary>
         [XmlElement("requirements")]
         [Description("Why this constraint is necessary")]
         public FhirString Requirements { get; set; }
+
         /// <summary>
         /// Gets or sets the severity of constraint
         /// </summary>

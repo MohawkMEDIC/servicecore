@@ -43,18 +43,21 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("discriminator")]
         [Description("Element values that used to distinguis the slices")]
         public List<FhirString> Discriminator { get; set; }
+
         /// <summary>
         /// Gets or sets the text description of how this slicing works
         /// </summary>
         [XmlElement("description")]
         [Description("Text description of how slicing works")]
         public FhirString Description { get; set; }
+
         /// <summary>
         /// Gets or sets if elements must be in the same order as slices
         /// </summary>
         [XmlElement("ordered")]
         [Description("If elements must be in same order as slices")]
         public FhirBoolean Ordered { get; set; }
+
         /// <summary>
         /// Gets or sets the rules
         /// </summary>

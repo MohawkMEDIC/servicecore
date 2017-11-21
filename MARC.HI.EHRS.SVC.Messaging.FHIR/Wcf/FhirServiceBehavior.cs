@@ -21,12 +21,14 @@ using System.Diagnostics;
 using System.Net;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using MARC.HI.EHRS.SVC.Core.Exceptions;
+using System.ServiceModel;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 {
     /// <summary>
     /// FHIR service behavior
     /// </summary>
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     public class FhirServiceBehavior : IFhirServiceContract
     {
 
@@ -110,7 +112,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, result, false) as DomainResourceBase;
+                throw;
             }
         }
 
@@ -130,7 +132,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, result, false) as DomainResourceBase;
+                throw;
             }
         }
 
@@ -182,7 +184,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, false) as DomainResourceBase;
+                throw;
             }
             finally
             {
@@ -232,7 +234,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, false) as DomainResourceBase;
+                throw;
             }
             finally
             {
@@ -290,7 +292,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, false) as DomainResourceBase;
+                throw;
             }
             finally
             {
@@ -339,7 +341,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, result, false) as OperationOutcome;
+                throw;
             }
         }
 
@@ -389,7 +391,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             {
                 audit = AuditUtil.CreateAuditData(null);
                 audit.Outcome = OutcomeIndicator.EpicFail;
-                return this.ErrorHelper(e, result, true) as Bundle;
+                throw;
             }
             finally
             {
@@ -406,7 +408,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         {
             this.ThrowIfNotReady();
 
-            var retVal = new Conformance(); // ConformanceUtil.GetConformanceStatement();
+            var retVal = ConformanceUtil.GetConformanceStatement();
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/{1}/_history/{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
             WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");
@@ -439,7 +441,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
             }
             catch (Exception e)
             {
-                return this.ErrorHelper(e, readResult, true) as Bundle;
+                throw;
             }
         }
 
@@ -450,14 +452,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         {
             this.ThrowIfNotReady();
 
-            var result = new FhirOperationResult()
-            {
-                Outcome = ResultCode.Rejected,
-                Details = new List<IResultDetail>() {
-                    new ResultDetail(ResultDetailType.Error, "For security reasons resource history is not supported", null, null)
-                }
-            };
-            return this.ErrorHelper(new NotImplementedException(), result, true) as Bundle;
+            throw new NotSupportedException("For security reasons resource history is not supported");
 
         }
 
@@ -468,62 +463,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         {
             this.ThrowIfNotReady();
 
-            var result = new FhirOperationResult()
-            {
-                Outcome = ResultCode.Rejected,
-                Details = new List<IResultDetail>() {
-                    new ResultDetail(ResultDetailType.Error, "For security reasons system history is not supported", null, null)
-                }
-            };
-            return this.ErrorHelper(new NotImplementedException(), result, true) as Bundle;
-        }
-
-        /// <summary>
-        /// Throw an appropriate exception based on the caught exception
-        /// </summary>
-        private object ErrorHelper(Exception e, FhirOperationResult result, bool returnBundle)
-        {
-
-            if (result == null && returnBundle)
-                result = new FhirQueryResult() { Details = new List<IResultDetail>(), Query = new FhirQuery() { Start = 0, Quantity = 0 } };
-            else if (result == null)
-                result = new FhirOperationResult() { Details = new List<IResultDetail>() { new ResultDetail(ResultDetailType.Error, "No information available", e) } };
-
-
-            this.m_tracer.TraceEvent(TraceEventType.Error, 0, e.ToString());
-            result.Details.Add(new ResultDetail(ResultDetailType.Error, e.Message, e));
-
-            HttpStatusCode retCode = HttpStatusCode.OK;
-
-            if (e is NotSupportedException)
-                retCode = System.Net.HttpStatusCode.MethodNotAllowed;
-            else if (e is NotImplementedException)
-                retCode = System.Net.HttpStatusCode.NotImplemented;
-            else if (e is InvalidDataException)
-                retCode = HttpStatusCode.BadRequest;
-            else if (e is FileLoadException)
-                retCode = System.Net.HttpStatusCode.Gone;
-            else if (e is FileNotFoundException || e is ArgumentException)
-                retCode = System.Net.HttpStatusCode.NotFound;
-            else if (e is ConstraintException)
-                retCode = (HttpStatusCode)422;
-            else
-                retCode = System.Net.HttpStatusCode.InternalServerError;
-
-            WebOperationContext.Current.OutgoingResponse.StatusCode = retCode;
-            WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Xml;
-
-            if (returnBundle)
-            {
-                throw new WebFaultException<Bundle>(MessageUtil.CreateBundle(result), retCode);
-            }
-            else
-            {
-                WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Disposition", "filename=\"error.xml\"");
-                throw e;
-            }
-            //return MessageUtil.CreateOutcomeResource(result);
-
+            throw new NotSupportedException("For security reasons system history is not supported");
         }
 
 

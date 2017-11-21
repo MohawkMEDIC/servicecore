@@ -39,6 +39,7 @@ using Newtonsoft.Json.Converters;
 using Hl7.Fhir.Serialization;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using System.Collections.Specialized;
+using Hl7.Fhir.Model;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
 {
@@ -227,7 +228,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                         using (StreamReader sr = new StreamReader(ms))
                         {
                             String fhirContent = sr.ReadToEnd();
-                            fhirObject = FhirParser.ParseFromXml(fhirContent);
+                            var parser = new FhirXmlParser();
+                            parser.Settings.AllowUnrecognizedEnums = true;
+                            fhirObject = parser.Parse<Resource>(fhirContent);
                         }
 
                         // Now we serialize to JSON

@@ -41,7 +41,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         {
             this.Resource = new List<ResourceDefinition>();
             this.Interaction = new List<InteractionDefinition>();
-            this.TransactionMode = new FhirCode<TransactionMode>();
             this.SearchParam = new List<SearchParamDefinition>();
             this.Compartment = new List<FhirUri>();
         }
@@ -84,13 +83,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         public List<InteractionDefinition> Interaction { get; set; }
 
         /// <summary>
-        /// Gets or sets transaction mode
-        /// </summary>
-        [XmlElement("transactionMode")]
-        [Description("Modes of operation for transaction control")]
-        public FhirCode<TransactionMode> TransactionMode { get; set; }
-
-        /// <summary>
         /// Search parameter definition for all resources
         /// </summary>
         [XmlElement("searchParam")]
@@ -121,8 +113,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
             headers.Add(new FhirCode<string>("Resource"));
             foreach (var res in this.Resource)
                 foreach (var op in res.Interaction)
-                    if (!headers.Exists(o=>o.Value == op.Type.Value))
-                        headers.Add(op.Type);
+                    if (!headers.Exists(o=>o.Value == op.Type.ToString()))
+                        headers.Add(op.Type.ToString());
             w.WriteStartElement("tr");
             foreach (var hdr in headers)
                 base.WriteTableHeader(w, hdr);
@@ -135,7 +127,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
                 base.WriteTableCell(w, res);
                 bool[] supported = new bool[headers.Count - 1];
                 foreach (var op in res.Interaction)
-                    supported[headers.FindIndex(o => o.Value == op.Type.Value) - 1] = true;
+                    supported[headers.FindIndex(o => o.Value == op.Type.ToString()) - 1] = true;
                 for (int i = 0; i < supported.Length; i++)
                     base.WriteTableCell(w, new FhirString(supported[i] ? "X" : " "));
                 w.WriteEndElement(); // tr
