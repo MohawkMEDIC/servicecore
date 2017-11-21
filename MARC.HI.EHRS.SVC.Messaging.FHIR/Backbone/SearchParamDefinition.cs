@@ -91,7 +91,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// <summary>
         /// Gets or sets the source of the search parameter definition
         /// </summary>
-        [XmlIgnore]
+        [XmlElement("definition")]
         [Description("The source of the search parameter definition")]
         public FhirUri Definition { get; set; }
 

@@ -227,7 +227,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             w.WriteStartElement("div");
             w.WriteAttributeString("class", "h1");
-            w.WriteString(String.Format("Conformance Statement {0}", this.Id));
+            w.WriteString(String.Format("{0} - Conformance", this.Title));
             w.WriteEndElement(); // div
 
             w.WriteStartElement("table");

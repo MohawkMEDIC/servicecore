@@ -188,21 +188,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
                 w.WriteStartElement("br");
                 w.WriteEndElement();
                 w.WriteEndElement(); // blockquote
-                w.WriteStartElement("blockquote");
-                w.WriteElementString("strong", "Search Parameters:");
+            }
+
+            w.WriteStartElement("blockquote");
+            w.WriteElementString("strong", "Search Parameters:");
+            w.WriteStartElement("br");
+            w.WriteEndElement();
+            foreach (var itm in this.SearchParams)
+            {
+                w.WriteStartElement("a");
+                w.WriteAttributeString("href", itm?.Definition?.Value?.ToString());
+                itm.Name?.WriteText(w);
+                w.WriteEndElement(); // a
                 w.WriteStartElement("br");
                 w.WriteEndElement();
-                foreach (var itm in this.SearchParams)
-                {
-                    w.WriteStartElement("a");
-                    w.WriteAttributeString("href", itm.Definition.Value.ToString());
-                    itm.Name.WriteText(w);
-                    w.WriteEndElement(); // a
-                    w.WriteStartElement("br");
-                    w.WriteEndElement();
-                }
-                w.WriteEndElement(); // blockquote
             }
+            w.WriteEndElement(); // blockquote
         }
     }
 }

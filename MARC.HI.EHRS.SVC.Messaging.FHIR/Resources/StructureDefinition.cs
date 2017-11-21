@@ -181,13 +181,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirBoolean Abstract { get; set; }
 
         /// <summary>
-        /// Gets or sets the datatype or resource type
-        /// </summary>
-        [XmlElement("type")]
-        [Description("Anyh datatype or resource, including abstract ones")]
-        public FhirCode<String> ConstrainedType { get; set; }
-
-        /// <summary>
         /// Gets or sets the context where an extension can be used
         /// </summary>
         [XmlElement("contextType")]
