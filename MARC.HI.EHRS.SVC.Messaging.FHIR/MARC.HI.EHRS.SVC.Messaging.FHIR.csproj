@@ -64,7 +64,7 @@
     <Compile Include="Backbone\AdverseEventSuspectEntity.cs" />
     <Compile Include="Backbone\AllergyIntoleranceReaction.cs" />
     <Compile Include="Backbone\BundleResrouce.cs" />
-    <Compile Include="Backbone\ConformancePublisher.cs" />
+    <Compile Include="Backbone\ContactDetail.cs" />
     <Compile Include="Backbone\ElementBase.cs" />
     <Compile Include="Backbone\ElementBinding.cs" />
     <Compile Include="Backbone\ElementConstraint.cs" />
@@ -184,6 +184,7 @@
     <Compile Include="Backbone\CodeSystemDefinition.cs" />
     <Compile Include="ResultDetailClasses.cs" />
     <Compile Include="Util\AuditUtil.cs" />
+    <Compile Include="Util\ConformanceUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
     <Compile Include="Wcf\Behaviors\FhirErrorEndpointBehavior.cs" />
     <Compile Include="Wcf\Behaviors\FhirRestEndpointBehavior.cs" />

@@ -408,7 +408,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         {
             this.ThrowIfNotReady();
 
-            var retVal = new Conformance(); // ConformanceUtil.GetConformanceStatement();
+            var retVal = ConformanceUtil.GetConformanceStatement();
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Content-Location", String.Format("{0}Conformance/{1}/_history/{2}", WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri, retVal.Id, retVal.VersionId));
             WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
             WebOperationContext.Current.OutgoingResponse.Headers.Remove("Content-Disposition");

@@ -142,6 +142,7 @@
     <Compile Include="ServiceUtil.cs" />
     <Compile Include="Terminology\ConceptValidationResult.cs" />
     <Compile Include="Terminology\ValidationOutcome.cs" />
+    <Compile Include="Wcf\AuthenticationSchemeDescriptionAttribute.cs" />
     <Compile Include="Wcf\WcfLoggingEndpointBehavior.cs" />
     <Compile Include="Wcf\LogMessageInspector.cs" />
   </ItemGroup>

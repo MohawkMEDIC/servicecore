@@ -56,7 +56,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public StructureDefinition()
         {
             this.Identifier = new List<FhirIdentifier>();
-            this.Contact = new List<ConformancePublisher>();
+            this.Contact = new List<ContactDetail>();
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("status")]
         [Description("The status of the structure definition")]
-        public FhirCode<ConformanceResourceStatus> Status { get; set; }
+        public FhirCode<PublicationStatus> Status { get; set; }
         /// <summary>
         /// Gets or sets whether this structure definition is experimental
         /// </summary>
@@ -113,7 +113,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("contact")]
         [Description("Contact details of the publisher")]
-        public List<ConformancePublisher> Contact { get; set; }
+        public List<ContactDetail> Contact { get; set; }
         /// <summary>
         /// Gets or sets the date for this version of the structure definition
         /// </summary>

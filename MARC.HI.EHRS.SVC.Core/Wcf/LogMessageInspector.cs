@@ -29,13 +29,23 @@ namespace MARC.HI.EHRS.SVC.Core.Wcf
         public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
             Guid httpCorrelator = Guid.NewGuid();
-            
-            this.m_httpSource.TraceEvent(TraceEventType.Verbose, 0, "HTTP RQO {0} : {1} {2} ({3}) - {4}", 
+
+            // Windows we get CPU usage
+            float usage = 0.0f;
+            if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                using (PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true))
+                    usage = cpuCounter.NextValue();
+                
+            }
+            this.m_httpSource.TraceEvent(TraceEventType.Verbose, 0, "HTTP RQO {0} : {1} {2} ({3}) - {4} (CPU {5}%)", 
                 (OperationContext.Current.IncomingMessageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty)?.Address.ToString(),
                 WebOperationContext.Current.IncomingRequest.Method,
-                WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri,
+                WebOperationContext.Current.IncomingRequest.UriTemplateMatch?.RequestUri,
                 WebOperationContext.Current.IncomingRequest.UserAgent,
-                httpCorrelator);
+                httpCorrelator, 
+                usage);
+
             return new KeyValuePair<Guid, DateTime>(httpCorrelator, DateTime.Now);
         }
 
@@ -49,10 +59,18 @@ namespace MARC.HI.EHRS.SVC.Core.Wcf
                 var httpCorrelation = (KeyValuePair<Guid, DateTime>)correlationState;
                 var processingTime = DateTime.Now.Subtract(httpCorrelation.Value);
 
-                this.m_httpSource.TraceEvent(TraceEventType.Verbose, 0, "HTTP RSP {0} : {1} ({2} ms)",
+                float usage = 0.0f;
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    using (PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true))
+                        usage = cpuCounter.NextValue();
+                }
+
+                this.m_httpSource.TraceEvent(TraceEventType.Verbose, 0, "HTTP RSP {0} : {1} ({2} ms - CPU {3}%)",
                     httpCorrelation.Key,
                     WebOperationContext.Current.OutgoingResponse.StatusCode,
-                    processingTime.TotalMilliseconds);
+                    processingTime.TotalMilliseconds,
+                    usage);
             }
         }
     }
