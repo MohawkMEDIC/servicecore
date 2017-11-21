@@ -261,6 +261,7 @@ namespace MARC.HI.EHRS.SVC.Core
             this.m_configuration.ServiceProviders.Remove(serviceType);
             if (this.m_cachedServices.ContainsKey(serviceType))
                 this.m_cachedServices.Remove(serviceType);
+            this.m_serviceInstances.RemoveAll(o => serviceType.IsAssignableFrom(o.GetType()));
 
         }
 
