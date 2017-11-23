@@ -3,6 +3,7 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,5 +71,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("meta")]
         public ResourceMetadata Meta { get; set; }
+
     }
 }

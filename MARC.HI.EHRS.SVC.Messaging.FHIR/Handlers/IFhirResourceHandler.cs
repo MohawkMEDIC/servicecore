@@ -49,6 +49,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         /// <summary>
         /// Get the definition for this resource
         /// </summary>
-        Backbone.ResourceDefinition GetDefinition();
+        Backbone.ResourceDefinition GetResourceDefinition();
+
+        /// <summary>
+        /// Get the structure definition for this profile
+        /// </summary>
+        StructureDefinition GetStructureDefinition();
     }
 }

@@ -122,7 +122,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
                 },
                 Resource = FhirResourceHandlerUtil.GetRestDefinition().ToList()
             };
-
             return retVal;
 
 

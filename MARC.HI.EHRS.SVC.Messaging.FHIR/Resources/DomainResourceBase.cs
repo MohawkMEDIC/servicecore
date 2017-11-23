@@ -13,7 +13,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// <summary>
     /// Base for all resources
     /// </summary>
-    [XmlType("DomainResourceBase", Namespace = "http://hl7.org/fhir")]
+    [XmlType("DomainResource", Namespace = "http://hl7.org/fhir")]
     public abstract class DomainResourceBase : ResourceBase
     {
         protected XmlSerializerNamespaces m_namespaces = new XmlSerializerNamespaces();

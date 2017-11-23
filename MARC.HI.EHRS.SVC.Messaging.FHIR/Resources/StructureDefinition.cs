@@ -46,6 +46,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     }
 
     /// <summary>
+    /// Type derivation rules
+    /// </summary>
+    [XmlType("TypeDerivationRule", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/type-derivation-rule")]
+    public enum TypeDerivationRule
+    {
+        [XmlEnum("constraint")]
+        Constraint,
+        [XmlEnum("specialization")]
+        Specialization
+    }
+
+    /// <summary>
     /// Represents a profile
     /// </summary>
     [XmlType("StructureDefinition", Namespace = "http://hl7.org/fhir")]
@@ -200,6 +213,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("The derfined type constrainted by this structure")]
         [XmlElement("type")]
         public FhirCode<String> Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the derivation rule
+        /// </summary>
+        [XmlElement("derivation")]
+        [Description("Identifies whether the structure is a constraint or specialization")]
+        public FhirCode<TypeDerivationRule> DerivationType { get; set; }
 
         /// <summary>
         /// Structure that this structure definition extends

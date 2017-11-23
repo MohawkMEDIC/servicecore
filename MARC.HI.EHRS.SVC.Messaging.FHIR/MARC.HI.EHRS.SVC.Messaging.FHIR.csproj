@@ -126,6 +126,7 @@
     <Compile Include="FhirQuery.cs" />
     <Compile Include="FhirQueryResult.cs" />
     <Compile Include="Handlers\IFhirResourceHandler.cs" />
+    <Compile Include="Handlers\StructureDefinitionHandler.cs" />
     <Compile Include="PersistenceResultDetail.cs" />
     <Compile Include="Handlers\FhirResourceHandlerUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Util\AuditUtil.cs" />
     <Compile Include="Util\ConformanceUtil.cs" />
     <Compile Include="Util\MessageUtil.cs" />
+    <Compile Include="Util\StructureDefinitionUtil.cs" />
     <Compile Include="Wcf\Behaviors\FhirErrorEndpointBehavior.cs" />
     <Compile Include="Wcf\Behaviors\FhirRestEndpointBehavior.cs" />
     <Compile Include="Wcf\Behaviors\FhirSerializerOperationBehavior.cs" />
