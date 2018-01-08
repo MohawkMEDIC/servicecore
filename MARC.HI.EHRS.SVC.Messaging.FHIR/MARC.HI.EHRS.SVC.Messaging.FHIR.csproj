@@ -71,6 +71,9 @@
     <Compile Include="Backbone\ElementDefinition.cs" />
     <Compile Include="Backbone\ElementSlicing.cs" />
     <Compile Include="Backbone\ElementType.cs" />
+    <Compile Include="Backbone\EncounterLocation.cs" />
+    <Compile Include="Backbone\EncounterParticipant.cs" />
+    <Compile Include="Backbone\EncounterStatusHistory.cs" />
     <Compile Include="Backbone\ExpansionContainsDefinition.cs" />
     <Compile Include="Backbone\ExpansionDefinition.cs" />
     <Compile Include="Attributes\FhirValueSetAttribute.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="Backbone\Contact.cs" />
     <Compile Include="Resources\ContactEntity.cs" />
     <Compile Include="Backbone\ImplementationDefinition.cs" />
+    <Compile Include="Resources\Encounter.cs" />
     <Compile Include="Resources\Immunization.cs" />
     <Compile Include="Resources\ImmunizationRecommendation.cs" />
     <Compile Include="Backbone\ImmunizationRecommendation.cs" />
