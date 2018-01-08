@@ -124,6 +124,7 @@
     <Compile Include="DataTypes\ScheduleRepeat.cs" />
     <Compile Include="DataTypes\FhirElement.cs" />
     <Compile Include="DataTypes\FhirTelecom.cs" />
+    <Compile Include="FhirConstants.cs" />
     <Compile Include="FhirMessageHandler.cs" />
     <Compile Include="FhirOperationResult.cs" />
     <Compile Include="FhirQuery.cs" />

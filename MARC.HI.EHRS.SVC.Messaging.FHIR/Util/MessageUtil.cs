@@ -13,6 +13,7 @@ using MARC.HI.EHRS.SVC.Core;
 using MARC.HI.EHRS.SVC.Core.Services;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
 {
@@ -148,7 +149,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             retVal.Id = String.Format("urn:uuid:{0}", Guid.NewGuid());
 
             // Make the Self uri
-            String baseUri = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
+            String baseUri = (ApplicationContext.Current.GetService<IConfigurationManager>().GetSection(FhirConstants.ConfigurationSectionName) as FhirServiceConfiguration)?.ResourceBaseUri?.AbsoluteUri ?? WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.AbsoluteUri;
             if (baseUri.Contains("?"))
                 baseUri = baseUri.Substring(0, baseUri.IndexOf("?") + 1);
             else

@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\TraceSourceAttribute.cs" />
     <Compile Include="Configuration\DbXml\SqlScript.cs" />
     <Compile Include="Configuration\LocalConfigurationManager.cs" />
     <Compile Include="Exceptions\DomainStateException.cs" />
