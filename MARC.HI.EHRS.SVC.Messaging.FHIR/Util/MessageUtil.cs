@@ -215,7 +215,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Util
             if(queryResult != null)
                 retVal.Total = queryResult.TotalResults;
 
-            //retVal.
+            
             // Results
             if (result.Results != null)
             {

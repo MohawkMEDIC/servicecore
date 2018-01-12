@@ -26,7 +26,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']"),
                 actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']"),
                 corsConfig = section.SelectNodes("./*[local-name() = 'cors']/*[local-name() = 'add']");
-            XmlAttribute baseUri = section.SelectSingleNode("./*[local-name() = 'resourceProcessors'/@baseUrl") as XmlAttribute;
+            XmlAttribute baseUri = section.SelectSingleNode("./*[local-name() = 'resourceProcessors']/@baseUrl") as XmlAttribute;
 
             string wcfServiceName = String.Empty,
                 landingPage = String.Empty;

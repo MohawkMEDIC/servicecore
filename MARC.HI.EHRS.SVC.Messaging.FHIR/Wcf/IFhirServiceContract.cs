@@ -27,6 +27,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
     [ServiceKnownType(typeof(ImmunizationRecommendation))]
     [ServiceKnownType(typeof(Conformance))]
     [ServiceKnownType(typeof(RelatedPerson))]
+    [ServiceKnownType(typeof(Encounter))]
+    [ServiceKnownType(typeof(Condition))]
+    [ServiceKnownType(typeof(AdverseEvent))]
+    [ServiceKnownType(typeof(MedicationAdministration))]
+    [ServiceKnownType(typeof(Location))]
+    [ServiceKnownType(typeof(AllergyIntolerance))]
     [ServiceKnownType(typeof(System.ServiceModel.Syndication.Atom10FeedFormatter))]
     [XmlSerializerFormat(SupportFaults = true)]
     public interface IFhirServiceContract

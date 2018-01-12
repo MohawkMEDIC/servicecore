@@ -24,7 +24,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         /// <summary>
         /// Identifies the stop time of the period
         /// </summary>
-        [XmlElement("stop")]
+        [XmlElement("end")]
         public FhirDateTime Stop { get; set; }
 
 

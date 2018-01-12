@@ -27,6 +27,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         {
             this.Resource = r;
         }
+
         /// <summary>
         /// Gets or sets the resource
         /// </summary>
@@ -45,6 +46,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("AdverseEvent", Type = typeof(AdverseEvent))]
         [XmlElement("Condition", Type = typeof(Condition))]
         [XmlElement("MedicationAdministration", Type = typeof(MedicationAdministration))]
+        [XmlElement("Encounter", Type = typeof(Encounter))]
         public DomainResourceBase Resource { get; set; }
 
     }
