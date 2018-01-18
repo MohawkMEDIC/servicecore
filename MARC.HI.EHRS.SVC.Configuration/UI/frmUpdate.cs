@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -87,6 +88,16 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
                         if (feature is IReportProgressChanged)
                             (feature as IReportProgressChanged).ProgressChanged -= progHandler;
                     }
+                }
+                catch(TargetInvocationException ex)
+                {
+#if DEBUG
+                    MessageBox.Show(ex.InnerException?.ToString() ?? ex.ToString(), "Error Configuring Service");
+
+#else
+                    MessageBox.Show(ex.InnerException?.Message ?? ex.Message, "Error Configuring Service");
+#endif
+
                 }
                 catch (Exception ex)
                 {

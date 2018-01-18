@@ -24,6 +24,9 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         // Check SQL
         private string m_checkRange;
 
+        // Check SQL 
+        private string m_checkSql; 
+
         // Invariant name
         private string m_invariant;
 
@@ -49,6 +52,7 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
                 retVal.Description = xd.SelectSingleNode("/update/summary/text()")?.Value ?? "other update";
 
                 retVal.m_checkRange = xd.SelectSingleNode("/update/@applyRange")?.Value;
+                retVal.m_checkSql = xd.SelectSingleNode("/update/guard/text()")?.Value;
                 retVal.m_invariant = xd.SelectSingleNode("/update/@invariantName")?.Value;
 
             }
@@ -80,14 +84,17 @@ namespace MARC.HI.EHRS.SVC.Configuration.Data
         /// </summary>
         public string GetCheckSql(string invariantName)
         {
-            switch(invariantName.ToLower())
-            {
-                case "npgsql":
-                    var updateRange = this.m_checkRange.Split('-');
-                    return $"select not(string_to_array(get_sch_vrsn(), '.')::int[] between string_to_array('{updateRange[0]}','.')::int[] and string_to_array('{updateRange[1]}', '.')::int[])";
-                default:
-                    throw new InvalidOperationException($"This update provider does not support {invariantName}");
-            }
+            if (String.IsNullOrEmpty(this.m_checkSql))
+                switch (invariantName.ToLower())
+                {
+                    case "npgsql":
+                        var updateRange = this.m_checkRange.Split('-');
+                        return $"select not(string_to_array(get_sch_vrsn(), '.')::int[] between string_to_array('{updateRange[0]}','.')::int[] and string_to_array('{updateRange[1]}', '.')::int[])";
+                    default:
+                        throw new InvalidOperationException($"This update provider does not support {invariantName}");
+                }
+            else
+                return this.m_checkSql;
         }
 
         /// <summary>

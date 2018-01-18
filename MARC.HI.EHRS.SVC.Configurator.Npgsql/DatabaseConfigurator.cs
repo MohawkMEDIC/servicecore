@@ -92,7 +92,7 @@ namespace MARC.HI.EHRS.SVC.Configurator.PostgreSql9
                             using (NpgsqlCommand cmd = new NpgsqlCommand(installSql, conn))
                                 cmd.ExecuteNonQuery();
                     }
-                    feature.AfterUnDeploy();
+                    feature.AfterDeploy();
 
                 }
                 finally
