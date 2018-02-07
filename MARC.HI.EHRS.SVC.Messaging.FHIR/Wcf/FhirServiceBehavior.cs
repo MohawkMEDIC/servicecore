@@ -22,6 +22,7 @@ using System.Net;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using MARC.HI.EHRS.SVC.Core.Exceptions;
 using System.ServiceModel;
+using SwaggerWcf.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
 {
@@ -29,6 +30,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
     /// FHIR service behavior
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [SwaggerWcf("/fhir")]
     public class FhirServiceBehavior : IFhirServiceContract
     {
 
@@ -40,6 +42,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Get schema
         /// </summary>
+        [SwaggerWcfHidden]
         public XmlSchema GetSchema(int schemaId)
         {
             this.ThrowIfNotReady();
@@ -58,6 +61,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Get the index
         /// </summary>
+        [SwaggerWcfHidden]
         public Stream Index()
         {
             this.ThrowIfNotReady();
@@ -96,6 +100,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Read a reasource
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DomainResourceBase ReadResource(string resourceType, string id, string mimeType)
         {
             this.ThrowIfNotReady();
@@ -119,6 +133,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Read resource with version
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DomainResourceBase VReadResource(string resourceType, string id, string vid, string mimeType)
         {
             this.ThrowIfNotReady();
@@ -139,6 +163,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Update a resource
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DomainResourceBase UpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target)
         {
             this.ThrowIfNotReady();
@@ -196,6 +230,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Delete a resource
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DomainResourceBase DeleteResource(string resourceType, string id, string mimeType)
         {
             this.ThrowIfNotReady();
@@ -246,6 +290,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Create a resource
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DomainResourceBase CreateResource(string resourceType, string mimeType, DomainResourceBase target)
         {
             this.ThrowIfNotReady();
@@ -304,6 +358,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Validate a resource (really an update with debugging / non comit)
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public OperationOutcome ValidateResource(string resourceType, string id, DomainResourceBase target)
         {
             this.ThrowIfNotReady();
@@ -348,6 +412,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Searches a resource from the client registry datastore 
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Bundle SearchResource(string resourceType)
         {
             this.ThrowIfNotReady();
@@ -404,6 +478,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Get conformance
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Conformance GetOptions()
         {
             this.ThrowIfNotReady();
@@ -419,6 +503,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Posting transaction is not supported
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Bundle PostTransaction(Bundle feed)
         {
             throw new NotImplementedException();
@@ -427,6 +521,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Get a resource's history
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Bundle GetResourceInstanceHistory(string resourceType, string id, string mimeType)
         {
             this.ThrowIfNotReady();
@@ -448,6 +552,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Not implemented result
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Bundle GetResourceHistory(string resourceType, string mimeType)
         {
             this.ThrowIfNotReady();
@@ -459,6 +573,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Not implemented
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Bundle GetHistory(string mimeType)
         {
             this.ThrowIfNotReady();
@@ -470,6 +594,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Perform a read against the underlying IFhirResourceHandler
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         private FhirOperationResult PerformRead(string resourceType, string id, string vid)
         {
             this.ThrowIfNotReady();
@@ -532,6 +666,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Get meta-data
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Conformance GetMetaData()
         {
             return this.GetOptions();
@@ -544,6 +688,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Get the current time
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DateTime Time()
         {
             return DateTime.Now;
@@ -554,6 +708,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Create or update
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public DomainResourceBase CreateUpdateResource(string resourceType, string id, string mimeType, DomainResourceBase target)
         {
             return this.UpdateResource(resourceType, id, mimeType, target);
@@ -562,6 +726,16 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf
         /// <summary>
         /// Alternate search
         /// </summary>
+        [SwaggerWcfContentTypes(ConsumeTypes = new String[] { "application/xml+fhir", "application/json+fhir" }, ProduceTypes = new String[] { "application/xml+fhir", "application/json+fhir" })]
+        [SwaggerWcfTag("HL7 Fast Health Interoperability Resources (FHIR)")]
+        [SwaggerWcfResponse(400, "The client sent a request in a format which is not understood by this server")]
+        [SwaggerWcfResponse(401, "The client attempted to perform an operation requires authentication (this can also happen when the client is required to elevate to another user credential)")]
+        [SwaggerWcfResponse(403, "The client attempted to perform an operation which it is not permitted to perform")]
+        [SwaggerWcfResponse(404, "The client requested access to a resource which is not available")]
+        [SwaggerWcfResponse(422, "The client requested an operation which violated business rules or some other formal constraint")]
+        [SwaggerWcfResponse(500, "The server encountered an issue processing your request")]
+        [SwaggerWcfResponse(503, "This service is not in a state where it can service your request")]
+        [SwaggerWcfSecurity("OAUTH2")]
         public Bundle SearchResourceAlt(string resourceType)
         {
             return this.SearchResource(resourceType);
