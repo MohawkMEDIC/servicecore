@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Auditing", "MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj", "{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Auditing.Atna", "MARC.HI.EHRS.SVC.Auditing.Atna\MARC.HI.EHRS.SVC.Auditing.Atna.csproj", "{DA2F5466-DB52-45A1-B3F9-90F29A220B71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MARC.HI.EHRS.SVC.Core", "MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj", "{FE76688B-17E8-42EF-B8E0-77B06AB3DB10}"
@@ -67,18 +65,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Debug|x86.ActiveCfg = Debug|x86
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Debug|x86.Build.0 = Debug|x86
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Release|x86.ActiveCfg = Release|x86
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50}.Release|x86.Build.0 = Release|x86
 		{DA2F5466-DB52-45A1-B3F9-90F29A220B71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA2F5466-DB52-45A1-B3F9-90F29A220B71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA2F5466-DB52-45A1-B3F9-90F29A220B71}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -250,7 +236,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{27BA9E20-3952-4A9A-92C4-01C86BA2BA50} = {95E8EFB6-C6B9-441D-9F5E-A8598DE9EE72}
 		{DA2F5466-DB52-45A1-B3F9-90F29A220B71} = {95E8EFB6-C6B9-441D-9F5E-A8598DE9EE72}
 		{FE76688B-17E8-42EF-B8E0-77B06AB3DB10} = {06A63863-2967-417F-9694-D689198FB35D}
 		{5351472E-4D1C-499B-AC55-E91627F1FBAE} = {06A63863-2967-417F-9694-D689198FB35D}
@@ -267,5 +252,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {24B08399-E138-49C0-9795-3E668970FD7C}
 	EndGlobalSection
 EndGlobal
