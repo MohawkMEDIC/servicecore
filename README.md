@@ -33,3 +33,7 @@
 </li>
 <li>Stateful query continuation services</li>
 </ul>
+
+<script type="text/javascript" src="https://jira.marc-hi.ca/s/be0fd92c13691c7c8ffab8223cf7b697-T/qz1074/73012/9c49254d0b8026d9562344f6e652bde4/2.0.23/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=97dd5319"></script>
+
+
