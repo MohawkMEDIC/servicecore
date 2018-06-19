@@ -51,6 +51,9 @@
     <Compile Include="Services\IAuditorService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MARC.HI.EHRS.SVC.Auditing.Core.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Solution Items\Newtonsoft.Json.dll</HintPath>
     </Reference>

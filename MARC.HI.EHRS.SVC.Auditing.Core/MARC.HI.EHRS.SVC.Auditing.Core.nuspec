@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Mohawk College of Applied Arts and Technology</authors>
+    <owners>Mohawk College of Applied Arts and Technology</owners>
+    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://santedb.org</projectUrl>
+    <iconUrl>http://santedb.org/img/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>MARC-HI Service Core Auditing</description>
+    <releaseNotes>Initial Version</releaseNotes>
+    <copyright>Copyright 2009-2018, Mohawk College of Applied Arts and Technology</copyright>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="9.0.0.0"/>
+    </dependencies>
+  </metadata>
+</package>
