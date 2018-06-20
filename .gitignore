@@ -187,4 +187,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
-/.vs/ServiceCore/v15/Server/sqlite3
+.vs/

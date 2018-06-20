@@ -55,6 +55,9 @@
     <None Include="..\MARC.HI.EHRS.SVC.licenseheader">
       <Link>MARC.HI.EHRS.SVC.licenseheader</Link>
     </None>
+    <None Include="MARC.HI.EHRS.SVC.Core.Timer.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">

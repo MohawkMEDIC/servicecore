@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>..\bin\Debug\MARC.HI.EHRS.SVC.Messaging.Everest.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -116,10 +117,6 @@
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing.Core\MARC.HI.EHRS.SVC.Auditing.Core.csproj">
       <Project>{4D448BFD-B967-4F75-AD30-37327153149C}</Project>
       <Name>MARC.HI.EHRS.SVC.Auditing.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MARC.HI.EHRS.SVC.Auditing\MARC.HI.EHRS.SVC.Auditing.csproj">
-      <Project>{27ba9e20-3952-4a9a-92c4-01c86ba2ba50}</Project>
-      <Name>MARC.HI.EHRS.SVC.Auditing</Name>
     </ProjectReference>
     <ProjectReference Include="..\MARC.HI.EHRS.SVC.Core\MARC.HI.EHRS.SVC.Core.csproj">
       <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>MARC.HI.EHRS.SVC.Core</id>
+    <version>2.0.0.1</version>
+    <title>MEDIC Service Core Main Core Assembly</title>
+    <authors>justin-fyfe, nityan</authors>
+    <owners>mohawkmedic</owners>
+    <licenseUrl>https://github.com/MohawkMEDIC/servicecore/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/MohawkMEDIC/servicecore</projectUrl>
+    <iconUrl>https://avatars3.githubusercontent.com/u/26844884?s=400&amp;u=0d772db7422a9cca45b670d9aaad2c7b3b6d7f89&amp;v=4</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>MEDIC Service Core Main Core Assembly</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>medic service-core services windows soa</tags>
+    <dependencies>
+      <dependency id="MARC.HI.EHRS.SVC.Configuration" version="2.0.0.0" />
+    </dependencies>
+  </metadata>
+</package>

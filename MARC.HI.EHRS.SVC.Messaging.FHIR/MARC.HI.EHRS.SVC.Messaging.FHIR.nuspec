@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>2.0.0.0</version>
+    <title>$title$</title>
+    <authors>Mohawk College of Applied Arts and Technology</authors>
+    <owners>Mohawk College of Applied Arts and Technology</owners>
+    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://santedb.org</projectUrl>
+    <iconUrl>https://avatars3.githubusercontent.com/u/26844884?s=400&amp;u=0d772db7422a9cca45b670d9aaad2c7b3b6d7f89&amp;v=4</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The MARC-HI Service Core FHIR interface</description>
+    <releaseNotes>Initial Version</releaseNotes>
+    <copyright>Copyright 2015-2018, Mohawk College of Applied Arts and Technology</copyright>
+    <tags>CDR SanteDB</tags>
+    <dependencies>
+      <dependency id="MARC.HI.EHRS.SVC.Core" version="2.0.0.0"/>
+      <dependency id="MARC.HI.EHRS.SVC.Auditing.Core" version="2.0.0.0"/>
+      <dependency id="Newtonsoft.Json" version="11.0.2.0"/>
+      <dependency id="SwaggerWcf.MEDIC" version="0.2.9"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Solution Items\HL7.Fhir.STU3.Core.dll" target="lib\net45"/>
+    <file src="..\Solution Items\MARC.Everest.dll" target="lib\net45"/>
+  </files>
+</package>
