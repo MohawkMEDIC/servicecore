@@ -61,6 +61,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         {
             return s_messageProcessors.Find(o => o.ResourceName.ToLower() == resourceName.ToLower());
         }
+        
+        /// <summary>
+        /// Get REST definition
+        /// </summary>
+        public static IEnumerable<Backbone.ResourceDefinition> GetRestDefinition()
+        {
+            return s_messageProcessors.Select(o => {
+                var resourceDef = o.GetResourceDefinition();
+                var structureDef = o.GetStructureDefinition();
+                resourceDef.Profile = Reference.CreateResourceReference(structureDef, WebOperationContext.Current.IncomingRequest.UriTemplateMatch.BaseUri);
+                return resourceDef;
+            });
+        }
 
         /// <summary>
         /// Get all resource handlers

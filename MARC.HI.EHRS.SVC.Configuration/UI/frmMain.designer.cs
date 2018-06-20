@@ -46,11 +46,10 @@
             this.trvOptions.Dock = System.Windows.Forms.DockStyle.Left;
             this.trvOptions.ImageIndex = 1;
             this.trvOptions.ImageList = this.imlMain;
-            this.trvOptions.Location = new System.Drawing.Point(0, 32);
-            this.trvOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.trvOptions.Location = new System.Drawing.Point(0, 31);
             this.trvOptions.Name = "trvOptions";
             this.trvOptions.SelectedImageIndex = 0;
-            this.trvOptions.Size = new System.Drawing.Size(292, 690);
+            this.trvOptions.Size = new System.Drawing.Size(196, 481);
             this.trvOptions.TabIndex = 0;
             this.trvOptions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvOptions_AfterSelect);
             // 
@@ -71,8 +70,7 @@
             this.toolStripButton2});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.tsMain.Size = new System.Drawing.Size(878, 32);
+            this.tsMain.Size = new System.Drawing.Size(742, 31);
             this.tsMain.TabIndex = 1;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -81,7 +79,7 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(187, 29);
+            this.toolStripButton1.Size = new System.Drawing.Size(133, 28);
             this.toolStripButton1.Text = "Configure Options";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
@@ -90,18 +88,19 @@
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(206, 29);
+            this.toolStripButton2.Size = new System.Drawing.Size(146, 28);
             this.toolStripButton2.Text = "Unconfigure Options";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // pnlConfigure
             // 
+            this.pnlConfigure.AutoScroll = true;
+            this.pnlConfigure.AutoSize = true;
             this.pnlConfigure.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlConfigure.Enabled = false;
-            this.pnlConfigure.Location = new System.Drawing.Point(292, 86);
-            this.pnlConfigure.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlConfigure.Location = new System.Drawing.Point(196, 67);
             this.pnlConfigure.Name = "pnlConfigure";
-            this.pnlConfigure.Size = new System.Drawing.Size(586, 636);
+            this.pnlConfigure.Size = new System.Drawing.Size(546, 445);
             this.pnlConfigure.TabIndex = 3;
             // 
             // lblConfigured
@@ -110,9 +109,10 @@
             this.lblConfigured.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblConfigured.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblConfigured.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblConfigured.Location = new System.Drawing.Point(292, 32);
+            this.lblConfigured.Location = new System.Drawing.Point(196, 31);
+            this.lblConfigured.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblConfigured.Name = "lblConfigured";
-            this.lblConfigured.Size = new System.Drawing.Size(586, 30);
+            this.lblConfigured.Size = new System.Drawing.Size(546, 19);
             this.lblConfigured.TabIndex = 0;
             this.lblConfigured.Text = "This Feature Is Already Configured";
             this.lblConfigured.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -122,26 +122,27 @@
             // 
             this.chkEnable.AutoSize = true;
             this.chkEnable.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkEnable.Location = new System.Drawing.Point(292, 62);
+            this.chkEnable.Location = new System.Drawing.Point(196, 50);
+            this.chkEnable.Margin = new System.Windows.Forms.Padding(2);
             this.chkEnable.Name = "chkEnable";
-            this.chkEnable.Size = new System.Drawing.Size(586, 24);
+            this.chkEnable.Size = new System.Drawing.Size(546, 17);
             this.chkEnable.TabIndex = 4;
             this.chkEnable.Text = "Enable Feature";
             this.chkEnable.UseVisualStyleBackColor = true;
             this.chkEnable.Visible = false;
+            this.chkEnable.CheckedChanged += new System.EventHandler(this.chkEnable_CheckedChanged);
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 722);
+            this.ClientSize = new System.Drawing.Size(742, 512);
             this.Controls.Add(this.pnlConfigure);
             this.Controls.Add(this.chkEnable);
             this.Controls.Add(this.lblConfigured);
             this.Controls.Add(this.trvOptions);
             this.Controls.Add(this.tsMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmMain";
             this.Text = "Service Configuration";
             this.tsMain.ResumeLayout(false);

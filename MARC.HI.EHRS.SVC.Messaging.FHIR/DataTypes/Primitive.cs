@@ -77,6 +77,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes
         {
             return this.XmlValue;
         }
+
+        /// <summary>
+        /// Write the text
+        /// </summary>
+        internal override void WriteText(XmlWriter w)
+        {
+            w.WriteString(this.XmlValue);
+        }
     }
 
     /// <summary>

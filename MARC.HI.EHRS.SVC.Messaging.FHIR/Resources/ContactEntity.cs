@@ -40,12 +40,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Visiting or postal address for the contact")]
         public FhirAddress Address { get; set; }
 
-        /// <summary>
-        /// Identifies the gender of the contact
-        /// </summary>
-        [XmlElement("gender")]
-        [Description("Gender for administrative purposes")]
-        [FhirElement(RemoteBinding = "http://hl7.org/fhir/vs/administrative-gender")]
-        public FhirCodeableConcept Gender { get; set; }
+
     }
 }

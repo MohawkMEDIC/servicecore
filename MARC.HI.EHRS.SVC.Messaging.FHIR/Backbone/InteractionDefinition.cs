@@ -5,9 +5,36 @@ using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
 {
+    /// <summary>
+    /// Search parameter type
+    /// </summary>
+    [XmlType("SearchParamType", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/type-restful-interaction")]
+    public enum TypeRestfulInteraction
+    {
+        [XmlEnum("read")]
+        Read,
+        [XmlEnum("vread")]
+        VersionRead,
+        [XmlEnum("update")]
+        Update,
+        [XmlEnum("patch")]
+        Patch,
+        [XmlEnum("delete")]
+        Delete,
+        [XmlEnum("history-instance")]
+        InstanceHistory,
+        [XmlEnum("history-type")]
+        ResourceHistory,
+        [XmlEnum("create")]
+        Create,
+        [XmlEnum("search-type")]
+        Search
+    }
     /// <summary>
     /// Operation definition
     /// </summary>
@@ -20,7 +47,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         /// </summary>
         [Description("Type of operation")]
         [XmlElement("code")]
-        public FhirCode<String> Type { get; set; }
+        public FhirCode<TypeRestfulInteraction> Type { get; set; }
 
         /// <summary>
         /// Documentation related to the operation

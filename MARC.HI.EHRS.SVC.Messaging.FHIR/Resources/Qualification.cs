@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using System.Xml.Serialization;
+using MARC.HI.EHRS.SVC.Messaging.FHIR.Attributes;
+using System.ComponentModel;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
 {
@@ -14,15 +16,33 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     public class Qualification : FhirElement
     {
         /// <summary>
+        /// Qualification
+        /// </summary>
+        public Qualification()
+        {
+            this.Identifier = new List<FhirIdentifier>();
+        }
+
+        /// <summary>
+        /// Identifier for this qualification
+        /// </summary>
+        [XmlElement("identifier")]
+        [Description("An identifier for this qualification")]
+        public List<FhirIdentifier> Identifier { get; set; }
+
+        /// <summary>
         /// Gets or sets the code
         /// </summary>
         [XmlElement("code")]
+        [FhirElement(MinOccurs = 1)]
         public FhirCodeableConcept Code { get; set; }
+
         /// <summary>
         /// Gets or sets the period of time
         /// </summary>
         [XmlElement("period")]
         public FhirPeriod Period { get; set; }
+
         /// <summary>
         /// Gets or sets the issuer organization
         /// </summary>

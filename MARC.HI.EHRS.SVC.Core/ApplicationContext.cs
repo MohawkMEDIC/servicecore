@@ -1,5 +1,5 @@
-﻿/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
+﻿/*
+ * Copyright 2010-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 7-5-2012
+ * Date: 1-9-2017
  */
 
 using System;
@@ -135,7 +135,14 @@ namespace MARC.HI.EHRS.SVC.Core
                 if (this.Starting != null)
                     this.Starting(this, null);
 
-                m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
+                // If there is no configuration manager then add the local
+                if (this.GetService(typeof(IConfigurationManager)) == null)
+                {
+                    m_configuration = ConfigurationManager.GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
+                    this.m_serviceInstances.Add(new LocalConfigurationManager());
+                }
+                else
+                    m_configuration = this.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.core") as HostConfiguration;
 
                 // If there is no configuration manager then add the local
                 if (this.GetService(typeof(IConfigurationManager)) == null)
@@ -254,6 +261,7 @@ namespace MARC.HI.EHRS.SVC.Core
             this.m_configuration.ServiceProviders.Remove(serviceType);
             if (this.m_cachedServices.ContainsKey(serviceType))
                 this.m_cachedServices.Remove(serviceType);
+            this.m_serviceInstances.RemoveAll(o => serviceType.IsAssignableFrom(o.GetType()));
 
         }
 

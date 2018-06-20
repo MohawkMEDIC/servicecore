@@ -13,9 +13,26 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// <summary>
     /// Conformance resource status
     /// </summary>
+    [XmlType("UnknownContentCode", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/unknown-content-code")]
+    public enum UnknownContentCode
+    {
+        [XmlEnum("no")]
+        None,
+        [XmlEnum("elements")]
+        Elements,
+        [XmlEnum("extensions")]
+        Extensions,
+        [XmlEnum("both")]
+        Both
+    }
+
+    /// <summary>
+    /// Conformance resource status
+    /// </summary>
     [XmlType("ConformanceResourceStatus", Namespace = "http://hl7.org/fhir")]
-    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/conformance-resource-status")]
-    public enum ConformanceResourceStatus
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/publication-status")]
+    public enum PublicationStatus
     {
         [XmlEnum("draft")]
         Draft,
@@ -29,8 +46,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// Conformance statement kind
     /// </summary>
     [XmlType("ConformanceStatementKind", Namespace = "http://hl7.org/fhir")]
-    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/conformance-statement-kind")]
-    public enum ConformanceStatementKind
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/capability-statement-kind")]
+    public enum CapabilityStatementKind
     {
         [XmlEnum("instance")]
         Instance,
@@ -43,8 +60,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// <summary>
     /// Conformance resource
     /// </summary>
-    [XmlType("Conformance", Namespace = "http://hl7.org/fhir")]
-    [XmlRoot("Conformance", Namespace = "http://hl7.org/fhir")]
+    [XmlType("CapabilityStatement", Namespace = "http://hl7.org/fhir")]
+    [XmlRoot("CapabilityStatement", Namespace = "http://hl7.org/fhir")]
     public class Conformance : DomainResourceBase
     {
 
@@ -55,7 +72,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             this.Rest = new List<RestDefinition>();
             this.Format = new List<FhirCode<string>>();
-            this.Contact = new List<ConformancePublisher>();
+            this.Contact = new List<ContactDetail>();
             this.Profile = new List<Reference<Resources.StructureDefinition>>();
         }
 
@@ -81,11 +98,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirString Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the title of the conformance statement
+        /// </summary>
+        [XmlElement("title")]
+        [Description("The human friendly title for the statement")]
+        public FhirString Title { get; set; }
+
+        /// <summary>
         /// The status of the conformance statement
         /// </summary>
         [Description("Status of the conformance statement")]
         [XmlElement("status")]
-        public FhirCode<ConformanceResourceStatus> Status { get; set; }
+        [FhirElement(MinOccurs = 1)]
+        public FhirCode<PublicationStatus> Status { get; set; }
         
         /// <summary>
         /// True if the conformance statement is experimental
@@ -102,13 +127,6 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirString Publisher { get; set; }
 
         /// <summary>
-        /// Gets or sets contact information for the publisher
-        /// </summary>
-        [XmlElement("contact")]
-        [Description("Contact details of the publisher")]
-        public List<ConformancePublisher> Contact { get; set; }
-
-        /// <summary>
         /// Date the spec was published
         /// </summary>
         [Description("Date of publication")]
@@ -117,19 +135,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public FhirDateTime Date { get; set; }
 
         /// <summary>
+        /// Gets or sets contact information for the publisher
+        /// </summary>
+        [XmlElement("contact")]
+        [Description("Contact details of the publisher")]
+        public List<ContactDetail> Contact { get; set; }
+
+        /// <summary>
         /// Description of the conformance statement
         /// </summary>
         [Description("Human description of the conformance statement")]
         [XmlElement("description")]
         public FhirString Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets why the conformance statement is needed
-        /// </summary>
-        [XmlElement("requirements")]
-        [Description("Why is this needed?")]
-        public FhirString Requirements { get; set; }
-
+       
         /// <summary>
         /// Gets or sets copyright information related to the conformance statement
         /// </summary>
@@ -142,7 +160,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("kind")]
         [Description("Kind of conformance statement represented")]
-        public FhirCode<ConformanceStatementKind> Kind { get; set; }
+        public FhirCode<CapabilityStatementKind> Kind { get; set; }
 
         /// <summary>
         /// Describes the software that is covered by this conformance statement
@@ -169,10 +187,10 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// True if application accepts unknown elements
         /// </summary>
-        [Description("True if application accepts unknown elements")]
+        [Description("If application accepts unknown elements")]
         [XmlElement("acceptUnknown")]
         [FhirElement(MinOccurs = 1)]
-        public FhirBoolean AcceptUnknown { get; set; }
+        public FhirCode<UnknownContentCode> AcceptUnknown { get; set; }
 
         /// <summary>
         /// Formats supported
@@ -180,6 +198,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Formats supported")]
         [XmlElement("format")]
         public List<FhirCode<String>> Format { get; set; }
+
+        /// <summary>
+        /// Formats supported
+        /// </summary>
+        [Description("Patch formats supported")]
+        [XmlElement("patchFormat")]
+        public List<FhirCode<String>> PatchFormat { get; set; }
 
         /// <summary>
         /// Profiles supported
@@ -202,7 +227,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         {
             w.WriteStartElement("div");
             w.WriteAttributeString("class", "h1");
-            w.WriteString(String.Format("Conformance Statement {0}", this.Id));
+            w.WriteString(String.Format("{0} - Conformance", this.Title));
             w.WriteEndElement(); // div
 
             w.WriteStartElement("table");

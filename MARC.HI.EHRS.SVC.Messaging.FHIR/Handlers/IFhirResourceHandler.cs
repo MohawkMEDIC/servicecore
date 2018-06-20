@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 
 namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
 {
+
     /// <summary>
     /// Represents a class that can handle a FHIR resource query request
     /// </summary>
@@ -45,5 +46,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Handlers
         /// </summary>
         FhirQueryResult Query(NameValueCollection parameters);
 
+        /// <summary>
+        /// Get the definition for this resource
+        /// </summary>
+        Backbone.ResourceDefinition GetResourceDefinition();
+
+        /// <summary>
+        /// Get the structure definition for this profile
+        /// </summary>
+        StructureDefinition GetStructureDefinition();
     }
 }

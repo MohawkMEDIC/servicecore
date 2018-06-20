@@ -15,13 +15,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// <summary>
         /// Creates a new instance of the WcfEndpoint
         /// </summary>
-        public FhirServiceConfiguration(string wcfEndpoint, string landingPage)
+        public FhirServiceConfiguration(string wcfEndpoint, string landingPage, Uri baseUri)
         {
             this.WcfEndpoint = wcfEndpoint;
             this.LandingPage = landingPage;
             this.ResourceHandlers = new List<Type>();
             this.ActionMap = new Dictionary<string, CodeValue>();
             this.CorsConfiguration = new Dictionary<string, FhirCorsConfiguration>();
+            this.ResourceBaseUri = baseUri;
         }
 
         /// <summary>
@@ -48,6 +49,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
         /// Gets the CORS configuration
         /// </summary>
         public Dictionary<String, FhirCorsConfiguration> CorsConfiguration { get;  private set; }
+
+        /// <summary>
+        /// When set, describes the base uri for all resources on this FHIR service.
+        /// </summary>
+        public Uri ResourceBaseUri { get; private set; }
     }
 
     /// <summary>

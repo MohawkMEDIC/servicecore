@@ -42,6 +42,25 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
     }
 
     /// <summary>
+    /// Conditional delete status
+    /// </summary>
+    [XmlType("ReferencePolicy", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/reference-policy")]
+    public enum ReferencePolicy
+    {
+        [XmlEnum("literal")]
+        Literal,
+        [XmlEnum("logical")]
+        Logical,
+        [XmlEnum("resolves")]
+        Resolves,
+        [XmlEnum("enforced")]
+        Enforced,
+        [XmlEnum("local")]
+        Local
+    }
+
+    /// <summary>
     /// Resource definition
     /// </summary>
     [XmlType("Resource", Namespace = "http://hl7.org/fhir")]
@@ -57,6 +76,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
             this.SearchParams = new List<SearchParamDefinition>();
             this.SearchInclude = new List<FhirString>();
             this.SearchRevInclude = new List<FhirString>();
+            this.ReferencePolicy = new List<FhirCode<Backbone.ReferencePolicy>>();
         }
 
         /// <summary>
@@ -124,6 +144,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         public FhirCode<ConditionalDeleteStatus> ConditionalDelete { get; set; }
 
         /// <summary>
+        /// Gets or sets the reference policy applied
+        /// </summary>
+        [XmlElement("referencePolicy")]
+        [Description("Reference policy applied")]
+        public List<FhirCode<ReferencePolicy>> ReferencePolicy { get; set; }
+
+        /// <summary>
         /// Gets or sets _include value supported by server
         /// </summary>
         [XmlElement("searchInclude")]
@@ -161,21 +188,22 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
                 w.WriteStartElement("br");
                 w.WriteEndElement();
                 w.WriteEndElement(); // blockquote
-                w.WriteStartElement("blockquote");
-                w.WriteElementString("strong", "Search Parameters:");
+            }
+
+            w.WriteStartElement("blockquote");
+            w.WriteElementString("strong", "Search Parameters:");
+            w.WriteStartElement("br");
+            w.WriteEndElement();
+            foreach (var itm in this.SearchParams)
+            {
+                w.WriteStartElement("a");
+                w.WriteAttributeString("href", itm?.Definition?.Value?.ToString());
+                itm.Name?.WriteText(w);
+                w.WriteEndElement(); // a
                 w.WriteStartElement("br");
                 w.WriteEndElement();
-                foreach (var itm in this.SearchParams)
-                {
-                    w.WriteStartElement("a");
-                    w.WriteAttributeString("href", itm.Definition.Value.ToString());
-                    itm.Name.WriteText(w);
-                    w.WriteEndElement(); // a
-                    w.WriteStartElement("br");
-                    w.WriteEndElement();
-                }
-                w.WriteEndElement(); // blockquote
             }
+            w.WriteEndElement(); // blockquote
         }
     }
 }

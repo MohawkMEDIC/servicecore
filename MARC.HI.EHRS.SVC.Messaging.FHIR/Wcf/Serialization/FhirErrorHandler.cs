@@ -3,6 +3,9 @@ using MARC.HI.EHRS.SVC.Messaging.FHIR.DataTypes;
 using MARC.HI.EHRS.SVC.Messaging.FHIR.Resources;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
 using System.IdentityModel.Tokens;
 using System.IO;
 using System.Linq;
@@ -24,6 +27,9 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
     /// </summary>
     public class FhirErrorHandler : IErrorHandler
     {
+
+        private TraceSource m_tracer = new TraceSource("MARC.HI.EHRS.SVC.Messaging.FHIR");
+
         /// <summary>
         /// Handle error
         /// </summary>
@@ -37,6 +43,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
         /// </summary>
         public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
+
+            this.m_tracer.TraceEvent(TraceEventType.Error, error.HResult, "Error on WCF FHIR Pipeline: {0}", error);
             // Formulate appropriate response
             if (error is DomainStateException)
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.ServiceUnavailable;
@@ -61,6 +69,8 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Wcf.Serialization
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
             else if (error is FileNotFoundException)
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
+            else if (error is DbException || error is ConstraintException)
+                WebOperationContext.Current.OutgoingResponse.StatusCode = (System.Net.HttpStatusCode)422;
             else
                 WebOperationContext.Current.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
 

@@ -63,7 +63,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Gets or sets the contact entities
         /// </summary>
-        [XmlElement("contactEntity")]
+        [XmlElement("contact")]
         [Description("Contact information for the organization")]
         public List<ContactEntity> ContactEntity { get; set; }
 
@@ -74,5 +74,12 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Whether the organization's record is still in active use")]
         public FhirBoolean Active { get; set; }
 
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Organization] {0}", this.Name);
+        }
     }
 }

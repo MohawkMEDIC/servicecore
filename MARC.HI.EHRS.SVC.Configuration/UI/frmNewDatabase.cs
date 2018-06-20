@@ -8,17 +8,43 @@ using System.Text;
 using System.Windows.Forms;
 using MARC.HI.EHRS.SVC.Configuration.Data;
 
-namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
+namespace MARC.HI.EHRS.SVC.Configuration.UI
 {
     public partial class frmNewDatabase : Form
     {
-        public frmNewDatabase(IDatabaseProvider configurator, String server)
+        public frmNewDatabase(DbConnectionString connectionString)
         {
             InitializeComponent();
             PopulateConfigurators();
-            this.DatabaseConfigurator = configurator;
-            this.Server = server;
+            this.ConnectionString = connectionString;
         }
+
+        /// <summary>
+        /// Gets or sets the connection string
+        /// </summary>
+        public DbConnectionString ConnectionString
+        {
+            get
+            {
+                return new DbConnectionString()
+                {
+                    Database = this.cbxDatabase.SelectedValue?.ToString(),
+                    UserName = this.txtUserName.Text,
+                    Password = this.txtPassword.Text,
+                    Host = this.txtDatabaseAddress.Text,
+                    Provider = this.cbxProviderType.SelectedItem as IDatabaseProvider
+                };
+            }
+            set
+            {
+                this.txtUserName.Text = value.UserName;
+                this.txtPassword.Text = value.Password;
+                this.txtDatabaseAddress.Text = value.Host;
+                this.cbxDatabase.SelectedValue = value.Database;
+                this.cbxProviderType.SelectedItem = value.Provider;
+            }
+        }
+
 
         /// <summary>
         /// Populate configurators
@@ -29,40 +55,7 @@ namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
                 cbxProviderType.Items.Add(config);
         }
 
-        /// <summary>
-        /// Database connector
-        /// </summary>
-        public IDatabaseProvider DatabaseConfigurator
-        {
-            get { return this.cbxProviderType.SelectedItem as IDatabaseProvider; }
-            set { this.cbxProviderType.SelectedItem = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the server
-        /// </summary>
-        public string Server
-        {
-            get
-            {
-                return this.txtDatabaseAddress.Text;
-            }
-            set
-            {
-                txtDatabaseAddress.Text = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the database
-        /// </summary>
-        public string DatabaseName { get { return cbxDatabase.Text; } }
-
-        /// <summary>
-        /// Gets user name
-        /// </summary>
-        public string UserName { get { return txtOwner.Text; } }
-        
+       
         /// <summary>
         /// Validated connection parameter
         /// </summary>
@@ -83,7 +76,7 @@ namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
             IDatabaseProvider conf = cbxProviderType.SelectedItem as IDatabaseProvider;
             try
             {
-                cbxDatabase.Items.AddRange(conf.GetDatabases(txtDatabaseAddress.Text, txtUserName.Text, txtPassword.Text));
+                cbxDatabase.Items.AddRange(conf.GetDatabases(this.ConnectionString));
             }
             catch (Exception ex)
             {
@@ -127,7 +120,7 @@ namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
             // Create
             try
             {
-                this.DatabaseConfigurator.CreateDatabase(this.Server, this.txtUserName.Text, this.txtPassword.Text, this.DatabaseName, this.UserName);
+                this.ConnectionString.Provider.CreateDatabase(this.ConnectionString, this.cbxDatabase.Text, this.txtOwner.Text);
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
             }

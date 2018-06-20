@@ -1,5 +1,5 @@
-﻿/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
+﻿/*
+ * Copyright 2010-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,8 +14,9 @@
  * the License.
  * 
  * User: fyfej
- * Date: 23-10-2012
+ * Date: 1-9-2017
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

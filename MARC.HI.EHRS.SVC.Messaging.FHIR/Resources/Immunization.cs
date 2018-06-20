@@ -90,14 +90,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("performer")]
         [Description("Indicates the practitioner who performed the vaccination")]
-        public Reference<Practictioner> Performer { get; set; }
+        public Reference<Practitioner> Performer { get; set; }
 
         /// <summary>
         /// Gets or sets the practitioner who requested the vaccination
         /// </summary>
         [XmlElement("requester")]
         [Description("Indicates the practitioner who requested the vaccination")]
-        public Reference<Practictioner> Requester { get; set; }
+        public Reference<Practitioner> Requester { get; set; }
 
         /// <summary>
         /// Gets or sets the encounter during which the vaccination was performed

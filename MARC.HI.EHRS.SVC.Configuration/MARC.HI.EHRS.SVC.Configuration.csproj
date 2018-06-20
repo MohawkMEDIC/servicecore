@@ -25,15 +25,17 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,12 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Data\IDatabaseProvider.cs" />
     <Compile Include="Data\IDataUpdate.cs" />
     <Compile Include="Data\IDataFeature.cs" />
+    <Compile Include="Data\SqlSourceUpdate.cs" />
     <Compile Include="IConfigurableFeature.cs" />
     <Compile Include="IDataboundFeature.cs" />
+    <Compile Include="IScriptableConfigurableFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\X509CertificateUtils.cs" />
     <Compile Include="UI\ConfigurationApplicationContext.cs" />
     <Compile Include="UI\DatabaseSelector.cs">
       <SubType>UserControl</SubType>
@@ -87,11 +93,26 @@
     <Compile Include="UI\frmStartScreen.designer.cs">
       <DependentUpon>frmStartScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\frmUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmUpdate.Designer.cs">
+      <DependentUpon>frmUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\IReportProgressChanged.cs" />
+    <Compile Include="UI\ListItem.cs" />
     <Compile Include="UI\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Wcf\WcfBehaviorInfo.cs" />
+    <Compile Include="Wcf\WcfBindingInfo.cs" />
+    <Compile Include="Wcf\WcfCertificateCredentialInfo.cs" />
+    <Compile Include="Wcf\WcfCertificateValidationInfo.cs" />
+    <Compile Include="Wcf\WcfEndpointInfo.cs" />
+    <Compile Include="Wcf\WcfExtensionMethods.cs" />
+    <Compile Include="Wcf\WcfServiceInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\DatabaseSelector.resx">
@@ -112,10 +133,16 @@
     <EmbeddedResource Include="UI\frmStartScreen.resx">
       <DependentUpon>frmStartScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmUpdate.resx">
+      <DependentUpon>frmUpdate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

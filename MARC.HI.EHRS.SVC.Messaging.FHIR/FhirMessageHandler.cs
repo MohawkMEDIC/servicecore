@@ -26,7 +26,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
 
         #region IMessageHandlerService Members
 
-        private TraceSource m_traceSource = new TraceSource("MARC.HI.EHRS.SVC.Messaging.FHIR");
+        private TraceSource m_traceSource = new TraceSource(FhirConstants.TraceSourceName);
 
         // Configuration
         private FhirServiceConfiguration m_configuration;
@@ -56,7 +56,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR
         /// </summary>
         public FhirMessageHandler()
         {
-            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.fhir") as FhirServiceConfiguration;
+            this.m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection(FhirConstants.ConfigurationSectionName) as FhirServiceConfiguration;
         }
 
         /// <summary>

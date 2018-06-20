@@ -14,21 +14,19 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     /// </summary>
     [XmlType("Practitioner", Namespace = "http://hl7.org/fhir")]
     [XmlRoot("Practitioner", Namespace = "http://hl7.org/fhir")]
-    public class Practictioner : DomainResourceBase
+    public class Practitioner : DomainResourceBase
     {
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Practictioner()
+        public Practitioner()
         {
             this.Identifier = new List<FhirIdentifier>();
             this.Name = new List<FhirHumanName>();
             this.Telecom = new List<FhirTelecom>();
             this.Address = new List<FhirAddress>();
-            this.Role = new List<FhirCodeableConcept>();
             this.Photo = new List<Attachment>();
-            this.Specialty = new List<FhirCodeableConcept>();
             this.Communication = new List<FhirCodeableConcept>();
         }
 
@@ -37,6 +35,13 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("identifier")]
         public List<FhirIdentifier> Identifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the active flag
+        /// </summary>
+        [XmlElement("active")]
+        [Description("Indicates an active / inactive practitioner")]
+        public FhirBoolean Active { get; set; }
 
         /// <summary>
         /// The name of the individual
@@ -80,35 +85,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("photo")]
         [Description("Image of the person")]
         public List<Attachment> Photo { get; set; }
-
-        /// <summary>
-        /// Gets or sets the organization
-        /// </summary>
-        [XmlElement("organization")]
-        [Description("The represented organization")]
-        public Reference<Organization> Organization { get; set; }
-
-        /// <summary>
-        /// Gets or sets the role
-        /// </summary>
-        [XmlElement("role")]
-        [Description("A role the practitioner has")]
-        public List<FhirCodeableConcept> Role { get; set; }
-
-        /// <summary>
-        /// Gets or sets the specialty
-        /// </summary>
-        [XmlElement("specialty")]
-        [Description("Specific speciality of the practitioner")]
-        public List<FhirCodeableConcept> Specialty { get; set; }
-
-        /// <summary>
-        /// Gets or sets the period
-        /// </summary>
-        [XmlElement("period")]
-        [Description("The Period during which the person is authorized to perform the service")]
-        public FhirPeriod Period { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the qualifications of the practicioner
         /// </summary>
@@ -123,6 +100,15 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("A language the practitioner is able to use in patient communication")]
         [FhirElement(RemoteBinding = "http://tools.ietf.org/html/bcp47")]
         public List<FhirCodeableConcept> Communication { get; set; }
+
+
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("[Practitioner] {0}", this.Name.FirstOrDefault());
+        }
 
     }
 }

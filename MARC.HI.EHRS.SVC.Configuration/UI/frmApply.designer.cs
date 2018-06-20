@@ -46,8 +46,9 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(628, 285);
+            this.btnCancel.Location = new System.Drawing.Point(565, 274);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(112, 35);
@@ -58,7 +59,8 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(507, 285);
+            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOk.Location = new System.Drawing.Point(444, 274);
             this.btnOk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(112, 35);
@@ -69,11 +71,14 @@
             // 
             // chkActions
             // 
+            this.chkActions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chkActions.FormattingEnabled = true;
             this.chkActions.Location = new System.Drawing.Point(18, 38);
             this.chkActions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkActions.Name = "chkActions";
-            this.chkActions.Size = new System.Drawing.Size(721, 235);
+            this.chkActions.Size = new System.Drawing.Size(658, 214);
             this.chkActions.TabIndex = 3;
             // 
             // frmApply
@@ -82,13 +87,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(759, 332);
+            this.ClientSize = new System.Drawing.Size(696, 324);
             this.ControlBox = false;
             this.Controls.Add(this.chkActions);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblDescription);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmApply";
             this.ShowIcon = false;

@@ -26,10 +26,11 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             XmlNodeList resourceElements = section.SelectNodes("./*[local-name()= 'resourceProcessors']/*[local-name() = 'add']"),
                 actionMap = section.SelectNodes("./*[local-name() = 'actionMap']/*[local-name() = 'add']"),
                 corsConfig = section.SelectNodes("./*[local-name() = 'cors']/*[local-name() = 'add']");
+            XmlAttribute baseUri = section.SelectSingleNode("./*[local-name() = 'resourceProcessors']/@baseUrl") as XmlAttribute;
 
             string wcfServiceName = String.Empty,
                 landingPage = String.Empty;
-
+            
             if (serviceElement != null)
             {
                 XmlAttribute serviceName = serviceElement.Attributes["wcfServiceName"],
@@ -44,7 +45,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Configuration
             else
                 throw new ConfigurationErrorsException("Missing serviceElement", section);
 
-            var retVal = new FhirServiceConfiguration(wcfServiceName, landingPage);
+            var retVal = new FhirServiceConfiguration(wcfServiceName, landingPage, baseUri == null ? null : new Uri(baseUri.Value));
 
             // Add instructions
             foreach (XmlElement addInstruction in resourceElements)

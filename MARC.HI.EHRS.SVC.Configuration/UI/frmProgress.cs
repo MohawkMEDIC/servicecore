@@ -1,23 +1,4 @@
-﻿/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
- * the License.
- * 
- * User: fyfej
- * Date: 5-12-2012
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,11 +19,23 @@ namespace MARC.HI.EHRS.SVC.Configuration.UI
         /// <summary>
         /// Gets or sets the status text
         /// </summary>
-        public int Status { get { return progressBar1.Value; } set { progressBar1.Value = value; Application.DoEvents(); } }
+        public int ActionStatus { get { return pgAction.Value; } set { pgAction.Value = value; Application.DoEvents(); } }
 
         /// <summary>
         /// Gets or sets the status text
         /// </summary>
-        public string StatusText { get { return label1.Text; } set { label1.Text = value; Application.DoEvents(); } }
+        public string ActionStatusText { get { return label2.Text; } set { label2.Text = $"{value} ({this.ActionStatus}%)"; Application.DoEvents(); } }
+
+
+        /// <summary>
+        /// Gets or sets the status text
+        /// </summary>
+        internal int OverallStatus { get { return pgMain.Value; } set { pgMain.Value = value; Application.DoEvents(); } }
+
+        /// <summary>
+        /// Gets or sets the status text
+        /// </summary>
+        internal string OverallStatusText { get { return label1.Text; } set { label1.Text = $"{value}"; Application.DoEvents(); } }
+
     }
 }

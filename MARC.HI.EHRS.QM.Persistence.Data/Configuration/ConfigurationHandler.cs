@@ -1,5 +1,5 @@
-﻿/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
+﻿/*
+ * Copyright 2010-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 7-5-2012
+ * Date: 1-9-2017
  */
 
 using System;
@@ -26,6 +26,8 @@ using System.Data.Common;
 using System.Data;
 using System.Xml;
 using System.Diagnostics;
+using MARC.HI.EHRS.SVC.Core.Services;
+using MARC.HI.EHRS.SVC.Core;
 
 namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration
 {
@@ -81,7 +83,7 @@ namespace MARC.HI.EHRS.QM.Persistence.Data.Configuration
             // Connection manager configuration
             if (connectionManagerConfig.Attributes["connection"] != null)
             {
-                ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[connectionManagerConfig.Attributes["connection"].Value];
+                ConnectionStringSettings settings = ApplicationContext.Current.GetService<IConfigurationManager>().ConnectionStrings[connectionManagerConfig.Attributes["connection"].Value];
                 if (settings == null)
                     throw new ConfigurationErrorsException(String.Format("Cannot find the connection string '{0}'", connectionManagerConfig.Attributes["connection"].Value), connectionManagerConfig);
 

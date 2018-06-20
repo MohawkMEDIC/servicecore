@@ -41,96 +41,106 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [FhirElement(MinOccurs = 1)]
         [XmlElement("path")]
         public FhirString Path { get; set; }
+
         /// <summary>
         /// Gets or sets how the element ios represented in instances
         /// </summary>
         [XmlElement("representation")]
         [Description("How the element is represented in instances")]
         public List<FhirCode<PropertyRepresentation>> Representation { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the element
         /// </summary>
-        [XmlElement("name")]
-        [Description("The name of this particular element")]
-        public FhirString Name { get; set; }
+        [XmlElement("sliceName")]
+        [Description("The name of this particular sliced element")]
+        public FhirString SliceName { get; set; }
+
         /// <summary>
         /// Gets or sets name for element to display or prompt
         /// </summary>
         [XmlElement("label")]
         [Description("Name for element to display or prompt")]
         public FhirString Label { get; set; }
+
         /// <summary>
         /// Gets or sets the defining codes
         /// </summary>
         [XmlElement("code")]
         [Description("Defining code")]
         public List<FhirCoding> Code { get; set; }
+
         /// <summary>
         /// Gets or sets the element slices
         /// </summary>
         [XmlElement("slicing")]
         [Description("This element is sliced. Slices follow")]
         public ElementSlicing Slicing { get; set; }
+
         /// <summary>
         /// Gets or sets the concise definition for the element
         /// </summary>
         [XmlElement("short")]
         [Description("Concise definition for the element")]
         public FhirString Short { get; set; }
+
         /// <summary>
         /// Gets or sets the full formal definition
         /// </summary>
         [XmlElement("definition")]
         [Description("Full formal definition as narrative text")]
         public FhirString Definition { get; set; }
+
         /// <summary>
         /// Gets or sets comments related to the element
         /// </summary>
-        [XmlElement("comments")]
+        [XmlElement("comment")]
         [Description("Comments about the use of this element")]
         public FhirString Comments { get; set; }
+
         /// <summary>
         /// Whi is this needed?
         /// </summary>
         [XmlElement("requirements")]
         [Description("Why is this needed?")]
         public FhirString Requirements { get; set; }
+
         /// <summary>
         /// Gets or sets other names
         /// </summary>
         [XmlElement("alias")]
         [Description("Other names")]
         public List<FhirString> Alias { get; set; }
+
         /// <summary>
         /// Minimum cardinality
         /// </summary>
         [XmlElement("min")]
         [Description("Minimum cardinality")]
         public FhirInt Min { get; set; }
+
         /// <summary>
         /// Gets or sets the maximum cardinality
         /// </summary>
         [XmlElement("max")]
         [Description("Maximum cardinality")]
         public FhirString Max { get; set; }
+
         /// <summary>
         /// Gets or sets the base type upon which this element is based
         /// </summary>
         [XmlElement("base")]
         [Description("Base definition information for tools")]
         public ElementBase Base { get; set; }
+
         /// <summary>
         /// Data type and profile for element
         /// </summary>
         [XmlElement("type")]
         [Description("Data type and profile for the element")]
         public List<ElementType> Type { get; set; }
-        /// <summary>
-        /// Gets or set a name reference to another element constraint
-        /// </summary>
-        [XmlElement("nameReference")]
-        [Description("Reference to another element")]
-        public FhirString NameReference { get; set; }
+        
+
         /// <summary>
         /// Default values
         /// </summary>
@@ -155,12 +165,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("defaultValueRatio", Type = typeof(FhirRatio))]
         [Description("Default values")]
         public FhirElement DefaultValue { get; set; }
+
         /// <summary>
         /// Gets or sets the implicit meaning when the element is missing
         /// </summary>
         [XmlElement("meaningWhenMissing")]
         [Description("Implicit meaning when this element is missing")]
         public FhirString MeaningWhenMissing { get; set; }
+
         /// <summary>
         /// Gets or sets the fixed value
         /// </summary>
@@ -185,6 +197,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("fixedRatio", Type = typeof(FhirRatio))]
         [Description("Value must be exactly this")]
         public FhirElement Fixed { get; set; }
+
         /// <summary>
         /// Gets or sets the pattern of value which an instance must contain
         /// </summary>
@@ -209,6 +222,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("patternRatio", Type = typeof(FhirRatio))]
         [Description("Value must have at least these property values")]
         public FhirElement Pattern { get; set; }
+
         /// <summary>
         /// Gets or sets an example
         /// </summary>
@@ -233,6 +247,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("exampleRatio", Type = typeof(FhirRatio))]
         [Description("Example value")]
         public FhirElement Example { get; set; }
+
         /// <summary>
         /// Minimum allowed value
         /// </summary>
@@ -248,6 +263,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("minValueRatio", Type = typeof(FhirRatio))]
         [Description("Minimum allowed value")]
         public FhirElement MinValue { get; set; }
+
         /// <summary>
         /// Maximum allowed value
         /// </summary>
@@ -263,42 +279,49 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Backbone
         [XmlElement("maxValueRatio", Type = typeof(FhirRatio))]
         [Description("Maximum allowed value")]
         public FhirElement MaxValue { get; set; }
+
         /// <summary>
         /// Gets or sets the maximum length for strings
         /// </summary>
         [XmlElement("maxLength")]
         [Description("Max length for strings")]
         public FhirInt MaxLength { get; set; }
+
         /// <summary>
         /// Reference to invariant about presence
         /// </summary>
         [XmlElement("condition")]
         [Description("Reference to invariant about presence")]
         public List<FhirId> Condition { get; set; }
+
         /// <summary>
         /// Gets or sets a condition that must evaluate to true
         /// </summary>
         [XmlElement("constraint")]
         [Description("Condition that must evaluate to true")]
         public List<ElementConstraint> Constraint { get; set; }
+
         /// <summary>
         /// If the element must be supported
         /// </summary>
         [XmlElement("mustSupport")]
         [Description("If the element must be supported")]
         public FhirBoolean MustSupport { get; set; }
+
         /// <summary>
         /// If this modifies the meaning of other elements
         /// </summary>
         [XmlElement("isModifier")]
         [Description("If this modifies the meaning of other elements")]
         public FhirBoolean IsModifier { get; set; }
+
         /// <summary>
         /// Gets or sets if the item is a summary element
         /// </summary>
         [XmlElement("isSummary")]
         [Description("Include when _summary = true")]
         public FhirBoolean IsSummary { get; set; }
+
         /// <summary>
         /// Value set details if this is coded
         /// </summary>

@@ -23,7 +23,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         public ValueSet()
         {
-            this.Contact = new List<ConformancePublisher>();
+            this.Contact = new List<ContactDetail>();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [XmlElement("status")]
         [Description("Status of the value set")]
         [FhirElement(MinOccurs = 1)]
-        public FhirCode<ConformanceResourceStatus> Status { get; set; }
+        public FhirCode<PublicationStatus> Status { get; set; }
 
         /// <summary>
         /// Gets or sets an indicator describing whether the value set is for experimental use
@@ -81,7 +81,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// </summary>
         [XmlElement("contact")]
         [Description("Contact details of the publisher")]
-        public List<ConformancePublisher> Contact { get; set; }
+        public List<ContactDetail> Contact { get; set; }
 
         /// <summary>
         /// The date of publication

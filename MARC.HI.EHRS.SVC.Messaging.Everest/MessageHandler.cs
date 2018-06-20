@@ -1,532 +1,530 @@
-/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+/*
+ * Copyright 2010-2018 Mohawk College of Applied Arts and Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
- * Date: 17-10-2012
+ * Date: 1-9-2017
  */
 
+using MARC.Everest.Connectors;
+using MARC.Everest.Connectors.WCF;
+using MARC.Everest.DataTypes;
+using MARC.Everest.Exceptions;
+using MARC.Everest.Interfaces;
+using MARC.HI.EHRS.SVC.Auditing.Data;
+using MARC.HI.EHRS.SVC.Auditing.Services;
+using MARC.HI.EHRS.SVC.Core;
+using MARC.HI.EHRS.SVC.Core.Services;
+using MARC.HI.EHRS.SVC.Messaging.Everest.Configuration;
+using MARC.HI.EHRS.SVC.Messaging.Everest.Exception;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MARC.Everest.DataTypes;
-using System.IO;
-using System.Xml;
 using System.ComponentModel;
-using MARC.HI.EHRS.SVC.Messaging.Everest.Configuration;
-using System.Configuration;
-using System.Reflection;
 using System.Diagnostics;
-using MARC.Everest.Connectors;
-using MARC.Everest.Exceptions;
-using MARC.HI.EHRS.SVC.Core.Services;
-using MARC.HI.EHRS.SVC.Core;
-using MARC.Everest.Interfaces;
-using MARC.HI.EHRS.SVC.Messaging.Everest.Exception;
-using System.Runtime.InteropServices;
-using MARC.Everest.Connectors.WCF;
+using System.IO;
+using System.Reflection;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Web;
-using System.ServiceModel;
-using MARC.HI.EHRS.SVC.Auditing.Services;
-using MARC.HI.EHRS.SVC.Auditing.Data;
-using MARC.HI.EHRS.SVC.Core.Data;
+using System.Xml;
+
 //using MARC.HI.EHRS.SVC.Messaging.Everest.ClientAccess;
 
 namespace MARC.HI.EHRS.SVC.Messaging.Everest
 {
-    /// <summary>
-    /// Handles messages for HL7v3
-    /// </summary>
-    [Description("Everest Based Message Handler Service")]
-    public class MessageHandler : IMessageHandlerService
-    {
+	/// <summary>
+	/// Handles messages for HL7v3
+	/// </summary>
+	[Description("Everest Based Message Handler Service")]
+	public class MessageHandler : IMessageHandlerService
+	{
+		/// <summary>
+		/// Active connectors
+		/// </summary>
+		private List<IListenWaitConnector> m_activeConnectors = new List<IListenWaitConnector>();
 
-        /// <summary>
-        /// Active connectors
-        /// </summary>
-        private List<IListenWaitConnector> m_activeConnectors = new List<IListenWaitConnector>();
+		/// <summary>
+		/// The configuraiton for the everest message handler
+		/// </summary>
+		private EverestConfigurationSectionHandler m_configuration;
 
-        /// <summary>
-        /// The configuraiton for the everest message handler
-        /// </summary>
-        private EverestConfigurationSectionHandler m_configuration;
+		/// <summary>
+		/// Create a new instance of the MessageHandler
+		/// </summary>
+		public MessageHandler()
+		{
+			m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.everest") as EverestConfigurationSectionHandler;
+		}
 
-        /// <summary>
-        /// Fired when the message handler is starting
-        /// </summary>
-        public event EventHandler Starting;
-        /// <summary>
-        /// Fired when the message handler is stopping
-        /// </summary>
-        public event EventHandler Stopping;
-        /// <summary>
-        /// Fired when the messaging handler has started
-        /// </summary>
-        public event EventHandler Started;
-        /// <summary>
-        /// Fired when the nmessaging handler has stopped
-        /// </summary>
-        public event EventHandler Stopped;
+		/// <summary>
+		/// Fired when the messaging handler has started
+		/// </summary>
+		public event EventHandler Started;
 
-        /// <summary>
-        /// Create a new instance of the MessageHandler
-        /// </summary>
-        public MessageHandler()
-        {
-            m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.everest") as EverestConfigurationSectionHandler;
-        }
+		/// <summary>
+		/// Fired when the message handler is starting
+		/// </summary>
+		public event EventHandler Starting;
 
-        #region IMessageHandlerService Members
+		/// <summary>
+		/// Fired when the nmessaging handler has stopped
+		/// </summary>
+		public event EventHandler Stopped;
 
-        public bool Start()
-        {
-            this.Starting?.Invoke(this, EventArgs.Empty);
-               
-            // Start each of the listeners for each of the ITS(es)
-            foreach (var itsConfig in m_configuration.Revisions)
-            {
-                ConstructorInfo ciFormatter = itsConfig.Formatter.GetConstructor(Type.EmptyTypes);
-                if (ciFormatter == null)
-                {
-                    Trace.TraceError("Cannot create listener for {0} as the formatter has no default constructor", itsConfig.Formatter.FullName);
-                    continue;
-                }
+		/// <summary>
+		/// Fired when the message handler is stopping
+		/// </summary>
+		public event EventHandler Stopping;
 
-                // Now we want to create the formatter
-                IStructureFormatter formatter = ciFormatter.Invoke(null) as IStructureFormatter;
-                if (itsConfig.GraphAide != null)
-                {
-                    ciFormatter = itsConfig.GraphAide.GetConstructor(Type.EmptyTypes);
-                    if (ciFormatter == null)
-                    {
-                        Trace.TraceError("Cannot create listener for {0} as the formatter has no default constructor", itsConfig.GraphAide.FullName);
-                        continue;
-                    }
+		#region IMessageHandlerService Members
 
-                    var aide = ciFormatter.Invoke(null) as IStructureFormatter;
-                    if(aide is IValidatingStructureFormatter)
-                        (aide as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
-                    formatter.GraphAides.Add(aide);
-                }
+		public bool Start()
+		{
+			this.Starting?.Invoke(this, EventArgs.Empty);
 
-                // Build the type cache
-                if (formatter is ICodeDomStructureFormatter && itsConfig.CacheTypes.Count > 0)
-                {
-                    Trace.TraceInformation("Creating type cache for {0} ({1} types)", itsConfig.Formatter, itsConfig.CacheTypes.Count);
-                    (formatter as ICodeDomStructureFormatter).BuildCache(itsConfig.CacheTypes.ToArray());
-                    Trace.TraceInformation("{0} CLR types created", (formatter as ICodeDomStructureFormatter).GeneratedAssemblies[0].GetTypes().Length);
-                }
-                if (formatter is IValidatingStructureFormatter)
-                    (formatter as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
-                
+			// Start each of the listeners for each of the ITS(es)
+			foreach (var itsConfig in m_configuration.Revisions)
+			{
+				ConstructorInfo ciFormatter = itsConfig.Formatter.GetConstructor(Type.EmptyTypes);
+				if (ciFormatter == null)
+				{
+					Trace.TraceError("Cannot create listener for {0} as the formatter has no default constructor", itsConfig.Formatter.FullName);
+					continue;
+				}
 
-                // Iterate through listeners and start em up
-                foreach (var listenerConfig in itsConfig.Listeners)
-                {
+				// Now we want to create the formatter
+				IStructureFormatter formatter = ciFormatter.Invoke(null) as IStructureFormatter;
+				if (itsConfig.GraphAide != null)
+				{
+					ciFormatter = itsConfig.GraphAide.GetConstructor(Type.EmptyTypes);
+					if (ciFormatter == null)
+					{
+						Trace.TraceError("Cannot create listener for {0} as the formatter has no default constructor", itsConfig.GraphAide.FullName);
+						continue;
+					}
 
-                    ConstructorInfo ciListener = listenerConfig.ConnectorType.GetConstructor(Type.EmptyTypes);
-                    if (ciListener == null) // sanity checks
-                    {
-                        Trace.TraceError("Cannot create listener for {0} as the connector {1} has no default constructor", itsConfig.Formatter.FullName, listenerConfig.ConnectorType.FullName);
-                        continue;
-                    }
-                    else if (listenerConfig.ConnectorType.GetInterface(typeof(IFormattedConnector).FullName) == null)
-                    {
-                        Trace.TraceError("Cannot append formatter {0} to connector {1} as the connector doesn't implement IFormattedConnector", itsConfig.Formatter.FullName, listenerConfig.ConnectorType.FullName);
-                        continue;
-                    }
-                    else if (listenerConfig.ConnectorType.GetInterface(typeof(IListenWaitConnector).FullName) == null)
-                    {
-                        Trace.TraceError("Cannot append formatter {0} to connector {1} as the connector doesn't implement IListenWaitConnector", itsConfig.Formatter.FullName, listenerConfig.ConnectorType.FullName);
-                        continue;
-                    }
+					var aide = ciFormatter.Invoke(null) as IStructureFormatter;
+					if (aide is IValidatingStructureFormatter)
+						(aide as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
+					formatter.GraphAides.Add(aide);
+				}
 
-                    // Now create the connector
-                    IListenWaitConnector connector = ciListener.Invoke(null) as IListenWaitConnector;
-                    
-                    try
-                    {
-                        // Set the connector up
-                        (connector as IFormattedConnector).Formatter = formatter;
-                        connector.ConnectionString = listenerConfig.ConnectionString;
-                        connector.MessageAvailable += new EventHandler<UnsolicitedDataEventArgs>(connector_MessageAvailable);
+				// Build the type cache
+				if (formatter is ICodeDomStructureFormatter && itsConfig.CacheTypes.Count > 0)
+				{
+					Trace.TraceInformation("Creating type cache for {0} ({1} types)", itsConfig.Formatter, itsConfig.CacheTypes.Count);
+					(formatter as ICodeDomStructureFormatter).BuildCache(itsConfig.CacheTypes.ToArray());
+					Trace.TraceInformation("{0} CLR types created", (formatter as ICodeDomStructureFormatter).GeneratedAssemblies[0].GetTypes().Length);
+				}
+				if (formatter is IValidatingStructureFormatter)
+					(formatter as IValidatingStructureFormatter).ValidateConformance = itsConfig.ValidateInstances;
 
-                        Trace.TraceInformation("Starting listener {0}", connector.ConnectionString);
-                        connector.Open();
-                        connector.Start();
-                        m_activeConnectors.Add(connector);
-                    }
-                    catch (ConnectorException e)
-                    {
-                        Trace.TraceError("Could not start listener {0}", connector.ConnectionString);
-                        Trace.Indent();
-                        Trace.WriteLine(e.Message);
-                        Trace.Indent();
-                        foreach (var detail in e.Details ?? new IResultDetail[0])
-                            Trace.WriteLine(String.Format("{0}: {1}", detail.Type, detail.Message));
-                        Trace.Unindent();
-                        Trace.Unindent();
-                    }
-                    catch (System.Exception e)
-                    {
-                        Trace.TraceError("Could not start listener {0}", connector.ConnectionString);
-                        Trace.Indent();
-                        Trace.WriteLine(e.ToString());
-                        Trace.Unindent();
-                    }
-                }
-                
+				// Iterate through listeners and start em up
+				foreach (var listenerConfig in itsConfig.Listeners)
+				{
+					ConstructorInfo ciListener = listenerConfig.ConnectorType.GetConstructor(Type.EmptyTypes);
+					if (ciListener == null) // sanity checks
+					{
+						Trace.TraceError("Cannot create listener for {0} as the connector {1} has no default constructor", itsConfig.Formatter.FullName, listenerConfig.ConnectorType.FullName);
+						continue;
+					}
+					else if (listenerConfig.ConnectorType.GetInterface(typeof(IFormattedConnector).FullName) == null)
+					{
+						Trace.TraceError("Cannot append formatter {0} to connector {1} as the connector doesn't implement IFormattedConnector", itsConfig.Formatter.FullName, listenerConfig.ConnectorType.FullName);
+						continue;
+					}
+					else if (listenerConfig.ConnectorType.GetInterface(typeof(IListenWaitConnector).FullName) == null)
+					{
+						Trace.TraceError("Cannot append formatter {0} to connector {1} as the connector doesn't implement IListenWaitConnector", itsConfig.Formatter.FullName, listenerConfig.ConnectorType.FullName);
+						continue;
+					}
 
-            }
+					// Now create the connector
+					IListenWaitConnector connector = ciListener.Invoke(null) as IListenWaitConnector;
 
-            if (this.m_activeConnectors.Count > 0)
-                this.Started?.Invoke(this, EventArgs.Empty);
+					try
+					{
+						// Set the connector up
+						(connector as IFormattedConnector).Formatter = formatter;
+						connector.ConnectionString = listenerConfig.ConnectionString;
+						connector.MessageAvailable += new EventHandler<UnsolicitedDataEventArgs>(connector_MessageAvailable);
 
-            return m_activeConnectors.Count > 0;
-        }
+						Trace.TraceInformation("Starting listener {0}", connector.ConnectionString);
+						connector.Open();
+						connector.Start();
+						m_activeConnectors.Add(connector);
+					}
+					catch (ConnectorException e)
+					{
+						Trace.TraceError("Could not start listener {0}", connector.ConnectionString);
+						Trace.Indent();
+						Trace.WriteLine(e.Message);
+						Trace.Indent();
+						foreach (var detail in e.Details ?? new IResultDetail[0])
+							Trace.WriteLine(String.Format("{0}: {1}", detail.Type, detail.Message));
+						Trace.Unindent();
+						Trace.Unindent();
+					}
+					catch (System.Exception e)
+					{
+						Trace.TraceError("Could not start listener {0}", connector.ConnectionString);
+						Trace.Indent();
+						Trace.WriteLine(e.ToString());
+						Trace.Unindent();
+					}
+				}
+			}
 
-        /// <summary>
-        /// Write the specified message to the memory stream
-        /// </summary>
-        /// <param name="conn">The connector that received the message</param>
-        /// <param name="ms">The memory stream</param>
-        /// <param name="msg">The message</param>
-        void WriteMessageToStream(IFormattedConnector conn, IGraphable msg, MemoryStream ms)
-        {
-            //var fmtr = conn.Formatter.Clone() as IStructureFormatter;
-            conn.Formatter.Graph(ms, msg);
-            ms.Flush();
-            ms.Seek(0, SeekOrigin.Begin);
-        }
+			if (this.m_activeConnectors.Count > 0)
+				this.Started?.Invoke(this, EventArgs.Empty);
 
-        /// <summary>
-        /// Fired whenever a message is available for processing
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void connector_MessageAvailable(object sender, UnsolicitedDataEventArgs e)
-        {
-            // Audit service
-            IAuditorService auditService = Context.GetService(typeof(IAuditorService)) as IAuditorService;
+			return m_activeConnectors.Count > 0;
+		}
 
-            #region Setup Audit
-            AuditData audit = new AuditData(
-                    DateTime.Now, ActionType.Execute,
-                    OutcomeIndicator.Success,
-                    EventIdentifierType.ApplicationActivity,
-                    new AuditCode("GEN", null)
-                );
-            audit.Actors.Add(new AuditActorData()
-            {
-                NetworkAccessPointId = Environment.MachineName,
-                NetworkAccessPointType = NetworkAccessPointType.MachineName,
-                UserIdentifier = String.Format("{0}\\{1}", Environment.UserDomainName, Environment.UserName)
-            });
-            audit.Actors.Add(new AuditActorData()
-            {
-                UserIsRequestor = true,
-                NetworkAccessPointId = e.SolicitorEndpoint.ToString(),
-                NetworkAccessPointType = NetworkAccessPointType.IPAddress,
-                UserIdentifier = e.SolicitorEndpoint.ToString()
-            });
-            audit.AuditableObjects.Add(new AuditableObject()
-            {
-                IDTypeCode = AuditableObjectIdType.Uri,
-                LifecycleType = AuditableObjectLifecycle.Access,
-                Role = AuditableObjectRole.DataRepository,
-                ObjectId = e.ReceiveEndpoint.ToString(),
-                Type = AuditableObjectType.SystemObject
-            });
-            #endregion
+		public bool Stop()
+		{
+			this.Stopping?.Invoke(this, EventArgs.Empty);
 
-            try
-            {
-                // Find a receiver capable of processing this
-                var wcfConnector = (sender as IListenWaitConnector);
-                IReceiveResult rcvResult = wcfConnector.Receive();
+			foreach (var connector in m_activeConnectors)
+			{
+				Trace.TraceInformation("Stopping listener {0}", connector.ConnectionString);
+				connector.Close();
+			}
 
-                // get the persistence service from the context
-                IMessagePersistenceService persistenceService = Context.GetService(typeof(IMessagePersistenceService)) as IMessagePersistenceService;
+			this.Stopped?.Invoke(this, EventArgs.Empty);
 
-                // Were we able to process the message
-                Assembly messageTypeAssembly = null;
-                if (rcvResult.Structure != null)
-                    messageTypeAssembly = rcvResult.Structure.GetType().Assembly;
+			return true;
+		}
 
-                // Find the configuration section that handles the specified revision
-                var curRevision = m_configuration.Revisions.Find(o => o.Listeners.Exists(l=>l.ConnectionString == wcfConnector.ConnectionString));
-                if (curRevision == null)
-                {
-                    Trace.TraceError("This service does not seem to have support for the version of message being used");
-                    throw new UninterpretableMessageException("This service doesn't support this standard", rcvResult);
-                }
+		/// <summary>
+		/// Fired whenever a message is available for processing
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void connector_MessageAvailable(object sender, UnsolicitedDataEventArgs e)
+		{
+			// Audit service
+			IAuditorService auditService = Context.GetService(typeof(IAuditorService)) as IAuditorService;
 
-                // Do we have a handler for this message interaction? Cast as an interaction
-                // and attempt to find the handler configuration
-                IInteraction interactionStructure = rcvResult.Structure as IInteraction;
-                MessageHandlerConfiguration receiverConfig = null;
-                if (interactionStructure != null && interactionStructure.InteractionId != null &&
-                    !String.IsNullOrEmpty(interactionStructure.InteractionId.Extension))
-                    receiverConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i => i.Id == interactionStructure.InteractionId.Extension));
-                else
-                {
-                    Trace.TraceWarning("Interaction is missing InteractionId attribute! Assuming default");
-                    // Set interaction id
-                    var intId = interactionStructure.GetType().GetMethod("GetInteractionId", BindingFlags.Static | BindingFlags.Public);
-                    if (intId == null)
-                        throw new InvalidOperationException("Cannot find the GetInteractionId method, cannot determine interaction");
-                    interactionStructure.InteractionId = intId.Invoke(null, null) as II;
-                }
+			#region Setup Audit
 
-                // Message identifier missing?
-                if (interactionStructure.Id == null)
-                {
-                    interactionStructure.Id = Guid.NewGuid();
-                    Trace.TraceWarning("Interaction is missing id. Generated token {0}...", interactionStructure.Id.Root);
-                }
+			AuditData audit = new AuditData(
+					DateTime.Now, ActionType.Execute,
+					OutcomeIndicator.Success,
+					EventIdentifierType.ApplicationActivity,
+					new AuditCode("GEN", null)
+				);
+			audit.Actors.Add(new AuditActorData()
+			{
+				NetworkAccessPointId = Environment.MachineName,
+				NetworkAccessPointType = NetworkAccessPointType.MachineName,
+				UserIdentifier = String.Format("{0}\\{1}", Environment.UserDomainName, Environment.UserName)
+			});
+			audit.Actors.Add(new AuditActorData()
+			{
+				UserIsRequestor = true,
+				NetworkAccessPointId = e.SolicitorEndpoint.ToString(),
+				NetworkAccessPointType = NetworkAccessPointType.IPAddress,
+				UserIdentifier = e.SolicitorEndpoint.ToString()
+			});
+			audit.AuditableObjects.Add(new AuditableObject()
+			{
+				IDTypeCode = AuditableObjectIdType.Uri,
+				LifecycleType = AuditableObjectLifecycle.Access,
+				Role = AuditableObjectRole.DataRepository,
+				ObjectId = e.ReceiveEndpoint.ToString(),
+				Type = AuditableObjectType.SystemObject
+			});
 
-                IEverestMessageReceiver currentHandler = null, defaultHandler = null;
-                
-                var defaultHandlerConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i=>i.Id == "*"));
-                receiverConfig = receiverConfig ?? defaultHandlerConfig; // find a handler
+			#endregion Setup Audit
 
-                // Receiver configuration
-                if (receiverConfig == null)
-                    throw new InvalidOperationException("Cannot find appropriate handler this message");
-                else
-                {
-                    
-                    var messageState = Core.Services.MessageState.New;
-                    IInteraction response = null;
-                    
-                    InteractionConfiguration interactionConfig = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
-                    if(interactionConfig != null && interactionConfig.Disclosure)
-                        persistenceService = null;
+			try
+			{
+				// Find a receiver capable of processing this
+				var wcfConnector = (sender as IListenWaitConnector);
+				IReceiveResult rcvResult = wcfConnector.Receive();
 
-                    // check with persistence
-                    if (persistenceService != null)
-                    {
-                        messageState = persistenceService.GetMessageState(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
-                    }
+				// get the persistence service from the context
+				IMessagePersistenceService persistenceService = Context.GetService(typeof(IMessagePersistenceService)) as IMessagePersistenceService;
 
-                    switch (messageState)
-                    {
-                        case Core.Services.MessageState.New:
+				// Were we able to process the message
+				Assembly messageTypeAssembly = null;
+				if (rcvResult.Structure != null)
+					messageTypeAssembly = rcvResult.Structure.GetType().Assembly;
 
-                            // Persist the message 
-                            if (persistenceService != null)
-                            {
-                                MemoryStream ms = new MemoryStream();
-                                try
-                                {
-                                    WriteMessageToStream(sender as IFormattedConnector, interactionStructure, ms);
-                                    persistenceService.PersistMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension), ms);
-                                }
-                                finally
-                                {
-                                    ms.Dispose();
-                                }
-                            }
-                                
-                            currentHandler = receiverConfig.Handler;
-                            defaultHandler = defaultHandlerConfig.Handler;
-                            response = currentHandler.HandleMessageReceived(sender, e, rcvResult) as IInteraction;
-                            if (persistenceService != null)
-                            {
-                                MemoryStream ms = new MemoryStream();
-                                try
-                                {
-                                    WriteMessageToStream(sender as IFormattedConnector, response, ms);
-                                    persistenceService.PersistResultMessage(String.Format(curRevision.MessageIdentifierFormat, response.Id.Root, response.Id.Extension), String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension), ms);
-                                }
-                                finally
-                                {
-                                    ms.Dispose();
-                                }
-                            }
+				// Find the configuration section that handles the specified revision
+				var curRevision = m_configuration.Revisions.Find(o => o.Listeners.Exists(l => l.ConnectionString == wcfConnector.ConnectionString));
+				if (curRevision == null)
+				{
+					Trace.TraceError("This service does not seem to have support for the version of message being used");
+					throw new UninterpretableMessageException("This service doesn't support this standard", rcvResult);
+				}
 
-                            break;
-                        case Core.Services.MessageState.Complete:
-                            var rms = persistenceService.GetMessageResponseMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
-                            var parseResult = (sender as IFormattedConnector).Formatter.Parse(rms);
-                            response = parseResult.Structure as IInteraction;
-                            break;
-                        case Core.Services.MessageState.Active:
-                            throw new ApplicationException("Message is already being processed");
-                    }
-                    // Send back
-                    IListenWaitRespondConnector ilwConnector = sender as IListenWaitRespondConnector;
-                    if (ilwConnector == null) // no need to send something back
-                    {
-                        auditService.SendAudit(audit);
-                        return;
-                    }
-                    else
-                    {
+				// Do we have a handler for this message interaction? Cast as an interaction
+				// and attempt to find the handler configuration
+				IInteraction interactionStructure = rcvResult.Structure as IInteraction;
+				MessageHandlerConfiguration receiverConfig = null;
+				if (interactionStructure != null && interactionStructure.InteractionId != null &&
+					!String.IsNullOrEmpty(interactionStructure.InteractionId.Extension))
+					receiverConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i => i.Id == interactionStructure.InteractionId.Extension));
+				else
+				{
+					Trace.TraceWarning("Interaction is missing InteractionId attribute! Assuming default");
+					// Set interaction id
+					var intId = interactionStructure.GetType().GetMethod("GetInteractionId", BindingFlags.Static | BindingFlags.Public);
+					if (intId == null)
+						throw new InvalidOperationException("Cannot find the GetInteractionId method, cannot determine interaction");
+					interactionStructure.InteractionId = intId.Invoke(null, null) as II;
+				}
 
-                        // Invalid message delegate
-                        var invalidMessageDelegate = new EventHandler<MessageEventArgs>(delegate(object sndr, MessageEventArgs mea)
-                            {
-                                audit.Outcome = OutcomeIndicator.MinorFail;
-                                InvalidMessageResult res = new InvalidMessageResult()
-                                {
-                                    Code = mea.Code,
-                                    Details = mea.Details,
-                                    Structure = rcvResult.Structure
-                                };
-                                if (defaultHandler != null)
-                                    mea.Alternate = response;
-                                Trace.TraceWarning("Returning a default message because Everest was unable to serialize the response correctly. Error was {0}", mea.Code);
-                                Trace.Indent();
-                                foreach (IResultDetail dtl in mea.Details)
-                                    Trace.TraceWarning("{0} : {1} : {2}", dtl.Type, dtl.Message, dtl.Location);
-                                Trace.Unindent();
-                                mea.Alternate = response;
-                            });
-                        ilwConnector.InvalidResponse += invalidMessageDelegate;
+				// Message identifier missing?
+				if (interactionStructure.Id == null)
+				{
+					interactionStructure.Id = Guid.NewGuid();
+					Trace.TraceWarning("Interaction is missing id. Generated token {0}...", interactionStructure.Id.Root);
+				}
 
-                        try
-                        {
-                            // Create headers
-                            var wcfResult = rcvResult as WcfReceiveResult;
-                            if (wcfResult != null && wcfResult.Headers != null)
-                            {
-                                var rcvrInfo = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
-                                if (rcvrInfo != null)
-                                {
-                                    wcfResult.ResponseHeaders = CreateResponseHeaders(rcvrInfo.ResponseHeaders, wcfResult.Headers.MessageVersion);
-                                }
-                                if (wcfResult.ResponseHeaders != null)
-                                    wcfResult.ResponseHeaders.RelatesTo = wcfResult.Headers.MessageId;
-                            }
-                            ISendResult sndResult = ilwConnector.Send(response, rcvResult);
-                            if (sndResult.Code != ResultCode.Accepted &&
-                                sndResult.Code != ResultCode.AcceptedNonConformant)
-                            {
-                                Trace.TraceError("Cannot send response back to the solicitor : {0}", sndResult.Code);
-                                Trace.Indent();
-                                foreach (IResultDetail dtl in sndResult.Details ?? new IResultDetail[0])
-                                    Trace.TraceError("{0}: {1} : {2}", dtl.Type, dtl.Message, dtl.Location);
-                                Trace.Unindent();
-                            }
-                        }
-                        finally
-                        {
-                            if(auditService != null)
-                                auditService.SendAudit(audit);
-                            // Remove the invalid message delegate
-                            ilwConnector.InvalidResponse -= invalidMessageDelegate;
-                        }
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
+				IEverestMessageReceiver currentHandler = null, defaultHandler = null;
 
-                #region Audit Failure
-                audit.Outcome = OutcomeIndicator.EpicFail;
+				var defaultHandlerConfig = curRevision.MessageHandlers.Find(o => o.Interactions.Exists(i => i.Id == "*"));
+				receiverConfig = receiverConfig ?? defaultHandlerConfig; // find a handler
 
-                if(auditService != null)
-                    auditService.SendAudit(audit);
-                #endregion
+				// Receiver configuration
+				if (receiverConfig == null)
+					throw new InvalidOperationException("Cannot find appropriate handler this message");
+				else
+				{
+					var messageState = Core.Services.MessageState.New;
+					IInteraction response = null;
 
-                Trace.TraceError(ex.ToString());
-                throw;
-            }
-        }
+					InteractionConfiguration interactionConfig = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
+					if (interactionConfig != null && interactionConfig.Disclosure)
+						persistenceService = null;
 
-        /// <summary>
-        /// Create response headers
-        /// </summary>
-        private System.ServiceModel.Channels.MessageHeaders CreateResponseHeaders(XmlNodeList xmlNodeList, MessageVersion ver)
-        {
-            if (xmlNodeList == null)
-                return null;
+					// check with persistence
+					if (persistenceService != null)
+					{
+						messageState = persistenceService.GetMessageState(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
+					}
 
-            MessageHeaders retVal = new MessageHeaders(ver);
-            foreach (XmlElement hdr in xmlNodeList)
-            {
-                if (hdr.NamespaceURI == "http://schemas.xmlsoap.org/ws/2004/08/addressing" || hdr.NamespaceURI == "http://www.w3.org/2005/08/addressing")
-                {
-                    switch (hdr.LocalName)
-                    {
-                        case "Action":
-                            retVal.Action = hdr.InnerText;
-                            break;
-                        case "To":
-                            retVal.To = new Uri(hdr.InnerText);
-                            break;
-                        case "From":
-                            retVal.From = new System.ServiceModel.EndpointAddress(hdr.InnerText);
-                            break;
-                        case "ReplyTo":
-                            retVal.ReplyTo = new System.ServiceModel.EndpointAddress(hdr.InnerText);
-                            break;
-                        default:
-                            MessageHeader header = MessageHeader.CreateHeader(hdr.LocalName, hdr.NamespaceURI, hdr.InnerText);
-                            retVal.Add(header);
-                            break;                            
-                    }
-                }
-                else
-                {
-                    MessageHeader header = MessageHeader.CreateHeader(hdr.LocalName, hdr.NamespaceURI, hdr.InnerText);
-                    retVal.Add(header);
-                }
+					switch (messageState)
+					{
+						case Core.Services.MessageState.New:
 
-            }
-            return retVal;
-        }
+							// Persist the message
+							if (persistenceService != null)
+							{
+								MemoryStream ms = new MemoryStream();
+								try
+								{
+									WriteMessageToStream(sender as IFormattedConnector, interactionStructure, ms);
+									persistenceService.PersistMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension), ms);
+								}
+								finally
+								{
+									ms.Dispose();
+								}
+							}
 
-        public bool Stop()
-        {
-            this.Stopping?.Invoke(this, EventArgs.Empty);
+							currentHandler = receiverConfig.Handler;
+							defaultHandler = defaultHandlerConfig.Handler;
+							response = currentHandler.HandleMessageReceived(sender, e, rcvResult) as IInteraction;
+							if (persistenceService != null)
+							{
+								MemoryStream ms = new MemoryStream();
+								try
+								{
+									WriteMessageToStream(sender as IFormattedConnector, response, ms);
+									persistenceService.PersistResultMessage(String.Format(curRevision.MessageIdentifierFormat, response.Id.Root, response.Id.Extension), String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension), ms);
+								}
+								finally
+								{
+									ms.Dispose();
+								}
+							}
 
-            foreach (var connector in m_activeConnectors)
-            {
-                Trace.TraceInformation("Stopping listener {0}", connector.ConnectionString);
-                connector.Close();
-            }
+							break;
 
-            this.Stopped?.Invoke(this, EventArgs.Empty);
+						case Core.Services.MessageState.Complete:
+							var rms = persistenceService.GetMessageResponseMessage(String.Format(curRevision.MessageIdentifierFormat, interactionStructure.Id.Root, interactionStructure.Id.Extension));
+							var parseResult = (sender as IFormattedConnector).Formatter.Parse(rms);
+							response = parseResult.Structure as IInteraction;
+							break;
 
-            return true;
-        }
+						case Core.Services.MessageState.Active:
+							throw new ApplicationException("Message is already being processed");
+					}
+					// Send back
+					IListenWaitRespondConnector ilwConnector = sender as IListenWaitRespondConnector;
+					if (ilwConnector == null) // no need to send something back
+					{
+						auditService.SendAudit(audit);
+						return;
+					}
+					else
+					{
+						// Invalid message delegate
+						var invalidMessageDelegate = new EventHandler<MessageEventArgs>(delegate (object sndr, MessageEventArgs mea)
+							{
+								audit.Outcome = OutcomeIndicator.MinorFail;
+								InvalidMessageResult res = new InvalidMessageResult()
+								{
+									Code = mea.Code,
+									Details = mea.Details,
+									Structure = rcvResult.Structure
+								};
+								if (defaultHandler != null)
+									mea.Alternate = response;
+								Trace.TraceWarning("Returning a default message because Everest was unable to serialize the response correctly. Error was {0}", mea.Code);
+								Trace.Indent();
+								foreach (IResultDetail dtl in mea.Details)
+									Trace.TraceWarning("{0} : {1} : {2}", dtl.Type, dtl.Message, dtl.Location);
+								Trace.Unindent();
+								mea.Alternate = response;
+							});
+						ilwConnector.InvalidResponse += invalidMessageDelegate;
 
-        #endregion
+						try
+						{
+							// Create headers
+							var wcfResult = rcvResult as WcfReceiveResult;
+							if (wcfResult != null && wcfResult.Headers != null)
+							{
+								var rcvrInfo = receiverConfig.Interactions.Find(o => o.Id == interactionStructure.InteractionId.Extension);
+								if (rcvrInfo != null)
+								{
+									wcfResult.ResponseHeaders = CreateResponseHeaders(rcvrInfo.ResponseHeaders, wcfResult.Headers.MessageVersion);
+								}
+								if (wcfResult.ResponseHeaders != null)
+									wcfResult.ResponseHeaders.RelatesTo = wcfResult.Headers.MessageId;
+							}
+							ISendResult sndResult = ilwConnector.Send(response, rcvResult);
+							if (sndResult.Code != ResultCode.Accepted &&
+								sndResult.Code != ResultCode.AcceptedNonConformant)
+							{
+								Trace.TraceError("Cannot send response back to the solicitor : {0}", sndResult.Code);
+								Trace.Indent();
+								foreach (IResultDetail dtl in sndResult.Details ?? new IResultDetail[0])
+									Trace.TraceError("{0}: {1} : {2}", dtl.Type, dtl.Message, dtl.Location);
+								Trace.Unindent();
+							}
+						}
+						finally
+						{
+							if (auditService != null)
+								auditService.SendAudit(audit);
+							// Remove the invalid message delegate
+							ilwConnector.InvalidResponse -= invalidMessageDelegate;
+						}
+					}
+				}
+			}
+			catch (System.Exception ex)
+			{
+				#region Audit Failure
 
-        #region IUsesHostContext Members
+				audit.Outcome = OutcomeIndicator.EpicFail;
 
-        public IServiceProvider Context
-        {
-            get;
-            set; 
-        }
+				if (auditService != null)
+					auditService.SendAudit(audit);
 
-        /// <summary>
-        /// Running?
-        /// </summary>
-        public bool IsRunning
-        {
-            get
-            {
-                return this.m_activeConnectors.Count > 0;
-            }
-        }
+				#endregion Audit Failure
 
-        #endregion
-    }
+				Trace.TraceError(ex.ToString());
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Create response headers
+		/// </summary>
+		private System.ServiceModel.Channels.MessageHeaders CreateResponseHeaders(XmlNodeList xmlNodeList, MessageVersion ver)
+		{
+			if (xmlNodeList == null)
+				return null;
+
+			MessageHeaders retVal = new MessageHeaders(ver);
+			foreach (XmlElement hdr in xmlNodeList)
+			{
+				if (hdr.NamespaceURI == "http://schemas.xmlsoap.org/ws/2004/08/addressing" || hdr.NamespaceURI == "http://www.w3.org/2005/08/addressing")
+				{
+					switch (hdr.LocalName)
+					{
+						case "Action":
+							retVal.Action = hdr.InnerText;
+							break;
+
+						case "To":
+							retVal.To = new Uri(hdr.InnerText);
+							break;
+
+						case "From":
+							retVal.From = new System.ServiceModel.EndpointAddress(hdr.InnerText);
+							break;
+
+						case "ReplyTo":
+							retVal.ReplyTo = new System.ServiceModel.EndpointAddress(hdr.InnerText);
+							break;
+
+						default:
+							MessageHeader header = MessageHeader.CreateHeader(hdr.LocalName, hdr.NamespaceURI, hdr.InnerText);
+							retVal.Add(header);
+							break;
+					}
+				}
+				else
+				{
+					MessageHeader header = MessageHeader.CreateHeader(hdr.LocalName, hdr.NamespaceURI, hdr.InnerText);
+					retVal.Add(header);
+				}
+			}
+			return retVal;
+		}
+
+		/// <summary>
+		/// Write the specified message to the memory stream
+		/// </summary>
+		/// <param name="conn">The connector that received the message</param>
+		/// <param name="ms">The memory stream</param>
+		/// <param name="msg">The message</param>
+		private void WriteMessageToStream(IFormattedConnector conn, IGraphable msg, MemoryStream ms)
+		{
+			//var fmtr = conn.Formatter.Clone() as IStructureFormatter;
+			conn.Formatter.Graph(ms, msg);
+			ms.Flush();
+			ms.Seek(0, SeekOrigin.Begin);
+		}
+
+		#endregion IMessageHandlerService Members
+
+		#region IUsesHostContext Members
+
+		public IServiceProvider Context
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Running?
+		/// </summary>
+		public bool IsRunning
+		{
+			get
+			{
+				return this.m_activeConnectors.Count > 0;
+			}
+		}
+
+		#endregion IUsesHostContext Members
+	}
 }

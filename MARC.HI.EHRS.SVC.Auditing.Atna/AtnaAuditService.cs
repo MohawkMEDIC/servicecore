@@ -1,5 +1,5 @@
-﻿/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
+﻿/*
+ * Copyright 2010-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 23-8-2012
+ * Date: 1-9-2017
  */
 
 using System;
@@ -132,18 +132,19 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     {
                         IDTypeCode = aoPtctpt.IDTypeCode.HasValue ?
                             aoPtctpt.IDTypeCode.Value != Auditing.Data.AuditableObjectIdType.Custom ?
-                                new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt.IDTypeCode.ToString())) :
+                                new CodeValue<AuditableObjectIdType>((AuditableObjectIdType)Enum.Parse(typeof(AuditableObjectIdType), aoPtctpt?.IDTypeCode?.ToString())) :
+                                (aoPtctpt.CustomIdTypeCode != null ?
                                   new CodeValue<AuditableObjectIdType>()
                                   {
-                                      Code = aoPtctpt.CustomIdTypeCode.Code,
-                                      CodeSystem = aoPtctpt.CustomIdTypeCode.CodeSystem,
-                                      DisplayName = aoPtctpt.CustomIdTypeCode.DisplayName
-                                  } :
+                                      Code = aoPtctpt.CustomIdTypeCode?.Code,
+                                      CodeSystem = aoPtctpt.CustomIdTypeCode?.CodeSystem,
+                                      DisplayName = aoPtctpt.CustomIdTypeCode?.DisplayName
+                                  } : null) :
                             null,
                         LifecycleType = aoPtctpt.LifecycleType.HasValue ? (AuditableObjectLifecycle)Enum.Parse(typeof(AuditableObjectLifecycle), aoPtctpt.LifecycleType.ToString()) : 0,
                         LifecycleTypeSpecified = aoPtctpt.LifecycleType.HasValue,
                         ObjectId = aoPtctpt.ObjectId,
-                        Role = (AuditableObjectRole)Enum.Parse(typeof(AuditableObjectRole), aoPtctpt.Role.ToString()),
+                        Role = aoPtctpt.Role.HasValue ? (AuditableObjectRole)Enum.Parse(typeof(AuditableObjectRole), aoPtctpt.Role.ToString()) : 0,
                         RoleSpecified = aoPtctpt.Role != 0,
                         Type = (AuditableObjectType)Enum.Parse(typeof(AuditableObjectType), aoPtctpt.Type.ToString()),
                         TypeSpecified = aoPtctpt.Type != 0,
@@ -152,10 +153,11 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
                     };
                     // TODO: Object Data
                     foreach(var kv in aoPtctpt.ObjectData)
-                        atnaAo.ObjectDetail.Add(new ObjectDetailType() {
-                            Type = kv.Key,
-                            Value = kv.Value
-                        });
+                        if(!String.IsNullOrEmpty(kv.Key))
+                            atnaAo.ObjectDetail.Add(new ObjectDetailType() {
+                                Type = kv.Key,
+                                Value = kv.Value
+                            });
                     am.AuditableObjects.Add(atnaAo);
                 }
 

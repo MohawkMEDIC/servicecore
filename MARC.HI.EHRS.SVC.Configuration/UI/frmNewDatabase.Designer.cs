@@ -1,4 +1,4 @@
-﻿namespace MARC.HI.EHRS.SVC.ConfigurationApplciation
+﻿namespace MARC.HI.EHRS.SVC.Configuration.UI
 {
     partial class frmNewDatabase
     {

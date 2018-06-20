@@ -35,12 +35,27 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
     [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/structure-definition-kind")]
     public enum StructureDefinitionKind
     {
-        [XmlEnum("datatype")]
+        [XmlEnum("complex-type")]
+        Complex,
+        [XmlEnum("primitive-type")]
         Datatype,
         [XmlEnum("resource")]
         Resource,
         [XmlEnum("logical")]
         Logical
+    }
+
+    /// <summary>
+    /// Type derivation rules
+    /// </summary>
+    [XmlType("TypeDerivationRule", Namespace = "http://hl7.org/fhir")]
+    [FhirValueSet(Uri = "http://hl7.org/fhir/ValueSet/type-derivation-rule")]
+    public enum TypeDerivationRule
+    {
+        [XmlEnum("constraint")]
+        Constraint,
+        [XmlEnum("specialization")]
+        Specialization
     }
 
     /// <summary>
@@ -56,7 +71,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         public StructureDefinition()
         {
             this.Identifier = new List<FhirIdentifier>();
-            this.Contact = new List<ConformancePublisher>();
+            this.Contact = new List<ContactDetail>();
         }
 
         /// <summary>
@@ -87,63 +102,66 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         /// <summary>
         /// Gets or sets the display name of the structure
         /// </summary>
-        [XmlElement("display")]
+        [XmlElement("title")]
         [Description("Use this name when displaying the value")]
-        public FhirString Display { get; set; }
+        public FhirString Title { get; set; }
+
         /// <summary>
         /// Gets or sets the status of the structure definition
         /// </summary>
         [XmlElement("status")]
         [Description("The status of the structure definition")]
-        public FhirCode<ConformanceResourceStatus> Status { get; set; }
+        public FhirCode<PublicationStatus> Status { get; set; }
+
         /// <summary>
         /// Gets or sets whether this structure definition is experimental
         /// </summary>
         [XmlElement("experimental")]
         [Description("If for testing purposes, not real usage")]
         public FhirBoolean Experimental { get; set; }
-        /// <summary>
-        /// Gets or sets the publisher name
-        /// </summary>
-        [XmlElement("publisher")]
-        [Description("Name of the publisher")]
-        public FhirString Publisher { get; set; }
-        /// <summary>
-        /// Gets or sets the contact information for the publisher
-        /// </summary>
-        [XmlElement("contact")]
-        [Description("Contact details of the publisher")]
-        public List<ConformancePublisher> Contact { get; set; }
+
         /// <summary>
         /// Gets or sets the date for this version of the structure definition
         /// </summary>
         [XmlElement("date")]
         [Description("Date for this version of the structure definition")]
         public FhirDateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the publisher name
+        /// </summary>
+        [XmlElement("publisher")]
+        [Description("Name of the publisher")]
+        public FhirString Publisher { get; set; }
+
+        /// <summary>
+        /// Gets or sets the contact information for the publisher
+        /// </summary>
+        [XmlElement("contact")]
+        [Description("Contact details of the publisher")]
+        public List<ContactDetail> Contact { get; set; }
+       
         /// <summary>
         /// Gets or sets natural language description
         /// </summary>
         [XmlElement("description")]
         [Description("Natural language description of the structure definition")]
         public FhirString Description { get; set; }
+
         /// <summary>
         /// Gets or sets the context 
         /// </summary>
         [XmlElement("useContext")]
         [Description("Content intends to support these contexts")]
         public List<FhirCodeableConcept> UseContext { get; set; }
-        /// <summary>
-        /// Gets or sets the reason why the structure definition is needed
-        /// </summary>
-        [XmlElement("requirements")]
-        [Description("Scope and usage for this structure definition")]
-        public FhirString Requirements { get; set; }
+        
         /// <summary>
         /// Gets or sets use and/or publishing restrictions
         /// </summary>
         [XmlElement("copyright")]
         [Description("Use and/or publishing restrictions")]
         public FhirString Copyright { get; set; }
+
         /// <summary>
         /// Assists with indexing and finding
         /// </summary>
@@ -151,12 +169,14 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Assists with indexing and finding")]
         [FhirElement(MaxOccurs = 0)]
         public List<FhirCodeableConcept> Code { get; set; }
+
         /// <summary>
         /// Gets or sets the version of FHIR
         /// </summary>
         [XmlElement("fhirVersion")]
         [Description("FHIR Version this StructureDefinition targets")]
         public FhirString FhirVersion { get; set; }
+
         /// <summary>
         /// Gets or sets the kind of structure definition
         /// </summary>
@@ -164,31 +184,50 @@ namespace MARC.HI.EHRS.SVC.Messaging.FHIR.Resources
         [Description("Identifies the kind of structure definition")]
         [FhirElement(MinOccurs = 1)]
         public FhirCode<StructureDefinitionKind> Kind { get; set; }
+
         /// <summary>
-        /// Gets or sets the datatype or resource type
-        /// </summary>
-        [XmlElement("constrainedType")]
-        [Description("Anyh datatype or resource, including abstract ones")]
-        public FhirCode<String> ConstrainedType { get; set; }
-        /// <summary>
-        /// Whether the structure is abstract
+        /// Gets or sets the abstract structure definition
         /// </summary>
         [XmlElement("abstract")]
         [Description("Whether the structure is abstract")]
         [FhirElement(MinOccurs = 1)]
         public FhirBoolean Abstract { get; set; }
+
         /// <summary>
         /// Gets or sets the context where an extension can be used
         /// </summary>
-        [XmlElement("context")]
+        [XmlElement("contextType")]
         [Description("Where the extension can be used in instances")]
-        public List<FhirCode<ExtensionContext>> Context { get; set; }
+        public FhirCode<ExtensionContext> ContextType { get; set; }
+
+        /// <summary>
+        /// Where the element can be used 
+        /// </summary>
+        [XmlElement("context")]
+        [Description("Where the element extension can be used")]
+        public FhirString Context { get; set; }
+
+        /// <summary>
+        /// The type contained by the structure
+        /// </summary>
+        [Description("The derfined type constrainted by this structure")]
+        [XmlElement("type")]
+        public FhirCode<String> Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the derivation rule
+        /// </summary>
+        [XmlElement("derivation")]
+        [Description("Identifies whether the structure is a constraint or specialization")]
+        public FhirCode<TypeDerivationRule> DerivationType { get; set; }
+
         /// <summary>
         /// Structure that this structure definition extends
         /// </summary>
-        [XmlElement("base")]
+        [XmlElement("baseDefinition")]
         [Description("Structure that this set of constraints applies to")]
         public FhirUri Base { get; set; }
+
         ///// <summary>
         ///// Snapshot view of the structure 
         ///// </summary>

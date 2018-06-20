@@ -1,5 +1,5 @@
-﻿/**
- * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
+﻿/*
+ * Copyright 2010-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 7-5-2012
+ * Date: 1-9-2017
  */
 
 using System;
@@ -57,39 +57,46 @@ namespace MARC.HI.EHRS.SVC.Core.Services
     public interface IDataPersistenceService<TData>
     {
 
-        /// <summary>
-        /// Store the specified <see cref="T:System.ComponentModel.IContainer"/> into
-        /// the perminant data store. 
-        /// </summary>
-        /// <param name="storageData">The container data to store</param>
-        /// <returns>The identifiers representing the identifier of the stored container object</returns>
-        /// <exception cref="System.ArgumentException">Thrown when the storage data container is of an unknown type</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown when there is not sufficient data known to store the container</exception>
-        TData Insert(TData storageData, IPrincipal principal, TransactionMode mode);
+		/// <summary>
+		/// Store the specified <see cref="T:System.ComponentModel.IContainer" /> into
+		/// the perminant data store.
+		/// </summary>
+		/// <param name="storageData">The container data to store</param>
+		/// <param name="principal">The principal.</param>
+		/// <param name="mode">The mode.</param>
+		/// <returns>The identifiers representing the identifier of the stored container object</returns>
+		/// <exception cref="System.ArgumentException">Thrown when the storage data container is of an unknown type</exception>
+		/// <exception cref="System.InvalidOperationException">Thrown when there is not sufficient data known to store the container</exception>
+		TData Insert(TData storageData, IPrincipal principal, TransactionMode mode);
 
-        /// <summary>
-        /// Update the specified <see cref="T:System.ComponentModel.IContainer"/> into the
-        /// perminent data store. 
-        /// </summary>
-        /// <remarks>The <paramref name="storageData"/> container should have some form of identification to permit the update process</remarks>
-        /// <param name="storageData">The data that is to be updated. Should have some form of identification</param>
-        /// <returns>The </returns>
-        /// <exception cref="System.KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
-        /// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
-        TData Update(TData storageData, IPrincipal principal, TransactionMode mode);
+		/// <summary>
+		/// Update the specified <see cref="T:System.ComponentModel.IContainer" /> into the
+		/// perminent data store.
+		/// </summary>
+		/// <param name="storageData">The data that is to be updated. Should have some form of identification</param>
+		/// <param name="principal">The principal.</param>
+		/// <param name="mode">The mode.</param>
+		/// <returns>The</returns>
+		/// <exception cref="KeyNotFoundException">Thrown when the persistence service cannot determine the record to update</exception>
+		/// <exception cref="System.ArgumentException">Thrown when the container is of an unknown type</exception>
+		/// <remarks>The <paramref name="storageData" /> container should have some form of identification to permit the update process</remarks>
+		TData Update(TData storageData, IPrincipal principal, TransactionMode mode);
         
         /// <summary>
         /// Obsoletes a particular container object
         /// </summary>
         TData Obsolete(TData storageData, IPrincipal principal, TransactionMode mode);
 
-        /// <summary>
-        /// Get the object represention of the specified container as specified by <paramref name="containerId"/>
-        /// </summary>
-        /// <param name="containerId">The versioned domain identifier of the container to retrieve</param>
-        /// <returns>An IContainer object that represents the stored container</returns>
-        /// <exception cref="System.KeyNotFoundException">Thrown when the <paramref name="containerId"/> is not present in the database</exception>
-        TData Get<TIdentifier>(Identifier<TIdentifier> containerId, IPrincipal principal, bool loadFast);
+		/// <summary>
+		/// Get the object representation of the specified container as specified by <paramref name="containerId" />
+		/// </summary>
+		/// <typeparam name="TIdentifier">The type of the t identifier.</typeparam>
+		/// <param name="containerId">The versioned domain identifier of the container to retrieve</param>
+		/// <param name="principal">The principal.</param>
+		/// <param name="loadFast">if set to <c>true</c> [load fast].</param>
+		/// <returns>An IContainer object that represents the stored container</returns>
+		/// <exception cref="KeyNotFoundException">Thrown when the <paramref name="containerId" /> is not present in the database</exception>
+		TData Get<TIdentifier>(Identifier<TIdentifier> containerId, IPrincipal principal, bool loadFast);
 
         /// <summary>
         /// Counts the number of records which would be returned by the specified query
