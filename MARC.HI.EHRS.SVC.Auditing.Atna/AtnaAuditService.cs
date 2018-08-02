@@ -92,11 +92,12 @@ namespace MARC.HI.EHRS.SVC.Auditing.Atna
 
                 am.SourceIdentification.Add(new AuditSourceIdentificationType()
                 {
-                    AuditEnterpriseSiteID = String.Format("{1}^^^&{0}&ISO", configuration.DeviceIdentifier, configuration.DeviceName),
-                    AuditSourceID = Dns.GetHostName(),
+                    AuditEnterpriseSiteID = ad.Metadata.FirstOrDefault(o=>o.Key == Data.AuditMetadataKey.EnterpriseSiteID)?.Value ?? String.Format("{1}^^^&{0}&ISO", configuration.DeviceIdentifier, configuration.DeviceName),
+                    AuditSourceID = ad.Metadata.FirstOrDefault(o => o.Key == Data.AuditMetadataKey.AuditSourceID)?.Value ?? Dns.GetHostName(),
                     AuditSourceTypeCode = new List<CodeValue<AuditSourceType>>()
                     {
-                        new CodeValue<AuditSourceType>(AuditSourceType.ApplicationServerProcess)
+                        new CodeValue<AuditSourceType>(
+                            (AuditSourceType)Enum.Parse(typeof(AuditSourceType), ad.Metadata.FirstOrDefault(o=>o.Key == Data.AuditMetadataKey.AuditSourceType)?.Value ?? "ApplicationServerProcess"))
                     }
                 });
                 
