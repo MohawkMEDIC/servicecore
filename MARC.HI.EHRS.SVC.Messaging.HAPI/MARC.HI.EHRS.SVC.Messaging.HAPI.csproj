@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\MllpMessageSender.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Configuration\HL7ConfigurationSection.cs" />
     <Compile Include="HL7MessageHandler.cs" />
@@ -85,6 +86,9 @@
       <Project>{fe76688b-17e8-42ef-b8e0-77b06ab3db10}</Project>
       <Name>MARC.HI.EHRS.SVC.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MARC.HI.EHRS.SVC.Messaging.HAPI.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
