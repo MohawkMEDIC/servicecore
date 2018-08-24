@@ -44,6 +44,7 @@
     <Compile Include="Data\AuditActorData.cs" />
     <Compile Include="Data\AuditCode.cs" />
     <Compile Include="Data\AuditData.cs" />
+    <Compile Include="Data\AuditMetadata.cs" />
     <Compile Include="Data\AuditSourceType.cs" />
     <Compile Include="Data\NetworkAccessPointType.cs" />
     <Compile Include="Data\OutcomeIndicator.cs" />

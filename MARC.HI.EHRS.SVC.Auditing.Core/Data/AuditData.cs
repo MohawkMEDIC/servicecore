@@ -183,6 +183,7 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
 			this.EventTypeCode = eventTypeCode;
 			this.Actors = new List<AuditActorData>();
 			this.AuditableObjects = new List<AuditableObject>();
+            this.Metadata = new List<AuditMetadata>();
 		}
 
 		/// <summary>
@@ -232,5 +233,19 @@ namespace MARC.HI.EHRS.SVC.Auditing.Data
 		/// </summary>
 		[XmlElement("timestamp"), JsonProperty("timestamp")]
 		public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// Metadata about the audit 
+        /// </summary>
+        [XmlElement("meta"), JsonProperty("meta")]
+        public List<AuditMetadata> Metadata { get; set; }
+
+        /// <summary>
+        /// Add metadata to the audit
+        /// </summary>
+        public void AddMetadata(AuditMetadataKey key, String value)
+        {
+            this.Metadata.Add(new AuditMetadata(key, value));
+        }
 	}
 }
