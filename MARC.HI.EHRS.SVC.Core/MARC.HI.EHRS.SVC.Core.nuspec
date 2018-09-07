@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>MARC.HI.EHRS.SVC.Core</id>
-    <version>2.0.0.0</version>
+    <version>2.0.1.0</version>
     <title>MEDIC Service Core Main Core Assembly</title>
     <authors>justin-fyfe, nityan</authors>
     <owners>mohawkmedic</owners>

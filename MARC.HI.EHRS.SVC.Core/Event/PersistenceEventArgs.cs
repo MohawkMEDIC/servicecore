@@ -168,7 +168,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// The expression tree representing the query parameters
         /// </summary>
-        public Expression<Func<TData, bool>> Query { get; private set; }
+        public Expression<Func<TData, bool>> Query { get; set; }
 
         /// <summary>
         /// True if the callee wishes the caller to cancel the operation
