@@ -151,7 +151,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// <summary>
         /// Gets the data retrieved
         /// </summary>
-        public TData Data { get; private set; }
+        public TData Data { get; set; }
     } 
 
     /// <summary>
@@ -159,16 +159,46 @@ namespace MARC.HI.EHRS.SVC.Core.Event
     /// </summary>
     public class PreQueryEventArgs<TData> : SecureAccessEventArgs
     {
-
-        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, IPrincipal authContext = null) : base(authContext)
+        /// <summary>
+        /// Creates new pre-query event args
+        /// </summary>
+        public PreQueryEventArgs(Expression<Func<TData, bool>> predicate, Guid? queryId = null, int offset = 0, int? count = null, IPrincipal authContext = null) : base(authContext)
         {
             this.Query = predicate;
+            this.Offset = offset;
+            this.Count = count;
+            this.QueryId = queryId;
         }
+
+        /// <summary>
+        /// When cancelling the action allows the callee to override the results returned to the service
+        /// </summary>
+        public IEnumerable<TData> OverrideResults { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supplied query id
+        /// </summary>
+        public Guid? QueryId { get; set; }
+
+        /// <summary>
+        /// When specified, overrides the total results output parameters
+        /// </summary>
+        public int? OverrideTotalResults { get; set; }
 
         /// <summary>
         /// The expression tree representing the query parameters
         /// </summary>
         public Expression<Func<TData, bool>> Query { get; set; }
+
+        /// <summary>
+        /// Gets the offset
+        /// </summary>
+        public int Offset { get; set; }
+
+        /// <summary>
+        /// Get sor sets the count of objects
+        /// </summary>
+        public int? Count { get; set; }
 
         /// <summary>
         /// True if the callee wishes the caller to cancel the operation
