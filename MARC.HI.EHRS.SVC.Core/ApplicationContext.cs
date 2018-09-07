@@ -183,11 +183,14 @@ namespace MARC.HI.EHRS.SVC.Core
             this.m_messageHandler?.Stop();
 
             this.m_running = false;
-            foreach (var svc in this.m_configuration.ServiceProviders.OfType<IDaemonService>())
+            foreach (var svc in this.m_serviceInstances.OfType<IDaemonService>())
             {
                 Trace.TraceInformation("Stopping daemon service {0}...", svc.GetType().Name);
                 svc.Stop();
             }
+
+            foreach (var svc in this.m_serviceInstances.OfType<IDisposable>())
+                svc.Dispose();
 
             if (this.Stopped != null)
                 this.Stopped(this, null);

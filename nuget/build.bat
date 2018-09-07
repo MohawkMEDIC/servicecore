@@ -22,6 +22,6 @@ for /D %%D in (..\MARC.HI.EHRS.*) do (
 	echo found directory %%D
 	
 	echo will create nupkg file
-	nuget pack %%D -IncludeReferencedProjects -OutputDirectory ..\nuget\release -prop Configuration=Release
+	nuget pack %%D -IncludeReferencedProjects -OutputDirectory %localappdata%\NugetStaging -prop Configuration=Release
 )
 )

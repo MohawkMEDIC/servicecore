@@ -42,6 +42,7 @@ using NHapi.Base.Model;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MARC.HI.EHRS.SVC.Messaging.HAPI.TransportProtocol
 {
@@ -127,4 +128,25 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI.TransportProtocol
 		/// </summary>
 		public DateTime Timestamp { get; private set; }
 	}
+
+    /// <summary>
+	/// Event args
+	/// </summary>
+	public class AuthenticatedHl7MessageReceivedEventArgs : Hl7MessageReceivedEventArgs
+    {
+        /// <summary>
+        /// Creates a new instance of the Hl7MessageReceivedEventArgs
+        /// </summary>
+        public AuthenticatedHl7MessageReceivedEventArgs(IMessage message, Uri solicitorEp, Uri receiveEp, DateTime timestamp, byte[] authorization) : 
+            base(message, solicitorEp, receiveEp, timestamp)
+        {
+            this.AuthorizationToken = authorization;
+        }
+
+        /// <summary>
+        /// Gets the authorization token (X509 thumbprint) validated by this entity
+        /// </summary>
+        public byte[] AuthorizationToken { get; private set; }
+
+    }
 }

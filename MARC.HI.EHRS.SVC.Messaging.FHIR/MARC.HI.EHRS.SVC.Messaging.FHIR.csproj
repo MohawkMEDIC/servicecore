@@ -66,7 +66,10 @@
   <ItemGroup>
     <Compile Include="Backbone\AdverseEventSuspectEntity.cs" />
     <Compile Include="Backbone\AllergyIntoleranceReaction.cs" />
+    <Compile Include="Backbone\AuditEventEntity.cs" />
+    <Compile Include="Backbone\AuditEventSource.cs" />
     <Compile Include="Backbone\BundleResrouce.cs" />
+    <Compile Include="Backbone\AuditEventAgent.cs" />
     <Compile Include="Backbone\ContactDetail.cs" />
     <Compile Include="Backbone\ElementBase.cs" />
     <Compile Include="Backbone\ElementBinding.cs" />
@@ -148,6 +151,7 @@
     <Compile Include="Resources\AllergyIntolerance.cs" />
     <Compile Include="Resources\Attributes\ConfidenceAttribute.cs" />
     <Compile Include="Resources\Attributes\ResourceAttributeBase.cs" />
+    <Compile Include="Resources\AuditEvent.cs" />
     <Compile Include="Resources\Bundle.cs" />
     <Compile Include="Backbone\ComposeDefinition.cs" />
     <Compile Include="Backbone\ConceptDefinition.cs" />

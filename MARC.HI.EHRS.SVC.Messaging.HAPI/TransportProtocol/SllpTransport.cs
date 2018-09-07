@@ -425,7 +425,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI.TransportProtocol
 						Trace.TraceInformation("Received message from sllp://{0} : {1}", tcpClient.Client.RemoteEndPoint, messageData.ToString());
 #endif
 
-						messageArgs = new Hl7MessageReceivedEventArgs(message, localEndpoint, remoteEndpoint, DateTime.Now);
+						messageArgs = new AuthenticatedHl7MessageReceivedEventArgs(message, localEndpoint, remoteEndpoint, DateTime.Now, stream.RemoteCertificate.GetPublicKey());
 
 						// Call any bound event handlers that there is a message available
 						OnMessageReceived(messageArgs);
