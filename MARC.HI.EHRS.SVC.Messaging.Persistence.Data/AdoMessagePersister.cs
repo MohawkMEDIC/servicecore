@@ -81,7 +81,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
         /// <summary>
         /// Fired when a message is being retrieved
         /// </summary>
-        public event EventHandler<PreRetrievalEventArgs> Retrieving;
+        public event EventHandler<PreRetrievalEventArgs<MessageInfo>> Retrieving;
         /// <summary>
         /// Fired after a message has been retrieved
         /// </summary>
@@ -95,7 +95,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             m_configuration = ApplicationContext.Current.GetService<IConfigurationManager>().GetSection("marc.hi.ehrs.svc.messaging.persistence") as ConfigurationSectionHandler;
         }
 
-        event EventHandler<PreRetrievalEventArgs> IMessagePersistenceService.Retrieving
+        event EventHandler<PreRetrievalEventArgs<MessageInfo>> IMessagePersistenceService.Retrieving
         {
             add
             {
@@ -475,7 +475,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.Persistence.Data
             try
             {
 
-                var mpe = new PreRetrievalEventArgs(new Identifier<String>(messageId));
+                var mpe = new PreRetrievalEventArgs<MessageInfo>(new Identifier<String>(messageId));
                 this.Retrieving?.Invoke(this, mpe);
                 if(mpe.Cancel)
                 {

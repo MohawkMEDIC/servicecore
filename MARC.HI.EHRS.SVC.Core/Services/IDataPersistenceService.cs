@@ -140,7 +140,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Fired prior to a record being retrieved
         /// </summary>
-        event EventHandler<PreRetrievalEventArgs> Retrieving;
+        event EventHandler<PreRetrievalEventArgs<TData>> Retrieving;
         /// <summary>
         /// Fired after a record has been retrieved
         /// </summary>

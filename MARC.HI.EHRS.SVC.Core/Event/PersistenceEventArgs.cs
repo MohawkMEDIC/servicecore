@@ -111,7 +111,7 @@ namespace MARC.HI.EHRS.SVC.Core.Event
     /// <summary>
     /// Represents event data associated with a data retrieval operation
     /// </summary>
-    public class PreRetrievalEventArgs : SecureAccessEventArgs
+    public class PreRetrievalEventArgs<TData> : SecureAccessEventArgs
     {
 
         /// <summary>
@@ -131,7 +131,11 @@ namespace MARC.HI.EHRS.SVC.Core.Event
         /// Allows the handler to cancel the operation
         /// </summary>
         public bool Cancel { get; set; }
-        
+
+        /// <summary>
+        /// Gets the data retrieved
+        /// </summary>
+        public TData OverrideResult { get; set; }
     }
 
     /// <summary>

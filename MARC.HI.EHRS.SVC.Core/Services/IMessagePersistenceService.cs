@@ -144,7 +144,7 @@ namespace MARC.HI.EHRS.SVC.Core.Services
         /// <summary>
         /// Fired before message information is persisted
         /// </summary>
-        event EventHandler<PreRetrievalEventArgs> Retrieving;
+        event EventHandler<PreRetrievalEventArgs<MessageInfo>> Retrieving;
         /// <summary>
         /// Fired after message information is retrieved
         /// </summary>
