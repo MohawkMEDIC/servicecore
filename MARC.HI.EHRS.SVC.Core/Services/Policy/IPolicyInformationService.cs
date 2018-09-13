@@ -91,6 +91,13 @@ namespace MARC.HI.EHRS.SVC.Core.Services.Policy
         /// Gets the policy by policy OID
         /// </summary>
         IPolicy GetPolicy(String policyOid);
-               
+
+        /// <summary>
+        /// Adds the specified policies to the specified securable object
+        /// </summary>
+        /// <param name="securable">The object to which policies should be added</param>
+        /// <param name="rule">The rule to be applied to the securable</param>
+        /// <param name="policyOids">The oids of the policies to add</param>
+        void AddPolicies(Object securable, PolicyDecisionOutcomeType rule, params String[] policyOids);
     }
 }
