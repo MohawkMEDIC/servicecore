@@ -80,6 +80,25 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI.Configuration
 		}
 	}
 
+    /// <summary>
+    /// Security methods
+    /// </summary>
+    public enum SecurityMethod
+    {
+        /// <summary>
+        /// No security
+        /// </summary>
+        None,
+        /// <summary>
+        /// Use MSH-8 for authentication
+        /// </summary>
+        Msh8,
+        /// <summary>
+        /// Use SFT-4 for authentication
+        /// </summary>
+        Sft4
+    }
+
 	/// <summary>
 	/// Configuration section for the PIX handler
 	/// </summary>
@@ -88,16 +107,23 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI.Configuration
 		/// <summary>
 		/// PIX configuration section
 		/// </summary>
-		public HL7ConfigurationSection()
+		public HL7ConfigurationSection(SecurityMethod securityMethod)
 		{
 			this.Services = new List<ServiceDefinition>();
+            this.Security = securityMethod;
 		}
 
-		/// <summary>
-		/// The address to which to bind
-		/// </summary>
-		/// <remarks>A full Uri is required and must be tcp:// or mllp://</remarks>
-		public List<ServiceDefinition> Services { get; private set; }
+        /// <summary>
+        /// Security method
+        /// </summary>
+        public SecurityMethod Security { get; set; }
+
+
+        /// <summary>
+        /// The address to which to bind
+        /// </summary>
+        /// <remarks>A full Uri is required and must be tcp:// or mllp://</remarks>
+        public List<ServiceDefinition> Services { get; private set; }
 	}
 
 	/// <summary>

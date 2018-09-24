@@ -37,7 +37,7 @@ namespace MARC.HI.EHRS.SVC.Messaging.HAPI.Configuration
 		/// </summary>
 		public object Create(object parent, object configContext, System.Xml.XmlNode section)
 		{
-			HL7ConfigurationSection config = new HL7ConfigurationSection();
+			HL7ConfigurationSection config = new HL7ConfigurationSection((SecurityMethod)Enum.Parse(typeof(SecurityMethod), section.Attributes["security"]?.Value ?? "None"));
 
 			// Read the configuration
 			var xConnectionDatas = section.SelectNodes("./*[local-name() = 'services']/*[local-name() = 'service']");
