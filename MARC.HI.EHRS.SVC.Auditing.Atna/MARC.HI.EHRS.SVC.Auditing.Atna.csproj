@@ -46,7 +46,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AtnaApi">
+    <Reference Include="AtnaApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4aa39182aec47e34, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution Items\AtnaApi.dll</HintPath>
     </Reference>
     <Reference Include="MARC.Everest, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ba5b2480018546af, processorArchitecture=MSIL">

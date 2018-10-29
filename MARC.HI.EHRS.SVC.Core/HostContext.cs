@@ -79,7 +79,7 @@ namespace MARC.HI.EHRS.SVC.Core
             lock(m_cachedServices)
                 if (!m_cachedServices.TryGetValue(serviceType, out candidateService))
                 {
-                    List<object> candidateServices = m_configuration.ServiceProviders.FindAll(o => o.GetType().GetInterface(serviceType.FullName) != null);
+                    List<object> candidateServices = m_configuration.ServiceProviders.FindAll(o => o.GetType().GetInterfaces().Contains(serviceType));
                     if (candidateServices.Count > 1)
                         Trace.TraceWarning("More than one service implementation for {0} found, using {1} as default", serviceType.FullName, candidateServices[0].GetType().FullName);
 

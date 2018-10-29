@@ -22,3 +22,6 @@ Thumbs.db
 *.dll
 *.lib
 *.sbr
+obj/
+bin/
+.vs/
